@@ -43,7 +43,7 @@ extension MovieItem {
                 .fontWeight(.semibold)
                 .lineLimit(2)
             
-            Text(movie.releaseDate.formatDateString(input: "yyyy-MM-dd", output: "dd MMMM yyyy"))
+            Text(movie.releaseDate.formatDateString())
                 .font(.subheadline)
         }
     }

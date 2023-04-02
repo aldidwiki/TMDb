@@ -26,8 +26,7 @@ struct DetailView: View {
                             .multilineTextAlignment(.center)
                         
                         Text(
-                            presenter.movie.releaseDate
-                                .formatDateString(input: "yyyy-MM-dd", output: "dd MMMM yyyy")
+                            presenter.movie.releaseDate.formatDateString()
                         )
                         
                         if !presenter.movie.tagline.isEmpty {

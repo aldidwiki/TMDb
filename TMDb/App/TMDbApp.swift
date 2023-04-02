@@ -16,7 +16,9 @@ struct TMDbApp: App {
             let favoriteUseCase = Injection.init().provideFavoriteUseCase()
             let favoritePresenter = FavoritePresenter(favoriteUseCase: favoriteUseCase)
             
-            ContentView().environmentObject(homePresenter).environmentObject(favoritePresenter)
+            ContentView()
+                .environmentObject(homePresenter)
+                .environmentObject(favoritePresenter)
         }
     }
 }

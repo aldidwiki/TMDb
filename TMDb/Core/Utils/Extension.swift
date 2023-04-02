@@ -8,7 +8,7 @@
 import Foundation
 
 extension String {
-    func formatDateString(input inFormat: String, output outFormat: String) -> String {
+    func formatDateString(input inFormat: String = "yyyy-MM-dd", output outFormat: String = "dd MMMM yyyy") -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = inFormat
         let outDate = dateFormatter.date(from: self) ?? Date()

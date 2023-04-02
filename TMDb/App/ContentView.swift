@@ -35,7 +35,8 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let homeUseCase = Injection.init().provideHomeUseCase()
         let favoriteUseCase = Injection.init().provideFavoriteUseCase()
-        ContentView().environmentObject(HomePresenter(homeUseCase: homeUseCase))
+        ContentView()
+            .environmentObject(HomePresenter(homeUseCase: homeUseCase))
             .environmentObject(FavoritePresenter(favoriteUseCase: favoriteUseCase))
     }
 }
