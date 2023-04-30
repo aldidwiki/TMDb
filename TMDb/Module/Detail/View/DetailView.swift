@@ -26,7 +26,7 @@ struct DetailView: View {
                         Text("Overview")
                             .padding([.top, .horizontal])
                             .font(.title2)
-                            .bold()
+                            .fontWeight(.semibold)
                         
                         Text(presenter.movie.overview)
                             .padding(.horizontal)
@@ -76,7 +76,7 @@ extension DetailView {
             VStack {
                 Text(presenter.movie.title)
                     .font(.title2)
-                    .fontWeight(.semibold)
+                    .fontWeight(.bold)
                     .multilineTextAlignment(.center)
                 
                 Text(
@@ -85,7 +85,7 @@ extension DetailView {
                 
                 if !presenter.movie.tagline.isEmpty {
                     Text(presenter.movie.tagline)
-                        .fontWeight(.regular)
+                        .fontWeight(.medium)
                         .multilineTextAlignment(.center)
                         .italic()
                         .padding(.top)
