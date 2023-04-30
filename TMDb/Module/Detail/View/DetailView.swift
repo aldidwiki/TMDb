@@ -17,31 +17,20 @@ struct DetailView: View {
                 ProgressView("Loading")
             } else {
                 ScrollView {
-                    VStack(alignment: .center) {
-                        moviePoster
+                    VStack(alignment: .leading) {
+                        movieBackdrop
                         
-                        Text(presenter.movie.title)
+                        movieDetail
+                            .padding([.top, .horizontal])
+                        
+                        Text("Overview")
+                            .padding([.top, .horizontal])
                             .font(.title2)
-                            .fontWeight(.semibold)
-                            .multilineTextAlignment(.center)
-                        
-                        Text(
-                            presenter.movie.releaseDate.formatDateString()
-                        )
-                        
-                        if !presenter.movie.tagline.isEmpty {
-                            Text(presenter.movie.tagline)
-                                .fontWeight(.regular)
-                                .multilineTextAlignment(.center)
-                                .padding(.top)
-                                .italic()
-                        }
+                            .bold()
                         
                         Text(presenter.movie.overview)
-                            .multilineTextAlignment(.center)
-                            .padding(.top)
+                            .padding(.horizontal)
                     }
-                    .padding(.horizontal)
                 }
             }
         }.onAppear {
@@ -69,7 +58,40 @@ extension DetailView {
             .indicator(.activity)
             .transition(.fade(duration: 0.5))
             .scaledToFit()
-            .frame(height: 300)
+            .frame(height: 175)
+    }
+    
+    var movieBackdrop: some View {
+        WebImage(url: URL(string: API.backdropBaseUrl + (presenter.movie.backdropPath ?? "")))
+            .resizable()
+            .indicator(.activity)
+            .transition(.fade(duration: 0.5))
+            .scaledToFit()
+    }
+    
+    var movieDetail: some View {
+        HStack {
+            moviePoster
+            
+            VStack {
+                Text(presenter.movie.title)
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .multilineTextAlignment(.center)
+                
+                Text(
+                    presenter.movie.releaseDate.formatDateString()
+                )
+                
+                if !presenter.movie.tagline.isEmpty {
+                    Text(presenter.movie.tagline)
+                        .fontWeight(.regular)
+                        .multilineTextAlignment(.center)
+                        .italic()
+                        .padding(.top)
+                }
+            }
+        }
     }
 }
 

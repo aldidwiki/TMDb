@@ -32,7 +32,8 @@ final class Mapper {
             posterPath: movieDetailResponse.posterPath,
             overview: movieDetailResponse.overview,
             tagline: movieDetailResponse.tagline,
-            releaseDate: movieDetailResponse.releaseDate
+            releaseDate: movieDetailResponse.releaseDate,
+            backdropPath: movieDetailResponse.backdropPath
         )
     }
     

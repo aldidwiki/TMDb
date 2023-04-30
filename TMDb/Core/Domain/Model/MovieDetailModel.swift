@@ -15,4 +15,5 @@ struct MovieDetailModel: Equatable, Identifiable {
     let overview: String
     let tagline: String
     let releaseDate: String
+    let backdropPath: String?
 }
