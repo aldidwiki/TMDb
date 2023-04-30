@@ -25,6 +25,7 @@ struct DetailView: View {
                         
                         Text("Overview")
                             .padding([.top, .horizontal])
+                            .padding(.bottom, 1)
                             .font(.title2)
                             .fontWeight(.semibold)
                         
@@ -88,9 +89,10 @@ extension DetailView {
                         .fontWeight(.medium)
                         .multilineTextAlignment(.center)
                         .italic()
-                        .padding(.top)
+                        .padding(.top, 2)
                 }
             }
+            .padding(.horizontal)
         }
     }
 }
