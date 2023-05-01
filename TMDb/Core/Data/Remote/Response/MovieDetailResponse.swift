@@ -16,6 +16,7 @@ struct MovieDetailResponse: Decodable {
     let tagline: String
     let releaseDate: String
     let backdropPath: String?
+    let runtime: Int?
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -26,5 +27,6 @@ struct MovieDetailResponse: Decodable {
         case tagline
         case releaseDate = "release_date"
         case backdropPath = "backdrop_path"
+        case runtime
     }
 }

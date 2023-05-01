@@ -22,7 +22,8 @@ class DetailPresenter: ObservableObject {
         overview: "Nearly 5,000 years after he was bestowed with the almighty powers of the Egyptian gods—and imprisoned just as quickly—Black Adam is freed from his earthly tomb, ready to unleash his unique form of justice on the modern world.",
         tagline: "The world needed a hero. It got Black Adam.",
         releaseDate: "2022-10-19",
-        backdropPath: "/3CxUndGhUcZdt1Zggjdb2HkLLQX.jpg"
+        backdropPath: "/3CxUndGhUcZdt1Zggjdb2HkLLQX.jpg",
+        runtime: 125
     )
     @Published var errorMessage = ""
     @Published var loadingState = false

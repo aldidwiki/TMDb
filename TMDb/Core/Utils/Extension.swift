@@ -17,3 +17,21 @@ extension String {
         return dateFormatter.string(from: outDate)
     }
 }
+
+extension Int? {
+    func formatRuntime() -> String {
+        var runtimeText = ""
+        if let runtime = self {
+            let hours = runtime / 60
+            let minutes = runtime % 60
+            
+            if hours <= 0 {
+                runtimeText = "\(minutes)m"
+            } else {
+                runtimeText = "\(hours)h \(minutes)m"
+            }
+        }
+        
+        return runtimeText
+    }
+}

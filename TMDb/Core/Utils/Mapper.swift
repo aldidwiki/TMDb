@@ -33,7 +33,8 @@ final class Mapper {
             overview: movieDetailResponse.overview,
             tagline: movieDetailResponse.tagline,
             releaseDate: movieDetailResponse.releaseDate,
-            backdropPath: movieDetailResponse.backdropPath
+            backdropPath: movieDetailResponse.backdropPath,
+            runtime: movieDetailResponse.runtime
         )
     }
     

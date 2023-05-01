@@ -80,9 +80,13 @@ extension DetailView {
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
                 
-                Text(
-                    presenter.movie.releaseDate.formatDateString()
-                )
+                Text(presenter.movie.releaseDate.formatDateString())
+                    .multilineTextAlignment(.center)
+                
+                if !presenter.movie.runtime.formatRuntime().isEmpty {
+                    Text(presenter.movie.runtime.formatRuntime())
+                        .multilineTextAlignment(.center)
+                }
                 
                 if !presenter.movie.tagline.isEmpty {
                     Text(presenter.movie.tagline)
