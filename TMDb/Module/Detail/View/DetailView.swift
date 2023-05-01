@@ -18,11 +18,11 @@ struct DetailView: View {
             } else {
                 ScrollView {
                     VStack(alignment: .leading) {
-                        if let backdrop = presenter.movie.backdropPath {
+                        if presenter.movie.backdropPath != nil {
                             movieBackdrop
                         }
                         
-                        movieDetail
+                        movieContentDetail
                             .padding([.top, .horizontal])
                         
                         Text("Overview")
@@ -72,7 +72,7 @@ extension DetailView {
             .scaledToFit()
     }
     
-    var movieDetail: some View {
+    var movieContentDetail: some View {
         HStack {
             moviePoster
             
