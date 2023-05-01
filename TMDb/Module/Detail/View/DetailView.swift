@@ -18,7 +18,9 @@ struct DetailView: View {
             } else {
                 ScrollView {
                     VStack(alignment: .leading) {
-                        movieBackdrop
+                        if let backdrop = presenter.movie.backdropPath {
+                            movieBackdrop
+                        }
                         
                         movieDetail
                             .padding([.top, .horizontal])
