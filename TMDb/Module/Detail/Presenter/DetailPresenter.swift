@@ -11,6 +11,8 @@ import Combine
 class DetailPresenter: ObservableObject {
     private var cancellable: Set<AnyCancellable> = []
     
+    private let router = DetailRouter()
+    
     private let detailUseCase: DetailUseCase
     private let favoriteUseCase: FavoriteUseCase
     
@@ -103,5 +105,15 @@ class DetailPresenter: ObservableObject {
                     self.isFavorite = false
                 }
             }.store(in: &cancellable)
+    }
+    
+    func linkBuilder<Content: View>(
+        for personId: Int,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        NavigationLink(destination: router.makePersonDetailView(for: personId)) {
+            content()
+        }
+        .buttonStyle(.plain)
     }
 }

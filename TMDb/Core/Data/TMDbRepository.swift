@@ -11,6 +11,7 @@ import Combine
 protocol TMDbRepositoryProtocol {
     func getMovies() -> AnyPublisher<[MovieModel], Error>
     func getMovie(movieId: Int) -> AnyPublisher<MovieDetailModel, Error>
+    func getPerson(personId: Int) -> AnyPublisher<PersonModel, Error>
     func searchMovie(query: String) -> AnyPublisher<[MovieModel], Error>
     
     func addFavorite(from movie: MovieDetailModel) -> AnyPublisher<Bool, Error>
@@ -67,6 +68,13 @@ extension TMDbRepository: TMDbRepositoryProtocol {
         return self.remote.searchMovie(query: query)
             .map {
                 Mapper.mapMovieResponseModelsToDomains(input: $0)
+            }.eraseToAnyPublisher()
+    }
+    
+    func getPerson(personId: Int) -> AnyPublisher<PersonModel, Error> {
+        return self.remote.getPerson(personId: personId)
+            .map {
+                Mapper.mapPersonResponseToDomain(input: $0)
             }.eraseToAnyPublisher()
     }
 }

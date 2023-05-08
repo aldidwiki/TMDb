@@ -12,6 +12,7 @@ import Combine
 protocol RemoteDataSourceProtocol {
     func getMovies() -> AnyPublisher<[MovieResponseModel], Error>
     func getMovie(movieId: Int) -> AnyPublisher<MovieDetailResponse, Error>
+    func getPerson(personId: Int) -> AnyPublisher<PersonResponse, Error>
     func searchMovie(query: String) -> AnyPublisher<[MovieResponseModel], Error>
 }
 
@@ -76,6 +77,27 @@ extension RemoteDataSource: RemoteDataSourceProtocol {
                             case .success(let value):
                                 completion(.success(value.movies))
                             case . failure:
+                                completion(.failure(URLError.invalidResponse))
+                        }
+                    }
+            }
+        }.eraseToAnyPublisher()
+    }
+    
+    func getPerson(personId: Int) -> AnyPublisher<PersonResponse, Error> {
+        let param: Parameters = [
+            "api_key": "150ef4d7b4d3c9953518a6e2ed49928e"
+        ]
+        
+        return Future<PersonResponse, Error> {completion in
+            if let url = URL(string: "\(API.baseUrl)person/\(personId)") {
+                AF.request(url, parameters: param)
+                    .validate()
+                    .responseDecodable(of: PersonResponse.self) { response in
+                        switch response.result {
+                            case .success(let value):
+                                completion(.success(value))
+                            case .failure:
                                 completion(.failure(URLError.invalidResponse))
                         }
                     }

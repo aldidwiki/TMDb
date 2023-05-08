@@ -87,6 +87,22 @@ final class Mapper {
         }
     }
     
+    static func mapPersonResponseToDomain(
+        input personResponse: PersonResponse
+    ) -> PersonModel {
+        return PersonModel(
+            id: personResponse.id,
+            name: personResponse.name,
+            profilePath: personResponse.profilePath,
+            birthday: personResponse.birthday,
+            deathday: personResponse.deathday,
+            gender: personResponse.gender,
+            biography: personResponse.biography,
+            birthplace: personResponse.birthplace,
+            knownFor: personResponse.knownFor
+        )
+    }
+    
     private static func mapCreditResponseModelToDomains(
         input movieDetailResponse: MovieDetailResponse
     ) -> [CreditModel] {
