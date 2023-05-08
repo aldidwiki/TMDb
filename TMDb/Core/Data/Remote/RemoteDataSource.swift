@@ -40,9 +40,14 @@ extension RemoteDataSource: RemoteDataSourceProtocol {
     }
     
     func getMovie(movieId: Int) -> AnyPublisher<MovieDetailResponse, Error> {
+        let param: Parameters = [
+            "api_key": "150ef4d7b4d3c9953518a6e2ed49928e",
+            "append_to_response": "release_dates"
+        ]
+        
         return Future<MovieDetailResponse, Error> { completion in
-            if let url = URL(string: "\(API.baseUrl)movie/\(movieId)?api_key=150ef4d7b4d3c9953518a6e2ed49928e") {
-                AF.request(url)
+            if let url = URL(string: "\(API.baseUrl)movie/\(movieId)") {
+                AF.request(url, parameters: param)
                     .validate()
                     .responseDecodable(of: MovieDetailResponse.self) { response in
                         switch response.result {

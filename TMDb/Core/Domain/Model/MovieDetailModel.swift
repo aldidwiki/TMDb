@@ -17,4 +17,5 @@ struct MovieDetailModel: Equatable, Identifiable {
     let releaseDate: String
     let backdropPath: String?
     let runtime: Int?
+    let certification: String
 }

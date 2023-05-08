@@ -85,9 +85,17 @@ extension DetailView {
                 Text(presenter.movie.releaseDate.formatDateString())
                     .multilineTextAlignment(.center)
                 
-                if !presenter.movie.runtime.formatRuntime().isEmpty {
-                    Text(presenter.movie.runtime.formatRuntime())
-                        .multilineTextAlignment(.center)
+                HStack {
+                    if !presenter.movie.runtime.formatRuntime().isEmpty {
+                        Text(presenter.movie.runtime.formatRuntime())
+                            .multilineTextAlignment(.center)
+                    }
+                    
+                    if !presenter.movie.certification.isEmpty {
+                        Text("\u{2022}")
+                        Text(presenter.movie.certification)
+                            .multilineTextAlignment(.center)
+                    }
                 }
                 
                 if !presenter.movie.tagline.isEmpty {

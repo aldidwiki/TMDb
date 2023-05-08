@@ -25,6 +25,14 @@ final class Mapper {
     static func mapMovieDetailResponseToDomain(
         input movieDetailResponse: MovieDetailResponse
     ) -> MovieDetailModel {
+        var movieCertification = "NR"
+        for movieDateItem in movieDetailResponse.releaseDates.results {
+            for certificationItem in movieDateItem.movieCertificationResponseModel where movieDateItem.region == "US" {
+                movieCertification = certificationItem.certification
+                break
+            }
+        }
+        
         return MovieDetailModel(
             id: movieDetailResponse.id,
             title: movieDetailResponse.title,
@@ -34,7 +42,8 @@ final class Mapper {
             tagline: movieDetailResponse.tagline,
             releaseDate: movieDetailResponse.releaseDate,
             backdropPath: movieDetailResponse.backdropPath,
-            runtime: movieDetailResponse.runtime
+            runtime: movieDetailResponse.runtime,
+            certification: movieCertification
         )
     }
     

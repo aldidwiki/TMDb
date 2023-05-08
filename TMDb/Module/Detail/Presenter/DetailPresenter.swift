@@ -23,7 +23,8 @@ class DetailPresenter: ObservableObject {
         tagline: "The world needed a hero. It got Black Adam.",
         releaseDate: "2022-10-19",
         backdropPath: "/3CxUndGhUcZdt1Zggjdb2HkLLQX.jpg",
-        runtime: 125
+        runtime: 125,
+        certification: "NR"
     )
     @Published var errorMessage = ""
     @Published var loadingState = false
