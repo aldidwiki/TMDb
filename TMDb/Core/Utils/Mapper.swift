@@ -56,7 +56,8 @@ final class Mapper {
             backdropPath: movieDetailResponse.backdropPath,
             runtime: movieDetailResponse.runtime,
             certification: movieCertification,
-            genre: movieGenres
+            genre: movieGenres,
+            cast: mapCreditResponseModelToDomains(input: movieDetailResponse)
         )
     }
     
@@ -82,6 +83,20 @@ final class Mapper {
                 posterPath: item.posterPath,
                 rating: item.rating,
                 releaseDate: item.releasedDate
+            )
+        }
+    }
+    
+    private static func mapCreditResponseModelToDomains(
+        input movieDetailResponse: MovieDetailResponse
+    ) -> [CreditModel] {
+        return movieDetailResponse.credits.cast.map { cast in
+            CreditModel(
+                id: cast.id,
+                name: cast.name,
+                profilePath: cast.profilePath,
+                characterName: cast.characterName,
+                order: cast.order
             )
         }
     }

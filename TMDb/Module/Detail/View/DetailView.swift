@@ -16,7 +16,7 @@ struct DetailView: View {
             if presenter.loadingState {
                 ProgressView("Loading")
             } else {
-                ScrollView {
+                ScrollView(.vertical, showsIndicators: false) {
                     VStack(alignment: .leading) {
                         if presenter.movie.backdropPath != nil {
                             movieBackdrop
@@ -25,14 +25,9 @@ struct DetailView: View {
                         movieContentDetail
                             .padding([.top, .horizontal])
                         
-                        Text("Overview")
-                            .padding([.top, .horizontal])
-                            .padding(.bottom, 1)
-                            .font(.title2)
-                            .fontWeight(.semibold)
+                        movieOverview
                         
-                        Text(presenter.movie.overview)
-                            .padding(.horizontal)
+                        movieCredits
                     }
                 }
             }
@@ -111,6 +106,38 @@ extension DetailView {
                 }
             }
             .padding(.horizontal)
+        }
+    }
+    
+    var movieOverview: some View {
+        VStack(alignment: .leading) {
+            Text("Overview")
+                .padding([.top, .horizontal])
+                .padding(.bottom, 1)
+                .font(.title2)
+                .fontWeight(.semibold)
+            
+            Text(presenter.movie.overview)
+                .padding(.horizontal)
+        }
+    }
+    
+    var movieCredits: some View {
+        VStack(alignment: .leading) {
+            Text("Top Billed Cast")
+                .padding([.top, .horizontal])
+                .font(.title2)
+                .fontWeight(.semibold)
+            
+            ScrollView(.horizontal) {
+                LazyHStack(spacing: 15) {
+                    ForEach(presenter.movie.cast, id: \.id) { cast in
+                        CreditItemView(creditModel: cast)
+                    }
+                }
+                .padding(.horizontal)
+                .padding(.bottom)
+            }
         }
     }
 }

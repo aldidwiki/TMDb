@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MovieDetailModel: Equatable, Identifiable {
+struct MovieDetailModel: Identifiable {
     let id: Int
     let title: String
     let rating: Double
@@ -19,4 +19,5 @@ struct MovieDetailModel: Equatable, Identifiable {
     let runtime: Int?
     let certification: String
     let genre: String
+    let cast: [CreditModel]
 }

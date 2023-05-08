@@ -25,7 +25,8 @@ class DetailPresenter: ObservableObject {
         backdropPath: "/3CxUndGhUcZdt1Zggjdb2HkLLQX.jpg",
         runtime: 125,
         certification: "NR",
-        genre: "Action"
+        genre: "Action",
+        cast: []
     )
     @Published var errorMessage = ""
     @Published var loadingState = false
