@@ -24,7 +24,8 @@ class DetailPresenter: ObservableObject {
         releaseDate: "2022-10-19",
         backdropPath: "/3CxUndGhUcZdt1Zggjdb2HkLLQX.jpg",
         runtime: 125,
-        certification: "NR"
+        certification: "NR",
+        genre: "Action"
     )
     @Published var errorMessage = ""
     @Published var loadingState = false

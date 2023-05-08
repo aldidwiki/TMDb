@@ -33,6 +33,18 @@ final class Mapper {
             }
         }
         
+        var movieGenres = ""
+        let sortedGenre = movieDetailResponse.genres.sorted { genre1, genre2 in
+            genre1.genreName < genre2.genreName
+        }
+        for genre in sortedGenre {
+            if genre == sortedGenre.last {
+                movieGenres += "\(genre.genreName)"
+            } else {
+                movieGenres += "\(genre.genreName), "
+            }
+        }
+        
         return MovieDetailModel(
             id: movieDetailResponse.id,
             title: movieDetailResponse.title,
@@ -43,7 +55,8 @@ final class Mapper {
             releaseDate: movieDetailResponse.releaseDate,
             backdropPath: movieDetailResponse.backdropPath,
             runtime: movieDetailResponse.runtime,
-            certification: movieCertification
+            certification: movieCertification,
+            genre: movieGenres
         )
     }
     

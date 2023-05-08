@@ -98,6 +98,10 @@ extension DetailView {
                     }
                 }
                 
+                Text(presenter.movie.genre)
+                    .multilineTextAlignment(.center)
+                    .padding(.top, 1)
+                
                 if !presenter.movie.tagline.isEmpty {
                     Text(presenter.movie.tagline)
                         .fontWeight(.medium)
