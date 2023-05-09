@@ -40,6 +40,12 @@ extension CreditItemView {
     var creditPoster: some View {
         WebImage(url: URL(string: API.profileImageBaseUrl + (creditModel.profilePath ?? "")))
             .resizable()
+            .placeholder(content: {
+                Image(systemName: "person")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 50, height: 50)
+            })
             .indicator(.activity)
             .transition(.fade(duration: 0.5))
             .frame(width: 120, height: 150)
