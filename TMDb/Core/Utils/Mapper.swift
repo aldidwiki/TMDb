@@ -57,7 +57,11 @@ final class Mapper {
             runtime: movieDetailResponse.runtime,
             certification: movieCertification,
             genre: movieGenres,
-            cast: mapCreditResponseModelToDomains(input: movieDetailResponse)
+            cast: mapCreditResponseModelToDomains(input: movieDetailResponse),
+            budget: movieDetailResponse.budget,
+            revenue: movieDetailResponse.revenue,
+            status: movieDetailResponse.status,
+            originalLanguage: movieDetailResponse.originalLanguage
         )
     }
     

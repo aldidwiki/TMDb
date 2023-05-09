@@ -28,6 +28,8 @@ struct DetailView: View {
                         movieOverview
                         
                         movieCredits
+                        
+                        movieDetailInfo
                     }
                 }
             }
@@ -141,6 +143,49 @@ extension DetailView {
                 .padding(.bottom)
             }
         }
+    }
+    
+    var movieDetailInfo: some View {
+        VStack(alignment: .leading) {
+            Text("Details")
+                .padding([.top, .horizontal])
+                .font(.title2)
+                .fontWeight(.semibold)
+            
+            HStack {
+                Spacer()
+                
+                VStack {
+                    Text("Status")
+                    Text(presenter.movie.status)
+                        .fontWeight(.thin)
+                    
+                    Spacer()
+                    
+                    Text("Budget")
+                    Text("$\(presenter.movie.budget)")
+                        .fontWeight(.thin)
+                }
+                
+                Spacer()
+                
+                VStack {
+                    Text("Original Language")
+                    Text(presenter.movie.originalLanguage)
+                        .fontWeight(.thin)
+                    
+                    Spacer()
+                    
+                    Text("Revenue")
+                    Text("$\(presenter.movie.revenue)")
+                        .fontWeight(.thin)
+                }
+                
+                Spacer()
+            }
+            .padding(.top, 2)
+        }
+        .padding(.bottom)
     }
 }
 

@@ -20,6 +20,10 @@ struct MovieDetailResponse: Decodable {
     let releaseDates: MovieReleaseDatesResponseModel
     let genres: [GenreResponseModel]
     let credits: CreditResponse
+    let budget: Int64
+    let revenue: Int64
+    let status: String
+    let originalLanguage: String
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -34,6 +38,10 @@ struct MovieDetailResponse: Decodable {
         case releaseDates = "release_dates"
         case genres = "genres"
         case credits
+        case budget
+        case revenue
+        case status
+        case originalLanguage = "original_language"
     }
 }
 

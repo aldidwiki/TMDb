@@ -20,4 +20,8 @@ struct MovieDetailModel: Identifiable {
     let certification: String
     let genre: String
     let cast: [CreditModel]
+    let budget: Int64
+    let revenue: Int64
+    let status: String
+    let originalLanguage: String
 }
