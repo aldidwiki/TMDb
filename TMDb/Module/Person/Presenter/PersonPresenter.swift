@@ -21,7 +21,7 @@ class PersonPresenter: ObservableObject {
         name: "Chris Pratt",
         profilePath: "/83o3koL82jt30EJ0rz4Bnzrt2dd.jpg",
         birthday: "1979-06-21",
-        deathday: nil,
+        deathday: "",
         gender: "Unknown",
         biography: "Christopher Michael Pratt (born 21 June 1979) is an American actor, known for starring in both television and action films.",
         birthplace: "Virginia, Minnesota, USA",

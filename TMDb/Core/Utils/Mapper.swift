@@ -105,14 +105,14 @@ final class Mapper {
         
         return PersonModel(
             id: personResponse.id,
-            name: personResponse.name,
-            profilePath: personResponse.profilePath,
-            birthday: personResponse.birthday,
-            deathday: personResponse.deathday,
+            name: personResponse.name ?? "",
+            profilePath: personResponse.profilePath ?? "",
+            birthday: personResponse.birthday ?? "-",
+            deathday: personResponse.deathday ?? "",
             gender: genderText,
-            biography: personResponse.biography,
-            birthplace: personResponse.birthplace,
-            knownFor: personResponse.knownFor
+            biography: personResponse.biography ?? "-",
+            birthplace: personResponse.birthplace ?? "-",
+            knownFor: personResponse.knownFor ?? "-"
         )
     }
     

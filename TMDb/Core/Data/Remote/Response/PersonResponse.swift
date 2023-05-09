@@ -9,14 +9,14 @@ import Foundation
 
 struct PersonResponse: Decodable {
     let id: Int
-    let name: String
+    let name: String?
     let profilePath: String?
-    let birthday: String
+    let birthday: String?
     let deathday: String?
-    let gender: Int
+    let gender: Int?
     let biography: String?
-    let birthplace: String
-    let knownFor: String
+    let birthplace: String?
+    let knownFor: String?
     
     private enum CodingKeys: String, CodingKey {
         case id

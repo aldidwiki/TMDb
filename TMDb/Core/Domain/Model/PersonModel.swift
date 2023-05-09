@@ -10,11 +10,11 @@ import Foundation
 struct PersonModel: Identifiable, Equatable {
     let id: Int
     let name: String
-    let profilePath: String?
+    let profilePath: String
     let birthday: String
-    let deathday: String?
+    let deathday: String
     let gender: String
-    let biography: String?
+    let biography: String
     let birthplace: String
     let knownFor: String
 }

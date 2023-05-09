@@ -37,7 +37,7 @@ struct PersonView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.top)
                         
-                        Text(presenter.person.biography ?? "-")
+                        Text(presenter.person.biography)
                             .fontWeight(.thin)
                             .multilineTextAlignment(.leading)
                             .padding(.top, 2)
@@ -54,7 +54,7 @@ struct PersonView: View {
 
 extension PersonView {
     var profilePoster: some View {
-        WebImage(url: URL(string: API.profileImageBaseUrl + (presenter.person.profilePath ?? "")))
+        WebImage(url: URL(string: API.profileImageBaseUrl + presenter.person.profilePath))
             .resizable()
             .indicator(.activity)
             .transition(.fade(duration: 0.5))
@@ -67,9 +67,11 @@ extension PersonView {
         HStack {
             VStack(alignment: .leading) {
                 Text("Birthday")
-                Text("\(presenter.person.birthday.formatDateString()) (\(presenter.person.birthday.ageFormatter()) years old)")
+                let birthday = presenter.person.birthday.formatDateString()
+                let age = presenter.person.birthday.ageFormatter()
+                Text(!birthday.isEmpty ? "\(birthday) (\(age) years old)" : "-")
                     .fontWeight(.thin)
-                
+                    
                 Spacer()
                 
                 Text("Place of Birth")
