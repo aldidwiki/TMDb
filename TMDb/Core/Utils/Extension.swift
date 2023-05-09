@@ -35,18 +35,16 @@ extension String {
     }
 }
 
-extension Int? {
+extension Int {
     func formatRuntime() -> String {
         var runtimeText = ""
-        if let runtime = self {
-            let hours = runtime / 60
-            let minutes = runtime % 60
-            
-            if hours <= 0 {
-                runtimeText = "\(minutes)m"
-            } else {
-                runtimeText = "\(hours)h \(minutes)m"
-            }
+        let hours = self / 60
+        let minutes = self % 60
+        
+        if hours <= 0 {
+            runtimeText = "\(minutes)m"
+        } else {
+            runtimeText = "\(hours)h \(minutes)m"
         }
         
         return runtimeText

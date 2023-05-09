@@ -17,10 +17,10 @@ struct CreditResponse: Decodable {
 
 struct CreditResponseModel: Decodable {
     let id: Int
-    let name: String
+    let name: String?
     let profilePath: String?
-    let characterName: String
-    let order: Int
+    let characterName: String?
+    let order: Int?
     
     private enum CodingKeys: String, CodingKey {
         case id

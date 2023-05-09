@@ -10,7 +10,7 @@ import Foundation
 struct CreditModel: Identifiable, Equatable {
     let id: Int
     let name: String
-    let profilePath: String?
+    let profilePath: String
     let characterName: String
     let order: Int
     

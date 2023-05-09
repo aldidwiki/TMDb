@@ -28,7 +28,7 @@ final class Mapper {
         var movieCertification = "NR"
         for movieDateItem in movieDetailResponse.releaseDates.results {
             for certificationItem in movieDateItem.movieCertificationResponseModel where movieDateItem.region == "US" {
-                movieCertification = certificationItem.certification
+                movieCertification = certificationItem.certification ?? ""
                 break
             }
         }
@@ -51,12 +51,12 @@ final class Mapper {
             id: movieDetailResponse.id,
             title: movieDetailResponse.title,
             rating: movieDetailResponse.rating,
-            posterPath: movieDetailResponse.posterPath,
-            overview: movieDetailResponse.overview,
+            posterPath: movieDetailResponse.posterPath ?? "",
+            overview: movieDetailResponse.overview ?? "-",
             tagline: movieDetailResponse.tagline,
-            releaseDate: movieDetailResponse.releaseDate,
-            backdropPath: movieDetailResponse.backdropPath,
-            runtime: movieDetailResponse.runtime,
+            releaseDate: movieDetailResponse.releaseDate ?? "",
+            backdropPath: movieDetailResponse.backdropPath ?? "",
+            runtime: movieDetailResponse.runtime ?? 0,
             certification: movieCertification,
             genre: movieGenres,
             cast: mapCreditResponseModelToDomains(input: movieDetailResponse),
@@ -73,7 +73,7 @@ final class Mapper {
         let favoriteEntity = FavoriteEntity()
         favoriteEntity.id = movieDetailModel.id
         favoriteEntity.title = movieDetailModel.title
-        favoriteEntity.posterPath = movieDetailModel.posterPath ?? ""
+        favoriteEntity.posterPath = movieDetailModel.posterPath
         favoriteEntity.rating = movieDetailModel.rating
         favoriteEntity.releasedDate = movieDetailModel.releaseDate
         return favoriteEntity
@@ -122,10 +122,10 @@ final class Mapper {
         return movieDetailResponse.credits.cast.map { cast in
             CreditModel(
                 id: cast.id,
-                name: cast.name,
-                profilePath: cast.profilePath,
-                characterName: cast.characterName,
-                order: cast.order
+                name: cast.name ?? "",
+                profilePath: cast.profilePath ?? "",
+                characterName: cast.characterName ?? "",
+                order: cast.order ?? 0
             )
         }
     }

@@ -8,7 +8,7 @@
 import Foundation
 
 struct MovieCertificationResponse: Decodable {
-    let region: String
+    let region: String?
     let movieCertificationResponseModel: [MovieCertificationResponseModel]
     
     private enum CodingKeys: String, CodingKey {
@@ -18,7 +18,7 @@ struct MovieCertificationResponse: Decodable {
 }
 
 struct MovieCertificationResponseModel: Decodable {
-    let certification: String
+    let certification: String?
     
     private enum CodingKeys: String, CodingKey {
         case certification

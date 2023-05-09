@@ -12,9 +12,9 @@ struct MovieDetailResponse: Decodable {
     let title: String
     let rating: Double
     let posterPath: String?
-    let overview: String
+    let overview: String?
     let tagline: String
-    let releaseDate: String
+    let releaseDate: String?
     let backdropPath: String?
     let runtime: Int?
     let releaseDates: MovieReleaseDatesResponseModel

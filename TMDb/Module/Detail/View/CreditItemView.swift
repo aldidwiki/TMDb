@@ -38,7 +38,7 @@ struct CreditItemView: View {
 
 extension CreditItemView {
     var creditPoster: some View {
-        WebImage(url: URL(string: API.profileImageBaseUrl + (creditModel.profilePath ?? "")))
+        WebImage(url: URL(string: API.profileImageBaseUrl + creditModel.profilePath))
             .resizable()
             .placeholder(content: {
                 Image(systemName: "person")

@@ -18,7 +18,7 @@ struct DetailView: View {
             } else {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(alignment: .leading) {
-                        if presenter.movie.backdropPath != nil {
+                        if !presenter.movie.backdropPath.isEmpty {
                             movieBackdrop
                         }
                         
@@ -27,7 +27,9 @@ struct DetailView: View {
                         
                         movieOverview
                         
-                        movieCredits
+                        if !presenter.movie.cast.isEmpty {
+                            movieCredits
+                        }
                         
                         movieDetailInfo
                     }
@@ -53,7 +55,7 @@ struct DetailView: View {
 
 extension DetailView {
     var moviePoster: some View {
-        WebImage(url: URL(string: API.imageBaseUrl + (presenter.movie.posterPath ?? "")))
+        WebImage(url: URL(string: API.imageBaseUrl + presenter.movie.posterPath))
             .resizable()
             .indicator(.activity)
             .transition(.fade(duration: 0.5))
@@ -62,7 +64,7 @@ extension DetailView {
     }
     
     var movieBackdrop: some View {
-        WebImage(url: URL(string: API.backdropBaseUrl + (presenter.movie.backdropPath ?? "")))
+        WebImage(url: URL(string: API.backdropBaseUrl + presenter.movie.backdropPath))
             .resizable()
             .indicator(.activity)
             .transition(.fade(duration: 0.5))
@@ -83,7 +85,7 @@ extension DetailView {
                     .multilineTextAlignment(.center)
                 
                 HStack {
-                    if !presenter.movie.runtime.formatRuntime().isEmpty {
+                    if presenter.movie.runtime != 0 {
                         Text(presenter.movie.runtime.formatRuntime())
                             .multilineTextAlignment(.center)
                     }
