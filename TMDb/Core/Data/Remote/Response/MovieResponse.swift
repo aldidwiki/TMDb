@@ -19,8 +19,8 @@ struct MovieResponseModel: Decodable {
     let id: Int
     let title: String
     let posterPath: String?
-    let rating: Double
-    let releaseDate: String
+    let rating: Double?
+    let releaseDate: String?
     
     private enum CodingKeys: String, CodingKey {
         case id

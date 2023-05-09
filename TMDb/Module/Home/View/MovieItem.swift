@@ -27,7 +27,7 @@ struct MovieItem: View {
 
 extension MovieItem {
     var moviePoster: some View {
-        WebImage(url: URL(string: API.imageBaseUrl + (movie.posterPath ?? "")))
+        WebImage(url: URL(string: API.imageBaseUrl + movie.posterPath))
             .resizable()
             .indicator(.activity)
             .transition(.fade(duration: 0.5))

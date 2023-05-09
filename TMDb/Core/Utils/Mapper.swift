@@ -15,9 +15,9 @@ final class Mapper {
             MovieModel(
                 id: item.id,
                 title: item.title,
-                posterPath: item.posterPath,
-                rating: item.rating,
-                releaseDate: item.releaseDate
+                posterPath: item.posterPath ?? "",
+                rating: item.rating ?? 0.0,
+                releaseDate: item.releaseDate ?? ""
             )
         }
     }
