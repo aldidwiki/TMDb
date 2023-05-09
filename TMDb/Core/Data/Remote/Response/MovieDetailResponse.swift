@@ -23,7 +23,7 @@ struct MovieDetailResponse: Decodable {
     let budget: Int64
     let revenue: Int64
     let status: String
-    let originalLanguage: String
+    let spokenLanguages: [SpokenLanguageResponse]
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -41,7 +41,7 @@ struct MovieDetailResponse: Decodable {
         case budget
         case revenue
         case status
-        case originalLanguage = "original_language"
+        case spokenLanguages = "spoken_languages"
     }
 }
 

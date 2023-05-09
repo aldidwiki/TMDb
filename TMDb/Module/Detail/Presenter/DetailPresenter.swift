@@ -32,7 +32,7 @@ class DetailPresenter: ObservableObject {
         budget: 1000,
         revenue: 2000,
         status: "Released",
-        originalLanguage: "English"
+        spokenLanguage: "English"
     )
     @Published var errorMessage = ""
     @Published var loadingState = false

@@ -163,21 +163,21 @@ extension DetailView {
                     Spacer()
                     
                     Text("Budget")
-                    Text("$\(presenter.movie.budget)")
+                    Text(presenter.movie.budget.formatCurrency())
                         .fontWeight(.thin)
                 }
                 
                 Spacer()
                 
                 VStack {
-                    Text("Original Language")
-                    Text(presenter.movie.originalLanguage)
+                    Text("Spoken Language")
+                    Text(presenter.movie.spokenLanguage)
                         .fontWeight(.thin)
                     
                     Spacer()
                     
                     Text("Revenue")
-                    Text("$\(presenter.movie.revenue)")
+                    Text(presenter.movie.revenue.formatCurrency())
                         .fontWeight(.thin)
                 }
                 

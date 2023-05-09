@@ -53,6 +53,7 @@
 		CEC6551C292F5BAB007B393A /* MovieItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC6551B292F5BAB007B393A /* MovieItem.swift */; };
 		CEC6551E292F5C52007B393A /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC6551D292F5C52007B393A /* API.swift */; };
 		CEC65520292F60BF007B393A /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC6551F292F60BF007B393A /* HomeView.swift */; };
+		CECA71502A0A1A5D0091094A /* SpokenLanguageResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECA714F2A0A1A5D0091094A /* SpokenLanguageResponse.swift */; };
 		CEEEDEE52931F7E800976696 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = CEEEDEE42931F7E800976696 /* .swiftlint.yml */; };
 /* End PBXBuildFile section */
 
@@ -99,6 +100,7 @@
 		CEC6551B292F5BAB007B393A /* MovieItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieItem.swift; sourceTree = "<group>"; };
 		CEC6551D292F5C52007B393A /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		CEC6551F292F60BF007B393A /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		CECA714F2A0A1A5D0091094A /* SpokenLanguageResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpokenLanguageResponse.swift; sourceTree = "<group>"; };
 		CEEEDEE42931F7E800976696 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -334,6 +336,7 @@
 				CEBD444C2A089C3E00BBD9B6 /* GenreResponse.swift */,
 				CEBD444E2A08A38C00BBD9B6 /* CreditResponse.swift */,
 				CEBD44542A08E12B00BBD9B6 /* PersonResponse.swift */,
+				CECA714F2A0A1A5D0091094A /* SpokenLanguageResponse.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -531,6 +534,7 @@
 				CE182B04292F831E00B5C857 /* DetailPresenter.swift in Sources */,
 				CE182AFC292F7F7000B5C857 /* MovieDetailResponse.swift in Sources */,
 				CE9E30E429305C15001BFB57 /* DetailView.swift in Sources */,
+				CECA71502A0A1A5D0091094A /* SpokenLanguageResponse.swift in Sources */,
 				CEC65520292F60BF007B393A /* HomeView.swift in Sources */,
 				CEC654E7292F5381007B393A /* ContentView.swift in Sources */,
 				CEC65519292F5B14007B393A /* Injection.swift in Sources */,

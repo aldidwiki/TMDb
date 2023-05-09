@@ -45,6 +45,8 @@ final class Mapper {
             }
         }
         
+        let spokenLanguage = movieDetailResponse.spokenLanguages.first?.englishName ?? "-"
+        
         return MovieDetailModel(
             id: movieDetailResponse.id,
             title: movieDetailResponse.title,
@@ -61,7 +63,7 @@ final class Mapper {
             budget: movieDetailResponse.budget,
             revenue: movieDetailResponse.revenue,
             status: movieDetailResponse.status,
-            originalLanguage: movieDetailResponse.originalLanguage
+            spokenLanguage: spokenLanguage
         )
     }
     
@@ -94,13 +96,20 @@ final class Mapper {
     static func mapPersonResponseToDomain(
         input personResponse: PersonResponse
     ) -> PersonModel {
+        var genderText = "Unknown"
+        if personResponse.gender == 1 {
+            genderText = "Female"
+        } else if personResponse.gender == 2 {
+            genderText = "Male"
+        }
+        
         return PersonModel(
             id: personResponse.id,
             name: personResponse.name,
             profilePath: personResponse.profilePath,
             birthday: personResponse.birthday,
             deathday: personResponse.deathday,
-            gender: personResponse.gender,
+            gender: genderText,
             biography: personResponse.biography,
             birthplace: personResponse.birthplace,
             knownFor: personResponse.knownFor

@@ -16,6 +16,21 @@ extension String {
         dateFormatter.dateFormat = outFormat
         return dateFormatter.string(from: outDate)
     }
+    
+    func ageFormatter(_ inFormat: String = "yyyy-MM-dd") -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = inFormat
+        let currentDate = Date()
+        
+        var age = 0
+        if let date = dateFormatter.date(from: self) {
+            let calendar = Calendar.current
+            let ageComponents = calendar.dateComponents([.year], from: date, to: currentDate)
+            age = ageComponents.year!
+        }
+        
+        return String(age)
+    }
 }
 
 extension Int? {
@@ -33,5 +48,25 @@ extension Int? {
         }
         
         return runtimeText
+    }
+}
+
+extension Int64 {
+    func formatCurrency() -> String {
+        let formatter = NumberFormatter()
+        formatter.locale = Locale(identifier: "en-US")
+        formatter.numberStyle = .currency
+        formatter.maximumFractionDigits = 0
+        if let str = formatter.string(for: self) {
+            return str
+        }
+        
+        return String(self)
+    }
+}
+
+extension Date {
+    func get(_ component: Calendar.Component, calendar: Calendar = Calendar.current) -> Int {
+        return calendar.component(component, from: self)
     }
 }

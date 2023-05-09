@@ -23,5 +23,5 @@ struct MovieDetailModel: Identifiable {
     let budget: Int64
     let revenue: Int64
     let status: String
-    let originalLanguage: String
+    let spokenLanguage: String
 }

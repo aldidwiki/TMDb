@@ -13,7 +13,7 @@ struct PersonModel: Identifiable, Equatable {
     let profilePath: String?
     let birthday: String
     let deathday: String?
-    let gender: Int
+    let gender: String
     let biography: String?
     let birthplace: String
     let knownFor: String

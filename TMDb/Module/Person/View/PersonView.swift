@@ -67,7 +67,7 @@ extension PersonView {
         HStack {
             VStack(alignment: .leading) {
                 Text("Birthday")
-                Text(presenter.person.birthday.formatDateString())
+                Text("\(presenter.person.birthday.formatDateString()) (\(presenter.person.birthday.ageFormatter()) years old)")
                     .fontWeight(.thin)
                 
                 Spacer()
@@ -91,8 +91,7 @@ extension PersonView {
                 Text(String(presenter.person.gender))
                     .fontWeight(.thin)
             }
-            
-            Spacer()
+            .padding(.trailing)
         }
         .padding(.top, 2)
     }
