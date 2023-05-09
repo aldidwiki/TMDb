@@ -37,7 +37,9 @@ struct DetailView: View {
             }
         }.onAppear {
             presenter.getMovie()
-        }.toolbar {
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
             ToolbarItem {
                 Button {
                     if !presenter.isFavorite {

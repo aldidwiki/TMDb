@@ -56,6 +56,12 @@ extension PersonView {
     var profilePoster: some View {
         WebImage(url: URL(string: API.profileImageBaseUrl + presenter.person.profilePath))
             .resizable()
+            .placeholder(content: {
+                Image(systemName: "person")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
+            })
             .indicator(.activity)
             .transition(.fade(duration: 0.5))
             .scaledToFit()
@@ -71,7 +77,7 @@ extension PersonView {
                 let age = presenter.person.birthday.ageFormatter()
                 Text(!birthday.isEmpty ? "\(birthday) (\(age) years old)" : "-")
                     .fontWeight(.thin)
-                    
+                
                 Spacer()
                 
                 Text("Place of Birth")

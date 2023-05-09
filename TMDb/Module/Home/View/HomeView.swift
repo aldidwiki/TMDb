@@ -30,7 +30,8 @@ struct HomeView: View {
                 if self.presenter.movies.count == 0 {
                     self.presenter.getMovies()
                 }
-            }.navigationTitle("Popular Movies")
+            }
+            .navigationTitle("Popular Movies")
         }
         .searchable(text: $presenter.movieQuery, placement: .automatic)
         .onReceive(presenter.$movieQuery.debounce(for: 1, scheduler: RunLoop.main)) { query in
