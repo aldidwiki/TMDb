@@ -7,11 +7,13 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 class PersonPresenter: ObservableObject {
     private var cancellable: Set<AnyCancellable> = []
     
     private let personUseCase: PersonUseCase
+    private let router = PersonRouter()
     
     @Published var errorMessage = ""
     @Published var loadingState = false
@@ -47,5 +49,15 @@ class PersonPresenter: ObservableObject {
             } receiveValue: { person in
                 self.person = person
             }.store(in: &cancellable)
+    }
+    
+    func linkBuilder<Content: View>(
+        movieId: Int,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        NavigationLink(destination: router.makeMovieDetailView(for: movieId)) {
+            content()
+        }
+        .buttonStyle(.plain)
     }
 }
