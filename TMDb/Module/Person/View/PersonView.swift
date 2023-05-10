@@ -24,33 +24,9 @@ struct PersonView: View {
                             .font(.title)
                             .fontWeight(.semibold)
                         
-                        Text("Personal Info")
-                            .font(.title2)
-                            .fontWeight(.medium)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.top)
-                            .padding(.horizontal)
                         personalInfo
                         
-                        Text("Biography")
-                            .font(.title2)
-                            .fontWeight(.medium)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.top)
-                            .padding(.horizontal)
-                        
-                        Text(presenter.person.biography)
-                            .fontWeight(.thin)
-                            .multilineTextAlignment(.leading)
-                            .padding(.top, 2)
-                            .padding(.horizontal)
-                        
-                        Text("Known For")
-                            .font(.title2)
-                            .fontWeight(.medium)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.top)
-                            .padding(.horizontal)
+                        personBiography
                         
                         personCredits
                     }
@@ -81,53 +57,86 @@ extension PersonView {
     }
     
     var personalInfo: some View {
-        HStack {
-            VStack(alignment: .leading) {
-                Text("Birthday")
-                let birthday = presenter.person.birthday.formatDateString()
-                let age = presenter.person.birthday.ageFormatter()
-                Text(!birthday.isEmpty ? "\(birthday) (\(age) years old)" : "-")
-                    .fontWeight(.thin)
+        VStack {
+            Text("Personal Info")
+                .font(.title2)
+                .fontWeight(.medium)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            HStack {
+                VStack(alignment: .leading) {
+                    Text("Birthday")
+                    let birthday = presenter.person.birthday.formatDateString()
+                    let age = presenter.person.birthday.ageFormatter()
+                    Text(!birthday.isEmpty ? "\(birthday) (\(age) years old)" : "-")
+                        .fontWeight(.thin)
+                    
+                    Spacer()
+                    
+                    Text("Place of Birth")
+                    Text(presenter.person.birthplace)
+                        .fontWeight(.thin)
+                        .lineLimit(1)
+                }
                 
                 Spacer()
                 
-                Text("Place of Birth")
-                Text(presenter.person.birthplace)
-                    .fontWeight(.thin)
-                    .lineLimit(1)
+                VStack(alignment: .leading) {
+                    Text("Known For")
+                    Text(presenter.person.knownFor)
+                        .fontWeight(.thin)
+                    
+                    Spacer()
+                    
+                    Text("Gender")
+                    Text(String(presenter.person.gender))
+                        .fontWeight(.thin)
+                }
+                .padding(.trailing)
             }
-            
-            Spacer()
-            
-            VStack(alignment: .leading) {
-                Text("Known For")
-                Text(presenter.person.knownFor)
-                    .fontWeight(.thin)
-                
-                Spacer()
-                
-                Text("Gender")
-                Text(String(presenter.person.gender))
-                    .fontWeight(.thin)
-            }
-            .padding(.trailing)
+            .padding(.top, 1)
         }
+        .padding(.top)
         .padding(.horizontal)
-        .padding(.top, 2)
+    }
+    
+    var personBiography: some View {
+        VStack {
+            Text("Biography")
+                .font(.title2)
+                .fontWeight(.medium)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Text(presenter.person.biography)
+                .fontWeight(.thin)
+                .multilineTextAlignment(.leading)
+                .padding(.top, 1)
+        }
+        .padding(.top)
+        .padding(.horizontal)
     }
     
     var personCredits: some View {
-        ScrollView(.horizontal) {
-            LazyHStack(spacing: 15) {
-                ForEach(presenter.person.credits, id: \.id) { cast in
-                    presenter.linkBuilder(movieId: cast.id) {
-                        CreditItemView(creditModel: cast)
+        VStack {
+            Text("Known For")
+                .font(.title2)
+                .fontWeight(.medium)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal)
+            
+            ScrollView(.horizontal) {
+                LazyHStack(spacing: 15) {
+                    ForEach(presenter.person.credits, id: \.id) { cast in
+                        presenter.linkBuilder(movieId: cast.id) {
+                            CreditItemView(creditModel: cast)
+                        }
                     }
                 }
+                .padding(.horizontal)
             }
-            .padding(.horizontal)
-            .padding(.bottom)
         }
+        .padding(.top)
+        .padding(.bottom)
     }
 }
 
