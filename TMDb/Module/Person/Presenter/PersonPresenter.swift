@@ -25,7 +25,8 @@ class PersonPresenter: ObservableObject {
         gender: "Unknown",
         biography: "Christopher Michael Pratt (born 21 June 1979) is an American actor, known for starring in both television and action films.",
         birthplace: "Virginia, Minnesota, USA",
-        knownFor: "Acting"
+        knownFor: "Acting",
+        credits: []
     )
     
     init(personUseCase: PersonUseCase) {

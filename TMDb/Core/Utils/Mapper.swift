@@ -112,7 +112,8 @@ final class Mapper {
             gender: genderText,
             biography: personResponse.biography ?? "-",
             birthplace: personResponse.birthplace ?? "-",
-            knownFor: personResponse.knownFor ?? "-"
+            knownFor: personResponse.knownFor ?? "-",
+            credits: mapPersonCreditResponseToDomains(input: personResponse)
         )
     }
     
@@ -124,6 +125,20 @@ final class Mapper {
                 id: cast.id,
                 name: cast.name ?? "",
                 profilePath: cast.profilePath ?? "",
+                characterName: cast.characterName ?? "",
+                order: cast.order ?? 0
+            )
+        }
+    }
+    
+    private static func mapPersonCreditResponseToDomains(
+        input personResponse: PersonResponse
+    ) -> [CreditModel] {
+        return personResponse.credits.cast.map { cast in
+            CreditModel(
+                id: cast.id,
+                name: cast.title ?? "",
+                profilePath: cast.posterPath ?? "",
                 characterName: cast.characterName ?? "",
                 order: cast.order ?? 0
             )

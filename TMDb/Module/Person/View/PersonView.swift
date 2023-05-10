@@ -29,6 +29,7 @@ struct PersonView: View {
                             .fontWeight(.medium)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.top)
+                            .padding(.horizontal)
                         personalInfo
                         
                         Text("Biography")
@@ -36,13 +37,23 @@ struct PersonView: View {
                             .fontWeight(.medium)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.top)
+                            .padding(.horizontal)
                         
                         Text(presenter.person.biography)
                             .fontWeight(.thin)
                             .multilineTextAlignment(.leading)
                             .padding(.top, 2)
+                            .padding(.horizontal)
+                        
+                        Text("Known For")
+                            .font(.title2)
+                            .fontWeight(.medium)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.top)
+                            .padding(.horizontal)
+                        
+                        personCredits
                     }
-                    .padding(.horizontal)
                     .padding(.bottom)
                 }
             }
@@ -101,7 +112,20 @@ extension PersonView {
             }
             .padding(.trailing)
         }
+        .padding(.horizontal)
         .padding(.top, 2)
+    }
+    
+    var personCredits: some View {
+        ScrollView(.horizontal) {
+            LazyHStack(spacing: 15) {
+                ForEach(presenter.person.credits, id: \.id) { cast in
+                    CreditItemView(creditModel: cast)
+                }
+            }
+            .padding(.horizontal)
+            .padding(.bottom)
+        }
     }
 }
 

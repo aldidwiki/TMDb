@@ -13,12 +13,4 @@ struct CreditModel: Identifiable, Equatable {
     let profilePath: String
     let characterName: String
     let order: Int
-    
-    private enum CodingKeys: String, CodingKey {
-        case id
-        case name
-        case profilePath = "profile_path"
-        case characterName = "character"
-        case order
-    }
 }
