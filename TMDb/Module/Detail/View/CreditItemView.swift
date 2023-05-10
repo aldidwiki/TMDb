@@ -14,8 +14,8 @@ struct CreditItemView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 6, style: .continuous)
-                .fill(.white)
-                .shadow(radius: 3)
+                .fill(.background)
+                .shadow(radius: 4)
             
             VStack(alignment: .leading) {
                 creditPoster
