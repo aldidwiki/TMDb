@@ -137,7 +137,7 @@ extension DetailView {
             
             ScrollView(.horizontal) {
                 LazyHStack(spacing: 20) {
-                    ForEach(presenter.movie.cast, id: \.id) { cast in
+                    ForEach(presenter.movie.cast.take(length: 10), id: \.id) { cast in
                         presenter.linkBuilder(for: cast.id) {
                             CreditItemView(creditModel: cast)
                         }

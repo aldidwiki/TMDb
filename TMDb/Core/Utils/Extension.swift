@@ -70,3 +70,13 @@ extension Date {
         return calendar.component(component, from: self)
     }
 }
+
+extension Array {
+    func take(length: Int) -> [Element] {
+        if self.count < length {
+            return Array(self.prefix(self.count))
+        } else {
+            return Array(self.prefix(length))
+        }
+    }
+}

@@ -126,7 +126,7 @@ extension PersonView {
             
             ScrollView(.horizontal) {
                 LazyHStack(spacing: 20) {
-                    ForEach(presenter.person.credits, id: \.id) { cast in
+                    ForEach(presenter.person.credits.take(length: 10), id: \.id) { cast in
                         presenter.linkBuilder(movieId: cast.id) {
                             CreditItemView(creditModel: cast)
                         }
