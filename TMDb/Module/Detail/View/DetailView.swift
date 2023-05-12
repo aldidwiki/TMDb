@@ -130,10 +130,19 @@ extension DetailView {
     
     var movieCredits: some View {
         VStack(alignment: .leading) {
-            Text("Top Billed Cast")
-                .padding([.top, .horizontal])
-                .font(.title2)
-                .fontWeight(.semibold)
+            HStack(alignment: .center) {
+                Text("Top Billed Cast")
+                    .padding(.horizontal)
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                
+                Spacer()
+                
+                Button("FULL CAST") {
+                    
+                }
+                .padding(.horizontal)
+            }
             
             ScrollView(.horizontal) {
                 LazyHStack(spacing: 20) {
@@ -147,6 +156,7 @@ extension DetailView {
                 .padding(.bottom)
             }
         }
+        .padding(.top)
     }
     
     var movieDetailInfo: some View {

@@ -118,11 +118,19 @@ extension PersonView {
     
     var personCredits: some View {
         VStack {
-            Text("Known For")
-                .font(.title2)
-                .fontWeight(.medium)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal)
+            HStack(alignment: .center) {
+                Text("Known For")
+                    .font(.title2)
+                    .fontWeight(.medium)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                Spacer()
+                
+                Button("SHOW ALL") {
+                    
+                }
+            }
+            .padding(.horizontal)
             
             ScrollView(.horizontal) {
                 LazyHStack(spacing: 20) {
