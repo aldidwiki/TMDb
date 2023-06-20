@@ -18,4 +18,8 @@ struct PersonModel: Identifiable, Equatable {
     let birthplace: String
     let knownFor: String
     let credits: [CreditModel]
+    let instagramId: String
+    let facebookId: String
+    let imdbId: String
+    let twitterId: String
 }

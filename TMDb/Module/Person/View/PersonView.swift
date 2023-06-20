@@ -24,6 +24,13 @@ struct PersonView: View {
                             .font(.title)
                             .fontWeight(.semibold)
                         
+                        ExternalMediaView(
+                            instagramId: presenter.person.instagramId,
+                            facebookId: presenter.person.facebookId,
+                            twitterId: presenter.person.twitterId,
+                            imdbId: presenter.person.imdbId
+                        )
+                        
                         personalInfo
                         
                         personBiography

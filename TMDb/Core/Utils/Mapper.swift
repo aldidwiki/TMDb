@@ -117,7 +117,11 @@ final class Mapper {
             biography: personResponse.biography ?? "-",
             birthplace: personResponse.birthplace ?? "-",
             knownFor: personResponse.knownFor ?? "-",
-            credits: mapPersonCreditResponseToDomains(input: personResponse)
+            credits: mapPersonCreditResponseToDomains(input: personResponse),
+            instagramId: personResponse.externalMedia?.instagramId ?? "",
+            facebookId: personResponse.externalMedia?.facebookId ?? "",
+            imdbId: personResponse.externalMedia?.imdbId ?? "",
+            twitterId: personResponse.externalMedia?.twitterId ?? ""
         )
     }
     

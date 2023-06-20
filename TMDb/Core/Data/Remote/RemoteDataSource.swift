@@ -87,7 +87,7 @@ extension RemoteDataSource: RemoteDataSourceProtocol {
     func getPerson(personId: Int) -> AnyPublisher<PersonResponse, Error> {
         let param: Parameters = [
             "api_key": "150ef4d7b4d3c9953518a6e2ed49928e",
-            "append_to_response": "movie_credits"
+            "append_to_response": "movie_credits,external_ids"
         ]
         
         return Future<PersonResponse, Error> {completion in

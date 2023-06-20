@@ -28,7 +28,11 @@ class PersonPresenter: ObservableObject {
         biography: "Christopher Michael Pratt (born 21 June 1979) is an American actor, known for starring in both television and action films.",
         birthplace: "Virginia, Minnesota, USA",
         knownFor: "Acting",
-        credits: []
+        credits: [],
+        instagramId: "prattprattpratt",
+        facebookId: "PrattPrattPratt",
+        imdbId: "nm0695435",
+        twitterId: "prattprattpratt"
     )
     
     init(personUseCase: PersonUseCase) {
