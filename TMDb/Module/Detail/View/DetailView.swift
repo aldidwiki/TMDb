@@ -138,7 +138,7 @@ extension DetailView {
                 
                 Spacer()
                 
-                presenter.toCreditDetailView(for: presenter.movie.cast) {
+                presenter.toCreditDetailView(for: presenter.movie.cast, presenter: presenter) {
                     Text("FULL CAST")
                         .padding(.horizontal)
                 }
@@ -147,7 +147,7 @@ extension DetailView {
             ScrollView(.horizontal) {
                 LazyHStack(spacing: 20) {
                     ForEach(presenter.movie.cast.take(length: 10), id: \.id) { cast in
-                        presenter.linkBuilder(for: cast.id) {
+                        presenter.toPersonDetail(for: cast.id) {
                             CreditItemView(creditModel: cast)
                         }
                     }

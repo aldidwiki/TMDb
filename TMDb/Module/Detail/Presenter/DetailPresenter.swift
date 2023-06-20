@@ -111,7 +111,7 @@ class DetailPresenter: ObservableObject {
             }.store(in: &cancellable)
     }
     
-    func linkBuilder<Content: View>(
+    func toPersonDetail<Content: View>(
         for personId: Int,
         @ViewBuilder content: () -> Content
     ) -> some View {
@@ -123,9 +123,10 @@ class DetailPresenter: ObservableObject {
     
     func toCreditDetailView<Content: View>(
         for credits: [CreditModel],
+        presenter: DetailPresenter,
         @ViewBuilder content: () -> Content
     ) -> some View {
-        NavigationLink(destination: router.makeCreditDetailView(for: credits)) {
+        NavigationLink(destination: router.makeCreditDetailView(for: credits, presenter: presenter)) {
             content()
         }
     }

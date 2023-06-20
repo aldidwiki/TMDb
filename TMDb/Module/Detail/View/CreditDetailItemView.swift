@@ -35,7 +35,7 @@ extension CreditDetailItemView {
         WebImage(url: URL(string: API.profileImageBaseUrl + creditModel.profilePath))
             .resizable()
             .placeholder(content: {
-                Image(systemName: "photo")
+                Image(systemName: "person")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 35, height: 35)
