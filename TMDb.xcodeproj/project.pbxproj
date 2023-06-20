@@ -18,6 +18,7 @@
 		CE5762772A41635C0094A16D /* CreditDetailRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5762762A41635C0094A16D /* CreditDetailRouter.swift */; };
 		CE5762792A4194310094A16D /* ExternalMediaResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5762782A4194310094A16D /* ExternalMediaResponse.swift */; };
 		CE57627B2A419EBF0094A16D /* ExternalMediaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE57627A2A419EBF0094A16D /* ExternalMediaView.swift */; };
+		CE57627F2A41A9100094A16D /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE57627E2A41A9100094A16D /* CircularProgressView.swift */; };
 		CE8DDDEE2A0B303400F94CEE /* PersonCreditResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8DDDED2A0B303400F94CEE /* PersonCreditResponse.swift */; };
 		CE8DDDF12A0B3BED00F94CEE /* PersonRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8DDDF02A0B3BED00F94CEE /* PersonRouter.swift */; };
 		CE971C432931F53900C33D9C /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE971C422931F53900C33D9C /* EmptyView.swift */; };
@@ -77,6 +78,7 @@
 		CE5762762A41635C0094A16D /* CreditDetailRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditDetailRouter.swift; sourceTree = "<group>"; };
 		CE5762782A4194310094A16D /* ExternalMediaResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalMediaResponse.swift; sourceTree = "<group>"; };
 		CE57627A2A419EBF0094A16D /* ExternalMediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalMediaView.swift; sourceTree = "<group>"; };
+		CE57627E2A41A9100094A16D /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
 		CE8DDDED2A0B303400F94CEE /* PersonCreditResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonCreditResponse.swift; sourceTree = "<group>"; };
 		CE8DDDF02A0B3BED00F94CEE /* PersonRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonRouter.swift; sourceTree = "<group>"; };
 		CE971C422931F53900C33D9C /* EmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
@@ -334,6 +336,7 @@
 				CE182AF6292F6E2D00B5C857 /* Extension.swift */,
 				CE971C422931F53900C33D9C /* EmptyView.swift */,
 				CE57627A2A419EBF0094A16D /* ExternalMediaView.swift */,
+				CE57627E2A41A9100094A16D /* CircularProgressView.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -573,6 +576,7 @@
 				CEC654E7292F5381007B393A /* ContentView.swift in Sources */,
 				CEC65519292F5B14007B393A /* Injection.swift in Sources */,
 				CE182B00292F825B00B5C857 /* DetailInteractor.swift in Sources */,
+				CE57627F2A41A9100094A16D /* CircularProgressView.swift in Sources */,
 				CEC6550C292F57A6007B393A /* Mapper.swift in Sources */,
 				CE9E30F129308DE7001BFB57 /* LocaleDataSource.swift in Sources */,
 				CEC65516292F59DA007B393A /* HomePresenter.swift in Sources */,
