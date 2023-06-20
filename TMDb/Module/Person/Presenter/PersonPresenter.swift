@@ -60,4 +60,13 @@ class PersonPresenter: ObservableObject {
         }
         .buttonStyle(.plain)
     }
+    
+    func toCreditDetailView<Content: View>(
+        creditModelList: [CreditModel],
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        NavigationLink(destination: router.makeCreditDetailView(creditModelList: creditModelList)) {
+            content()
+        }
+    }
 }

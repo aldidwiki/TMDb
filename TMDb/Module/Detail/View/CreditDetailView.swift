@@ -8,13 +8,19 @@
 import SwiftUI
 
 struct CreditDetailView: View {
-    var presenter: DetailPresenter
+    @ObservedObject var presenter: CreditDetailPresenter
     var creditModelList: [CreditModel]
     
     var body: some View {
         List(creditModelList) { credit in
-            presenter.toPersonDetail(for: credit.id) {
-                CreditDetailItemView(creditModel: credit)
+            if presenter.navigateType == NavigateType.personView {
+                presenter.toPersonView(for: credit.id) {
+                    CreditDetailItemView(creditModel: credit)
+                }
+            } else {
+                presenter.toMovieDetailView(for: credit.id) {
+                    CreditDetailItemView(creditModel: credit)
+                }
             }
         }
         .listStyle(.plain)
@@ -23,11 +29,8 @@ struct CreditDetailView: View {
 
 struct CreditDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        let detailUseCase = Injection.init().provideDetailUseCase(movieId: 436270)
-        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
-        
         CreditDetailView(
-            presenter: DetailPresenter(detailUseCase: detailUseCase, favoriteUseCase: favoriteUseCase),
+            presenter: CreditDetailPresenter(navigateType: NavigateType.personView),
             creditModelList: [
                 CreditModel(
                     id: 73457,

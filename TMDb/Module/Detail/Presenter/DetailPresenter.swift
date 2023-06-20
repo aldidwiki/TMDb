@@ -123,10 +123,9 @@ class DetailPresenter: ObservableObject {
     
     func toCreditDetailView<Content: View>(
         for credits: [CreditModel],
-        presenter: DetailPresenter,
         @ViewBuilder content: () -> Content
     ) -> some View {
-        NavigationLink(destination: router.makeCreditDetailView(for: credits, presenter: presenter)) {
+        NavigationLink(destination: router.makeCreditDetailView(for: credits)) {
             content()
         }
     }

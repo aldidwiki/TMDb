@@ -139,9 +139,10 @@ extension DetailView {
                 
                 Spacer()
                 
-                presenter.toCreditDetailView(for: presenter.movie.cast, presenter: presenter) {
+                presenter.toCreditDetailView(for: presenter.movie.cast) {
                     Text("FULL CAST")
                         .padding(.horizontal)
+                        .font(.subheadline)
                 }
             }
             

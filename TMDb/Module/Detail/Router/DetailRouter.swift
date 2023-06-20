@@ -14,7 +14,7 @@ class DetailRouter {
         return PersonView(presenter: PersonPresenter(personUseCase: personUseCase))
     }
     
-    func makeCreditDetailView(for credits: [CreditModel], presenter: DetailPresenter) -> some View {
-        return CreditDetailView(presenter: presenter, creditModelList: credits)
+    func makeCreditDetailView(for credits: [CreditModel]) -> some View {
+        return CreditDetailView(presenter: CreditDetailPresenter(navigateType: NavigateType.personView), creditModelList: credits)
     }
 }

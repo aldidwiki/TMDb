@@ -127,8 +127,9 @@ extension PersonView {
                 
                 Spacer()
                 
-                Button("SHOW ALL") {
-                    
+                presenter.toCreditDetailView(creditModelList: presenter.person.credits) {
+                    Text("SHOW ALL")
+                        .font(.subheadline)
                 }
             }
             .padding(.horizontal)
