@@ -36,6 +36,7 @@ struct PersonView: View {
         }.onAppear {
             presenter.getPerson()
         }
+        .navigationTitle(presenter.person.name)
     }
 }
 

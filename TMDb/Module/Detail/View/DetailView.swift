@@ -39,6 +39,7 @@ struct DetailView: View {
             presenter.getMovie()
         }
         .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(presenter.movie.title)
         .toolbar {
             ToolbarItem {
                 Button {
