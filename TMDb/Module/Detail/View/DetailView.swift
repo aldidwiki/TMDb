@@ -138,10 +138,10 @@ extension DetailView {
                 
                 Spacer()
                 
-                Button("FULL CAST") {
-                    
+                presenter.toCreditDetailView(for: presenter.movie.cast) {
+                    Text("FULL CAST")
+                        .padding(.horizontal)
                 }
-                .padding(.horizontal)
             }
             
             ScrollView(.horizontal) {

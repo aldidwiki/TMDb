@@ -13,4 +13,8 @@ class DetailRouter {
         let personUseCase = Injection.init().providePersonUseCase(personId: personId)
         return PersonView(presenter: PersonPresenter(personUseCase: personUseCase))
     }
+    
+    func makeCreditDetailView(for credits: [CreditModel]) -> some View {
+        return CreditDetailView(creditModelList: credits)
+    }
 }
