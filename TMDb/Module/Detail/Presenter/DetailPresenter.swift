@@ -18,7 +18,7 @@ class DetailPresenter: ObservableObject {
     
     @Published var movie = MovieDetailModel(
         id: 436270,
-        title: "Black Adam",
+        title: "",
         rating: 7.1,
         posterPath: "/bQXAqRx2Fgc46uCVWgoPz5L5Dtr.jpg",
         overview: "Nearly 5,000 years after he was bestowed with the almighty powers of the Egyptian gods—and imprisoned just as quickly—Black Adam is freed from his earthly tomb, ready to unleash his unique form of justice on the modern world.",
@@ -32,7 +32,11 @@ class DetailPresenter: ObservableObject {
         budget: 1000,
         revenue: 2000,
         status: "Released",
-        spokenLanguage: "English"
+        spokenLanguage: "English",
+        instagramId: "blackadammovie",
+        facebookId: "blackadammovie",
+        twitterId: "blackadammovie",
+        imdbId: "tt6443346"
     )
     @Published var errorMessage = ""
     @Published var loadingState = false

@@ -63,7 +63,11 @@ final class Mapper {
             budget: movieDetailResponse.budget,
             revenue: movieDetailResponse.revenue,
             status: movieDetailResponse.status,
-            spokenLanguage: spokenLanguage
+            spokenLanguage: spokenLanguage,
+            instagramId: movieDetailResponse.externalMedia?.instagramId ?? "",
+            facebookId: movieDetailResponse.externalMedia?.facebookId ?? "",
+            twitterId: movieDetailResponse.externalMedia?.twitterId ?? "",
+            imdbId: movieDetailResponse.externalMedia?.imdbId ?? ""
         )
     }
     

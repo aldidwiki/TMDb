@@ -24,4 +24,8 @@ struct MovieDetailModel: Identifiable {
     let revenue: Int64
     let status: String
     let spokenLanguage: String
+    let instagramId: String
+    let facebookId: String
+    let twitterId: String
+    let imdbId: String
 }

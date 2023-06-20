@@ -32,6 +32,8 @@ struct DetailView: View {
                         }
                         
                         movieDetailInfo
+                        
+                        movieExternalMedia
                     }
                 }
             }
@@ -202,6 +204,45 @@ extension DetailView {
             .padding(.top, 2)
         }
         .padding(.bottom)
+    }
+    
+    var movieExternalMedia: some View {
+        HStack(spacing: 30) {
+            Spacer()
+            if !presenter.movie.facebookId.isEmpty {
+                Link(destination: URL(string: "https://www.facebook.com/" + presenter.movie.facebookId)!) {
+                    Image("facebook_logo")
+                        .resizable()
+                        .frame(width: 25, height: 25)
+                }
+            }
+            
+            if !presenter.movie.instagramId.isEmpty {
+                Link(destination: URL(string: "https://www.instagram.com/" + presenter.movie.instagramId)!) {
+                    Image("instagram_logo")
+                        .resizable()
+                        .frame(width: 25, height: 25)
+                }
+            }
+            
+            if !presenter.movie.imdbId.isEmpty {
+                Link(destination: URL(string: "https://www.imdb.com/title/" + presenter.movie.imdbId)!) {
+                    Image("imdb_logo")
+                        .resizable()
+                        .frame(width: 25, height: 25)
+                }
+            }
+            
+            if !presenter.movie.twitterId.isEmpty {
+                Link(destination: URL(string: "https://twitter.com/" + presenter.movie.twitterId)!) {
+                    Image("twitter_logo")
+                        .resizable()
+                        .frame(width: 25, height: 25)
+                }
+            }
+            Spacer()
+        }
+        .padding(.vertical)
     }
 }
 
