@@ -33,10 +33,10 @@ class DetailPresenter: ObservableObject {
         revenue: 2000,
         status: "Released",
         spokenLanguage: "English",
-        instagramId: "blackadammovie",
-        facebookId: "blackadammovie",
-        twitterId: "blackadammovie",
-        imdbId: "tt6443346",
+        instagramId: "",
+        facebookId: "",
+        twitterId: "",
+        imdbId: "",
         videos: []
     )
     @Published var errorMessage = ""

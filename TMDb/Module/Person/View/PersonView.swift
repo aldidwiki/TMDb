@@ -28,7 +28,8 @@ struct PersonView: View {
                             instagramId: presenter.person.instagramId,
                             facebookId: presenter.person.facebookId,
                             twitterId: presenter.person.twitterId,
-                            imdbId: presenter.person.imdbId
+                            imdbId: presenter.person.imdbId,
+                            isPerson: true
                         )
                         
                         personalInfo

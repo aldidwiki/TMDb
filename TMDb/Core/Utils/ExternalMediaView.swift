@@ -13,11 +13,13 @@ struct ExternalMediaView: View {
     var twitterId: String
     var imdbId: String
     
+    var isPerson = false
+    
     var body: some View {
         HStack(spacing: 30) {
             Spacer()
             if !facebookId.isEmpty {
-                Link(destination: URL(string: "https://www.facebook.com/" + facebookId)!) {
+                Link(destination: URL(string: Constants.facebookBaseUrl + facebookId)!) {
                     Image("facebook_logo")
                         .resizable()
                         .frame(width: 25, height: 25)
@@ -25,7 +27,7 @@ struct ExternalMediaView: View {
             }
             
             if !instagramId.isEmpty {
-                Link(destination: URL(string: "https://www.instagram.com/" + instagramId)!) {
+                Link(destination: URL(string: Constants.instagramBaseUrl + instagramId)!) {
                     Image("instagram_logo")
                         .resizable()
                         .frame(width: 25, height: 25)
@@ -33,7 +35,7 @@ struct ExternalMediaView: View {
             }
             
             if !imdbId.isEmpty {
-                Link(destination: URL(string: "https://www.imdb.com/title/" + imdbId)!) {
+                Link(destination: URL(string: isPerson ? Constants.imdbPersonBaseUrl + imdbId : Constants.imdbBaseUrl + imdbId)!) {
                     Image("imdb_logo")
                         .resizable()
                         .frame(width: 25, height: 25)
@@ -41,7 +43,7 @@ struct ExternalMediaView: View {
             }
             
             if !twitterId.isEmpty {
-                Link(destination: URL(string: "https://twitter.com/" + twitterId)!) {
+                Link(destination: URL(string: Constants.twitterBaseUrl + twitterId)!) {
                     Image("twitter_logo")
                         .resizable()
                         .frame(width: 25, height: 25)

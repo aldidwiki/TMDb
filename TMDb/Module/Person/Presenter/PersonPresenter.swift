@@ -29,10 +29,10 @@ class PersonPresenter: ObservableObject {
         birthplace: "Virginia, Minnesota, USA",
         knownFor: "Acting",
         credits: [],
-        instagramId: "prattprattpratt",
-        facebookId: "PrattPrattPratt",
-        imdbId: "nm0695435",
-        twitterId: "prattprattpratt"
+        instagramId: "",
+        facebookId: "",
+        imdbId: "",
+        twitterId: ""
     )
     
     init(personUseCase: PersonUseCase) {
