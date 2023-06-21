@@ -10,6 +10,7 @@ import SDWebImageSwiftUI
 
 struct DetailView: View {
     @ObservedObject var presenter: DetailPresenter
+    @State var showSheet = false
     
     var body: some View {
         ZStack {
@@ -218,10 +219,10 @@ extension DetailView {
         HStack(alignment: .center) {
             Spacer()
             ZStack {
-                CircularProgressView(progress: presenter.movie.rating, lineWidth: 3)
+                CircularProgressView(progress: presenter.movie.rating / 10, lineWidth: 3)
                     .frame(width: 35, height: 35)
                 
-                Text(presenter.movie.rating.toPercentage())
+                Text((presenter.movie.rating / 10).toPercentage())
                     .font(.system(size: 11))
             }
             
@@ -231,13 +232,46 @@ extension DetailView {
                 .fontWeight(.medium)
                 .padding(.horizontal)
             
-            Link(destination: URL(string: "https://www.youtube.com/")!) {
-                Label("Play Trailer", systemImage: "play.fill")
+            if presenter.movie.videos.count > 1 {
+                movieTrailerBottomSheet
+            } else {
+                if let firstKey = presenter.movie.videos.first?.key {
+                    Link(destination: URL(string: "https://www.youtube.com/watch?v=" + firstKey)!) {
+                        Label("Play Trailer", systemImage: "play.fill")
+                    }
+                    .buttonStyle(.plain)
+                }
             }
-            .buttonStyle(.plain)
             Spacer()
         }
         .padding(.top)
+    }
+    
+    var movieTrailerBottomSheet: some View {
+        Button {
+            showSheet.toggle()
+        } label: {
+            Label("Play Trailer", systemImage: "play.fill")
+        }
+        .buttonStyle(.plain)
+        .sheet(isPresented: $showSheet) {
+            VStack(alignment: .leading) {
+                Text("Choose Trailer")
+                    .font(.title2)
+                    .fontWeight(.medium)
+                    .padding(.leading, 20)
+                    .padding(.top)
+                
+                List(presenter.movie.videos, id: \.id) { video in
+                    Link(video.name, destination: URL(string: "https://www.youtube.com/watch?v=" + video.key)!)
+                        .buttonStyle(.borderedProminent)
+                        .padding(.vertical, 1)
+                }
+                .listStyle(.plain)
+                .presentationDetents([.height(300), .medium])
+            }
+            .padding(.vertical)
+        }
     }
 }
 

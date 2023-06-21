@@ -28,4 +28,5 @@ struct MovieDetailModel: Identifiable {
     let facebookId: String
     let twitterId: String
     let imdbId: String
+    let videos: [VideoModel]
 }

@@ -25,6 +25,7 @@ struct MovieDetailResponse: Decodable {
     let status: String
     let spokenLanguages: [SpokenLanguageResponse]
     let externalMedia: ExternalMediaResponse?
+    let videos: VideoResponse
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -44,6 +45,7 @@ struct MovieDetailResponse: Decodable {
         case status
         case spokenLanguages = "spoken_languages"
         case externalMedia = "external_ids"
+        case videos
     }
 }
 

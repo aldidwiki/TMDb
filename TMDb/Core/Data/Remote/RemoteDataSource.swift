@@ -43,7 +43,7 @@ extension RemoteDataSource: RemoteDataSourceProtocol {
     func getMovie(movieId: Int) -> AnyPublisher<MovieDetailResponse, Error> {
         let param: Parameters = [
             "api_key": "150ef4d7b4d3c9953518a6e2ed49928e",
-            "append_to_response": "release_dates,credits,external_ids"
+            "append_to_response": "release_dates,credits,external_ids,videos"
         ]
         
         return Future<MovieDetailResponse, Error> { completion in

@@ -50,7 +50,7 @@ final class Mapper {
         return MovieDetailModel(
             id: movieDetailResponse.id,
             title: movieDetailResponse.title,
-            rating: movieDetailResponse.rating ?? 0.0 / 10,
+            rating: movieDetailResponse.rating ?? 0.0,
             posterPath: movieDetailResponse.posterPath ?? "",
             overview: movieDetailResponse.overview ?? "-",
             tagline: movieDetailResponse.tagline,
@@ -67,7 +67,8 @@ final class Mapper {
             instagramId: movieDetailResponse.externalMedia?.instagramId ?? "",
             facebookId: movieDetailResponse.externalMedia?.facebookId ?? "",
             twitterId: movieDetailResponse.externalMedia?.twitterId ?? "",
-            imdbId: movieDetailResponse.externalMedia?.imdbId ?? ""
+            imdbId: movieDetailResponse.externalMedia?.imdbId ?? "",
+            videos: mapVideoResponseModelToDomains(input: movieDetailResponse)
         )
     }
     
@@ -136,6 +137,26 @@ final class Mapper {
                 characterName: cast.characterName ?? "",
                 order: cast.order ?? 0
             )
+        }
+    }
+    
+    private static func mapVideoResponseModelToDomains(
+        input movieDetailResponse: MovieDetailResponse
+    ) -> [VideoModel] {
+        return movieDetailResponse.videos.results.map { video in
+            VideoModel(
+                id: video.id,
+                key: video.key,
+                name: video.name,
+                site: video.site,
+                type: video.type
+            )
+        }
+        .filter { video in
+            video.site == "YouTube" && video.type == "Trailer"
+        }
+        .sorted {
+            $0.name < $1.name
         }
     }
     

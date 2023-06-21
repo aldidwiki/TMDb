@@ -36,7 +36,8 @@ class DetailPresenter: ObservableObject {
         instagramId: "blackadammovie",
         facebookId: "blackadammovie",
         twitterId: "blackadammovie",
-        imdbId: "tt6443346"
+        imdbId: "tt6443346",
+        videos: []
     )
     @Published var errorMessage = ""
     @Published var loadingState = false
