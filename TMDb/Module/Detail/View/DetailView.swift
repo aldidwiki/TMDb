@@ -226,7 +226,7 @@ extension DetailView {
                     .font(.system(size: 11))
             }
             
-            Text("User Review")
+            Text("User Score")
             
             Text("\u{FF5C}")
                 .fontWeight(.medium)
