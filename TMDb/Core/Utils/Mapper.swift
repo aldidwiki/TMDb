@@ -50,7 +50,7 @@ final class Mapper {
         return MovieDetailModel(
             id: movieDetailResponse.id,
             title: movieDetailResponse.title,
-            rating: movieDetailResponse.rating,
+            rating: movieDetailResponse.rating ?? 0.0 / 10,
             posterPath: movieDetailResponse.posterPath ?? "",
             overview: movieDetailResponse.overview ?? "-",
             tagline: movieDetailResponse.tagline,

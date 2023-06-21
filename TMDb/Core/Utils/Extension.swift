@@ -35,6 +35,21 @@ extension String {
     }
 }
 
+extension Double {
+    func toPercentage(maxFragtionDigits fragtionDigits: Int = 0) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .percent
+        formatter.maximumFractionDigits = fragtionDigits
+        formatter.locale = Locale(identifier: "en-US")
+        
+        if let str = formatter.string(for: self) {
+            return str
+        }
+        
+        return String(self)
+    }
+}
+
 extension Int {
     func formatRuntime() -> String {
         var runtimeText = ""

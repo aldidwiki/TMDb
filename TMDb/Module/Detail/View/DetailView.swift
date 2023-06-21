@@ -25,6 +25,8 @@ struct DetailView: View {
                         movieContentDetail
                             .padding([.top, .horizontal])
                         
+                        movieContentUtils
+                        
                         movieOverview
                         
                         if !presenter.movie.cast.isEmpty {
@@ -210,6 +212,32 @@ extension DetailView {
             .padding(.top, 2)
         }
         .padding(.bottom)
+    }
+    
+    var movieContentUtils: some View {
+        HStack(alignment: .center) {
+            Spacer()
+            ZStack {
+                CircularProgressView(progress: presenter.movie.rating, lineWidth: 3)
+                    .frame(width: 35, height: 35)
+                
+                Text(presenter.movie.rating.toPercentage())
+                    .font(.system(size: 11))
+            }
+            
+            Text("User Review")
+            
+            Text("\u{FF5C}")
+                .fontWeight(.medium)
+                .padding(.horizontal)
+            
+            Link(destination: URL(string: "https://www.youtube.com/")!) {
+                Label("Play Trailer", systemImage: "play.fill")
+            }
+            .buttonStyle(.plain)
+            Spacer()
+        }
+        .padding(.top)
     }
 }
 

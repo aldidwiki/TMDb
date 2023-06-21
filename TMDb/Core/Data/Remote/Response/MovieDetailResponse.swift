@@ -10,7 +10,7 @@ import Foundation
 struct MovieDetailResponse: Decodable {
     let id: Int
     let title: String
-    let rating: Double
+    let rating: Double?
     let posterPath: String?
     let overview: String?
     let tagline: String
