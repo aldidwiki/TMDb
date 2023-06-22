@@ -200,6 +200,7 @@ extension DetailView {
                     Text("Spoken Language")
                     Text(presenter.movie.spokenLanguage)
                         .fontWeight(.thin)
+                        .multilineTextAlignment(.center)
                     
                     Spacer()
                     

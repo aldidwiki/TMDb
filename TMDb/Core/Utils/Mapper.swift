@@ -45,7 +45,13 @@ final class Mapper {
             }
         }
         
-        let spokenLanguage = movieDetailResponse.spokenLanguages.first?.englishName ?? "-"
+        var spokenLanguage = ""
+        for spokenLangRes in movieDetailResponse.spokenLanguages {
+            spokenLanguage += spokenLangRes.englishName ?? ""
+            if spokenLangRes.englishName != movieDetailResponse.spokenLanguages.last?.englishName {
+                spokenLanguage += "\n"
+            }
+        }
         
         return MovieDetailModel(
             id: movieDetailResponse.id,
