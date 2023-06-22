@@ -21,6 +21,7 @@ struct CreditResponseModel: Decodable {
     let profilePath: String?
     let characterName: String?
     let order: Int?
+    let popularity: Double
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -28,5 +29,6 @@ struct CreditResponseModel: Decodable {
         case profilePath = "profile_path"
         case characterName = "character"
         case order
+        case popularity
     }
 }

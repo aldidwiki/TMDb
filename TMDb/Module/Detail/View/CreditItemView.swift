@@ -60,7 +60,8 @@ struct CreditItemView_Previews: PreviewProvider {
             name: "Chris Pratt",
             profilePath: "/83o3koL82jt30EJ0rz4Bnzrt2dd.jpg",
             characterName: "Peter Quill / Star-Lord",
-            order: 0
+            order: 0,
+            popularity: 47.542
         ))
     }
 }

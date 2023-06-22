@@ -135,8 +135,11 @@ final class Mapper {
                 name: cast.name ?? "",
                 profilePath: cast.profilePath ?? "",
                 characterName: cast.characterName ?? "",
-                order: cast.order ?? 0
+                order: cast.order ?? 0,
+                popularity: cast.popularity
             )
+        }.sorted {
+            $0.popularity > $1.popularity
         }
     }
     
@@ -169,8 +172,11 @@ final class Mapper {
                 name: cast.title ?? "",
                 profilePath: cast.posterPath ?? "",
                 characterName: cast.characterName ?? "",
-                order: cast.order ?? 0
+                order: cast.order ?? 0,
+                popularity: cast.popularity
             )
+        }.sorted {
+            $0.popularity > $1.popularity
         }
     }
 }

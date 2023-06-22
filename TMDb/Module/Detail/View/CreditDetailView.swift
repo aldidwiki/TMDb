@@ -30,7 +30,7 @@ struct CreditDetailView: View {
                         }
                     } else if isPopularSelected {
                         self.creditModelList = creditModelList.sorted {
-                            $0.order < $1.order
+                            $0.popularity > $1.popularity
                         }
                     }
                 }
@@ -61,21 +61,24 @@ struct CreditDetailView_Previews: PreviewProvider {
                     name: "Chris Pratt",
                     profilePath: "/83o3koL82jt30EJ0rz4Bnzrt2dd.jpg",
                     characterName: "Peter Quill / Star-Lord",
-                    order: 0
+                    order: 0,
+                    popularity: 47.542
                 ),
                 CreditModel(
                     id: 73457,
                     name: "Chris Pratt",
                     profilePath: "/83o3koL82jt30EJ0rz4Bnzrt2dd.jpg",
                     characterName: "Peter Quill / Star-Lord",
-                    order: 0
+                    order: 0,
+                    popularity: 47.542
                 ),
                 CreditModel(
                     id: 73457,
                     name: "Chris Pratt",
                     profilePath: "/83o3koL82jt30EJ0rz4Bnzrt2dd.jpg",
                     characterName: "Peter Quill / Star-Lord",
-                    order: 0
+                    order: 0,
+                    popularity: 47.542
                 )
             ])
     }

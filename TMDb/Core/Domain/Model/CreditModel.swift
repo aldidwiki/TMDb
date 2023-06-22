@@ -13,4 +13,5 @@ struct CreditModel: Identifiable, Equatable {
     let profilePath: String
     let characterName: String
     let order: Int
+    let popularity: Double
 }

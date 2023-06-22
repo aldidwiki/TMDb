@@ -22,6 +22,7 @@ struct PersonCreditResponseModel: Decodable {
     let characterName: String?
     let releaseDate: String?
     let order: Int?
+    let popularity: Double
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -30,5 +31,6 @@ struct PersonCreditResponseModel: Decodable {
         case characterName = "character"
         case releaseDate = "release_date"
         case order
+        case popularity
     }
 }
