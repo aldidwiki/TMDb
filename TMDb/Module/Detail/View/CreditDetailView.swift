@@ -11,26 +11,28 @@ struct CreditDetailView: View {
     @ObservedObject var presenter: CreditDetailPresenter
     @State var creditModelList: [CreditModel]
     
-    @State var isPopularSelected = true
-    @State var isNameSelected = false
-    @State var isCharacterSelected = false
+    @State var isSelected = (popular: true, name: false, character: false, recent: false)
     
     var body: some View {
         VStack(alignment: .leading) {
-            ChipsView(isPopularSelected: $isPopularSelected, isNameSelected: $isNameSelected, isCharactedSelected: $isCharacterSelected)
+            ChipsView(isSelected: $isSelected, isPersonCredit: presenter.navigateType == NavigateType.personView ? false : true)
                 .padding(.horizontal)
-                .onChange(of: [isNameSelected, isCharacterSelected, isPopularSelected]) { _ in
-                    if isNameSelected {
+                .onChange(of: [isSelected.name, isSelected.character, isSelected.popular, isSelected.recent]) { _ in
+                    if isSelected.name {
                         self.creditModelList = creditModelList.sorted {
                             $0.name < $1.name
                         }
-                    } else if isCharacterSelected {
+                    } else if isSelected.character {
                         self.creditModelList = creditModelList.sorted {
                             $0.characterName < $1.characterName
                         }
-                    } else if isPopularSelected {
+                    } else if isSelected.popular {
                         self.creditModelList = creditModelList.sorted {
                             $0.popularity > $1.popularity
+                        }
+                    } else if isSelected.recent {
+                        self.creditModelList = creditModelList.sorted {
+                            $0.releaseDate > $1.releaseDate
                         }
                     }
                 }
@@ -62,7 +64,8 @@ struct CreditDetailView_Previews: PreviewProvider {
                     profilePath: "/83o3koL82jt30EJ0rz4Bnzrt2dd.jpg",
                     characterName: "Peter Quill / Star-Lord",
                     order: 0,
-                    popularity: 47.542
+                    popularity: 47.542,
+                    releaseDate: ""
                 ),
                 CreditModel(
                     id: 73457,
@@ -70,7 +73,8 @@ struct CreditDetailView_Previews: PreviewProvider {
                     profilePath: "/83o3koL82jt30EJ0rz4Bnzrt2dd.jpg",
                     characterName: "Peter Quill / Star-Lord",
                     order: 0,
-                    popularity: 47.542
+                    popularity: 47.542,
+                    releaseDate: ""
                 ),
                 CreditModel(
                     id: 73457,
@@ -78,7 +82,8 @@ struct CreditDetailView_Previews: PreviewProvider {
                     profilePath: "/83o3koL82jt30EJ0rz4Bnzrt2dd.jpg",
                     characterName: "Peter Quill / Star-Lord",
                     order: 0,
-                    popularity: 47.542
+                    popularity: 47.542,
+                    releaseDate: ""
                 )
             ])
     }

@@ -8,19 +8,18 @@
 import SwiftUI
 
 struct ChipsView: View {
-    @Binding var isPopularSelected: Bool
-    @Binding var isNameSelected: Bool
-    @Binding var isCharactedSelected: Bool
+    @Binding var isSelected: (popular: Bool, name: Bool, character: Bool, recent: Bool)
+    let isPersonCredit: Bool
     
     var body: some View {
         HStack {
-            Text("popular")
+            Text("popularity")
                 .lineLimit(1)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 6)
                 .font(.system(size: 12))
-                .foregroundColor(isPopularSelected ? Color.white : Color.black)
-                .background(isPopularSelected ? Color("primary_color") : Color.white)
+                .foregroundColor(isSelected.popular ? Color.white : Color.black)
+                .background(isSelected.popular ? Color("primary_color") : Color.white)
                 .cornerRadius(40)
                 .overlay(
                     RoundedRectangle(cornerRadius: 40)
@@ -28,14 +27,17 @@ struct ChipsView: View {
                 )
                 .onTapGesture {
                     withAnimation {
-                        if !isPopularSelected {
-                            isPopularSelected.toggle()
+                        if !isSelected.popular {
+                            isSelected.popular.toggle()
                         }
-                        if isNameSelected {
-                            isNameSelected.toggle()
+                        if isSelected.name {
+                            isSelected.name.toggle()
                         }
-                        if isCharactedSelected {
-                            isCharactedSelected.toggle()
+                        if isSelected.character {
+                            isSelected.character.toggle()
+                        }
+                        if isSelected.recent {
+                            isSelected.recent.toggle()
                         }
                     }
                 }
@@ -45,8 +47,8 @@ struct ChipsView: View {
                 .padding(.horizontal, 10)
                 .padding(.vertical, 6)
                 .font(.system(size: 12))
-                .foregroundColor(isNameSelected ? Color.white : Color.black)
-                .background(isNameSelected ? Color("primary_color") : Color.white)
+                .foregroundColor(isSelected.name ? Color.white : Color.black)
+                .background(isSelected.name ? Color("primary_color") : Color.white)
                 .cornerRadius(40)
                 .overlay(
                     RoundedRectangle(cornerRadius: 40)
@@ -54,25 +56,28 @@ struct ChipsView: View {
                 )
                 .onTapGesture {
                     withAnimation {
-                        if !isNameSelected {
-                            isNameSelected.toggle()
+                        if !isSelected.name {
+                            isSelected.name.toggle()
                         }
-                        if isPopularSelected {
-                            isPopularSelected.toggle()
+                        if isSelected.popular {
+                            isSelected.popular.toggle()
                         }
-                        if isCharactedSelected {
-                            isCharactedSelected.toggle()
+                        if isSelected.character {
+                            isSelected.character.toggle()
+                        }
+                        if isSelected.recent {
+                            isSelected.recent.toggle()
                         }
                     }
                 }
             
-            Text("character")
+            Text("character name")
                 .lineLimit(1)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 6)
                 .font(.system(size: 12))
-                .foregroundColor(isCharactedSelected ? Color.white : Color.black)
-                .background(isCharactedSelected ? Color("primary_color") : Color.white)
+                .foregroundColor(isSelected.character ? Color.white : Color.black)
+                .background(isSelected.character ? Color("primary_color") : Color.white)
                 .cornerRadius(40)
                 .overlay(
                     RoundedRectangle(cornerRadius: 40)
@@ -80,17 +85,51 @@ struct ChipsView: View {
                 )
                 .onTapGesture {
                     withAnimation {
-                        if !isCharactedSelected {
-                            isCharactedSelected.toggle()
+                        if !isSelected.character {
+                            isSelected.character.toggle()
                         }
-                        if isNameSelected {
-                            isNameSelected.toggle()
+                        if isSelected.name {
+                            isSelected.name.toggle()
                         }
-                        if isPopularSelected {
-                            isPopularSelected.toggle()
+                        if isSelected.popular {
+                            isSelected.popular.toggle()
+                        }
+                        if isSelected.recent {
+                            isSelected.recent.toggle()
                         }
                     }
                 }
+            
+            if isPersonCredit {
+                Text("most recent")
+                    .lineLimit(1)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .font(.system(size: 12))
+                    .foregroundColor(isSelected.recent ? Color.white : Color.black)
+                    .background(isSelected.recent ? Color("primary_color") : Color.white)
+                    .cornerRadius(40)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 40)
+                            .stroke(Color("primary_color"), lineWidth: 1.5)
+                    )
+                    .onTapGesture {
+                        withAnimation {
+                            if !isSelected.recent {
+                                isSelected.recent.toggle()
+                            }
+                            if isSelected.name {
+                                isSelected.name.toggle()
+                            }
+                            if isSelected.character {
+                                isSelected.character.toggle()
+                            }
+                            if isSelected.popular {
+                                isSelected.popular.toggle()
+                            }
+                        }
+                    }
+            }
         }
     }
 }

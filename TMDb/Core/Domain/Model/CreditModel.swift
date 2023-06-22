@@ -14,4 +14,5 @@ struct CreditModel: Identifiable, Equatable {
     let characterName: String
     let order: Int
     let popularity: Double
+    let releaseDate: String
 }

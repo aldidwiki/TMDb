@@ -136,7 +136,8 @@ final class Mapper {
                 profilePath: cast.profilePath ?? "",
                 characterName: cast.characterName ?? "",
                 order: cast.order ?? 0,
-                popularity: cast.popularity
+                popularity: cast.popularity,
+                releaseDate: ""
             )
         }.sorted {
             $0.popularity > $1.popularity
@@ -173,7 +174,8 @@ final class Mapper {
                 profilePath: cast.posterPath ?? "",
                 characterName: cast.characterName ?? "",
                 order: cast.order ?? 0,
-                popularity: cast.popularity
+                popularity: cast.popularity,
+                releaseDate: cast.releaseDate ?? ""
             )
         }.sorted {
             $0.popularity > $1.popularity

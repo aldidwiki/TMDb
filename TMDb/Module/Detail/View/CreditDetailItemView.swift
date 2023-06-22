@@ -55,7 +55,8 @@ struct CreditDetailItemView_Previews: PreviewProvider {
             profilePath: "/83o3koL82jt30EJ0rz4Bnzrt2dd.jpg",
             characterName: "Peter Quill / Star-Lord",
             order: 0,
-            popularity: 47.542
+            popularity: 47.542,
+            releaseDate: ""
         ))
     }
 }
