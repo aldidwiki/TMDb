@@ -9,21 +9,45 @@ import SwiftUI
 
 struct CreditDetailView: View {
     @ObservedObject var presenter: CreditDetailPresenter
-    var creditModelList: [CreditModel]
+    @State var creditModelList: [CreditModel]
+    
+    @State var isPopularSelected = true
+    @State var isNameSelected = false
+    @State var isCharacterSelected = false
     
     var body: some View {
-        List(creditModelList) { credit in
-            if presenter.navigateType == NavigateType.personView {
-                presenter.toPersonView(for: credit.id) {
-                    CreditDetailItemView(creditModel: credit)
+        VStack(alignment: .leading) {
+            ChipsView(isPopularSelected: $isPopularSelected, isNameSelected: $isNameSelected, isCharactedSelected: $isCharacterSelected)
+                .padding(.horizontal)
+                .onChange(of: [isNameSelected, isCharacterSelected, isPopularSelected]) { _ in
+                    if isNameSelected {
+                        self.creditModelList = creditModelList.sorted {
+                            $0.name < $1.name
+                        }
+                    } else if isCharacterSelected {
+                        self.creditModelList = creditModelList.sorted {
+                            $0.characterName < $1.characterName
+                        }
+                    } else if isPopularSelected {
+                        self.creditModelList = creditModelList.sorted {
+                            $0.order < $1.order
+                        }
+                    }
                 }
-            } else {
-                presenter.toMovieDetailView(for: credit.id) {
-                    CreditDetailItemView(creditModel: credit)
+            
+            List(creditModelList) { credit in
+                if presenter.navigateType == NavigateType.personView {
+                    presenter.toPersonView(for: credit.id) {
+                        CreditDetailItemView(creditModel: credit)
+                    }
+                } else {
+                    presenter.toMovieDetailView(for: credit.id) {
+                        CreditDetailItemView(creditModel: credit)
+                    }
                 }
             }
+            .listStyle(.plain)
         }
-        .listStyle(.plain)
     }
 }
 
