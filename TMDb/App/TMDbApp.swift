@@ -11,14 +11,7 @@ import SwiftUI
 struct TMDbApp: App {
     var body: some Scene {
         WindowGroup {
-            let homeUseCase = Injection.init().provideHomeUseCase()
-            let homePresenter = HomePresenter(homeUseCase: homeUseCase)
-            let favoriteUseCase = Injection.init().provideFavoriteUseCase()
-            let favoritePresenter = FavoritePresenter(favoriteUseCase: favoriteUseCase)
-            
-            ContentView()
-                .environmentObject(homePresenter)
-                .environmentObject(favoritePresenter)
+            SplashView()
         }
     }
 }
