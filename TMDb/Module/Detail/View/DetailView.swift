@@ -161,7 +161,7 @@ extension DetailView {
                 LazyHStack(spacing: 20) {
                     ForEach(presenter.movie.cast.take(length: 10), id: \.id) { cast in
                         presenter.toPersonDetail(for: cast.id) {
-                            CreditItemView(creditModel: cast)
+                            CreditItemView(creditModel: cast, isPersonView: false)
                         }
                     }
                 }

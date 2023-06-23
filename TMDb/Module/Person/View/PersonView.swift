@@ -147,7 +147,7 @@ extension PersonView {
                 LazyHStack(spacing: 20) {
                     ForEach(presenter.person.credits.take(length: 10), id: \.id) { cast in
                         presenter.linkBuilder(movieId: cast.id) {
-                            CreditItemView(creditModel: cast)
+                            CreditItemView(creditModel: cast, isPersonView: true)
                         }
                     }
                 }
