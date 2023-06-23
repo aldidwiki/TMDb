@@ -66,44 +66,45 @@ extension PersonView {
     }
     
     var personalInfo: some View {
-        VStack {
+        VStack(spacing: 10) {
             Text("Personal Info")
                 .font(.title2)
                 .fontWeight(.medium)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
-            HStack {
+            HStack(alignment: .top) {
                 VStack(alignment: .leading) {
                     Text("Birthday")
                     let birthday = presenter.person.birthday.formatDateString()
                     let age = presenter.person.birthday.ageFormatter()
                     Text(!birthday.isEmpty ? "\(birthday) (\(age) years old)" : "-")
                         .fontWeight(.thin)
-                    
-                    Spacer()
-                    
-                    Text("Place of Birth")
-                    Text(presenter.person.birthplace)
-                        .fontWeight(.thin)
-                        .lineLimit(1)
                 }
-                
-                Spacer()
+                .frame(maxWidth: .infinity, alignment: .leading)
                 
                 VStack(alignment: .leading) {
                     Text("Known For")
                     Text(presenter.person.knownFor)
                         .fontWeight(.thin)
-                    
-                    Spacer()
-                    
+                }
+                .frame(width: 100, alignment: .leading)
+            }
+            
+            HStack(alignment: .top) {
+                VStack(alignment: .leading) {
+                    Text("Place of Birth")
+                    Text(presenter.person.birthplace)
+                        .fontWeight(.thin)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                
+                VStack(alignment: .leading) {
                     Text("Gender")
                     Text(String(presenter.person.gender))
                         .fontWeight(.thin)
                 }
-                .padding(.trailing)
+                .frame(width: 100, alignment: .leading)
             }
-            .padding(.top, 1)
         }
         .padding(.top)
         .padding(.horizontal)
