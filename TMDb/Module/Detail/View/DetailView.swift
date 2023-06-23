@@ -46,6 +46,7 @@ struct DetailView: View {
                     }
                 }
                 .blur(radius: showSheet ? 10 : 0)
+                .animation(.spring(), value: showSheet)
             }
         }.onAppear {
             presenter.getMovie()
