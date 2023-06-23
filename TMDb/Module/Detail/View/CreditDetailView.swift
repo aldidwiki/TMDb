@@ -37,18 +37,23 @@ struct CreditDetailView: View {
                     }
                 }
             
-            List(creditModelList) { credit in
-                if presenter.navigateType == NavigateType.personView {
+            if presenter.navigateType == NavigateType.personView {
+                List(creditModelList) { credit in
                     presenter.toPersonView(for: credit.id) {
                         CreditDetailItemView(creditModel: credit)
                     }
-                } else {
+                }
+                .listStyle(.plain)
+                .animation(.default, value: creditModelList)
+            } else {
+                List(creditModelList) { credit in
                     presenter.toMovieDetailView(for: credit.id) {
                         CreditDetailItemView(creditModel: credit)
                     }
                 }
+                .listStyle(.plain)
+                .animation(.default, value: creditModelList)
             }
-            .listStyle(.plain)
         }
     }
 }
