@@ -45,6 +45,7 @@ struct DetailView: View {
                         .padding(.vertical)
                     }
                 }
+                .blur(radius: showSheet ? 10 : 0)
             }
         }.onAppear {
             presenter.getMovie()
@@ -265,7 +266,7 @@ extension DetailView {
                 
                 List(presenter.movie.videos, id: \.id) { video in
                     Link(video.name, destination: URL(string: "https://www.youtube.com/watch?v=" + video.key)!)
-                        .buttonStyle(.borderedProminent)
+                        .buttonStyle(.plain)
                         .padding(.vertical, 1)
                 }
                 .listStyle(.plain)
