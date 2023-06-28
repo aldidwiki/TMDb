@@ -34,8 +34,3 @@ class CreditDetailPresenter: ObservableObject {
         }
     }
 }
-
-enum NavigateType {
-    case personView
-    case detailView
-}

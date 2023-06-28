@@ -14,3 +14,8 @@ class Constants {
     static let imdbBaseUrl = "https://www.imdb.com/title/"
     static let imdbPersonBaseUrl = "https://www.imdb.com/name/"
 }
+
+enum NavigateType {
+    case personView
+    case detailView
+}

@@ -40,7 +40,7 @@ struct CreditDetailView: View {
             if presenter.navigateType == NavigateType.personView {
                 List(creditModelList) { credit in
                     presenter.toPersonView(for: credit.id) {
-                        CreditDetailItemView(creditModel: credit)
+                        CreditDetailItemView(creditModel: credit, isFromPersonView: false)
                     }
                 }
                 .listStyle(.plain)
@@ -48,7 +48,7 @@ struct CreditDetailView: View {
             } else {
                 List(creditModelList) { credit in
                     presenter.toMovieDetailView(for: credit.id) {
-                        CreditDetailItemView(creditModel: credit)
+                        CreditDetailItemView(creditModel: credit, isFromPersonView: true)
                     }
                 }
                 .listStyle(.plain)

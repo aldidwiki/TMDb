@@ -10,6 +10,7 @@ import SDWebImageSwiftUI
 
 struct CreditDetailItemView: View {
     var creditModel: CreditModel
+    var isFromPersonView: Bool
     
     var body: some View {
         HStack {
@@ -35,7 +36,7 @@ extension CreditDetailItemView {
         WebImage(url: URL(string: API.profileImageBaseUrl + creditModel.profilePath))
             .resizable()
             .placeholder(content: {
-                Image(systemName: "person")
+                Image(systemName: isFromPersonView ? "photo" : "person")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 35, height: 35)
@@ -49,14 +50,17 @@ extension CreditDetailItemView {
 
 struct CreditDetailItemView_Previews: PreviewProvider {
     static var previews: some View {
-        CreditDetailItemView(creditModel: CreditModel(
-            id: 73457,
-            name: "Chris Pratt",
-            profilePath: "/83o3koL82jt30EJ0rz4Bnzrt2dd.jpg",
-            characterName: "Peter Quill / Star-Lord",
-            order: 0,
-            popularity: 47.542,
-            releaseDate: ""
-        ))
+        CreditDetailItemView(
+            creditModel: CreditModel(
+                id: 73457,
+                name: "Chris Pratt",
+                profilePath: "/83o3koL82jt30EJ0rz4Bnzrt2dd.jpg",
+                characterName: "Peter Quill / Star-Lord",
+                order: 0,
+                popularity: 47.542,
+                releaseDate: ""
+            ),
+            isFromPersonView: true
+        )
     }
 }
