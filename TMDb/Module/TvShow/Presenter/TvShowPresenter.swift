@@ -18,6 +18,8 @@ class TvShowPresenter: ObservableObject {
     @Published var errorMessage = ""
     @Published var loadingState = false
     
+    @Published var tvQuery = ""
+    
     init(tvShowUseCase: TvShowUseCase) {
         self.tvShowUseCase = tvShowUseCase
     }
@@ -36,5 +38,22 @@ class TvShowPresenter: ObservableObject {
             } receiveValue: { tvShows in
                 self.tvShows = tvShows
             }.store(in: &cancellable)
+    }
+    
+    func searchTvShows(query: String) {
+        loadingState = true
+        tvShowUseCase.searchTvShows(query: query)
+            .receive(on: RunLoop.main)
+            .sink { completion in
+                switch completion {
+                    case .failure:
+                        self.errorMessage = String(describing: completion)
+                    case .finished:
+                        self.loadingState = false
+                }
+            } receiveValue: { tvShows in
+                self.tvShows = tvShows
+            }.store(in: &cancellable)
+        
     }
 }

@@ -31,6 +31,14 @@ struct TvShowView: View {
             }
             .navigationTitle("Popular Tv Shows")
         }
+        .searchable(text: $presenter.tvQuery, placement: .automatic)
+        .onReceive(presenter.$tvQuery.debounce(for: 1, scheduler: RunLoop.main)) { query in
+            if !query.isEmpty {
+                presenter.searchTvShows(query: query)
+            } else {
+                presenter.getTvShows()
+            }
+        }
     }
 }
 

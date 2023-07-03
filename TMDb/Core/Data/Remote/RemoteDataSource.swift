@@ -16,6 +16,7 @@ protocol RemoteDataSourceProtocol {
     func searchMovie(query: String) -> AnyPublisher<[MovieResponseModel], Error>
     
     func getTvShows() -> AnyPublisher<[TvResponseModel], Error>
+    func searchTvShow(query: String) -> AnyPublisher<[TvResponseModel], Error>
 }
 
 final class RemoteDataSource: NSObject {
@@ -109,6 +110,27 @@ extension RemoteDataSource: RemoteDataSourceProtocol {
         return Future<[TvResponseModel], Error> { completion in
             if let url = URL(string: "\(API.baseUrl)tv/popular") {
                 AF.request(url, headers: API.headers)
+                    .validate()
+                    .responseDecodable(of: TvResponse.self) { response in
+                        switch response.result {
+                            case .success(let value):
+                                completion(.success(value.tvShows))
+                            case .failure:
+                                completion(.failure(URLError.invalidResponse))
+                        }
+                    }
+            }
+        }.eraseToAnyPublisher()
+    }
+    
+    func searchTvShow(query: String) -> AnyPublisher<[TvResponseModel], Error> {
+        let param: Parameters = [
+            "query": query
+        ]
+        
+        return Future<[TvResponseModel], Error> { completion in
+            if let url = URL(string: "\(API.baseUrl)/search/tv") {
+                AF.request(url, parameters: param, headers: API.headers)
                     .validate()
                     .responseDecodable(of: TvResponse.self) { response in
                         switch response.result {

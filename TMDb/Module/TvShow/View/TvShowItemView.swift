@@ -29,6 +29,12 @@ extension TvShowItemView {
     var tvPoster: some View {
         WebImage(url: URL(string: API.imageBaseUrl + tvModel.posterPath))
             .resizable()
+            .placeholder(content: {
+                Image(systemName: "photo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 50, height: 50)
+            })
             .indicator(.activity)
             .transition(.fade(duration: 0.5))
             .scaledToFit()

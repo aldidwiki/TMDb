@@ -15,6 +15,7 @@ protocol TMDbRepositoryProtocol {
     func searchMovie(query: String) -> AnyPublisher<[MovieModel], Error>
     
     func getTvShows() -> AnyPublisher<[TvShowModel], Error>
+    func searchTvShows(query: String) -> AnyPublisher<[TvShowModel], Error>
     
     func addFavorite(from movie: MovieDetailModel) -> AnyPublisher<Bool, Error>
     func getFavorites() -> AnyPublisher<[MovieModel], Error>
@@ -82,6 +83,13 @@ extension TMDbRepository: TMDbRepositoryProtocol {
     
     func getTvShows() -> AnyPublisher<[TvShowModel], Error> {
         return self.remote.getTvShows()
+            .map {
+                Mapper.mapTvResponseModelsToDomains(input: $0)
+            }.eraseToAnyPublisher()
+    }
+    
+    func searchTvShows(query: String) -> AnyPublisher<[TvShowModel], Error> {
+        return self.remote.searchTvShow(query: query)
             .map {
                 Mapper.mapTvResponseModelsToDomains(input: $0)
             }.eraseToAnyPublisher()
