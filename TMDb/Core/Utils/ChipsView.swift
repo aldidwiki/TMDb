@@ -19,11 +19,11 @@ struct ChipsView: View {
                 .padding(.vertical, 6)
                 .font(.system(size: 12))
                 .foregroundColor(isSelected.popular ? Color.white : Color.black)
-                .background(isSelected.popular ? Color("primary_color") : Color.white)
+                .background(isSelected.popular ? Color("chips_color") : Color.white)
                 .cornerRadius(40)
                 .overlay(
                     RoundedRectangle(cornerRadius: 40)
-                        .stroke(Color("primary_color"), lineWidth: 1.5)
+                        .stroke(Color("chips_color"), lineWidth: 1.5)
                 )
                 .onTapGesture {
                     withAnimation {
@@ -48,11 +48,11 @@ struct ChipsView: View {
                 .padding(.vertical, 6)
                 .font(.system(size: 12))
                 .foregroundColor(isSelected.name ? Color.white : Color.black)
-                .background(isSelected.name ? Color("primary_color") : Color.white)
+                .background(isSelected.name ? Color("chips_color") : Color.white)
                 .cornerRadius(40)
                 .overlay(
                     RoundedRectangle(cornerRadius: 40)
-                        .stroke(Color("primary_color"), lineWidth: 1.5)
+                        .stroke(Color("chips_color"), lineWidth: 1.5)
                 )
                 .onTapGesture {
                     withAnimation {
@@ -77,11 +77,11 @@ struct ChipsView: View {
                 .padding(.vertical, 6)
                 .font(.system(size: 12))
                 .foregroundColor(isSelected.character ? Color.white : Color.black)
-                .background(isSelected.character ? Color("primary_color") : Color.white)
+                .background(isSelected.character ? Color("chips_color") : Color.white)
                 .cornerRadius(40)
                 .overlay(
                     RoundedRectangle(cornerRadius: 40)
-                        .stroke(Color("primary_color"), lineWidth: 1.5)
+                        .stroke(Color("chips_color"), lineWidth: 1.5)
                 )
                 .onTapGesture {
                     withAnimation {
@@ -107,11 +107,11 @@ struct ChipsView: View {
                     .padding(.vertical, 6)
                     .font(.system(size: 12))
                     .foregroundColor(isSelected.recent ? Color.white : Color.black)
-                    .background(isSelected.recent ? Color("primary_color") : Color.white)
+                    .background(isSelected.recent ? Color("chips_color") : Color.white)
                     .cornerRadius(40)
                     .overlay(
                         RoundedRectangle(cornerRadius: 40)
-                            .stroke(Color("primary_color"), lineWidth: 1.5)
+                            .stroke(Color("chips_color"), lineWidth: 1.5)
                     )
                     .onTapGesture {
                         withAnimation {
