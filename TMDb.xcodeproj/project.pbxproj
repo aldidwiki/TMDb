@@ -69,6 +69,12 @@
 		CEC65520292F60BF007B393A /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC6551F292F60BF007B393A /* HomeView.swift */; };
 		CECA71502A0A1A5D0091094A /* SpokenLanguageResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECA714F2A0A1A5D0091094A /* SpokenLanguageResponse.swift */; };
 		CEEEDEE52931F7E800976696 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = CEEEDEE42931F7E800976696 /* .swiftlint.yml */; };
+		CEF796B52A52C4680046858F /* TvShowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF796B42A52C4680046858F /* TvShowView.swift */; };
+		CEF796B72A52C76A0046858F /* TvResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF796B62A52C76A0046858F /* TvResponse.swift */; };
+		CEF796B92A52CB0D0046858F /* TvShowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF796B82A52CB0D0046858F /* TvShowModel.swift */; };
+		CEF796BB2A52CD3A0046858F /* TvShowInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF796BA2A52CD3A0046858F /* TvShowInteractor.swift */; };
+		CEF796BE2A52CDFA0046858F /* TvShowPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF796BD2A52CDFA0046858F /* TvShowPresenter.swift */; };
+		CEF796C22A52D0C30046858F /* TvShowItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF796C12A52D0C30046858F /* TvShowItemView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -130,6 +136,12 @@
 		CEC6551F292F60BF007B393A /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		CECA714F2A0A1A5D0091094A /* SpokenLanguageResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpokenLanguageResponse.swift; sourceTree = "<group>"; };
 		CEEEDEE42931F7E800976696 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		CEF796B42A52C4680046858F /* TvShowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShowView.swift; sourceTree = "<group>"; };
+		CEF796B62A52C76A0046858F /* TvResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvResponse.swift; sourceTree = "<group>"; };
+		CEF796B82A52CB0D0046858F /* TvShowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShowModel.swift; sourceTree = "<group>"; };
+		CEF796BA2A52CD3A0046858F /* TvShowInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShowInteractor.swift; sourceTree = "<group>"; };
+		CEF796BD2A52CDFA0046858F /* TvShowPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShowPresenter.swift; sourceTree = "<group>"; };
+		CEF796C12A52D0C30046858F /* TvShowItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShowItemView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -320,9 +332,9 @@
 		CEC654F2292F541C007B393A /* App */ = {
 			isa = PBXGroup;
 			children = (
-				CEC654E4292F5381007B393A /* TMDbApp.swift */,
 				CEC654E6292F5381007B393A /* ContentView.swift */,
 				CE0FF1292A458782009D3B26 /* SplashView.swift */,
+				CEC654E4292F5381007B393A /* TMDbApp.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -386,6 +398,7 @@
 				CE8DDDED2A0B303400F94CEE /* PersonCreditResponse.swift */,
 				CE5762782A4194310094A16D /* ExternalMediaResponse.swift */,
 				CE8E43D42A429CC400123AA6 /* VideoResponse.swift */,
+				CEF796B62A52C76A0046858F /* TvResponse.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -407,6 +420,7 @@
 				CEBD44522A08C66900BBD9B6 /* CreditModel.swift */,
 				CEBD44562A08E29900BBD9B6 /* PersonModel.swift */,
 				CE8E43D62A429F4C00123AA6 /* VideoModel.swift */,
+				CEF796B82A52CB0D0046858F /* TvShowModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -418,6 +432,7 @@
 				CE182AFF292F825B00B5C857 /* DetailInteractor.swift */,
 				CE9E30F62930B5A1001BFB57 /* FavoriteInteractor.swift */,
 				CEBD445A2A08E54500BBD9B6 /* PersonInteractor.swift */,
+				CEF796BA2A52CD3A0046858F /* TvShowInteractor.swift */,
 			);
 			path = UseCase;
 			sourceTree = "<group>";
@@ -429,6 +444,7 @@
 				CE9E30F82930B657001BFB57 /* Favorite */,
 				CEC65513292F59C2007B393A /* Home */,
 				CEBD44582A08E50500BBD9B6 /* Person */,
+				CEF796B22A52C4120046858F /* TvShow */,
 			);
 			path = Module;
 			sourceTree = "<group>";
@@ -466,6 +482,32 @@
 				CEC6551F292F60BF007B393A /* HomeView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		CEF796B22A52C4120046858F /* TvShow */ = {
+			isa = PBXGroup;
+			children = (
+				CEF796BC2A52CDE40046858F /* Presenter */,
+				CEF796B32A52C42F0046858F /* View */,
+			);
+			path = TvShow;
+			sourceTree = "<group>";
+		};
+		CEF796B32A52C42F0046858F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CEF796B42A52C4680046858F /* TvShowView.swift */,
+				CEF796C12A52D0C30046858F /* TvShowItemView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		CEF796BC2A52CDE40046858F /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				CEF796BD2A52CDFA0046858F /* TvShowPresenter.swift */,
+			);
+			path = Presenter;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -577,14 +619,17 @@
 				CE9E30F72930B5A1001BFB57 /* FavoriteInteractor.swift in Sources */,
 				CE5762792A4194310094A16D /* ExternalMediaResponse.swift in Sources */,
 				CE182AF7292F6E2D00B5C857 /* Extension.swift in Sources */,
+				CEF796B92A52CB0D0046858F /* TvShowModel.swift in Sources */,
 				CEBD444D2A089C3E00BBD9B6 /* GenreResponse.swift in Sources */,
 				CEBD44632A08FB5400BBD9B6 /* DetailRouter.swift in Sources */,
 				CE182AFE292F813800B5C857 /* MovieDetailModel.swift in Sources */,
 				CEC65509292F5744007B393A /* MovieModel.swift in Sources */,
+				CEF796C22A52D0C30046858F /* TvShowItemView.swift in Sources */,
 				CE8E43D92A42B4AA00123AA6 /* Constants.swift in Sources */,
 				CEBD444F2A08A38C00BBD9B6 /* CreditResponse.swift in Sources */,
 				CE182B04292F831E00B5C857 /* DetailPresenter.swift in Sources */,
 				CE182AFC292F7F7000B5C857 /* MovieDetailResponse.swift in Sources */,
+				CEF796B52A52C4680046858F /* TvShowView.swift in Sources */,
 				CE8DDDF12A0B3BED00F94CEE /* PersonRouter.swift in Sources */,
 				CE9E30E429305C15001BFB57 /* DetailView.swift in Sources */,
 				CECA71502A0A1A5D0091094A /* SpokenLanguageResponse.swift in Sources */,
@@ -593,6 +638,7 @@
 				CEC65519292F5B14007B393A /* Injection.swift in Sources */,
 				CE182B00292F825B00B5C857 /* DetailInteractor.swift in Sources */,
 				CE57627F2A41A9100094A16D /* CircularProgressView.swift in Sources */,
+				CEF796BB2A52CD3A0046858F /* TvShowInteractor.swift in Sources */,
 				CEC6550C292F57A6007B393A /* Mapper.swift in Sources */,
 				CE9E30F129308DE7001BFB57 /* LocaleDataSource.swift in Sources */,
 				CEC65516292F59DA007B393A /* HomePresenter.swift in Sources */,
@@ -609,6 +655,7 @@
 				CEBD445D2A08E6A500BBD9B6 /* PersonPresenter.swift in Sources */,
 				CEC654E5292F5381007B393A /* TMDbApp.swift in Sources */,
 				CE5762712A4149D40094A16D /* CreditDetailView.swift in Sources */,
+				CEF796B72A52C76A0046858F /* TvResponse.swift in Sources */,
 				CE0FF12A2A458782009D3B26 /* SplashView.swift in Sources */,
 				CE57627B2A419EBF0094A16D /* ExternalMediaView.swift in Sources */,
 				CE8DDDEE2A0B303400F94CEE /* PersonCreditResponse.swift in Sources */,
@@ -623,6 +670,7 @@
 				CE9E30F52930A2FE001BFB57 /* FavoriteEntity.swift in Sources */,
 				CEBD445B2A08E54500BBD9B6 /* PersonInteractor.swift in Sources */,
 				CEC6551C292F5BAB007B393A /* MovieItem.swift in Sources */,
+				CEF796BE2A52CDFA0046858F /* TvShowPresenter.swift in Sources */,
 				CEC6550E292F5833007B393A /* TMDbRepository.swift in Sources */,
 				CEC654F6292F544B007B393A /* CustomError.swift in Sources */,
 				CEBD444B2A08950400BBD9B6 /* CertificationResponse.swift in Sources */,

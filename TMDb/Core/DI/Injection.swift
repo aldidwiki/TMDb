@@ -37,4 +37,9 @@ final class Injection: NSObject {
         let repo = provideRepository()
         return PersonInteractor(repository: repo, personId: personId)
     }
+    
+    func provideTvShowUseCase() -> TvShowUseCase {
+        let repo = provideRepository()
+        return TvShowInteractor(repository: repo)
+    }
 }

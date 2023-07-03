@@ -10,12 +10,18 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject var homePresenter: HomePresenter
     @EnvironmentObject var favoritePresenter: FavoritePresenter
+    @EnvironmentObject var tvShowPresenter: TvShowPresenter
     
     var body: some View {
         TabView {
             HomeView(presenter: self.homePresenter)
                 .tabItem {
-                    Label("Home", systemImage: "house")
+                    Label("Movie", systemImage: "film")
+                }
+            
+            TvShowView(presenter: tvShowPresenter)
+                .tabItem {
+                    Label("Tv Show", systemImage: "tv")
                 }
             
             FavoriteView(presenter: favoritePresenter)

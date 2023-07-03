@@ -17,10 +17,13 @@ struct SplashView: View {
                 let homePresenter = HomePresenter(homeUseCase: homeUseCase)
                 let favoriteUseCase = Injection.init().provideFavoriteUseCase()
                 let favoritePresenter = FavoritePresenter(favoriteUseCase: favoriteUseCase)
+                let tvShowUseCase = Injection.init().provideTvShowUseCase()
+                let tvShowPresenter = TvShowPresenter(tvShowUseCase: tvShowUseCase)
                 
                 ContentView()
                     .environmentObject(homePresenter)
                     .environmentObject(favoritePresenter)
+                    .environmentObject(tvShowPresenter)
                     .transition(.scale)
             } else {
                 Rectangle()

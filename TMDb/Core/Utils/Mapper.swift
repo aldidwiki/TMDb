@@ -132,6 +132,20 @@ final class Mapper {
         )
     }
     
+    static func mapTvResponseModelsToDomains(
+        input tvResponseModels: [TvResponseModel]
+    ) -> [TvShowModel] {
+        return tvResponseModels.map { tvResponseModel in
+            TvShowModel(
+                id: tvResponseModel.id,
+                title: tvResponseModel.title,
+                posterPath: tvResponseModel.posterPath ?? "",
+                rating: tvResponseModel.rating ?? 0.0,
+                releaseDate: tvResponseModel.releaseDate ?? ""
+            )
+        }
+    }
+    
     private static func mapCreditResponseModelToDomains(
         input movieDetailResponse: MovieDetailResponse
     ) -> [CreditModel] {
