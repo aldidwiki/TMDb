@@ -25,8 +25,8 @@ final class RemoteDataSource: NSObject {
 extension RemoteDataSource: RemoteDataSourceProtocol {
     func getMovies() -> AnyPublisher<[MovieResponseModel], Error> {
         return Future<[MovieResponseModel], Error> { completion in
-            if let url = URL(string: "\(API.baseUrl)movie/popular?api_key=150ef4d7b4d3c9953518a6e2ed49928e") {
-                AF.request(url)
+            if let url = URL(string: "\(API.baseUrl)movie/popular") {
+                AF.request(url, headers: API.headers)
                     .validate()
                     .responseDecodable(of: MovieResponse.self) { response in
                         switch response.result {
@@ -42,13 +42,12 @@ extension RemoteDataSource: RemoteDataSourceProtocol {
     
     func getMovie(movieId: Int) -> AnyPublisher<MovieDetailResponse, Error> {
         let param: Parameters = [
-            "api_key": "150ef4d7b4d3c9953518a6e2ed49928e",
             "append_to_response": "release_dates,credits,external_ids,videos"
         ]
         
         return Future<MovieDetailResponse, Error> { completion in
             if let url = URL(string: "\(API.baseUrl)movie/\(movieId)") {
-                AF.request(url, parameters: param)
+                AF.request(url, parameters: param, headers: API.headers)
                     .validate()
                     .responseDecodable(of: MovieDetailResponse.self) { response in
                         switch response.result {
@@ -64,13 +63,12 @@ extension RemoteDataSource: RemoteDataSourceProtocol {
     
     func searchMovie(query: String) -> AnyPublisher<[MovieResponseModel], Error> {
         let param: Parameters = [
-            "api_key": "150ef4d7b4d3c9953518a6e2ed49928e",
             "query": query
         ]
         
         return Future<[MovieResponseModel], Error> { completion in
             if let url = URL(string: "\(API.baseUrl)search/movie") {
-                AF.request(url, parameters: param)
+                AF.request(url, parameters: param, headers: API.headers)
                     .validate()
                     .responseDecodable(of: MovieResponse.self) { response in
                         switch response.result {
@@ -86,13 +84,12 @@ extension RemoteDataSource: RemoteDataSourceProtocol {
     
     func getPerson(personId: Int) -> AnyPublisher<PersonResponse, Error> {
         let param: Parameters = [
-            "api_key": "150ef4d7b4d3c9953518a6e2ed49928e",
             "append_to_response": "movie_credits,external_ids"
         ]
         
         return Future<PersonResponse, Error> {completion in
             if let url = URL(string: "\(API.baseUrl)person/\(personId)") {
-                AF.request(url, parameters: param)
+                AF.request(url, parameters: param, headers: API.headers)
                     .validate()
                     .responseDecodable(of: PersonResponse.self) { response in
                         switch response.result {
