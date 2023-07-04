@@ -27,9 +27,14 @@ struct ChipsView: View {
                 )
                 .onTapGesture {
                     withAnimation {
-                        if !isSelected.popular {
+                        if !isPersonCredit {
                             isSelected.popular.toggle()
+                        } else {
+                            if !isSelected.popular {
+                                isSelected.popular.toggle()
+                            }
                         }
+                        
                         if isSelected.name {
                             isSelected.name.toggle()
                         }
@@ -56,9 +61,14 @@ struct ChipsView: View {
                 )
                 .onTapGesture {
                     withAnimation {
-                        if !isSelected.name {
+                        if !isPersonCredit {
                             isSelected.name.toggle()
+                        } else {
+                            if !isSelected.name {
+                                isSelected.name.toggle()
+                            }
                         }
+                        
                         if isSelected.popular {
                             isSelected.popular.toggle()
                         }
@@ -85,9 +95,14 @@ struct ChipsView: View {
                 )
                 .onTapGesture {
                     withAnimation {
-                        if !isSelected.character {
+                        if !isPersonCredit {
                             isSelected.character.toggle()
+                        } else {
+                            if !isSelected.character {
+                                isSelected.character.toggle()
+                            }
                         }
+                        
                         if isSelected.name {
                             isSelected.name.toggle()
                         }
@@ -115,9 +130,14 @@ struct ChipsView: View {
                     )
                     .onTapGesture {
                         withAnimation {
-                            if !isSelected.recent {
+                            if !isPersonCredit {
                                 isSelected.recent.toggle()
+                            } else {
+                                if !isSelected.recent {
+                                    isSelected.recent.toggle()
+                                }
                             }
+                            
                             if isSelected.name {
                                 isSelected.name.toggle()
                             }

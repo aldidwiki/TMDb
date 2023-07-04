@@ -11,7 +11,7 @@ struct CreditDetailView: View {
     @ObservedObject var presenter: CreditDetailPresenter
     @State var creditModelList: [CreditModel]
     
-    @State var isSelected = (popular: true, name: false, character: false, recent: false)
+    @State var isSelected = (popular: false, name: false, character: false, recent: true)
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -33,6 +33,10 @@ struct CreditDetailView: View {
                     } else if isSelected.recent {
                         self.creditModelList = creditModelList.sorted {
                             $0.releaseDate > $1.releaseDate
+                        }
+                    } else {
+                        self.creditModelList = creditModelList.sorted {
+                            $0.order < $1.order
                         }
                     }
                 }

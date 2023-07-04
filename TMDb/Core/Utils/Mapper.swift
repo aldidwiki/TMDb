@@ -159,8 +159,6 @@ final class Mapper {
                 popularity: cast.popularity,
                 releaseDate: ""
             )
-        }.sorted {
-            $0.popularity > $1.popularity
         }
     }
     
@@ -198,7 +196,7 @@ final class Mapper {
                 releaseDate: cast.releaseDate ?? ""
             )
         }.sorted {
-            $0.popularity > $1.popularity
+            $0.releaseDate > $1.releaseDate
         }
     }
 }
