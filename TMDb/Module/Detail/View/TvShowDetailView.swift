@@ -89,13 +89,11 @@ extension TvShowDetailView {
                     if presenter.tvShow.runtime != 0 {
                         Text(presenter.tvShow.runtime.formatRuntime())
                             .multilineTextAlignment(.center)
+                        Text("\u{2022}")
                     }
-                    //
-                    //                    if !presenter.movie.certification.isEmpty {
-                    //                        Text("\u{2022}")
-                    //                        Text(presenter.movie.certification)
-                    //                            .multilineTextAlignment(.center)
-                    //                    }
+                    
+                    Text(presenter.tvShow.contentRating)
+                        .multilineTextAlignment(.center)
                 }
                 
                 Text(presenter.tvShow.genre)

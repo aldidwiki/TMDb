@@ -61,6 +61,10 @@ final class Mapper {
     static func mapTvShowDetailResponseToDomain(
         input tvShowDetailResponse: TvShowDetailResponse
     ) -> TvShowDetailModel {
+        let tvContentRating = tvShowDetailResponse.contentRating.results.first { contentRating in
+            contentRating.ratingRegion == "US"
+        }?.rating ?? "NR"
+        
         return TvShowDetailModel(
             id: tvShowDetailResponse.id,
             backdropPath: tvShowDetailResponse.backdropPath ?? "",
@@ -74,7 +78,8 @@ final class Mapper {
             genre: tvShowDetailResponse.genres.formatGenres(),
             rating: tvShowDetailResponse.rating ?? 0.0,
             runtime: tvShowDetailResponse.runtime.first ?? 0,
-            spokenLanguage: tvShowDetailResponse.spokenLanguages.formatSpokenLanguage()
+            spokenLanguage: tvShowDetailResponse.spokenLanguages.formatSpokenLanguage(),
+            contentRating: tvContentRating
         )
     }
     

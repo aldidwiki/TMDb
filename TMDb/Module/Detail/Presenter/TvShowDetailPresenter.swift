@@ -29,7 +29,8 @@ class TvShowDetailPresenter: ObservableObject {
         genre: "",
         rating: 0.0,
         runtime: 0,
-        spokenLanguage: ""
+        spokenLanguage: "",
+        contentRating: ""
     )
     
     init(tvShowUseCase: TvShowUseCase) {

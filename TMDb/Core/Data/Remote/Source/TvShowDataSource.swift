@@ -61,9 +61,13 @@ extension TvShowDataSource: TvShowDataSourceProtocol {
     }
     
     func getTvShow(tvShowId: Int) -> AnyPublisher<TvShowDetailResponse, Error> {
+        let param: Parameters = [
+            "append_to_response": "content_ratings"
+        ]
+        
         return Future<TvShowDetailResponse, Error> { completion in
             if let url = URL(string: "\(API.baseUrl)/tv/\(tvShowId)") {
-                AF.request(url, headers: API.headers)
+                AF.request(url, parameters: param, headers: API.headers)
                     .validate()
                     .responseDecodable(of: TvShowDetailResponse.self) { response in
                         switch response.result {
