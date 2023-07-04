@@ -45,7 +45,7 @@ final class Mapper {
             runtime: movieDetailResponse.runtime ?? 0,
             certification: movieCertification,
             genre: movieDetailResponse.genres.formatGenres(),
-            cast: mapCreditResponseModelToDomains(input: movieDetailResponse),
+            cast: mapCreditResponseModelToDomains(input: movieDetailResponse.credits),
             budget: movieDetailResponse.budget,
             revenue: movieDetailResponse.revenue,
             status: movieDetailResponse.status,
@@ -80,7 +80,8 @@ final class Mapper {
             runtime: tvShowDetailResponse.runtime.first ?? 0,
             spokenLanguage: tvShowDetailResponse.spokenLanguages.formatSpokenLanguage(),
             contentRating: tvContentRating,
-            videos: mapVideoResponseModelToDomains(input: tvShowDetailResponse.videos)
+            videos: mapVideoResponseModelToDomains(input: tvShowDetailResponse.videos),
+            credits: mapCreditResponseModelToDomains(input: tvShowDetailResponse.credits)
         )
     }
     
@@ -153,9 +154,9 @@ final class Mapper {
     }
     
     private static func mapCreditResponseModelToDomains(
-        input movieDetailResponse: MovieDetailResponse
+        input creditResponse: CreditResponse
     ) -> [CreditModel] {
-        return movieDetailResponse.credits.cast.map { cast in
+        return creditResponse.cast.map { cast in
             CreditModel(
                 id: cast.id,
                 name: cast.name ?? "",

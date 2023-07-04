@@ -62,7 +62,7 @@ extension TvShowDataSource: TvShowDataSourceProtocol {
     
     func getTvShow(tvShowId: Int) -> AnyPublisher<TvShowDetailResponse, Error> {
         let param: Parameters = [
-            "append_to_response": "content_ratings,videos"
+            "append_to_response": "content_ratings,videos,credits"
         ]
         
         return Future<TvShowDetailResponse, Error> { completion in

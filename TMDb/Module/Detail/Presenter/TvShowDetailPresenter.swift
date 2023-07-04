@@ -12,6 +12,7 @@ import SwiftUI
 class TvShowDetailPresenter: ObservableObject {
     private var cancellable: Set<AnyCancellable> = []
     
+    private let router = DetailRouter()
     private let tvShowUseCase: TvShowUseCase
     
     @Published var errorMessage = ""
@@ -31,7 +32,8 @@ class TvShowDetailPresenter: ObservableObject {
         runtime: 0,
         spokenLanguage: "",
         contentRating: "",
-        videos: []
+        videos: [],
+        credits: []
     )
     
     init(tvShowUseCase: TvShowUseCase) {
@@ -52,5 +54,24 @@ class TvShowDetailPresenter: ObservableObject {
             } receiveValue: { tvShow in
                 self.tvShow = tvShow
             }.store(in: &cancellable)
+    }
+    
+    func toPersonView<Content: View>(
+        for personId: Int,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        NavigationLink(destination: router.makePersonDetailView(for: personId)) {
+            content()
+        }
+        .buttonStyle(.plain)
+    }
+    
+    func toCreditDetailView<Content: View>(
+        for creditModel: [CreditModel],
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        NavigationLink(destination: router.makeCreditDetailView(for: creditModel)) {
+            content()
+        }
     }
 }

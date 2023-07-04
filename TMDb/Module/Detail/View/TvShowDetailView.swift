@@ -31,9 +31,9 @@ struct TvShowDetailView: View {
                         
                         tvOverview
                         
-                        //                        if !presenter.tvShow.cast.isEmpty {
-                        //                            movieCredits
-                        //                        }
+                        if !presenter.tvShow.credits.isEmpty {
+                            tvCredits
+                        }
                         
                         //                        movieDetailInfo
                         //
@@ -43,7 +43,7 @@ struct TvShowDetailView: View {
                         //                            twitterId: presenter.movie.twitterId,
                         //                            imdbId: presenter.movie.imdbId
                         //                        )
-                            .padding(.vertical)
+                        //                            .padding(.vertical)
                     }
                 }
                 .blur(radius: showSheet ? 10 : 0)
@@ -185,6 +185,38 @@ extension TvShowDetailView {
             }
             .padding(.vertical)
         }
+    }
+    
+    var tvCredits: some View {
+        VStack(alignment: .leading) {
+            HStack(alignment: .center) {
+                Text("Top Billed Cast")
+                    .padding(.horizontal)
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                
+                Spacer()
+                
+                presenter.toCreditDetailView(for: presenter.tvShow.credits) {
+                    Text("FULL CAST")
+                        .padding(.horizontal)
+                        .font(.subheadline)
+                }
+            }
+            
+            ScrollView(.horizontal) {
+                LazyHStack(spacing: 20) {
+                    ForEach(presenter.tvShow.credits.take(length: 10), id: \.id) { cast in
+                        presenter.toPersonView(for: cast.id) {
+                            CreditItemView(creditModel: cast, isPersonView: false)
+                        }
+                    }
+                }
+                .padding(.horizontal)
+                .padding(.bottom)
+            }
+        }
+        .padding(.top)
     }
 }
 

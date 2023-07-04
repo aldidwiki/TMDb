@@ -23,4 +23,5 @@ struct TvShowDetailModel: Identifiable {
     let spokenLanguage: String
     let contentRating: String
     let videos: [VideoModel]
+    let credits: [CreditModel]
 }

@@ -23,6 +23,7 @@ struct TvShowDetailResponse: Decodable {
     let spokenLanguages: [SpokenLanguageResponse]
     let contentRating: ContentRatingResponse
     let videos: VideoResponse
+    let credits: CreditResponse
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -40,5 +41,6 @@ struct TvShowDetailResponse: Decodable {
         case spokenLanguages = "spoken_languages"
         case contentRating = "content_ratings"
         case videos
+        case credits
     }
 }
