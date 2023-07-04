@@ -33,26 +33,6 @@ final class Mapper {
             }
         }
         
-        var movieGenres = ""
-        let sortedGenre = movieDetailResponse.genres.sorted { genre1, genre2 in
-            genre1.genreName < genre2.genreName
-        }
-        for genre in sortedGenre {
-            if genre == sortedGenre.last {
-                movieGenres += "\(genre.genreName)"
-            } else {
-                movieGenres += "\(genre.genreName), "
-            }
-        }
-        
-        var spokenLanguage = ""
-        for spokenLangRes in movieDetailResponse.spokenLanguages {
-            spokenLanguage += spokenLangRes.englishName ?? ""
-            if spokenLangRes.englishName != movieDetailResponse.spokenLanguages.last?.englishName {
-                spokenLanguage += "\n"
-            }
-        }
-        
         return MovieDetailModel(
             id: movieDetailResponse.id,
             title: movieDetailResponse.title,
@@ -64,17 +44,37 @@ final class Mapper {
             backdropPath: movieDetailResponse.backdropPath ?? "",
             runtime: movieDetailResponse.runtime ?? 0,
             certification: movieCertification,
-            genre: movieGenres,
+            genre: movieDetailResponse.genres.formatGenres(),
             cast: mapCreditResponseModelToDomains(input: movieDetailResponse),
             budget: movieDetailResponse.budget,
             revenue: movieDetailResponse.revenue,
             status: movieDetailResponse.status,
-            spokenLanguage: spokenLanguage,
+            spokenLanguage: movieDetailResponse.spokenLanguages.formatSpokenLanguage(),
             instagramId: movieDetailResponse.externalMedia?.instagramId ?? "",
             facebookId: movieDetailResponse.externalMedia?.facebookId ?? "",
             twitterId: movieDetailResponse.externalMedia?.twitterId ?? "",
             imdbId: movieDetailResponse.externalMedia?.imdbId ?? "",
             videos: mapVideoResponseModelToDomains(input: movieDetailResponse)
+        )
+    }
+    
+    static func mapTvShowDetailResponseToDomain(
+        input tvShowDetailResponse: TvShowDetailResponse
+    ) -> TvShowDetailModel {
+        return TvShowDetailModel(
+            id: tvShowDetailResponse.id,
+            backdropPath: tvShowDetailResponse.backdropPath ?? "",
+            releaseDate: tvShowDetailResponse.releaseDate ?? "",
+            title: tvShowDetailResponse.title,
+            overview: tvShowDetailResponse.overview ?? "",
+            posterPath: tvShowDetailResponse.posterPath ?? "",
+            tagline: tvShowDetailResponse.tagline,
+            status: tvShowDetailResponse.status,
+            type: tvShowDetailResponse.type,
+            genre: tvShowDetailResponse.genres.formatGenres(),
+            rating: tvShowDetailResponse.rating ?? 0.0,
+            runtime: tvShowDetailResponse.runtime.first ?? 0,
+            spokenLanguage: tvShowDetailResponse.spokenLanguages.formatSpokenLanguage()
         )
     }
     

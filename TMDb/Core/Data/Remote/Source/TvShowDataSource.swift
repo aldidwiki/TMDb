@@ -11,6 +11,7 @@ import Combine
 
 protocol TvShowDataSourceProtocol {
     func getTvShows() -> AnyPublisher<[TvResponseModel], Error>
+    func getTvShow(tvShowId: Int) -> AnyPublisher<TvShowDetailResponse, Error>
     func searchTvShow(query: String) -> AnyPublisher<[TvResponseModel], Error>
 }
 
@@ -51,6 +52,23 @@ extension TvShowDataSource: TvShowDataSourceProtocol {
                         switch response.result {
                             case .success(let value):
                                 completion(.success(value.tvShows))
+                            case .failure:
+                                completion(.failure(URLError.invalidResponse))
+                        }
+                    }
+            }
+        }.eraseToAnyPublisher()
+    }
+    
+    func getTvShow(tvShowId: Int) -> AnyPublisher<TvShowDetailResponse, Error> {
+        return Future<TvShowDetailResponse, Error> { completion in
+            if let url = URL(string: "\(API.baseUrl)/tv/\(tvShowId)") {
+                AF.request(url, headers: API.headers)
+                    .validate()
+                    .responseDecodable(of: TvShowDetailResponse.self) { response in
+                        switch response.result {
+                            case .success(let value):
+                                completion(.success(value))
                             case .failure:
                                 completion(.failure(URLError.invalidResponse))
                         }

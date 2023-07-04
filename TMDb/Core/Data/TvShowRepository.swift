@@ -10,6 +10,7 @@ import Combine
 
 protocol TvShowRepositoryProtocol {
     func getTvShows() -> AnyPublisher<[TvShowModel], Error>
+    func getTvShow(tvShowId: Int) -> AnyPublisher<TvShowDetailModel, Error>
     func searchTvShows(query: String) -> AnyPublisher<[TvShowModel], Error>
 }
 
@@ -39,6 +40,13 @@ extension TvShowRepository: TvShowRepositoryProtocol {
         return self.tvShowDataSource.searchTvShow(query: query)
             .map {
                 Mapper.mapTvResponseModelsToDomains(input: $0)
+            }.eraseToAnyPublisher()
+    }
+    
+    func getTvShow(tvShowId: Int) -> AnyPublisher<TvShowDetailModel, Error> {
+        return self.tvShowDataSource.getTvShow(tvShowId: tvShowId)
+            .map {
+                Mapper.mapTvShowDetailResponseToDomain(input: $0)
             }.eraseToAnyPublisher()
     }
 }
