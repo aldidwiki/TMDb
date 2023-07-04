@@ -1,5 +1,5 @@
 //
-//  HomeView.swift
+//  MovieView.swift
 //  TMDb
 //
 //  Created by Aldi Dwiki Prahasta on 24/11/22.
@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct HomeView: View {
-    @ObservedObject var presenter: HomePresenter
+struct MovieView: View {
+    @ObservedObject var presenter: MoviePresenter
     
     var body: some View {
         NavigationView {
@@ -21,7 +21,7 @@ struct HomeView: View {
                     } else {
                         List(self.presenter.movies) { movie in
                             self.presenter.linkBuilder(for: movie.id) {
-                                MovieItem(movie: movie)
+                                MovieItemView(movie: movie)
                             }
                         }
                     }
@@ -44,9 +44,9 @@ struct HomeView: View {
     }
 }
 
-struct HomeView_Previews: PreviewProvider {
+struct MovieView_Previews: PreviewProvider {
     static var previews: some View {
-        let homeUseCase = Injection.init().provideHomeUseCase()
-        HomeView(presenter: HomePresenter(homeUseCase: homeUseCase))
+        let movieUseCase = Injection.init().provideMovieUseCase()
+        MovieView(presenter: MoviePresenter(movieUseCase: movieUseCase))
     }
 }

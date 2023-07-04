@@ -8,7 +8,7 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
-struct MovieItem: View {
+struct MovieItemView: View {
     var movie: MovieModel
     
     var body: some View {
@@ -25,7 +25,7 @@ struct MovieItem: View {
     }
 }
 
-extension MovieItem {
+extension MovieItemView {
     var moviePoster: some View {
         WebImage(url: URL(string: API.imageBaseUrl + movie.posterPath))
             .resizable()
@@ -57,7 +57,7 @@ extension MovieItem {
 
 struct MovieItem_Previews: PreviewProvider {
     static var previews: some View {
-        MovieItem(movie: MovieModel(
+        MovieItemView(movie: MovieModel(
             id: 436270,
             title: "Black Adam",
             posterPath: "/3zXceNTtyj5FLjwQXuPvLYK5YYL.jpg",

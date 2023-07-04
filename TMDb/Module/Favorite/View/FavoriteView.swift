@@ -21,7 +21,7 @@ struct FavoriteView: View {
                     } else {
                         List(self.presenter.favorites) { movie in
                             presenter.linkBuilder(for: movie.id) {
-                                MovieItem(movie: movie)
+                                MovieItemView(movie: movie)
                             }
                         }
                     }

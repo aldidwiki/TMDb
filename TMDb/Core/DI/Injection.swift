@@ -18,9 +18,9 @@ final class Injection: NSObject {
         return TMDbRepository.sharedInstance(remote, locale)
     }
     
-    func provideHomeUseCase() -> HomeUseCase {
+    func provideMovieUseCase() -> MovieUseCase {
         let repo = provideRepository()
-        return HomeInteractor(repository: repo)
+        return MovieInteractor(repository: repo)
     }
     
     func provideDetailUseCase(movieId: Int) -> DetailUseCase {

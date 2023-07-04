@@ -1,5 +1,5 @@
 //
-//  HomePresenter.swift
+//  MoviePresenter.swift
 //  TMDb
 //
 //  Created by Aldi Dwiki Prahasta on 24/11/22.
@@ -8,11 +8,11 @@
 import SwiftUI
 import Combine
 
-class HomePresenter: ObservableObject {
+class MoviePresenter: ObservableObject {
     private var cancellable: Set<AnyCancellable> = []
     
-    private let router = HomeRouter()
-    private let homeUseCase: HomeUseCase
+    private let router = MovieRouter()
+    private let movieUseCase: MovieUseCase
     
     @Published var movies: [MovieModel] = []
     @Published var errorMessage = ""
@@ -20,13 +20,13 @@ class HomePresenter: ObservableObject {
     
     @Published var movieQuery = ""
     
-    init(homeUseCase: HomeUseCase) {
-        self.homeUseCase = homeUseCase
+    init(movieUseCase: MovieUseCase) {
+        self.movieUseCase = movieUseCase
     }
     
     func getMovies() {
         loadingState = true
-        homeUseCase.getMovies()
+        movieUseCase.getMovies()
             .receive(on: RunLoop.main)
             .sink { completion in
                 switch completion {
@@ -42,7 +42,7 @@ class HomePresenter: ObservableObject {
     
     func searchMovies(query: String) {
         loadingState = true
-        homeUseCase.searchMovies(query: query)
+        movieUseCase.searchMovies(query: query)
             .receive(on: RunLoop.main)
             .sink { completion in
                 switch completion {

@@ -13,15 +13,15 @@ struct SplashView: View {
     var body: some View {
         ZStack {
             if isActive {
-                let homeUseCase = Injection.init().provideHomeUseCase()
-                let homePresenter = HomePresenter(homeUseCase: homeUseCase)
+                let movieUseCase = Injection.init().provideMovieUseCase()
+                let moviePresenter = MoviePresenter(movieUseCase: movieUseCase)
                 let favoriteUseCase = Injection.init().provideFavoriteUseCase()
                 let favoritePresenter = FavoritePresenter(favoriteUseCase: favoriteUseCase)
                 let tvShowUseCase = Injection.init().provideTvShowUseCase()
                 let tvShowPresenter = TvShowPresenter(tvShowUseCase: tvShowUseCase)
                 
                 ContentView()
-                    .environmentObject(homePresenter)
+                    .environmentObject(moviePresenter)
                     .environmentObject(favoritePresenter)
                     .environmentObject(tvShowPresenter)
                     .transition(.scale)

@@ -1,5 +1,5 @@
 //
-//  HomeInteractor.swift
+//  MovieInteractor.swift
 //  TMDb
 //
 //  Created by Aldi Dwiki Prahasta on 24/11/22.
@@ -8,12 +8,12 @@
 import Foundation
 import Combine
 
-protocol HomeUseCase {
+protocol MovieUseCase {
     func getMovies() -> AnyPublisher<[MovieModel], Error>
     func searchMovies(query: String) -> AnyPublisher<[MovieModel], Error>
 }
 
-class HomeInteractor: HomeUseCase {
+class MovieInteractor: MovieUseCase {
     private let repository: TMDbRepositoryProtocol
     
     required init(repository: TMDbRepositoryProtocol) {
