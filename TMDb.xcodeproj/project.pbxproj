@@ -20,6 +20,8 @@
 		CE1F2C712A53ED5E00478B2A /* TvShowDetailResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1F2C702A53ED5E00478B2A /* TvShowDetailResponse.swift */; };
 		CE1F2C732A53F18E00478B2A /* TvShowDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1F2C722A53F18E00478B2A /* TvShowDetailModel.swift */; };
 		CE1F2C752A53F9F200478B2A /* TvShowDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1F2C742A53F9F200478B2A /* TvShowDetailPresenter.swift */; };
+		CE1F2C772A53FE0B00478B2A /* TvShowDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1F2C762A53FE0B00478B2A /* TvShowDetailView.swift */; };
+		CE1F2C7A2A5407F300478B2A /* TvShowRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1F2C792A5407F300478B2A /* TvShowRouter.swift */; };
 		CE57626F2A4146D40094A16D /* CreditDetailItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE57626E2A4146D40094A16D /* CreditDetailItemView.swift */; };
 		CE5762712A4149D40094A16D /* CreditDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5762702A4149D40094A16D /* CreditDetailView.swift */; };
 		CE5762752A4162E70094A16D /* CreditDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5762742A4162E70094A16D /* CreditDetailPresenter.swift */; };
@@ -98,6 +100,8 @@
 		CE1F2C702A53ED5E00478B2A /* TvShowDetailResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShowDetailResponse.swift; sourceTree = "<group>"; };
 		CE1F2C722A53F18E00478B2A /* TvShowDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShowDetailModel.swift; sourceTree = "<group>"; };
 		CE1F2C742A53F9F200478B2A /* TvShowDetailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShowDetailPresenter.swift; sourceTree = "<group>"; };
+		CE1F2C762A53FE0B00478B2A /* TvShowDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShowDetailView.swift; sourceTree = "<group>"; };
+		CE1F2C792A5407F300478B2A /* TvShowRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TvShowRouter.swift; path = ../../../../../../TvShowRouter.swift; sourceTree = "<group>"; };
 		CE57626E2A4146D40094A16D /* CreditDetailItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditDetailItemView.swift; sourceTree = "<group>"; };
 		CE5762702A4149D40094A16D /* CreditDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditDetailView.swift; sourceTree = "<group>"; };
 		CE5762742A4162E70094A16D /* CreditDetailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditDetailPresenter.swift; sourceTree = "<group>"; };
@@ -204,6 +208,14 @@
 			path = Source;
 			sourceTree = "<group>";
 		};
+		CE1F2C782A5407E200478B2A /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				CE1F2C792A5407F300478B2A /* TvShowRouter.swift */,
+			);
+			path = Router;
+			sourceTree = "<group>";
+		};
 		CE8DDDEF2A0B3BCB00F94CEE /* Router */ = {
 			isa = PBXGroup;
 			children = (
@@ -227,6 +239,7 @@
 				CEBD44502A08A6D200BBD9B6 /* CreditItemView.swift */,
 				CE57626E2A4146D40094A16D /* CreditDetailItemView.swift */,
 				CE5762702A4149D40094A16D /* CreditDetailView.swift */,
+				CE1F2C762A53FE0B00478B2A /* TvShowDetailView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -516,6 +529,7 @@
 		CEF796B22A52C4120046858F /* TvShow */ = {
 			isa = PBXGroup;
 			children = (
+				CE1F2C782A5407E200478B2A /* Router */,
 				CEF796BC2A52CDE40046858F /* Presenter */,
 				CEF796B32A52C42F0046858F /* View */,
 			);
@@ -688,6 +702,7 @@
 				CE5762712A4149D40094A16D /* CreditDetailView.swift in Sources */,
 				CEF796B72A52C76A0046858F /* TvResponse.swift in Sources */,
 				CE0FF12A2A458782009D3B26 /* SplashView.swift in Sources */,
+				CE1F2C7A2A5407F300478B2A /* TvShowRouter.swift in Sources */,
 				CE57627B2A419EBF0094A16D /* ExternalMediaView.swift in Sources */,
 				CE8DDDEE2A0B303400F94CEE /* PersonCreditResponse.swift in Sources */,
 				CE1F2C692A53B3D900478B2A /* PersonDataSource.swift in Sources */,
@@ -699,6 +714,7 @@
 				CE5762752A4162E70094A16D /* CreditDetailPresenter.swift in Sources */,
 				CEC65511292F5940007B393A /* MovieInteractor.swift in Sources */,
 				CE8E43D52A429CC400123AA6 /* VideoResponse.swift in Sources */,
+				CE1F2C772A53FE0B00478B2A /* TvShowDetailView.swift in Sources */,
 				CE8E43DB2A42D9D400123AA6 /* ChipsView.swift in Sources */,
 				CE9E31012930BF17001BFB57 /* FavoriteRouter.swift in Sources */,
 				CE9E30F52930A2FE001BFB57 /* FavoriteEntity.swift in Sources */,

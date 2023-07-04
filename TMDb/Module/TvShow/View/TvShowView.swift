@@ -20,7 +20,9 @@ struct TvShowView: View {
                         EmptyView(emptyTitle: "No Tv Show Found")
                     } else {
                         List(self.presenter.tvShows) { tvShow in
-                            TvShowItemView(tvModel: tvShow)
+                            presenter.toTvShowDetailView(for: tvShow.id) {
+                                TvShowItemView(tvModel: tvShow)
+                            }
                         }
                     }
                 }

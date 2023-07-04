@@ -17,19 +17,19 @@ class TvShowDetailPresenter: ObservableObject {
     @Published var errorMessage = ""
     @Published var loadingState = false
     @Published var tvShow = TvShowDetailModel(
-        id: 436270,
+        id: 114472,
         backdropPath: "",
-        releaseDate: "2022-12-22",
-        title: "/bQXAqRx2Fgc46uCVWgoPz5L5Dtr.jpg",
-        overview: "Nearly 5,000 years after he was bestowed with the almighty powers of the Egyptian gods—and imprisoned just as quickly—Black Adam is freed from his earthly tomb, ready to unleash his unique form of justice on the modern world.",
-        posterPath: "The world needed a hero. It got Black Adam.",
-        tagline: "2022-10-19",
-        status: "/3CxUndGhUcZdt1Zggjdb2HkLLQX.jpg",
-        type: "Miniseries",
-        genre: "Action",
-        rating: 7.1,
-        runtime: 55,
-        spokenLanguage: "English"
+        releaseDate: "",
+        title: "",
+        overview: "",
+        posterPath: "",
+        tagline: "",
+        status: "",
+        type: "",
+        genre: "",
+        rating: 0.0,
+        runtime: 0,
+        spokenLanguage: ""
     )
     
     init(tvShowUseCase: TvShowUseCase) {

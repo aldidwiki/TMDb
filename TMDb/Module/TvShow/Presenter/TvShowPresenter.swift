@@ -11,6 +11,7 @@ import SwiftUI
 
 class TvShowPresenter: ObservableObject {
     private var cancellable: Set<AnyCancellable> = []
+    private let router = TvShowRouter()
     
     private let tvShowUseCase: TvShowUseCase
     
@@ -55,5 +56,14 @@ class TvShowPresenter: ObservableObject {
                 self.tvShows = tvShows
             }.store(in: &cancellable)
         
+    }
+    
+    func toTvShowDetailView<Content: View>(
+        for tvShowId: Int,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        NavigationLink(destination: router.makeTvShowDetailView(for: tvShowId)) {
+            content()
+        }
     }
 }
