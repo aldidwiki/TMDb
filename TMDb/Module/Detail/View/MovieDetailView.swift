@@ -8,7 +8,7 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
-struct DetailView: View {
+struct MovieDetailView: View {
     @ObservedObject var presenter: DetailPresenter
     @State var showSheet = false
     
@@ -69,7 +69,7 @@ struct DetailView: View {
     }
 }
 
-extension DetailView {
+extension MovieDetailView {
     var moviePoster: some View {
         WebImage(url: URL(string: API.imageBaseUrl + presenter.movie.posterPath))
             .resizable()
@@ -278,10 +278,10 @@ extension DetailView {
     }
 }
 
-struct DetailView_Previews: PreviewProvider {
+struct MovieDetailView_Previews: PreviewProvider {
     static var previews: some View {
         let detailUseCase = Injection.init().provideDetailUseCase(movieId: 436270)
         let favoriteUseCase = Injection.init().provideFavoriteUseCase()
-        DetailView(presenter: DetailPresenter(detailUseCase: detailUseCase, favoriteUseCase: favoriteUseCase))
+        MovieDetailView(presenter: DetailPresenter(detailUseCase: detailUseCase, favoriteUseCase: favoriteUseCase))
     }
 }

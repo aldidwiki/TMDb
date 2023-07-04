@@ -11,6 +11,6 @@ class FavoriteRouter {
     func makeDetailView(movieId: Int) -> some View {
         let detailUseCase = Injection.init().provideDetailUseCase(movieId: movieId)
         let favoriteUseCase = Injection.init().provideFavoriteUseCase()
-        return DetailView(presenter: DetailPresenter(detailUseCase: detailUseCase, favoriteUseCase: favoriteUseCase))
+        return MovieDetailView(presenter: DetailPresenter(detailUseCase: detailUseCase, favoriteUseCase: favoriteUseCase))
     }
 }
