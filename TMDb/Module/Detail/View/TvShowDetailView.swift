@@ -255,7 +255,7 @@ extension TvShowDetailView {
                             .indicator(.activity)
                             .transition(.fade(duration: 0.5))
                             .scaledToFit()
-                            .frame(width: 40, height: 40)
+                            .frame(width: 35, height: 35)
                     }
                 }
                 .frame(maxWidth: 200)
