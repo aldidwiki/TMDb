@@ -1,5 +1,5 @@
 //
-//  RemoteDataSource.swift
+//  MovieDataSource.swift
 //  TMDb
 //
 //  Created by Aldi Dwiki Prahasta on 24/11/22.
@@ -9,23 +9,22 @@ import Foundation
 import Alamofire
 import Combine
 
-protocol RemoteDataSourceProtocol {
+protocol MovieDataSourceProtocol {
     func getMovies() -> AnyPublisher<[MovieResponseModel], Error>
     func getMovie(movieId: Int) -> AnyPublisher<MovieDetailResponse, Error>
-    func getPerson(personId: Int) -> AnyPublisher<PersonResponse, Error>
     func searchMovie(query: String) -> AnyPublisher<[MovieResponseModel], Error>
     
     func getTvShows() -> AnyPublisher<[TvResponseModel], Error>
     func searchTvShow(query: String) -> AnyPublisher<[TvResponseModel], Error>
 }
 
-final class RemoteDataSource: NSObject {
+final class MovieDataSource: NSObject {
     private override init() {}
     
-    static let sharedInstance: RemoteDataSource = RemoteDataSource()
+    static let sharedInstance: MovieDataSource = MovieDataSource()
 }
 
-extension RemoteDataSource: RemoteDataSourceProtocol {
+extension MovieDataSource: MovieDataSourceProtocol {
     func getMovies() -> AnyPublisher<[MovieResponseModel], Error> {
         return Future<[MovieResponseModel], Error> { completion in
             if let url = URL(string: "\(API.baseUrl)movie/popular") {
@@ -78,27 +77,6 @@ extension RemoteDataSource: RemoteDataSourceProtocol {
                             case .success(let value):
                                 completion(.success(value.movies))
                             case . failure:
-                                completion(.failure(URLError.invalidResponse))
-                        }
-                    }
-            }
-        }.eraseToAnyPublisher()
-    }
-    
-    func getPerson(personId: Int) -> AnyPublisher<PersonResponse, Error> {
-        let param: Parameters = [
-            "append_to_response": "movie_credits,external_ids"
-        ]
-        
-        return Future<PersonResponse, Error> {completion in
-            if let url = URL(string: "\(API.baseUrl)person/\(personId)") {
-                AF.request(url, parameters: param, headers: API.headers)
-                    .validate()
-                    .responseDecodable(of: PersonResponse.self) { response in
-                        switch response.result {
-                            case .success(let value):
-                                completion(.success(value))
-                            case .failure:
                                 completion(.failure(URLError.invalidResponse))
                         }
                     }

@@ -13,10 +13,10 @@ protocol DetailUseCase {
 }
 
 class DetailInteractor: DetailUseCase {
-    private let repository: TMDbRepositoryProtocol
+    private let repository: MovieRepositoryProtocol
     private let movieId: Int
     
-    required init(repository: TMDbRepositoryProtocol, movieId: Int) {
+    required init(repository: MovieRepositoryProtocol, movieId: Int) {
         self.repository = repository
         self.movieId = movieId
     }

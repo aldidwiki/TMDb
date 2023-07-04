@@ -9,13 +9,19 @@ import Foundation
 import RealmSwift
 
 final class Injection: NSObject {
-    private func provideRepository() -> TMDbRepositoryProtocol {
+    private func provideRepository() -> MovieRepositoryProtocol {
         let realm = try? Realm()
         
-        let remote = RemoteDataSource.sharedInstance
+        let movieDataSource = MovieDataSource.sharedInstance
         let locale = LocaleDataSource.sharedInstance(realm)
         
-        return TMDbRepository.sharedInstance(remote, locale)
+        return MovieRepository.sharedInstance(movieDataSource, locale)
+    }
+    
+    private func providePersonRepository() -> PersonRepositoryProtocol {
+        let personDataSource = PersonDataSource.sharedInstance
+        
+        return PersonRepository.sharedInstance(personDataSource)
     }
     
     func provideMovieUseCase() -> MovieUseCase {
@@ -34,7 +40,7 @@ final class Injection: NSObject {
     }
     
     func providePersonUseCase(personId: Int) -> PersonUseCase {
-        let repo = provideRepository()
+        let repo = providePersonRepository()
         return PersonInteractor(repository: repo, personId: personId)
     }
     

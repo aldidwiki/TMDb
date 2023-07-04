@@ -8,10 +8,9 @@
 import Foundation
 import Combine
 
-protocol TMDbRepositoryProtocol {
+protocol MovieRepositoryProtocol {
     func getMovies() -> AnyPublisher<[MovieModel], Error>
     func getMovie(movieId: Int) -> AnyPublisher<MovieDetailModel, Error>
-    func getPerson(personId: Int) -> AnyPublisher<PersonModel, Error>
     func searchMovie(query: String) -> AnyPublisher<[MovieModel], Error>
     
     func getTvShows() -> AnyPublisher<[TvShowModel], Error>
@@ -22,32 +21,32 @@ protocol TMDbRepositoryProtocol {
     func deleteFavorite(movieId: Int) -> AnyPublisher<Bool, Error>
 }
 
-final class TMDbRepository: NSObject {
-    typealias TMDbInstance = (RemoteDataSource, LocaleDataSource) -> TMDbRepository
+final class MovieRepository: NSObject {
+    typealias MovieRepositoryInstance = (MovieDataSource, LocaleDataSource) -> MovieRepository
     
-    fileprivate let remote: RemoteDataSource
+    fileprivate let movieDataSource: MovieDataSource
     fileprivate let locale: LocaleDataSource
     
-    private init(remote: RemoteDataSource, locale: LocaleDataSource) {
-        self.remote = remote
+    private init(movieDataSource: MovieDataSource, locale: LocaleDataSource) {
+        self.movieDataSource = movieDataSource
         self.locale = locale
     }
     
-    static let sharedInstance: TMDbInstance = { remoteRepo, localeRepo in
-        return TMDbRepository(remote: remoteRepo, locale: localeRepo)
+    static let sharedInstance: MovieRepositoryInstance = { movieDataSource, locale in
+        return MovieRepository(movieDataSource: movieDataSource, locale: locale)
     }
 }
 
-extension TMDbRepository: TMDbRepositoryProtocol {
+extension MovieRepository: MovieRepositoryProtocol {
     func getMovies() -> AnyPublisher<[MovieModel], Error> {
-        return self.remote.getMovies()
+        return self.movieDataSource.getMovies()
             .map {
                 Mapper.mapMovieResponseModelsToDomains(input: $0)
             }.eraseToAnyPublisher()
     }
     
     func getMovie(movieId: Int) -> AnyPublisher<MovieDetailModel, Error> {
-        return self.remote.getMovie(movieId: movieId)
+        return self.movieDataSource.getMovie(movieId: movieId)
             .map {
                 Mapper.mapMovieDetailResponseToDomain(input: $0)
             }.eraseToAnyPublisher()
@@ -68,28 +67,21 @@ extension TMDbRepository: TMDbRepositoryProtocol {
     }
     
     func searchMovie(query: String) -> AnyPublisher<[MovieModel], Error> {
-        return self.remote.searchMovie(query: query)
+        return self.movieDataSource.searchMovie(query: query)
             .map {
                 Mapper.mapMovieResponseModelsToDomains(input: $0)
             }.eraseToAnyPublisher()
     }
     
-    func getPerson(personId: Int) -> AnyPublisher<PersonModel, Error> {
-        return self.remote.getPerson(personId: personId)
-            .map {
-                Mapper.mapPersonResponseToDomain(input: $0)
-            }.eraseToAnyPublisher()
-    }
-    
     func getTvShows() -> AnyPublisher<[TvShowModel], Error> {
-        return self.remote.getTvShows()
+        return self.movieDataSource.getTvShows()
             .map {
                 Mapper.mapTvResponseModelsToDomains(input: $0)
             }.eraseToAnyPublisher()
     }
     
     func searchTvShows(query: String) -> AnyPublisher<[TvShowModel], Error> {
-        return self.remote.searchTvShow(query: query)
+        return self.movieDataSource.searchTvShow(query: query)
             .map {
                 Mapper.mapTvResponseModelsToDomains(input: $0)
             }.eraseToAnyPublisher()

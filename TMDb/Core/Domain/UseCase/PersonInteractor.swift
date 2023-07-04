@@ -13,10 +13,10 @@ protocol PersonUseCase {
 }
 
 class PersonInteractor: PersonUseCase {
-    private let repository: TMDbRepositoryProtocol
+    private let repository: PersonRepositoryProtocol
     private let personId: Int
     
-    required init(repository: TMDbRepositoryProtocol, personId: Int) {
+    required init(repository: PersonRepositoryProtocol, personId: Int) {
         self.repository = repository
         self.personId = personId
     }
