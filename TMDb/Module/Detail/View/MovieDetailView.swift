@@ -9,7 +9,7 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct MovieDetailView: View {
-    @ObservedObject var presenter: DetailPresenter
+    @ObservedObject var presenter: MovieDetailPresenter
     @State var showSheet = false
     
     var body: some View {
@@ -282,6 +282,6 @@ struct MovieDetailView_Previews: PreviewProvider {
     static var previews: some View {
         let detailUseCase = Injection.init().provideDetailUseCase(movieId: 436270)
         let favoriteUseCase = Injection.init().provideFavoriteUseCase()
-        MovieDetailView(presenter: DetailPresenter(detailUseCase: detailUseCase, favoriteUseCase: favoriteUseCase))
+        MovieDetailView(presenter: MovieDetailPresenter(detailUseCase: detailUseCase, favoriteUseCase: favoriteUseCase))
     }
 }

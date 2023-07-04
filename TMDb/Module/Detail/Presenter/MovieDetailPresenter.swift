@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 
-class DetailPresenter: ObservableObject {
+class MovieDetailPresenter: ObservableObject {
     private var cancellable: Set<AnyCancellable> = []
     
     private let router = DetailRouter()
