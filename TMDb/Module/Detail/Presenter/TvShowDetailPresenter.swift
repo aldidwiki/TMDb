@@ -30,7 +30,8 @@ class TvShowDetailPresenter: ObservableObject {
         rating: 0.0,
         runtime: 0,
         spokenLanguage: "",
-        contentRating: ""
+        contentRating: "",
+        videos: []
     )
     
     init(tvShowUseCase: TvShowUseCase) {

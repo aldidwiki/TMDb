@@ -22,4 +22,5 @@ struct TvShowDetailModel: Identifiable {
     let runtime: Int
     let spokenLanguage: String
     let contentRating: String
+    let videos: [VideoModel]
 }

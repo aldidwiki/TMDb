@@ -54,7 +54,7 @@ final class Mapper {
             facebookId: movieDetailResponse.externalMedia?.facebookId ?? "",
             twitterId: movieDetailResponse.externalMedia?.twitterId ?? "",
             imdbId: movieDetailResponse.externalMedia?.imdbId ?? "",
-            videos: mapVideoResponseModelToDomains(input: movieDetailResponse)
+            videos: mapVideoResponseModelToDomains(input: movieDetailResponse.videos)
         )
     }
     
@@ -79,7 +79,8 @@ final class Mapper {
             rating: tvShowDetailResponse.rating ?? 0.0,
             runtime: tvShowDetailResponse.runtime.first ?? 0,
             spokenLanguage: tvShowDetailResponse.spokenLanguages.formatSpokenLanguage(),
-            contentRating: tvContentRating
+            contentRating: tvContentRating,
+            videos: mapVideoResponseModelToDomains(input: tvShowDetailResponse.videos)
         )
     }
     
@@ -168,9 +169,9 @@ final class Mapper {
     }
     
     private static func mapVideoResponseModelToDomains(
-        input movieDetailResponse: MovieDetailResponse
+        input videoResponse: VideoResponse
     ) -> [VideoModel] {
-        return movieDetailResponse.videos.results.map { video in
+        return videoResponse.results.map { video in
             VideoModel(
                 id: video.id,
                 key: video.key,

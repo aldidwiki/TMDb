@@ -10,6 +10,7 @@ import SDWebImageSwiftUI
 
 struct TvShowDetailView: View {
     @ObservedObject var presenter: TvShowDetailPresenter
+    @State var showSheet = false
     var tvShowId: Int
     
     var body: some View {
@@ -26,7 +27,7 @@ struct TvShowDetailView: View {
                         tvContentDetail
                             .padding([.top, .horizontal])
                         
-                        //                        movieContentUtils
+                        tvContentUtils
                         
                         tvOverview
                         
@@ -45,6 +46,8 @@ struct TvShowDetailView: View {
                             .padding(.vertical)
                     }
                 }
+                .blur(radius: showSheet ? 10 : 0)
+                .animation(.spring(), value: showSheet)
             }
         }.onAppear {
             presenter.getTvShow(tvShowId: tvShowId)
@@ -122,6 +125,65 @@ extension TvShowDetailView {
             
             Text(presenter.tvShow.overview)
                 .padding(.horizontal)
+        }
+    }
+    
+    var tvContentUtils: some View {
+        HStack(alignment: .center) {
+            Spacer()
+            ZStack {
+                CircularProgressView(progress: presenter.tvShow.rating / 10, lineWidth: 3)
+                    .frame(width: 35, height: 35)
+                
+                Text((presenter.tvShow.rating / 10).toPercentage())
+                    .font(.system(size: 11))
+            }
+            
+            Text("User Score")
+            
+            Text("\u{FF5C}")
+                .fontWeight(.medium)
+                .padding(.horizontal)
+            
+            if presenter.tvShow.videos.count > 1 {
+                tvTrailerBottomSheet
+            } else {
+                if let firstKey = presenter.tvShow.videos.first?.key {
+                    Link(destination: URL(string: "https://www.youtube.com/watch?v=" + firstKey)!) {
+                        Label("Play Trailer", systemImage: "play.fill")
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            Spacer()
+        }
+        .padding(.top)
+    }
+    
+    var tvTrailerBottomSheet: some View {
+        Button {
+            showSheet.toggle()
+        } label: {
+            Label("Play Trailer", systemImage: "play.fill")
+        }
+        .buttonStyle(.plain)
+        .sheet(isPresented: $showSheet) {
+            VStack(alignment: .leading) {
+                Text("Choose Trailer")
+                    .font(.title2)
+                    .fontWeight(.medium)
+                    .padding(.leading, 20)
+                    .padding(.top)
+                
+                List(presenter.tvShow.videos, id: \.id) { video in
+                    Link(video.name, destination: URL(string: "https://www.youtube.com/watch?v=" + video.key)!)
+                        .buttonStyle(.plain)
+                        .padding(.vertical, 1)
+                }
+                .listStyle(.plain)
+                .presentationDetents([.height(300), .medium])
+            }
+            .padding(.vertical)
         }
     }
 }
