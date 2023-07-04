@@ -9,7 +9,7 @@ import Foundation
 import RealmSwift
 
 final class Injection: NSObject {
-    private func provideRepository() -> MovieRepositoryProtocol {
+    private func provideMovieRepository() -> MovieRepositoryProtocol {
         let realm = try? Realm()
         
         let movieDataSource = MovieDataSource.sharedInstance
@@ -24,18 +24,24 @@ final class Injection: NSObject {
         return PersonRepository.sharedInstance(personDataSource)
     }
     
+    private func provideTvShowRepository() -> TvShowRepositoryProtocol {
+        let tvShowDataSource = TvShowDataSource.sharedInstance
+        
+        return TvShowRepository.sharedInstance(tvShowDataSource)
+    }
+    
     func provideMovieUseCase() -> MovieUseCase {
-        let repo = provideRepository()
+        let repo = provideMovieRepository()
         return MovieInteractor(repository: repo)
     }
     
     func provideDetailUseCase(movieId: Int) -> DetailUseCase {
-        let repo = provideRepository()
+        let repo = provideMovieRepository()
         return DetailInteractor(repository: repo, movieId: movieId)
     }
     
     func provideFavoriteUseCase() -> FavoriteUseCase {
-        let repo = provideRepository()
+        let repo = provideMovieRepository()
         return FavoriteInteractor(repository: repo)
     }
     
@@ -45,7 +51,7 @@ final class Injection: NSObject {
     }
     
     func provideTvShowUseCase() -> TvShowUseCase {
-        let repo = provideRepository()
+        let repo = provideTvShowRepository()
         return TvShowInteractor(repository: repo)
     }
 }

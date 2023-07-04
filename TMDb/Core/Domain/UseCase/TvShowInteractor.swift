@@ -14,9 +14,9 @@ protocol TvShowUseCase {
 }
 
 class TvShowInteractor: TvShowUseCase {
-    private let repository: MovieRepositoryProtocol
+    private let repository: TvShowRepositoryProtocol
     
-    required init(repository: MovieRepositoryProtocol) {
+    required init(repository: TvShowRepositoryProtocol) {
         self.repository = repository
     }
     

@@ -15,6 +15,8 @@
 		CE182B04292F831E00B5C857 /* DetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE182B03292F831E00B5C857 /* DetailPresenter.swift */; };
 		CE1F2C692A53B3D900478B2A /* PersonDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1F2C682A53B3D900478B2A /* PersonDataSource.swift */; };
 		CE1F2C6B2A53B4BC00478B2A /* PersonRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1F2C6A2A53B4BC00478B2A /* PersonRepository.swift */; };
+		CE1F2C6D2A53B7AC00478B2A /* TvShowDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1F2C6C2A53B7AC00478B2A /* TvShowDataSource.swift */; };
+		CE1F2C6F2A53B86100478B2A /* TvShowRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1F2C6E2A53B86100478B2A /* TvShowRepository.swift */; };
 		CE57626F2A4146D40094A16D /* CreditDetailItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE57626E2A4146D40094A16D /* CreditDetailItemView.swift */; };
 		CE5762712A4149D40094A16D /* CreditDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5762702A4149D40094A16D /* CreditDetailView.swift */; };
 		CE5762752A4162E70094A16D /* CreditDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5762742A4162E70094A16D /* CreditDetailPresenter.swift */; };
@@ -88,6 +90,8 @@
 		CE182B03292F831E00B5C857 /* DetailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPresenter.swift; sourceTree = "<group>"; };
 		CE1F2C682A53B3D900478B2A /* PersonDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDataSource.swift; sourceTree = "<group>"; };
 		CE1F2C6A2A53B4BC00478B2A /* PersonRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonRepository.swift; sourceTree = "<group>"; };
+		CE1F2C6C2A53B7AC00478B2A /* TvShowDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShowDataSource.swift; sourceTree = "<group>"; };
+		CE1F2C6E2A53B86100478B2A /* TvShowRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShowRepository.swift; sourceTree = "<group>"; };
 		CE57626E2A4146D40094A16D /* CreditDetailItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditDetailItemView.swift; sourceTree = "<group>"; };
 		CE5762702A4149D40094A16D /* CreditDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditDetailView.swift; sourceTree = "<group>"; };
 		CE5762742A4162E70094A16D /* CreditDetailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditDetailPresenter.swift; sourceTree = "<group>"; };
@@ -188,6 +192,7 @@
 			children = (
 				CEC65505292F561E007B393A /* MovieDataSource.swift */,
 				CE1F2C682A53B3D900478B2A /* PersonDataSource.swift */,
+				CE1F2C6C2A53B7AC00478B2A /* TvShowDataSource.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -386,6 +391,7 @@
 				CEC65501292F5521007B393A /* Remote */,
 				CEC6550D292F5833007B393A /* MovieRepository.swift */,
 				CE1F2C6A2A53B4BC00478B2A /* PersonRepository.swift */,
+				CE1F2C6E2A53B86100478B2A /* TvShowRepository.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -658,6 +664,7 @@
 				CE9E30F129308DE7001BFB57 /* LocaleDataSource.swift in Sources */,
 				CEC65516292F59DA007B393A /* MoviePresenter.swift in Sources */,
 				CE9E30FB2930B956001BFB57 /* FavoritePresenter.swift in Sources */,
+				CE1F2C6F2A53B86100478B2A /* TvShowRepository.swift in Sources */,
 				CE971C432931F53900C33D9C /* EmptyView.swift in Sources */,
 				CE9E30FF2930BAA9001BFB57 /* FavoriteView.swift in Sources */,
 				CEC65506292F561E007B393A /* MovieDataSource.swift in Sources */,
@@ -677,6 +684,7 @@
 				CE1F2C692A53B3D900478B2A /* PersonDataSource.swift in Sources */,
 				CE57626F2A4146D40094A16D /* CreditDetailItemView.swift in Sources */,
 				CEC6551E292F5C52007B393A /* API.swift in Sources */,
+				CE1F2C6D2A53B7AC00478B2A /* TvShowDataSource.swift in Sources */,
 				CE9E30E129305B48001BFB57 /* MovieRouter.swift in Sources */,
 				CE5762752A4162E70094A16D /* CreditDetailPresenter.swift in Sources */,
 				CEC65511292F5940007B393A /* MovieInteractor.swift in Sources */,

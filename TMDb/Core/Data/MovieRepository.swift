@@ -13,9 +13,6 @@ protocol MovieRepositoryProtocol {
     func getMovie(movieId: Int) -> AnyPublisher<MovieDetailModel, Error>
     func searchMovie(query: String) -> AnyPublisher<[MovieModel], Error>
     
-    func getTvShows() -> AnyPublisher<[TvShowModel], Error>
-    func searchTvShows(query: String) -> AnyPublisher<[TvShowModel], Error>
-    
     func addFavorite(from movie: MovieDetailModel) -> AnyPublisher<Bool, Error>
     func getFavorites() -> AnyPublisher<[MovieModel], Error>
     func deleteFavorite(movieId: Int) -> AnyPublisher<Bool, Error>
@@ -70,20 +67,6 @@ extension MovieRepository: MovieRepositoryProtocol {
         return self.movieDataSource.searchMovie(query: query)
             .map {
                 Mapper.mapMovieResponseModelsToDomains(input: $0)
-            }.eraseToAnyPublisher()
-    }
-    
-    func getTvShows() -> AnyPublisher<[TvShowModel], Error> {
-        return self.movieDataSource.getTvShows()
-            .map {
-                Mapper.mapTvResponseModelsToDomains(input: $0)
-            }.eraseToAnyPublisher()
-    }
-    
-    func searchTvShows(query: String) -> AnyPublisher<[TvShowModel], Error> {
-        return self.movieDataSource.searchTvShow(query: query)
-            .map {
-                Mapper.mapTvResponseModelsToDomains(input: $0)
             }.eraseToAnyPublisher()
     }
 }
