@@ -26,15 +26,18 @@ struct SplashView: View {
                     .environmentObject(tvShowPresenter)
                     .transition(.scale)
             } else {
-                Rectangle()
-                    .background(Color("primary_color"))
-                
-                Color("primary_color")
-                
-                Image("app_logo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 150, height: 150)
+                ZStack {
+                    Rectangle()
+                        .background(Color("primary_color"))
+                    
+                    Color("primary_color")
+                    
+                    Image("app_logo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 150, height: 150)
+                }
+                .preferredColorScheme(.dark)
             }
         }
         .onAppear {
