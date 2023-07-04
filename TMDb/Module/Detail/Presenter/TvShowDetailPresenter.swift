@@ -33,7 +33,8 @@ class TvShowDetailPresenter: ObservableObject {
         spokenLanguage: "",
         contentRating: "",
         videos: [],
-        credits: []
+        credits: [],
+        networks: []
     )
     
     init(tvShowUseCase: TvShowUseCase) {

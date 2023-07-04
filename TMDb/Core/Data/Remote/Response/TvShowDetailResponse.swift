@@ -24,6 +24,7 @@ struct TvShowDetailResponse: Decodable {
     let contentRating: ContentRatingResponse
     let videos: VideoResponse
     let credits: CreditResponse
+    let networks: [NetworkResponseModel]
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -42,5 +43,18 @@ struct TvShowDetailResponse: Decodable {
         case contentRating = "content_ratings"
         case videos
         case credits
+        case networks
+    }
+}
+
+struct NetworkResponseModel: Decodable {
+    let id: Int
+    let logoPath: String?
+    let name: String
+    
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case logoPath = "logo_path"
+        case name
     }
 }

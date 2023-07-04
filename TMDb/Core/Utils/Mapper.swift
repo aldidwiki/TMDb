@@ -81,7 +81,8 @@ final class Mapper {
             spokenLanguage: tvShowDetailResponse.spokenLanguages.formatSpokenLanguage(),
             contentRating: tvContentRating,
             videos: mapVideoResponseModelToDomains(input: tvShowDetailResponse.videos),
-            credits: mapCreditResponseModelToDomains(input: tvShowDetailResponse.credits)
+            credits: mapCreditResponseModelToDomains(input: tvShowDetailResponse.credits),
+            networks: mapNetworkResponseModelToDomains(input: tvShowDetailResponse.networks)
         )
     }
     
@@ -204,6 +205,18 @@ final class Mapper {
             )
         }.sorted {
             $0.releaseDate > $1.releaseDate
+        }
+    }
+    
+    private static func mapNetworkResponseModelToDomains(
+        input networkResponseModel: [NetworkResponseModel]
+    ) -> [NetworkModel] {
+        return networkResponseModel.map { network in
+            NetworkModel(
+                id: network.id,
+                logoPath: network.logoPath ?? "",
+                name: network.name
+            )
         }
     }
 }

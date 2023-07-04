@@ -35,7 +35,7 @@ struct TvShowDetailView: View {
                             tvCredits
                         }
                         
-                        //                        movieDetailInfo
+                        tvDetailInfo
                         //
                         //                        ExternalMediaView(
                         //                            instagramId: presenter.movie.instagramId,
@@ -217,6 +217,58 @@ extension TvShowDetailView {
             }
         }
         .padding(.top)
+    }
+    
+    var tvDetailInfo: some View {
+        VStack(alignment: .leading) {
+            Text("Details")
+                .padding([.top, .horizontal])
+                .font(.title2)
+                .fontWeight(.semibold)
+                .padding(.bottom, 2)
+            
+            HStack(alignment: .top) {
+                VStack {
+                    Text("Status")
+                    Text(presenter.tvShow.status)
+                        .fontWeight(.thin)
+                }
+                .frame(maxWidth: 200)
+                
+                VStack {
+                    Text("Spoken Language")
+                    Text(presenter.tvShow.spokenLanguage)
+                        .multilineTextAlignment(.center)
+                        .fontWeight(.thin)
+                }
+                .frame(maxWidth: 200)
+            }
+            
+            Spacer()
+            
+            HStack(alignment: .top) {
+                VStack {
+                    Text("Network")
+                    ForEach(presenter.tvShow.networks) { network in
+                        WebImage(url: URL(string: API.logoImageBaseUrl + network.logoPath))
+                            .resizable()
+                            .indicator(.activity)
+                            .transition(.fade(duration: 0.5))
+                            .scaledToFit()
+                            .frame(width: 40, height: 40)
+                    }
+                }
+                .frame(maxWidth: 200)
+                
+                VStack {
+                    Text("Type")
+                    Text(presenter.tvShow.type)
+                        .fontWeight(.thin)
+                }
+                .frame(maxWidth: 200)
+            }
+        }
+        .padding(.bottom)
     }
 }
 

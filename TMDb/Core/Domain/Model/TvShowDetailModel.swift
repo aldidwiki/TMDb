@@ -24,4 +24,5 @@ struct TvShowDetailModel: Identifiable {
     let contentRating: String
     let videos: [VideoModel]
     let credits: [CreditModel]
+    let networks: [NetworkModel]
 }
