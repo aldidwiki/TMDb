@@ -253,9 +253,8 @@ extension TvShowDetailView {
                         WebImage(url: URL(string: API.logoImageBaseUrl + network.logoPath))
                             .resizable()
                             .indicator(.activity)
-                            .transition(.fade(duration: 0.5))
-                            .scaledToFit()
-                            .frame(width: 35, height: 35)
+                            .scaledToFill()
+                            .frame(width: 15, height: 15)
                     }
                 }
                 .frame(maxWidth: 200)
