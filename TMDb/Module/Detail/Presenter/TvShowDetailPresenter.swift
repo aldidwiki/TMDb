@@ -32,6 +32,10 @@ class TvShowDetailPresenter: ObservableObject {
         runtime: 0,
         spokenLanguage: "",
         contentRating: "",
+        instagramId: "",
+        facebookId: "",
+        twitterId: "",
+        imdbId: "",
         videos: [],
         credits: [],
         networks: []

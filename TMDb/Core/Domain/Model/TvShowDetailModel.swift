@@ -22,6 +22,10 @@ struct TvShowDetailModel: Identifiable {
     let runtime: Int
     let spokenLanguage: String
     let contentRating: String
+    let instagramId: String
+    let facebookId: String
+    let twitterId: String
+    let imdbId: String
     let videos: [VideoModel]
     let credits: [CreditModel]
     let networks: [NetworkModel]

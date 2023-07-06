@@ -80,6 +80,10 @@ final class Mapper {
             runtime: tvShowDetailResponse.runtime.first ?? 0,
             spokenLanguage: tvShowDetailResponse.spokenLanguages.formatSpokenLanguage(),
             contentRating: tvContentRating,
+            instagramId: tvShowDetailResponse.externalMedia?.instagramId ?? "",
+            facebookId: tvShowDetailResponse.externalMedia?.facebookId ?? "",
+            twitterId: tvShowDetailResponse.externalMedia?.twitterId ?? "",
+            imdbId: tvShowDetailResponse.externalMedia?.imdbId ?? "",
             videos: mapVideoResponseModelToDomains(input: tvShowDetailResponse.videos),
             credits: mapCreditResponseModelToDomains(input: tvShowDetailResponse.credits),
             networks: mapNetworkResponseModelToDomains(input: tvShowDetailResponse.networks)

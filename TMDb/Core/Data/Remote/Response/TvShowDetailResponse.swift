@@ -25,6 +25,7 @@ struct TvShowDetailResponse: Decodable {
     let videos: VideoResponse
     let credits: CreditResponse
     let networks: [NetworkResponseModel]
+    let externalMedia: ExternalMediaResponse?
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -44,6 +45,7 @@ struct TvShowDetailResponse: Decodable {
         case videos
         case credits
         case networks
+        case externalMedia = "external_ids"
     }
 }
 

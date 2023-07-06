@@ -36,14 +36,14 @@ struct TvShowDetailView: View {
                         }
                         
                         tvDetailInfo
-                        //
-                        //                        ExternalMediaView(
-                        //                            instagramId: presenter.movie.instagramId,
-                        //                            facebookId: presenter.movie.facebookId,
-                        //                            twitterId: presenter.movie.twitterId,
-                        //                            imdbId: presenter.movie.imdbId
-                        //                        )
-                        //                            .padding(.vertical)
+                        
+                        ExternalMediaView(
+                            instagramId: presenter.tvShow.instagramId,
+                            facebookId: presenter.tvShow.facebookId,
+                            twitterId: presenter.tvShow.twitterId,
+                            imdbId: presenter.tvShow.imdbId
+                        )
+                        .padding(.vertical)
                     }
                 }
                 .blur(radius: showSheet ? 10 : 0)
