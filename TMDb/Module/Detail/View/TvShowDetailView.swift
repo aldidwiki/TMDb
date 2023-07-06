@@ -141,15 +141,19 @@ extension TvShowDetailView {
             
             Text("User Score")
             
-            Text("\u{FF5C}")
-                .fontWeight(.medium)
-                .padding(.horizontal)
-            
             if presenter.tvShow.videos.count > 1 {
+                Text("\u{FF5C}")
+                    .fontWeight(.medium)
+                    .padding(.horizontal)
+                
                 tvTrailerBottomSheet
             } else {
                 if let firstKey = presenter.tvShow.videos.first?.key {
-                    Link(destination: URL(string: "https://www.youtube.com/watch?v=" + firstKey)!) {
+                    Text("\u{FF5C}")
+                        .fontWeight(.medium)
+                        .padding(.horizontal)
+                    
+                    Link(destination: URL(string: Constants.youtubeBaseUrl + firstKey)!) {
                         Label("Play Trailer", systemImage: "play.fill")
                     }
                     .buttonStyle(.plain)
@@ -176,7 +180,7 @@ extension TvShowDetailView {
                     .padding(.top)
                 
                 List(presenter.tvShow.videos, id: \.id) { video in
-                    Link(video.name, destination: URL(string: "https://www.youtube.com/watch?v=" + video.key)!)
+                    Link(video.name, destination: URL(string: Constants.youtubeBaseUrl + video.key)!)
                         .buttonStyle(.plain)
                         .padding(.vertical, 1)
                 }

@@ -13,6 +13,7 @@ class Constants {
     static let twitterBaseUrl = "https://twitter.com/"
     static let imdbBaseUrl = "https://www.imdb.com/title/"
     static let imdbPersonBaseUrl = "https://www.imdb.com/name/"
+    static let youtubeBaseUrl = "https://www.youtube.com/watch?v="
 }
 
 enum NavigateType {

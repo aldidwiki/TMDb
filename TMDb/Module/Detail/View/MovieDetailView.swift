@@ -231,15 +231,19 @@ extension MovieDetailView {
             
             Text("User Score")
             
-            Text("\u{FF5C}")
-                .fontWeight(.medium)
-                .padding(.horizontal)
-            
             if presenter.movie.videos.count > 1 {
+                Text("\u{FF5C}")
+                    .fontWeight(.medium)
+                    .padding(.horizontal)
+                
                 movieTrailerBottomSheet
             } else {
                 if let firstKey = presenter.movie.videos.first?.key {
-                    Link(destination: URL(string: "https://www.youtube.com/watch?v=" + firstKey)!) {
+                    Text("\u{FF5C}")
+                        .fontWeight(.medium)
+                        .padding(.horizontal)
+                    
+                    Link(destination: URL(string: Constants.youtubeBaseUrl + firstKey)!) {
                         Label("Play Trailer", systemImage: "play.fill")
                     }
                     .buttonStyle(.plain)
@@ -266,7 +270,7 @@ extension MovieDetailView {
                     .padding(.top)
                 
                 List(presenter.movie.videos, id: \.id) { video in
-                    Link(video.name, destination: URL(string: "https://www.youtube.com/watch?v=" + video.key)!)
+                    Link(video.name, destination: URL(string: Constants.youtubeBaseUrl + video.key)!)
                         .buttonStyle(.plain)
                         .padding(.vertical, 1)
                 }
