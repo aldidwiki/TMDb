@@ -99,6 +99,7 @@ final class Mapper {
         favoriteEntity.posterPath = movieDetailModel.posterPath
         favoriteEntity.rating = movieDetailModel.rating
         favoriteEntity.releasedDate = movieDetailModel.releaseDate
+        favoriteEntity.mediaType = Constants.movieType
         return favoriteEntity
     }
     

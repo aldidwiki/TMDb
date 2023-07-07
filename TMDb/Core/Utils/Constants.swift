@@ -14,6 +14,9 @@ class Constants {
     static let imdbBaseUrl = "https://www.imdb.com/title/"
     static let imdbPersonBaseUrl = "https://www.imdb.com/name/"
     static let youtubeBaseUrl = "https://www.youtube.com/watch?v="
+    
+    static let movieType = "movie_type"
+    static let tvType = "tv_type"
 }
 
 enum NavigateType {

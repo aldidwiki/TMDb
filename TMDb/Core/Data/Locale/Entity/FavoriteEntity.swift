@@ -14,6 +14,7 @@ class FavoriteEntity: Object {
     @objc dynamic var posterPath: String = ""
     @objc dynamic var releasedDate: String = ""
     @objc dynamic var rating: Double = 0.0
+    @objc dynamic var mediaType: String = ""
     
     override class func primaryKey() -> String? {
         return "id"
