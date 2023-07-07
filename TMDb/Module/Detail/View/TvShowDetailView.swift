@@ -58,9 +58,13 @@ struct TvShowDetailView: View {
         .toolbar {
             ToolbarItem {
                 Button {
-                    isFavorite.toggle()
+                    if !presenter.isFavorite {
+                        self.presenter.addFavorite(tvShowDetailModel: self.presenter.tvShow)
+                    } else {
+                        self.presenter.deleteFavorite(tvShowId: self.presenter.tvShow.id)
+                    }
                 } label: {
-                    Image(systemName: isFavorite ? "heart.fill" : "heart")
+                    Image(systemName: self.presenter.isFavorite ? "heart.fill" : "heart")
                 }.disabled(self.presenter.loadingState)
             }
         }
@@ -288,8 +292,9 @@ extension TvShowDetailView {
 struct TvShowDetailView_Previews: PreviewProvider {
     static var previews: some View {
         let tvShowUseCase = Injection.init().provideTvShowUseCase()
+        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         TvShowDetailView(
-            presenter: TvShowDetailPresenter(tvShowUseCase: tvShowUseCase),
+            presenter: TvShowDetailPresenter(tvShowUseCase: tvShowUseCase, favoriteUseCase: favoriteUseCase),
             tvShowId: 114472
         )
     }

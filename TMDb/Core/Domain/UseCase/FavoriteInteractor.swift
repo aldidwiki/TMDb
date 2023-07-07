@@ -11,6 +11,7 @@ import Combine
 protocol FavoriteUseCase {
     func getFavorites() -> AnyPublisher<[FavoriteModel], Error>
     func addFavorite(movie: MovieDetailModel) -> AnyPublisher<Bool, Error>
+    func addFavorite(tvShow: TvShowDetailModel) -> AnyPublisher<Bool, Error>
     func deleteFavorite(for favoriteId: Int) -> AnyPublisher<Bool, Error>
 }
 

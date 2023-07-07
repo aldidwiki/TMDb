@@ -16,6 +16,7 @@ class FavoriteRouter {
     
     func makeTvDetailView(tvShowId: Int) -> some View {
         let tvShowUseCase = Injection.init().provideTvShowUseCase()
-        return TvShowDetailView(presenter: TvShowDetailPresenter(tvShowUseCase: tvShowUseCase), tvShowId: tvShowId)
+        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
+        return TvShowDetailView(presenter: TvShowDetailPresenter(tvShowUseCase: tvShowUseCase, favoriteUseCase: favoriteUseCase), tvShowId: tvShowId)
     }
 }
