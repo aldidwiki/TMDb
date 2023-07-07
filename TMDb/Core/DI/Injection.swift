@@ -10,12 +10,16 @@ import RealmSwift
 
 final class Injection: NSObject {
     private func provideMovieRepository() -> MovieRepositoryProtocol {
-        let realm = try? Realm()
-        
         let movieDataSource = MovieDataSource.sharedInstance
-        let locale = LocaleDataSource.sharedInstance(realm)
         
-        return MovieRepository.sharedInstance(movieDataSource, locale)
+        return MovieRepository.sharedInstance(movieDataSource)
+    }
+    
+    private func provideFavoriteRepository() -> FavoriteRepositoryProtocol {
+        let realm = try? Realm()
+        let localDataSource = LocaleDataSource.sharedInstance(realm)
+        
+        return FavoriteRepository.sharedInstance(localDataSource)
     }
     
     private func providePersonRepository() -> PersonRepositoryProtocol {
@@ -41,7 +45,7 @@ final class Injection: NSObject {
     }
     
     func provideFavoriteUseCase() -> FavoriteUseCase {
-        let repo = provideMovieRepository()
+        let repo = provideFavoriteRepository()
         return FavoriteInteractor(repository: repo)
     }
     

@@ -103,6 +103,19 @@ final class Mapper {
         return favoriteEntity
     }
     
+    static func mapTvShowDetailModelToFavoriteEntity(
+        input tvShowDetailModel: TvShowDetailModel
+    ) -> FavoriteEntity {
+        let favoriteEntity = FavoriteEntity()
+        favoriteEntity.id = tvShowDetailModel.id
+        favoriteEntity.title = tvShowDetailModel.title
+        favoriteEntity.posterPath = tvShowDetailModel.posterPath
+        favoriteEntity.rating = tvShowDetailModel.rating
+        favoriteEntity.releasedDate = tvShowDetailModel.releaseDate
+        favoriteEntity.mediaType = Constants.tvType
+        return favoriteEntity
+    }
+    
     static func mapFavoriteEntitiesToDomains(
         input favoriteEntities: [FavoriteEntity]
     ) -> [MovieModel] {

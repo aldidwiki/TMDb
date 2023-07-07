@@ -15,9 +15,9 @@ protocol FavoriteUseCase {
 }
 
 class FavoriteInteractor: FavoriteUseCase {
-    private let repository: MovieRepositoryProtocol
+    private let repository: FavoriteRepositoryProtocol
     
-    required init(repository: MovieRepositoryProtocol) {
+    required init(repository: FavoriteRepositoryProtocol) {
         self.repository = repository
     }
     

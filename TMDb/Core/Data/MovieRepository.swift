@@ -12,25 +12,19 @@ protocol MovieRepositoryProtocol {
     func getMovies() -> AnyPublisher<[MovieModel], Error>
     func getMovie(movieId: Int) -> AnyPublisher<MovieDetailModel, Error>
     func searchMovie(query: String) -> AnyPublisher<[MovieModel], Error>
-    
-    func addFavorite(from movie: MovieDetailModel) -> AnyPublisher<Bool, Error>
-    func getFavorites() -> AnyPublisher<[MovieModel], Error>
-    func deleteFavorite(movieId: Int) -> AnyPublisher<Bool, Error>
 }
 
 final class MovieRepository: NSObject {
-    typealias MovieRepositoryInstance = (MovieDataSource, LocaleDataSource) -> MovieRepository
+    typealias MovieRepositoryInstance = (MovieDataSource) -> MovieRepository
     
     fileprivate let movieDataSource: MovieDataSource
-    fileprivate let locale: LocaleDataSource
     
-    private init(movieDataSource: MovieDataSource, locale: LocaleDataSource) {
+    private init(movieDataSource: MovieDataSource) {
         self.movieDataSource = movieDataSource
-        self.locale = locale
     }
     
-    static let sharedInstance: MovieRepositoryInstance = { movieDataSource, locale in
-        return MovieRepository(movieDataSource: movieDataSource, locale: locale)
+    static let sharedInstance: MovieRepositoryInstance = { movieDataSource in
+        return MovieRepository(movieDataSource: movieDataSource)
     }
 }
 
@@ -47,20 +41,6 @@ extension MovieRepository: MovieRepositoryProtocol {
             .map {
                 Mapper.mapMovieDetailResponseToDomain(input: $0)
             }.eraseToAnyPublisher()
-    }
-    
-    func addFavorite(from movie: MovieDetailModel) -> AnyPublisher<Bool, Error> {
-        return self.locale.addFavorite(from: Mapper.mapMovieDetailModelToFavoriteEntity(input: movie))
-    }
-    
-    func getFavorites() -> AnyPublisher<[MovieModel], Error> {
-        return self.locale.getFavorites().map {
-            Mapper.mapFavoriteEntitiesToDomains(input: $0)
-        }.eraseToAnyPublisher()
-    }
-    
-    func deleteFavorite(movieId: Int) -> AnyPublisher<Bool, Error> {
-        return self.locale.deleteFavorite(from: movieId)
     }
     
     func searchMovie(query: String) -> AnyPublisher<[MovieModel], Error> {
