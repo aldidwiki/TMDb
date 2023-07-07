@@ -11,6 +11,7 @@ import SDWebImageSwiftUI
 struct TvShowDetailView: View {
     @ObservedObject var presenter: TvShowDetailPresenter
     @State var showSheet = false
+    @State var isFavorite = false
     var tvShowId: Int
     
     var body: some View {
@@ -54,6 +55,15 @@ struct TvShowDetailView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(presenter.tvShow.title)
+        .toolbar {
+            ToolbarItem {
+                Button {
+                    isFavorite.toggle()
+                } label: {
+                    Image(systemName: isFavorite ? "heart.fill" : "heart")
+                }.disabled(self.presenter.loadingState)
+            }
+        }
     }
 }
 
