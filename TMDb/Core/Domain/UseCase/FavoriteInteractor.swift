@@ -26,7 +26,11 @@ class FavoriteInteractor: FavoriteUseCase {
     }
     
     func addFavorite(movie: MovieDetailModel) -> AnyPublisher<Bool, Error> {
-        return repository.addFavorite(from: movie)
+        return repository.addFavorite(for: Mapper.mapMovieDetailModelToFavoriteEntity(input: movie))
+    }
+    
+    func addFavorite(tvShow: TvShowDetailModel) -> AnyPublisher<Bool, Error> {
+        return repository.addFavorite(for: Mapper.mapTvShowDetailModelToFavoriteEntity(input: tvShow))
     }
     
     func deleteFavorite(movieId: Int) -> AnyPublisher<Bool, Error> {

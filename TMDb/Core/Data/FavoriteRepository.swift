@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 protocol FavoriteRepositoryProtocol {
-    func addFavorite(from movie: MovieDetailModel) -> AnyPublisher<Bool, Error>
+    func addFavorite(for favoriteEntity: FavoriteEntity) -> AnyPublisher<Bool, Error>
     func getFavorites() -> AnyPublisher<[MovieModel], Error>
     func deleteFavorite(movieId: Int) -> AnyPublisher<Bool, Error>
 }
@@ -29,8 +29,8 @@ final class FavoriteRepository: NSObject {
 }
 
 extension FavoriteRepository: FavoriteRepositoryProtocol {
-    func addFavorite(from movie: MovieDetailModel) -> AnyPublisher<Bool, Error> {
-        return self.localDataSource.addFavorite(from: Mapper.mapMovieDetailModelToFavoriteEntity(input: movie))
+    func addFavorite(for favoriteEntity: FavoriteEntity) -> AnyPublisher<Bool, Error> {
+        return self.localDataSource.addFavorite(from: favoriteEntity)
     }
     
     func getFavorites() -> AnyPublisher<[MovieModel], Error> {
