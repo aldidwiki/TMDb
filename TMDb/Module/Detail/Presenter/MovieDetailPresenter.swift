@@ -82,7 +82,7 @@ class MovieDetailPresenter: ObservableObject {
     }
     
     func deleteFavorite(movieId: Int) {
-        favoriteUseCase.deleteFavorite(movieId: movieId)
+        favoriteUseCase.deleteFavorite(for: movieId)
             .receive(on: RunLoop.main)
             .sink { completion in
                 switch completion {

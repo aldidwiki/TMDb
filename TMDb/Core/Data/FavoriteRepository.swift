@@ -11,7 +11,7 @@ import Combine
 protocol FavoriteRepositoryProtocol {
     func addFavorite(for favoriteEntity: FavoriteEntity) -> AnyPublisher<Bool, Error>
     func getFavorites() -> AnyPublisher<[FavoriteEntity], Error>
-    func deleteFavorite(movieId: Int) -> AnyPublisher<Bool, Error>
+    func deleteFavorite(favoriteId: Int) -> AnyPublisher<Bool, Error>
 }
 
 final class FavoriteRepository: NSObject {
@@ -37,7 +37,7 @@ extension FavoriteRepository: FavoriteRepositoryProtocol {
         return self.localDataSource.getFavorites()
     }
     
-    func deleteFavorite(movieId: Int) -> AnyPublisher<Bool, Error> {
-        return self.localDataSource.deleteFavorite(from: movieId)
+    func deleteFavorite(favoriteId: Int) -> AnyPublisher<Bool, Error> {
+        return self.localDataSource.deleteFavorite(from: favoriteId)
     }
 }
