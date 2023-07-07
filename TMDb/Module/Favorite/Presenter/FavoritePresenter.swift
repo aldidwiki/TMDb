@@ -14,7 +14,7 @@ class FavoritePresenter: ObservableObject {
     private let router = FavoriteRouter()
     private let favoriteUseCase: FavoriteUseCase
     
-    @Published var favorites = [MovieModel]()
+    @Published var favorites = [FavoriteModel]()
     @Published var errorMessage = ""
     @Published var loadingState = false
     
@@ -39,10 +39,16 @@ class FavoritePresenter: ObservableObject {
     }
     
     func linkBuilder<Content: View>(
-        for movieId: Int,
+        for favoriteModel: FavoriteModel,
         @ViewBuilder content: () -> Content
     ) -> some View {
-        NavigationLink(destination: router.makeDetailView(movieId: movieId)) {
+        NavigationLink {
+            if favoriteModel.mediaType == Constants.movieType {
+                router.makeDetailView(movieId: favoriteModel.id)
+            } else if favoriteModel.mediaType == Constants.tvType {
+                router.makeTvDetailView(tvShowId: favoriteModel.id)
+            }
+        } label: {
             content()
         }
     }

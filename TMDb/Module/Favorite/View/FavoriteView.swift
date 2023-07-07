@@ -19,9 +19,9 @@ struct FavoriteView: View {
                     if presenter.favorites.isEmpty {
                         EmptyView(emptyTitle: "No Favorites Found")
                     } else {
-                        List(self.presenter.favorites) { movie in
-                            presenter.linkBuilder(for: movie.id) {
-                                MovieItemView(movie: movie)
+                        List(self.presenter.favorites) { favorite in
+                            presenter.linkBuilder(for: favorite) {
+                                MovieItemView(movie: Mapper.mapFavoriteModelToMovieModel(input: favorite))
                             }
                         }
                     }

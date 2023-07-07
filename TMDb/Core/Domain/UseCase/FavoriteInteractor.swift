@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 protocol FavoriteUseCase {
-    func getFavorites() -> AnyPublisher<[MovieModel], Error>
+    func getFavorites() -> AnyPublisher<[FavoriteModel], Error>
     func addFavorite(movie: MovieDetailModel) -> AnyPublisher<Bool, Error>
     func deleteFavorite(movieId: Int) -> AnyPublisher<Bool, Error>
 }
@@ -21,8 +21,10 @@ class FavoriteInteractor: FavoriteUseCase {
         self.repository = repository
     }
     
-    func getFavorites() -> AnyPublisher<[MovieModel], Error> {
-        return repository.getFavorites()
+    func getFavorites() -> AnyPublisher<[FavoriteModel], Error> {
+        return repository.getFavorites().map { favoriteEntites in
+            Mapper.mapFavoriteEntitiesToDomains(input: favoriteEntites)
+        }.eraseToAnyPublisher()
     }
     
     func addFavorite(movie: MovieDetailModel) -> AnyPublisher<Bool, Error> {

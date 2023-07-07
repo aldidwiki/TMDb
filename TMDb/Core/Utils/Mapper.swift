@@ -118,16 +118,41 @@ final class Mapper {
     
     static func mapFavoriteEntitiesToDomains(
         input favoriteEntities: [FavoriteEntity]
-    ) -> [MovieModel] {
+    ) -> [FavoriteModel] {
         return favoriteEntities.map { item in
-            MovieModel(
+            FavoriteModel(
                 id: item.id,
                 title: item.title,
                 posterPath: item.posterPath,
                 rating: item.rating,
-                releaseDate: item.releasedDate
+                releaseDate: item.releasedDate,
+                mediaType: item.mediaType
             )
         }
+    }
+    
+    static func mapFavoriteModelToMovieModel(
+        input favoriteModel: FavoriteModel
+    ) -> MovieModel {
+        return MovieModel(
+            id: favoriteModel.id,
+            title: favoriteModel.title,
+            posterPath: favoriteModel.posterPath,
+            rating: favoriteModel.rating,
+            releaseDate: favoriteModel.releaseDate
+        )
+    }
+    
+    static func mapFavoriteModelToTvShowModel(
+        input favoriteModel: FavoriteModel
+    ) -> TvShowModel {
+        return TvShowModel(
+            id: favoriteModel.id,
+            title: favoriteModel.title,
+            posterPath: favoriteModel.posterPath,
+            rating: favoriteModel.rating,
+            releaseDate: favoriteModel.releaseDate
+        )
     }
     
     static func mapPersonResponseToDomain(
