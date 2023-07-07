@@ -239,11 +239,24 @@ extension TvShowDetailView {
     
     var tvDetailInfo: some View {
         VStack(alignment: .leading) {
-            Text("Details")
-                .padding([.top, .horizontal])
-                .font(.title2)
-                .fontWeight(.semibold)
-                .padding(.bottom, 2)
+            HStack {
+                Text("Details")
+                    .padding(.horizontal)
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                
+                Spacer()
+                
+                Button {
+                    
+                } label: {
+                    Text("SEE EPISODES")
+                        .padding(.horizontal)
+                        .font(.subheadline)
+                }
+                
+            }
+            .padding(.bottom, 2)
             
             HStack(alignment: .top) {
                 VStack {
@@ -285,6 +298,7 @@ extension TvShowDetailView {
                 .frame(maxWidth: 200)
             }
         }
+        .padding(.top)
         .padding(.bottom)
     }
 }
