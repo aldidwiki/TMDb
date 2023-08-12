@@ -247,10 +247,8 @@ extension TvShowDetailView {
                 
                 Spacer()
                 
-                Button {
-                    
-                } label: {
-                    Text("SEE EPISODES")
+                presenter.toTvShowSeasonView(for: presenter.tvShow.seasons) {
+                    Text("SEE SEASONS")
                         .padding(.horizontal)
                         .font(.subheadline)
                 }

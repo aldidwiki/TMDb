@@ -29,4 +29,5 @@ struct TvShowDetailModel: Identifiable {
     let videos: [VideoModel]
     let credits: [CreditModel]
     let networks: [NetworkModel]
+    let seasons: [TvShowSeasonModel]
 }

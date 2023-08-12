@@ -26,6 +26,7 @@ struct TvShowDetailResponse: Decodable {
     let credits: TvShowCreditResponse
     let networks: [NetworkResponseModel]
     let externalMedia: ExternalMediaResponse?
+    let seasons: [TvShowSeasonResponseModel]
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -46,6 +47,7 @@ struct TvShowDetailResponse: Decodable {
         case credits = "aggregate_credits"
         case networks
         case externalMedia = "external_ids"
+        case seasons
     }
 }
 
@@ -58,5 +60,25 @@ struct NetworkResponseModel: Decodable {
         case id
         case logoPath = "logo_path"
         case name
+    }
+}
+
+struct TvShowSeasonResponseModel: Decodable {
+    let id: Int
+    let airDate: String?
+    let episodeCount: Int?
+    let seasonName: String?
+    let posterPath: String?
+    let seasonNumber: Int
+    let overview: String?
+    
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case airDate = "air_date"
+        case episodeCount = "episode_count"
+        case seasonName = "name"
+        case posterPath = "poster_path"
+        case seasonNumber = "season_number"
+        case overview
     }
 }

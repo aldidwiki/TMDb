@@ -39,7 +39,8 @@ class TvShowDetailPresenter: ObservableObject {
         imdbId: "",
         videos: [],
         credits: [],
-        networks: []
+        networks: [],
+        seasons: []
     )
     @Published var isFavorite = false
     
@@ -132,6 +133,15 @@ class TvShowDetailPresenter: ObservableObject {
         @ViewBuilder content: () -> Content
     ) -> some View {
         NavigationLink(destination: router.makeCreditDetailView(for: creditModel)) {
+            content()
+        }
+    }
+    
+    func toTvShowSeasonView<Content: View>(
+        for tvShowSeasonList: [TvShowSeasonModel],
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        NavigationLink(destination: router.makeTvShowSeasonView(for: tvShowSeasonList)) {
             content()
         }
     }

@@ -86,7 +86,8 @@ final class Mapper {
             imdbId: tvShowDetailResponse.externalMedia?.imdbId ?? "",
             videos: mapVideoResponseModelToDomains(input: tvShowDetailResponse.videos),
             credits: mapTvShowCreditResponseModelToDomains(input: tvShowDetailResponse.credits),
-            networks: mapNetworkResponseModelToDomains(input: tvShowDetailResponse.networks)
+            networks: mapNetworkResponseModelToDomains(input: tvShowDetailResponse.networks),
+            seasons: mapTvShowSeasonResponseModelToDomains(input: tvShowDetailResponse.seasons)
         )
     }
     
@@ -230,6 +231,21 @@ final class Mapper {
             )
         }.sorted {
             $0.episodeCount > $1.episodeCount
+        }
+    }
+    
+    private static func mapTvShowSeasonResponseModelToDomains(
+        input tvShowSeasonResponseModels: [TvShowSeasonResponseModel]
+    ) -> [TvShowSeasonModel] {
+        return tvShowSeasonResponseModels.map { tvShowSeasonResponseModel in
+            TvShowSeasonModel(
+                id: tvShowSeasonResponseModel.id,
+                posterPath: tvShowSeasonResponseModel.posterPath ?? "",
+                seasonName: tvShowSeasonResponseModel.seasonName ?? "",
+                releaseYear: tvShowSeasonResponseModel.airDate ?? "",
+                episodeCount: tvShowSeasonResponseModel.episodeCount ?? 0,
+                seasonOverview: tvShowSeasonResponseModel.overview ?? ""
+            )
         }
     }
     
