@@ -3,3 +3,4 @@ disabled_rules: # rule identifiers to exclude from running
 - line_length
 - switch_case_alignment
 - large_tuple
+- type_body_length

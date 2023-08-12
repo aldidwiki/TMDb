@@ -45,7 +45,7 @@ final class Mapper {
             runtime: movieDetailResponse.runtime ?? 0,
             certification: movieCertification,
             genre: movieDetailResponse.genres.formatGenres(),
-            cast: mapCreditResponseModelToDomains(input: movieDetailResponse.credits),
+            cast: mapMovieCreditResponseModelToDomains(input: movieDetailResponse.credits),
             budget: movieDetailResponse.budget,
             revenue: movieDetailResponse.revenue,
             status: movieDetailResponse.status,
@@ -85,7 +85,7 @@ final class Mapper {
             twitterId: tvShowDetailResponse.externalMedia?.twitterId ?? "",
             imdbId: tvShowDetailResponse.externalMedia?.imdbId ?? "",
             videos: mapVideoResponseModelToDomains(input: tvShowDetailResponse.videos),
-            credits: mapCreditResponseModelToDomains(input: tvShowDetailResponse.credits),
+            credits: mapTvShowCreditResponseModelToDomains(input: tvShowDetailResponse.credits),
             networks: mapNetworkResponseModelToDomains(input: tvShowDetailResponse.networks)
         )
     }
@@ -197,7 +197,7 @@ final class Mapper {
         }
     }
     
-    private static func mapCreditResponseModelToDomains(
+    private static func mapMovieCreditResponseModelToDomains(
         input creditResponse: MovieCreditResponse
     ) -> [CreditModel] {
         return creditResponse.cast.map { cast in
@@ -208,7 +208,25 @@ final class Mapper {
                 characterName: cast.characterName ?? "",
                 order: cast.order ?? 0,
                 popularity: cast.popularity,
-                releaseDate: ""
+                releaseDate: "",
+                episodeCount: 0
+            )
+        }
+    }
+    
+    private static func mapTvShowCreditResponseModelToDomains(
+        input tvShowCreditResponse: TvShowCreditResponse
+    ) -> [CreditModel] {
+        return tvShowCreditResponse.cast.map { tvShowCast in
+            CreditModel(
+                id: tvShowCast.id,
+                name: tvShowCast.name ?? "",
+                profilePath: tvShowCast.profilePath ?? "",
+                characterName: tvShowCast.roles.first?.characterName ?? "",
+                order: tvShowCast.order ?? 0,
+                popularity: tvShowCast.popularity,
+                releaseDate: "",
+                episodeCount: tvShowCast.totalEpisodeCount
             )
         }
     }
@@ -244,7 +262,8 @@ final class Mapper {
                 characterName: cast.characterName ?? "",
                 order: cast.order ?? 0,
                 popularity: cast.popularity,
-                releaseDate: cast.releaseDate ?? ""
+                releaseDate: cast.releaseDate ?? "",
+                episodeCount: 0
             )
         }.sorted {
             $0.releaseDate > $1.releaseDate

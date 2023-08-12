@@ -74,7 +74,8 @@ struct CreditDetailView_Previews: PreviewProvider {
                     characterName: "Peter Quill / Star-Lord",
                     order: 0,
                     popularity: 47.542,
-                    releaseDate: ""
+                    releaseDate: "",
+                    episodeCount: 0
                 ),
                 CreditModel(
                     id: 73457,
@@ -83,7 +84,8 @@ struct CreditDetailView_Previews: PreviewProvider {
                     characterName: "Peter Quill / Star-Lord",
                     order: 0,
                     popularity: 47.542,
-                    releaseDate: ""
+                    releaseDate: "",
+                    episodeCount: 0
                 ),
                 CreditModel(
                     id: 73457,
@@ -92,7 +94,8 @@ struct CreditDetailView_Previews: PreviewProvider {
                     characterName: "Peter Quill / Star-Lord",
                     order: 0,
                     popularity: 47.542,
-                    releaseDate: ""
+                    releaseDate: "",
+                    episodeCount: 0
                 )
             ])
     }

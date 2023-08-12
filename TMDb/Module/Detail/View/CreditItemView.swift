@@ -64,7 +64,8 @@ struct CreditItemView_Previews: PreviewProvider {
                 characterName: "Peter Quill / Star-Lord",
                 order: 0,
                 popularity: 47.542,
-                releaseDate: ""
+                releaseDate: "",
+                episodeCount: 0
             ),
             isPersonView: true
         )

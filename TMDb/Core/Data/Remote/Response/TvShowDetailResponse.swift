@@ -23,7 +23,7 @@ struct TvShowDetailResponse: Decodable {
     let spokenLanguages: [SpokenLanguageResponse]
     let contentRating: ContentRatingResponse
     let videos: VideoResponse
-    let credits: MovieCreditResponse
+    let credits: TvShowCreditResponse
     let networks: [NetworkResponseModel]
     let externalMedia: ExternalMediaResponse?
     
@@ -43,7 +43,7 @@ struct TvShowDetailResponse: Decodable {
         case spokenLanguages = "spoken_languages"
         case contentRating = "content_ratings"
         case videos
-        case credits
+        case credits = "aggregate_credits"
         case networks
         case externalMedia = "external_ids"
     }
