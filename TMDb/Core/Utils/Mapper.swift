@@ -228,6 +228,8 @@ final class Mapper {
                 releaseDate: "",
                 episodeCount: tvShowCast.totalEpisodeCount
             )
+        }.sorted {
+            $0.episodeCount > $1.episodeCount
         }
     }
     

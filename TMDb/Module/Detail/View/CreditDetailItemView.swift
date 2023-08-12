@@ -25,6 +25,13 @@ struct CreditDetailItemView: View {
                 Text(creditModel.characterName)
                     .fontWeight(.thin)
                     .lineLimit(2)
+                
+                if creditModel.episodeCount != 0 {
+                    Text("(\(creditModel.episodeCount) episodes)")
+                        .fontWeight(.ultraLight)
+                        .font(.system(size: 16))
+                        .lineLimit(1)
+                }
             }
             .padding(.leading)
         }
@@ -59,7 +66,7 @@ struct CreditDetailItemView_Previews: PreviewProvider {
                 order: 0,
                 popularity: 47.542,
                 releaseDate: "",
-                episodeCount: 0
+                episodeCount: 188
             ),
             isFromPersonView: true
         )
