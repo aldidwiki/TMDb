@@ -313,6 +313,18 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		CEA218DB2A8784D700237BFB /* CustomView */ = {
+			isa = PBXGroup;
+			children = (
+				CE8E43DA2A42D9D400123AA6 /* ChipsView.swift */,
+				CE57627E2A41A9100094A16D /* CircularProgressView.swift */,
+				CEA218D92A877DC200237BFB /* ContentRatingView.swift */,
+				CE971C422931F53900C33D9C /* EmptyView.swift */,
+				CE57627A2A419EBF0094A16D /* ExternalMediaView.swift */,
+			);
+			path = CustomView;
+			sourceTree = "<group>";
+		};
 		CEBD44582A08E50500BBD9B6 /* Person */ = {
 			isa = PBXGroup;
 			children = (
@@ -398,6 +410,7 @@
 		CEC654F3292F542F007B393A /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				CEA218DB2A8784D700237BFB /* CustomView */,
 				CEC65500292F551A007B393A /* Data */,
 				CEC65517292F5B07007B393A /* DI */,
 				CEC65507292F5732007B393A /* Domain */,
@@ -413,12 +426,7 @@
 				CEC6550B292F57A6007B393A /* Mapper.swift */,
 				CEC6551D292F5C52007B393A /* API.swift */,
 				CE182AF6292F6E2D00B5C857 /* Extension.swift */,
-				CE971C422931F53900C33D9C /* EmptyView.swift */,
-				CE57627A2A419EBF0094A16D /* ExternalMediaView.swift */,
-				CE57627E2A41A9100094A16D /* CircularProgressView.swift */,
 				CE8E43D82A42B4AA00123AA6 /* Constants.swift */,
-				CE8E43DA2A42D9D400123AA6 /* ChipsView.swift */,
-				CEA218D92A877DC200237BFB /* ContentRatingView.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
