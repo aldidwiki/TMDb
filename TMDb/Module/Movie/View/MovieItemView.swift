@@ -17,10 +17,8 @@ struct MovieItemView: View {
             content
             
             Spacer()
-            Text("\(movie.rating, specifier: "%.1f")")
-                .font(.headline)
-                .fontWeight(.medium)
-                .padding(.leading, 8.0)
+            
+            ContentRatingView(contentRating: movie.rating)
         }
     }
 }
