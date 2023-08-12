@@ -19,7 +19,7 @@ struct MovieDetailResponse: Decodable {
     let runtime: Int?
     let releaseDates: MovieReleaseDatesResponseModel
     let genres: [GenreResponseModel]
-    let credits: CreditResponse
+    let credits: MovieCreditResponse
     let budget: Int64
     let revenue: Int64
     let status: String

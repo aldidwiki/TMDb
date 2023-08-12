@@ -7,15 +7,15 @@
 
 import Foundation
 
-struct CreditResponse: Decodable {
-    let cast: [CreditResponseModel]
+struct MovieCreditResponse: Decodable {
+    let cast: [MovieCreditResponseModel]
     
     private enum CodingKeys: String, CodingKey {
         case cast
     }
 }
 
-struct CreditResponseModel: Decodable {
+struct MovieCreditResponseModel: Decodable {
     let id: Int
     let name: String?
     let profilePath: String?

@@ -198,7 +198,7 @@ final class Mapper {
     }
     
     private static func mapCreditResponseModelToDomains(
-        input creditResponse: CreditResponse
+        input creditResponse: MovieCreditResponse
     ) -> [CreditModel] {
         return creditResponse.cast.map { cast in
             CreditModel(

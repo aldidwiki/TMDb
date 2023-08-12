@@ -23,7 +23,7 @@ struct TvShowDetailResponse: Decodable {
     let spokenLanguages: [SpokenLanguageResponse]
     let contentRating: ContentRatingResponse
     let videos: VideoResponse
-    let credits: CreditResponse
+    let credits: MovieCreditResponse
     let networks: [NetworkResponseModel]
     let externalMedia: ExternalMediaResponse?
     
