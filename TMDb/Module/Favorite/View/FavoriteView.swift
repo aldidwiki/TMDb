@@ -28,7 +28,7 @@ struct FavoriteView: View {
                 }
             }.onAppear {
                 self.presenter.getFavorites()
-            }.navigationTitle("Favorite Movies")
+            }.navigationTitle("Favorites")
         }
     }
 }
