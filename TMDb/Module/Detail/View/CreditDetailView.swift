@@ -36,7 +36,7 @@ struct CreditDetailView: View {
                         }
                     } else {
                         self.creditModelList = creditModelList.sorted {
-                            $0.episodeCount > $1.episodeCount
+                            $0.order < $1.order
                         }
                     }
                 }
