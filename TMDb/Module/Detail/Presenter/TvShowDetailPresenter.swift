@@ -139,9 +139,10 @@ class TvShowDetailPresenter: ObservableObject {
     
     func toTvShowSeasonView<Content: View>(
         for tvShowSeasonList: [TvShowSeasonModel],
+        title tvShowTitle: String,
         @ViewBuilder content: () -> Content
     ) -> some View {
-        NavigationLink(destination: router.makeTvShowSeasonView(for: tvShowSeasonList)) {
+        NavigationLink(destination: router.makeTvShowSeasonView(for: tvShowSeasonList, title: tvShowTitle)) {
             content()
         }
     }

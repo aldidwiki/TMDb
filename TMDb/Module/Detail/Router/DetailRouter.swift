@@ -18,7 +18,7 @@ class DetailRouter {
         return CreditDetailView(presenter: CreditDetailPresenter(navigateType: NavigateType.personView), creditModelList: credits)
     }
     
-    func makeTvShowSeasonView(for tvShowSeasonList: [TvShowSeasonModel]) -> some View {
-        return TvShowSeasonView(tvShowSeasonList: tvShowSeasonList)
+    func makeTvShowSeasonView(for tvShowSeasonList: [TvShowSeasonModel], title tvShowTitle: String) -> some View {
+        return TvShowSeasonView(tvShowTitle: tvShowTitle, tvShowSeasonList: tvShowSeasonList)
     }
 }
