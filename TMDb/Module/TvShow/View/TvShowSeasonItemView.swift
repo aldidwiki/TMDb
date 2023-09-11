@@ -23,7 +23,7 @@ struct TvShowSeasonItemView: View {
                 
                 Text("\(seasonModel.releaseYear.formatDateString(input: "YYYY-MM-DD", output: "YYYY")) \u{2022} \(seasonModel.episodeCount) episodes")
                 
-                Text(seasonModel.seasonOverview)
+                ExpandableTextView(textData: seasonModel.seasonOverview)
                     .padding(.top, 2)
                     .font(.system(size: 16))
                     .fontWeight(.light)
