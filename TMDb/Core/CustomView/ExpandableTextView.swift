@@ -9,19 +9,16 @@ import SwiftUI
 
 struct ExpandableTextView: View {
     var textData: String
-    var maxTextLength = 75
+    var maxTextLength = 70
     
     @State var isExpanded = false
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(
-                isExpanded ? textData :
-                    (textData.count > maxTextLength ? String(textData.prefix(maxTextLength)) + "....." : textData)
-            )
-            .multilineTextAlignment(.leading)
-            .clipped()
-            .animation(.default, value: isExpanded)
+        VStack(alignment: .leading) {
+            Text(textData)
+                .multilineTextAlignment(.leading)
+                .modifier(AnimatingCellHeight(height: isExpanded ? CGFloat(Double(textData.count)/1.5) + 10 : CGFloat(maxTextLength)))
+                .animation(.default, value: isExpanded)
             
             if textData.count > maxTextLength {
                 Button {
