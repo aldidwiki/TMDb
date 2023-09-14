@@ -261,8 +261,8 @@ final class Mapper {
                 seasonName: tvShowSeasonResponseModel.seasonName ?? "",
                 releaseYear: tvShowSeasonResponseModel.airDate ?? "",
                 episodeCount: tvShowSeasonResponseModel.episodeCount ?? 0,
-                seasonOverview: tvShowSeasonResponseModel.overview ?? "",
-                seasonNumber: tvShowSeasonResponseModel.seasonNumber
+                seasonNumber: tvShowSeasonResponseModel.seasonNumber,
+                seasonOverview: tvShowSeasonResponseModel.overview ?? ""
             )
         }
     }

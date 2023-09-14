@@ -13,6 +13,6 @@ struct TvShowSeasonModel: Identifiable {
     let seasonName: String
     let releaseYear: String
     let episodeCount: Int
-    let seasonOverview: String
     let seasonNumber: Int
+    let seasonOverview: String
 }

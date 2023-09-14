@@ -17,7 +17,7 @@ struct ExpandableTextView: View {
         VStack(alignment: .leading) {
             Text(textData)
                 .multilineTextAlignment(.leading)
-                .modifier(AnimatingCellHeight(height: isExpanded ? CGFloat(Double(textData.count)/1.5) + 10 : CGFloat(maxTextLength)))
+                .modifier(AnimatingCellHeight(height: isExpanded ? CGFloat(Double(textData.count)/1.3) : CGFloat(maxTextLength)))
             
             if textData.count > maxTextLength {
                 Button {
