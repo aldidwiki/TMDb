@@ -11,6 +11,7 @@ struct TvShowEpisodeView: View {
     @ObservedObject var presenter: TvShowSeasonDetailPresenter
     var tvShowId: Int
     var seasonNumber: Int
+    var seasonName: String
     
     var body: some View {
         ZStack {
@@ -27,6 +28,7 @@ struct TvShowEpisodeView: View {
         .onAppear {
             presenter.getTvShowSeasonDetail(tvShowId: tvShowId, seasonNumber: seasonNumber)
         }
+        .navigationTitle(seasonName)
     }
 }
 
@@ -37,7 +39,8 @@ struct TvShowEpisodeView_Previews: PreviewProvider {
         TvShowEpisodeView(
             presenter: TvShowSeasonDetailPresenter(tvShowUseCase: tvShowUseCase),
             tvShowId: 973190,
-            seasonNumber: 4
+            seasonNumber: 4,
+            seasonName: "Season 4"
         )
     }
 }

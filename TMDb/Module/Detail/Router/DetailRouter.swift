@@ -29,11 +29,13 @@ class DetailRouter {
             tvShowDetailPresenter: TvShowDetailPresenter(tvShowUseCase: tvShowUseCase, favoriteUseCase: favoriteUseCase))
     }
     
-    func makeTvShowSeasonDetailView(tvShowId: Int, seasonNumber: Int) -> some View {
+    func makeTvShowSeasonDetailView(tvShowId: Int, seasonNumber: Int, seasonName: String) -> some View {
         let tvShowUseCase = Injection.init().provideTvShowUseCase()
         return TvShowEpisodeView(
             presenter: TvShowSeasonDetailPresenter(tvShowUseCase: tvShowUseCase),
             tvShowId: tvShowId,
-            seasonNumber: seasonNumber)
+            seasonNumber: seasonNumber,
+            seasonName: seasonName
+        )
     }
 }

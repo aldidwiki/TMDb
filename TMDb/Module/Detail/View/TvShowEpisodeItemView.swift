@@ -71,7 +71,7 @@ extension TvShowEpisodeItemView {
             .indicator(.activity)
             .transition(.fade(duration: 0.5))
             .cornerRadius(6)
-            .frame(width: 160, height: 90)
+            .frame(width: 200, height: 130)
     }
 }
 

@@ -14,10 +14,13 @@ struct TvShowSeasonView: View {
     @StateObject var tvShowDetailPresenter: TvShowDetailPresenter
     
     var body: some View {
-        List(tvShowSeasonList) { tvShowSeason in
-            tvShowDetailPresenter.toTvShowEpisodeView(tvShowId: tvShowId, seasonNumber: tvShowSeason.seasonNumber) {
-                TvShowSeasonItemView(seasonModel: tvShowSeason)
-            }
+        List(tvShowSeasonList, id: \.id) { tvShowSeason in
+            tvShowDetailPresenter.toTvShowEpisodeView(
+                tvShowId: tvShowId,
+                seasonNumber: tvShowSeason.seasonNumber,
+                seasonName: tvShowSeason.seasonName) {
+                    TvShowSeasonItemView(seasonModel: tvShowSeason)
+                }
         }
         .listStyle(.plain)
         .navigationTitle("\(tvShowTitle) \(tvShowSeasonList.count > 1 ? "Seasons" : "Season")")

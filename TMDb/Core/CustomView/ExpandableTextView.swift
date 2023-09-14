@@ -18,17 +18,19 @@ struct ExpandableTextView: View {
             Text(textData)
                 .multilineTextAlignment(.leading)
                 .modifier(AnimatingCellHeight(height: isExpanded ? CGFloat(Double(textData.count)/1.5) + 10 : CGFloat(maxTextLength)))
-                .animation(.default, value: isExpanded)
             
             if textData.count > maxTextLength {
                 Button {
-                    isExpanded.toggle()
+                    withAnimation {
+                        isExpanded.toggle()
+                    }
                 } label: {
                     Label(isExpanded ? "Collapse" : "Expand", systemImage: isExpanded ? "chevron.up" : "chevron.down")
                         .font(.system(size: 14))
                         .fontWeight(.medium)
                         .labelStyle(CustomLabelStyle(spacing: 2))
                 }
+                .buttonStyle(.borderless)
                 .frame(maxWidth: .infinity, alignment: .center)
             }
         }
