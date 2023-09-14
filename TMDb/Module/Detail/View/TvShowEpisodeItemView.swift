@@ -17,7 +17,7 @@ struct TvShowEpisodeItemView: View {
                 .fill(Color("card_color"))
                 .shadow(radius: 4)
             
-            VStack {
+            VStack(alignment: .leading) {
                 HStack {
                     episodePoster
                     

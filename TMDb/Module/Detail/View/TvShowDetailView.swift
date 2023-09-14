@@ -247,7 +247,7 @@ extension TvShowDetailView {
                 
                 Spacer()
                 
-                presenter.toTvShowSeasonView(for: presenter.tvShow.seasons, title: presenter.tvShow.title) {
+                presenter.toTvShowSeasonView(for: presenter.tvShow.seasons, title: presenter.tvShow.title, id: presenter.tvShow.id) {
                     Text("SEE SEASONS")
                         .padding(.horizontal)
                         .font(.subheadline)

@@ -18,7 +18,22 @@ class DetailRouter {
         return CreditDetailView(presenter: CreditDetailPresenter(navigateType: NavigateType.personView), creditModelList: credits)
     }
     
-    func makeTvShowSeasonView(for tvShowSeasonList: [TvShowSeasonModel], title tvShowTitle: String) -> some View {
-        return TvShowSeasonView(tvShowTitle: tvShowTitle, tvShowSeasonList: tvShowSeasonList)
+    func makeTvShowSeasonView(for tvShowSeasonList: [TvShowSeasonModel], title tvShowTitle: String, id tvShowId: Int) -> some View {
+        let tvShowUseCase = Injection.init().provideTvShowUseCase()
+        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
+        
+        return TvShowSeasonView(
+            tvShowId: tvShowId,
+            tvShowTitle: tvShowTitle,
+            tvShowSeasonList: tvShowSeasonList, 
+            tvShowDetailPresenter: TvShowDetailPresenter(tvShowUseCase: tvShowUseCase, favoriteUseCase: favoriteUseCase))
+    }
+    
+    func makeTvShowSeasonDetailView(tvShowId: Int, seasonNumber: Int) -> some View {
+        let tvShowUseCase = Injection.init().provideTvShowUseCase()
+        return TvShowEpisodeView(
+            presenter: TvShowSeasonDetailPresenter(tvShowUseCase: tvShowUseCase),
+            tvShowId: tvShowId,
+            seasonNumber: seasonNumber)
     }
 }
