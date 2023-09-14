@@ -11,7 +11,7 @@ struct TvShowSeasonView: View {
     var tvShowId: Int
     var tvShowTitle: String
     var tvShowSeasonList: [TvShowSeasonModel]
-    @StateObject var tvShowDetailPresenter: TvShowDetailPresenter
+    @ObservedObject var tvShowDetailPresenter: TvShowDetailPresenter
     
     var body: some View {
         List(tvShowSeasonList, id: \.id) { tvShowSeason in
