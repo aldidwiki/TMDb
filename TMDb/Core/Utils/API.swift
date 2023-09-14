@@ -14,6 +14,7 @@ class API {
     static let backdropBaseUrl = "https://image.tmdb.org/t/p/w1280"
     static let profileImageBaseUrl = "https://image.tmdb.org/t/p/h632"
     static let logoImageBaseUrl = "https://image.tmdb.org/t/p/w92"
+    static let episodeStillBaseUrl = "https://image.tmdb.org/t/p/w300"
     
     static let headers: HTTPHeaders = [
         "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxNTBlZjRkN2I0ZDNjOTk1MzUxOGE2ZTJlZDQ5OTI4ZSIsInN1YiI6IjVmZDZkYjUyZDhlMjI1MDA0MTFiMzZlMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ObyQC30cOIxcfWiFBzp4mFX3BMxsQky6BXnONZtrzQw",
