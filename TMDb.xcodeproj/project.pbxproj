@@ -36,7 +36,6 @@
 		CE8E43D72A429F4C00123AA6 /* VideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8E43D62A429F4C00123AA6 /* VideoModel.swift */; };
 		CE8E43D92A42B4AA00123AA6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8E43D82A42B4AA00123AA6 /* Constants.swift */; };
 		CE8E43DB2A42D9D400123AA6 /* ChipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8E43DA2A42D9D400123AA6 /* ChipsView.swift */; };
-		CE9363652AAEFD74007FAB03 /* AnimatingCellHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9363642AAEFD74007FAB03 /* AnimatingCellHeight.swift */; };
 		CE971C432931F53900C33D9C /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE971C422931F53900C33D9C /* EmptyView.swift */; };
 		CE9E30E129305B48001BFB57 /* MovieRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9E30E029305B48001BFB57 /* MovieRouter.swift */; };
 		CE9E30E429305C15001BFB57 /* MovieDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9E30E329305C15001BFB57 /* MovieDetailView.swift */; };
@@ -96,6 +95,7 @@
 		CEF796BB2A52CD3A0046858F /* TvShowInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF796BA2A52CD3A0046858F /* TvShowInteractor.swift */; };
 		CEF796BE2A52CDFA0046858F /* TvShowPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF796BD2A52CDFA0046858F /* TvShowPresenter.swift */; };
 		CEF796C22A52D0C30046858F /* TvShowItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF796C12A52D0C30046858F /* TvShowItemView.swift */; };
+		CEFAA5F52AB29DFB00B3FD37 /* AnimatingCellHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAA5F42AB29DFA00B3FD37 /* AnimatingCellHeight.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -128,7 +128,6 @@
 		CE8E43D62A429F4C00123AA6 /* VideoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoModel.swift; sourceTree = "<group>"; };
 		CE8E43D82A42B4AA00123AA6 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		CE8E43DA2A42D9D400123AA6 /* ChipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipsView.swift; sourceTree = "<group>"; };
-		CE9363642AAEFD74007FAB03 /* AnimatingCellHeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AnimatingCellHeight.swift; path = ../../../../../AnimatingCellHeight.swift; sourceTree = "<group>"; };
 		CE971C422931F53900C33D9C /* EmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
 		CE9E30E029305B48001BFB57 /* MovieRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieRouter.swift; sourceTree = "<group>"; };
 		CE9E30E329305C15001BFB57 /* MovieDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailView.swift; sourceTree = "<group>"; };
@@ -184,6 +183,7 @@
 		CEF796BA2A52CD3A0046858F /* TvShowInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShowInteractor.swift; sourceTree = "<group>"; };
 		CEF796BD2A52CDFA0046858F /* TvShowPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShowPresenter.swift; sourceTree = "<group>"; };
 		CEF796C12A52D0C30046858F /* TvShowItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShowItemView.swift; sourceTree = "<group>"; };
+		CEFAA5F42AB29DFA00B3FD37 /* AnimatingCellHeight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatingCellHeight.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -328,8 +328,8 @@
 				CE971C422931F53900C33D9C /* EmptyView.swift */,
 				CE57627A2A419EBF0094A16D /* ExternalMediaView.swift */,
 				CECFD2422AAEA95E0023D93A /* ExpandableTextView.swift */,
+				CEFAA5F42AB29DFA00B3FD37 /* AnimatingCellHeight.swift */,
 				CECFD2442AAEB5FF0023D93A /* CustomLabelStyle.swift */,
-				CE9363642AAEFD74007FAB03 /* AnimatingCellHeight.swift */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -715,7 +715,7 @@
 				CEF796C22A52D0C30046858F /* TvShowItemView.swift in Sources */,
 				CE8E43D92A42B4AA00123AA6 /* Constants.swift in Sources */,
 				CEEFC2162A57BC8D006FDADC /* FavoriteRepository.swift in Sources */,
-				CE9363652AAEFD74007FAB03 /* AnimatingCellHeight.swift in Sources */,
+				CEFAA5F52AB29DFB00B3FD37 /* AnimatingCellHeight.swift in Sources */,
 				CEBD444F2A08A38C00BBD9B6 /* MovieCreditResponse.swift in Sources */,
 				CE182B04292F831E00B5C857 /* MovieDetailPresenter.swift in Sources */,
 				CE1F2C6B2A53B4BC00478B2A /* PersonRepository.swift in Sources */,
