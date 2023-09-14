@@ -11,6 +11,7 @@ import Combine
 protocol TvShowUseCase {
     func getTvShows() -> AnyPublisher<[TvShowModel], Error>
     func getTvShow(tvShowId: Int) -> AnyPublisher<TvShowDetailModel, Error>
+    func getTvShowSeasonDetail(tvShowId: Int, seasonNumber: Int) -> AnyPublisher<[TvShowSeasonDetailModel], Error>
     func searchTvShows(query: String) -> AnyPublisher<[TvShowModel], Error>
 }
 
@@ -31,5 +32,9 @@ class TvShowInteractor: TvShowUseCase {
     
     func getTvShow(tvShowId: Int) -> AnyPublisher<TvShowDetailModel, Error> {
         return repository.getTvShow(tvShowId: tvShowId)
+    }
+    
+    func getTvShowSeasonDetail(tvShowId: Int, seasonNumber: Int) -> AnyPublisher<[TvShowSeasonDetailModel], Error> {
+        return repository.getTvShowSeasonDetail(tvShowId: tvShowId, seasonNumber: seasonNumber)
     }
 }

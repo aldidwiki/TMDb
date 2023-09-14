@@ -198,6 +198,23 @@ final class Mapper {
         }
     }
     
+    static func mapTvShowSeasonDetailResponseToDomains(
+        input tvShowSeasonDetailResponse: TvShowSeasonDetailResponse
+    ) -> [TvShowSeasonDetailModel] {
+        return tvShowSeasonDetailResponse.episodes.map { episode in
+            TvShowSeasonDetailModel(
+                id: episode.id,
+                name: episode.episodeName,
+                overview: episode.overview ?? "",
+                runtime: episode.episodeRuntime ?? 0,
+                rating: episode.voteAverage ?? 0.0,
+                episodeNumber: episode.episodeNumber,
+                stillPath: episode.stillPath ?? "",
+                airDate: episode.airDate ?? ""
+            )
+        }
+    }
+    
     private static func mapMovieCreditResponseModelToDomains(
         input creditResponse: MovieCreditResponse
     ) -> [CreditModel] {

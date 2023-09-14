@@ -96,6 +96,8 @@
 		CEF796BE2A52CDFA0046858F /* TvShowPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF796BD2A52CDFA0046858F /* TvShowPresenter.swift */; };
 		CEF796C22A52D0C30046858F /* TvShowItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF796C12A52D0C30046858F /* TvShowItemView.swift */; };
 		CEFAA5F52AB29DFB00B3FD37 /* AnimatingCellHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAA5F42AB29DFA00B3FD37 /* AnimatingCellHeight.swift */; };
+		CEFAA5F72AB29F0F00B3FD37 /* TvShowSeasonDetailResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAA5F62AB29F0F00B3FD37 /* TvShowSeasonDetailResponse.swift */; };
+		CEFAA5F92AB2A2A000B3FD37 /* TvShowSeasonDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAA5F82AB2A2A000B3FD37 /* TvShowSeasonDetailModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -184,6 +186,8 @@
 		CEF796BD2A52CDFA0046858F /* TvShowPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShowPresenter.swift; sourceTree = "<group>"; };
 		CEF796C12A52D0C30046858F /* TvShowItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShowItemView.swift; sourceTree = "<group>"; };
 		CEFAA5F42AB29DFA00B3FD37 /* AnimatingCellHeight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatingCellHeight.swift; sourceTree = "<group>"; };
+		CEFAA5F62AB29F0F00B3FD37 /* TvShowSeasonDetailResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShowSeasonDetailResponse.swift; sourceTree = "<group>"; };
+		CEFAA5F82AB2A2A000B3FD37 /* TvShowSeasonDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShowSeasonDetailModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -479,6 +483,7 @@
 				CE1F2C702A53ED5E00478B2A /* TvShowDetailResponse.swift */,
 				CE1F2C7B2A540CEA00478B2A /* ContentRatingResponse.swift */,
 				CEA218CF2A87403D00237BFB /* TvShowCreditResponse.swift */,
+				CEFAA5F62AB29F0F00B3FD37 /* TvShowSeasonDetailResponse.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -505,6 +510,7 @@
 				CE594C6B2A541D2D0060D0EC /* NetworkModel.swift */,
 				CEEFC2172A57C1DB006FDADC /* FavoriteModel.swift */,
 				CEA218D52A874EB100237BFB /* TvShowSeasonModel.swift */,
+				CEFAA5F82AB2A2A000B3FD37 /* TvShowSeasonDetailModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -759,7 +765,9 @@
 				CE57626F2A4146D40094A16D /* CreditDetailItemView.swift in Sources */,
 				CEA218D62A874EB100237BFB /* TvShowSeasonModel.swift in Sources */,
 				CEC6551E292F5C52007B393A /* API.swift in Sources */,
+				CEFAA5F92AB2A2A000B3FD37 /* TvShowSeasonDetailModel.swift in Sources */,
 				CE1F2C6D2A53B7AC00478B2A /* TvShowDataSource.swift in Sources */,
+				CEFAA5F72AB29F0F00B3FD37 /* TvShowSeasonDetailResponse.swift in Sources */,
 				CE1F2C732A53F18E00478B2A /* TvShowDetailModel.swift in Sources */,
 				CE9E30E129305B48001BFB57 /* MovieRouter.swift in Sources */,
 				CE5762752A4162E70094A16D /* CreditDetailPresenter.swift in Sources */,
