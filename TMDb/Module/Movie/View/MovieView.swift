@@ -11,7 +11,7 @@ struct MovieView: View {
     @ObservedObject var presenter: MoviePresenter
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 if self.presenter.loadingState {
                     ProgressView("Loading")

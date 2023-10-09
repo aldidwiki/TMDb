@@ -17,7 +17,7 @@ struct CreditDetailView: View {
         VStack(alignment: .leading) {
             ChipsView(isSelected: $isSelected, isPersonCredit: presenter.navigateType == NavigateType.personView ? false : true)
                 .padding(.horizontal)
-                .onChange(of: [isSelected.name, isSelected.character, isSelected.popular, isSelected.recent]) { _ in
+                .onChange(of: [isSelected.name, isSelected.character, isSelected.popular, isSelected.recent]) { _, _ in
                     if isSelected.name {
                         self.creditModelList = creditModelList.sorted {
                             $0.name < $1.name
