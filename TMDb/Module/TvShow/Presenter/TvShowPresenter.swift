@@ -19,8 +19,6 @@ class TvShowPresenter: ObservableObject {
     @Published var errorMessage = ""
     @Published var loadingState = false
     
-    @Published var tvQuery = ""
-    
     init(tvShowUseCase: TvShowUseCase) {
         self.tvShowUseCase = tvShowUseCase
     }

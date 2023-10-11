@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TvShowView: View {
     @ObservedObject var presenter: TvShowPresenter
+    @State var tvQuery: String = ""
     
     var body: some View {
         NavigationView {
@@ -33,8 +34,8 @@ struct TvShowView: View {
             }
             .navigationTitle("Popular Tv Shows")
         }
-        .searchable(text: $presenter.tvQuery, placement: .automatic)
-        .onReceive(presenter.$tvQuery.debounce(for: 1, scheduler: RunLoop.main)) { query in
+        .searchable(text: $tvQuery, placement: .automatic)
+        .onChange(of: tvQuery) { _, query in
             if !query.isEmpty {
                 presenter.searchTvShows(query: query)
             } else {

@@ -18,8 +18,6 @@ class MoviePresenter: ObservableObject {
     @Published var errorMessage = ""
     @Published var loadingState = false
     
-    @Published var movieQuery = ""
-    
     init(movieUseCase: MovieUseCase) {
         self.movieUseCase = movieUseCase
     }
