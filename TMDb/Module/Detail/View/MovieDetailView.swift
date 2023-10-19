@@ -63,6 +63,7 @@ struct MovieDetailView: View {
                     }
                 } label: {
                     Image(systemName: self.presenter.isFavorite ? "heart.fill" : "heart")
+                        .contentTransition(.symbolEffect(.replace))
                 }.disabled(self.presenter.loadingState)
             }
         }

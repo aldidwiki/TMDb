@@ -65,7 +65,9 @@ struct TvShowDetailView: View {
                     }
                 } label: {
                     Image(systemName: self.presenter.isFavorite ? "heart.fill" : "heart")
-                }.disabled(self.presenter.loadingState)
+                        .contentTransition(.symbolEffect(.replace))
+                }
+                .disabled(self.presenter.loadingState)
             }
         }
     }
