@@ -20,6 +20,9 @@ struct TvShowEpisodeItemView: View {
             VStack(alignment: .leading) {
                 HStack {
                     episodePoster
+                        .padding(.leading)
+                        .padding(.top)
+                        .padding(.bottom)
                     
                     VStack(alignment: .leading) {
                         Text("\(episodeModel.episodeNumber)  \(episodeModel.name)")
@@ -48,8 +51,7 @@ struct TvShowEpisodeItemView: View {
                 
                 Text(episodeModel.overview)
                     .font(.system(size: 14))
-                    .padding(.top, 4)
-                    .padding(.horizontal, 6)
+                    .padding(.horizontal)
                 
                 Spacer()
             }
@@ -70,7 +72,6 @@ extension TvShowEpisodeItemView {
             })
             .indicator(.activity)
             .transition(.fade(duration: 0.5))
-            .cornerRadius(6)
             .frame(width: 180, height: 110)
     }
 }
