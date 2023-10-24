@@ -10,6 +10,7 @@ import SDWebImageSwiftUI
 
 struct PersonDetailView: View {
     @ObservedObject var presenter: PersonPresenter
+    var personId: Int
     
     var body: some View {
         ZStack {
@@ -42,7 +43,7 @@ struct PersonDetailView: View {
                 }
             }
         }.onAppear {
-            presenter.getPerson()
+            presenter.getPerson(personId: self.personId)
         }
         .navigationTitle(presenter.person.name)
     }
@@ -161,7 +162,7 @@ extension PersonDetailView {
 
 struct PersonView_Previews: PreviewProvider {
     static var previews: some View {
-        let personUseCase = Injection.init().providePersonUseCase(personId: 73457)
-        PersonDetailView(presenter: PersonPresenter(personUseCase: personUseCase))
+        let personUseCase = Injection.init().providePersonUseCase()
+        PersonDetailView(presenter: PersonPresenter(personUseCase: personUseCase), personId: 73457)
     }
 }

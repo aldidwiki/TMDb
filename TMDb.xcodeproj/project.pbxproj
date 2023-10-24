@@ -88,6 +88,8 @@
 		CECFD2452AAEB5FF0023D93A /* CustomLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECFD2442AAEB5FF0023D93A /* CustomLabelStyle.swift */; };
 		CEEA020A2AE7727700AEFE31 /* PersonPopularResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEA02092AE7727700AEFE31 /* PersonPopularResponse.swift */; };
 		CEEA020C2AE774E300AEFE31 /* PersonPopularModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEA020B2AE774E300AEFE31 /* PersonPopularModel.swift */; };
+		CEEA02122AE777B300AEFE31 /* PersonItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEA02112AE777B300AEFE31 /* PersonItemView.swift */; };
+		CEEA02152AE77A0400AEFE31 /* PersonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEA02142AE77A0400AEFE31 /* PersonView.swift */; };
 		CEEEDEE52931F7E800976696 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = CEEEDEE42931F7E800976696 /* .swiftlint.yml */; };
 		CEEFC2162A57BC8D006FDADC /* FavoriteRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEFC2152A57BC8D006FDADC /* FavoriteRepository.swift */; };
 		CEEFC2182A57C1DB006FDADC /* FavoriteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEFC2172A57C1DB006FDADC /* FavoriteModel.swift */; };
@@ -183,6 +185,8 @@
 		CECFD2442AAEB5FF0023D93A /* CustomLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLabelStyle.swift; sourceTree = "<group>"; };
 		CEEA02092AE7727700AEFE31 /* PersonPopularResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonPopularResponse.swift; sourceTree = "<group>"; };
 		CEEA020B2AE774E300AEFE31 /* PersonPopularModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonPopularModel.swift; sourceTree = "<group>"; };
+		CEEA02112AE777B300AEFE31 /* PersonItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonItemView.swift; sourceTree = "<group>"; };
+		CEEA02142AE77A0400AEFE31 /* PersonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonView.swift; sourceTree = "<group>"; };
 		CEEEDEE42931F7E800976696 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		CEEFC2152A57BC8D006FDADC /* FavoriteRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteRepository.swift; sourceTree = "<group>"; };
 		CEEFC2172A57C1DB006FDADC /* FavoriteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteModel.swift; sourceTree = "<group>"; };
@@ -375,6 +379,8 @@
 			isa = PBXGroup;
 			children = (
 				CEBD445F2A08E98F00BBD9B6 /* PersonDetailView.swift */,
+				CEEA02112AE777B300AEFE31 /* PersonItemView.swift */,
+				CEEA02142AE77A0400AEFE31 /* PersonView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -769,6 +775,7 @@
 				CEBD44572A08E29900BBD9B6 /* PersonModel.swift in Sources */,
 				CEBD44512A08A6D200BBD9B6 /* CreditItemView.swift in Sources */,
 				CEC65504292F5537007B393A /* MovieResponse.swift in Sources */,
+				CEEA02152AE77A0400AEFE31 /* PersonView.swift in Sources */,
 				CEBD445D2A08E6A500BBD9B6 /* PersonPresenter.swift in Sources */,
 				CEC654E5292F5381007B393A /* TMDbApp.swift in Sources */,
 				CE5762712A4149D40094A16D /* CreditDetailView.swift in Sources */,
@@ -794,6 +801,7 @@
 				CEA218D02A87403D00237BFB /* TvShowCreditResponse.swift in Sources */,
 				CE8E43D52A429CC400123AA6 /* VideoResponse.swift in Sources */,
 				CE1F2C772A53FE0B00478B2A /* TvShowDetailView.swift in Sources */,
+				CEEA02122AE777B300AEFE31 /* PersonItemView.swift in Sources */,
 				CE8E43DB2A42D9D400123AA6 /* ChipsView.swift in Sources */,
 				CEA218DA2A877DC200237BFB /* ContentRatingView.swift in Sources */,
 				CE9E31012930BF17001BFB57 /* FavoriteRouter.swift in Sources */,

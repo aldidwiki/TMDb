@@ -49,9 +49,9 @@ final class Injection: NSObject {
         return FavoriteInteractor(repository: repo)
     }
     
-    func providePersonUseCase(personId: Int) -> PersonUseCase {
+    func providePersonUseCase() -> PersonUseCase {
         let repo = providePersonRepository()
-        return PersonInteractor(repository: repo, personId: personId)
+        return PersonInteractor(repository: repo)
     }
     
     func provideTvShowUseCase() -> TvShowUseCase {

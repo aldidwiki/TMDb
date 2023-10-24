@@ -11,6 +11,7 @@ struct ContentView: View {
     @EnvironmentObject var moviePresenter: MoviePresenter
     @EnvironmentObject var favoritePresenter: FavoritePresenter
     @EnvironmentObject var tvShowPresenter: TvShowPresenter
+    @EnvironmentObject var personPresenter: PersonPresenter
     
     var body: some View {
         TabView {
@@ -24,6 +25,11 @@ struct ContentView: View {
                     Label("Tv Show", systemImage: "tv")
                 }
             
+            PersonView(presenter: personPresenter)
+                .tabItem {
+                    Label("Person", systemImage: "person.fill")
+                }
+            
             FavoriteView(presenter: favoritePresenter)
                 .tabItem {
                     Label("Favorite", systemImage: "heart")
@@ -32,12 +38,8 @@ struct ContentView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        let movieUseCase = Injection.init().provideMovieUseCase()
-        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
-        ContentView()
-            .environmentObject(MoviePresenter(movieUseCase: movieUseCase))
-            .environmentObject(FavoritePresenter(favoriteUseCase: favoriteUseCase))
-    }
+#Preview {
+    ContentView()
+        .environmentObject(MoviePresenter(movieUseCase: Injection.init().provideMovieUseCase()))
+        .environmentObject(FavoritePresenter(favoriteUseCase: Injection.init().provideFavoriteUseCase()))
 }

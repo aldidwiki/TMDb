@@ -15,15 +15,21 @@ struct SplashView: View {
             if isActive {
                 let movieUseCase = Injection.init().provideMovieUseCase()
                 let moviePresenter = MoviePresenter(movieUseCase: movieUseCase)
+                
                 let favoriteUseCase = Injection.init().provideFavoriteUseCase()
                 let favoritePresenter = FavoritePresenter(favoriteUseCase: favoriteUseCase)
+                
                 let tvShowUseCase = Injection.init().provideTvShowUseCase()
                 let tvShowPresenter = TvShowPresenter(tvShowUseCase: tvShowUseCase)
+                
+                let personUseCase = Injection.init().providePersonUseCase()
+                let personPresenter = PersonPresenter(personUseCase: personUseCase)
                 
                 ContentView()
                     .environmentObject(moviePresenter)
                     .environmentObject(favoritePresenter)
                     .environmentObject(tvShowPresenter)
+                    .environmentObject(personPresenter)
                     .transition(.scale)
             } else {
                 ZStack {
@@ -50,8 +56,6 @@ struct SplashView: View {
     }
 }
 
-struct SplashView_Previews: PreviewProvider {
-    static var previews: some View {
-        SplashView()
-    }
+#Preview {
+    SplashView()
 }

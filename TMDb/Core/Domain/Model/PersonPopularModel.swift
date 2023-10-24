@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PersonPopularModel {
+struct PersonPopularModel: Identifiable {
     let id: Int
     let name: String
     let profilePath: String

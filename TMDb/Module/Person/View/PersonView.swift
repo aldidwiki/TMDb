@@ -1,0 +1,41 @@
+//
+//  PersonView.swift
+//  TMDb
+//
+//  Created by Aldi Dwiki Prahasta on 24/10/23.
+//
+
+import SwiftUI
+
+struct PersonView: View {
+    @ObservedObject var presenter: PersonPresenter
+    
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                if presenter.loadingState {
+                    ProgressView("Loading")
+                } else {
+                    if presenter.personPopular.isEmpty {
+                        EmptyView(emptyTitle: "No Person Found")
+                    } else {
+                        List(presenter.personPopular) { personPopular in
+                            PersonItemView(personPopular: personPopular)
+                        }
+                    }
+                }
+            }.onAppear {
+                if presenter.personPopular.count == 0 {
+                    presenter.getPopularPerson()
+                }
+            }
+            .navigationTitle("Popular Person")
+        }
+    }
+}
+
+#Preview {
+    PersonView(
+        presenter: PersonPresenter(personUseCase: Injection.init().providePersonUseCase())
+    )
+}

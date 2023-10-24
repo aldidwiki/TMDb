@@ -35,13 +35,15 @@ class PersonPresenter: ObservableObject {
         twitterId: ""
     )
     
+    @Published var personPopular: [PersonPopularModel] = []
+    
     init(personUseCase: PersonUseCase) {
         self.personUseCase = personUseCase
     }
     
-    func getPerson() {
+    func getPerson(personId: Int) {
         self.loadingState = true
-        personUseCase.getPerson()
+        personUseCase.getPerson(personId: personId)
             .receive(on: RunLoop.main)
             .sink { completion in
                 switch completion {
@@ -52,6 +54,22 @@ class PersonPresenter: ObservableObject {
                 }
             } receiveValue: { person in
                 self.person = person
+            }.store(in: &cancellable)
+    }
+    
+    func getPopularPerson() {
+        self.loadingState = true
+        personUseCase.getPopularPerson()
+            .receive(on: RunLoop.main)
+            .sink { completion in
+                switch completion {
+                    case .failure:
+                        self.errorMessage = String(describing: completion)
+                    case .finished:
+                        self.loadingState = false
+                }
+            } receiveValue: { popularPerson in
+                self.personPopular = popularPerson
             }.store(in: &cancellable)
     }
     

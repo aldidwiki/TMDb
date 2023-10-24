@@ -9,21 +9,19 @@ import Foundation
 import Combine
 
 protocol PersonUseCase {
-    func getPerson() -> AnyPublisher<PersonModel, Error>
+    func getPerson(personId: Int) -> AnyPublisher<PersonModel, Error>
     func getPopularPerson() -> AnyPublisher<[PersonPopularModel], Error>
 }
 
 class PersonInteractor: PersonUseCase {
     private let repository: PersonRepositoryProtocol
-    private let personId: Int
     
-    required init(repository: PersonRepositoryProtocol, personId: Int) {
+    required init(repository: PersonRepositoryProtocol) {
         self.repository = repository
-        self.personId = personId
     }
     
-    func getPerson() -> AnyPublisher<PersonModel, Error> {
-        return repository.getPerson(personId: self.personId)
+    func getPerson(personId: Int) -> AnyPublisher<PersonModel, Error> {
+        return repository.getPerson(personId: personId)
     }
     
     func getPopularPerson() -> AnyPublisher<[PersonPopularModel], Error> {
