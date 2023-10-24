@@ -11,6 +11,7 @@ import Combine
 protocol PersonUseCase {
     func getPerson(personId: Int) -> AnyPublisher<PersonModel, Error>
     func getPopularPerson() -> AnyPublisher<[PersonPopularModel], Error>
+    func searchPerson(query: String) -> AnyPublisher<[PersonPopularModel], Error>
 }
 
 class PersonInteractor: PersonUseCase {
@@ -26,5 +27,9 @@ class PersonInteractor: PersonUseCase {
     
     func getPopularPerson() -> AnyPublisher<[PersonPopularModel], Error> {
         return repository.getPopularPerson()
+    }
+    
+    func searchPerson(query: String) -> AnyPublisher<[PersonPopularModel], Error> {
+        return repository.searchPerson(query: query)
     }
 }

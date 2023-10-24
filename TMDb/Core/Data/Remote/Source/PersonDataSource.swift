@@ -12,6 +12,7 @@ import Combine
 protocol PersonDataSourceProtocol {
     func getPerson(personId: Int) -> AnyPublisher<PersonResponse, Error>
     func getPopularPerson() -> AnyPublisher<PersonPopularResponse, Error>
+    func searchPerson(query: String) -> AnyPublisher<PersonPopularResponse, Error>
 }
 
 final class PersonDataSource: NSObject {
@@ -46,6 +47,28 @@ extension PersonDataSource: PersonDataSourceProtocol {
         return Future<PersonPopularResponse, Error> { completion in
             if let url = URL(string: "\(API.baseUrl)person/popular") {
                 AF.request(url, headers: API.headers)
+                    .validate()
+                    .responseDecodable(of: PersonPopularResponse.self) { response in
+                        switch response.result {
+                            case .success(let value):
+                                completion(.success(value))
+                            case .failure:
+                                completion(.failure(URLError.invalidResponse))
+                        }
+                    }
+            }
+        }.eraseToAnyPublisher()
+    }
+    
+    func searchPerson(query: String) -> AnyPublisher<PersonPopularResponse, Error> {
+        let param: Parameters = [
+            "query": query,
+            "include_adult": true
+        ]
+        
+        return Future<PersonPopularResponse, Error> { completion in
+            if let url = URL(string: "\(API.baseUrl)/search/person") {
+                AF.request(url, parameters: param, headers: API.headers)
                     .validate()
                     .responseDecodable(of: PersonPopularResponse.self) { response in
                         switch response.result {

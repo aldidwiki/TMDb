@@ -11,6 +11,7 @@ import Combine
 protocol PersonRepositoryProtocol {
     func getPerson(personId: Int) -> AnyPublisher<PersonModel, Error>
     func getPopularPerson() -> AnyPublisher<[PersonPopularModel], Error>
+    func searchPerson(query: String) -> AnyPublisher<[PersonPopularModel], Error>
 }
 
 final class PersonRepository: NSObject {
@@ -37,6 +38,13 @@ extension PersonRepository: PersonRepositoryProtocol {
     
     func getPopularPerson() -> AnyPublisher<[PersonPopularModel], Error> {
         return self.personDataSource.getPopularPerson()
+            .map {
+                Mapper.mapPersonPopularResponseToDomains(input: $0)
+            }.eraseToAnyPublisher()
+    }
+    
+    func searchPerson(query: String) -> AnyPublisher<[PersonPopularModel], Error> {
+        return self.personDataSource.searchPerson(query: query)
             .map {
                 Mapper.mapPersonPopularResponseToDomains(input: $0)
             }.eraseToAnyPublisher()
