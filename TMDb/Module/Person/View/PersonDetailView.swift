@@ -45,6 +45,7 @@ struct PersonDetailView: View {
         }.onAppear {
             presenter.getPerson(personId: self.personId)
         }
+        .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(presenter.person.name)
     }
 }

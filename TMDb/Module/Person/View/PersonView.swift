@@ -34,7 +34,7 @@ struct PersonView: View {
             }
             .navigationTitle("Popular Person")
         }
-        .searchable(text: $personQuery, placement: .automatic)
+        .searchable(text: $personQuery, placement: .automatic, prompt: "Search Person")
         .onChange(of: personQuery) { _, query in
             if !query.isEmpty {
                 presenter.searchPerson(query: query)

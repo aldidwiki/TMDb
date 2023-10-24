@@ -34,7 +34,7 @@ struct MovieView: View {
             }
             .navigationTitle("Popular Movies")
         }
-        .searchable(text: $movieQuery, placement: .automatic)
+        .searchable(text: $movieQuery, placement: .automatic, prompt: "Search Movie")
         .onChange(of: movieQuery) { _, query in
             if !query.isEmpty {
                 presenter.searchMovies(query: query)

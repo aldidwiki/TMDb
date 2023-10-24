@@ -34,7 +34,7 @@ struct TvShowView: View {
             }
             .navigationTitle("Popular Tv Shows")
         }
-        .searchable(text: $tvQuery, placement: .automatic)
+        .searchable(text: $tvQuery, placement: .automatic, prompt: "Search Tv Show")
         .onChange(of: tvQuery) { _, query in
             if !query.isEmpty {
                 presenter.searchTvShows(query: query)
