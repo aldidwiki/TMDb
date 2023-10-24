@@ -86,6 +86,8 @@
 		CECA71502A0A1A5D0091094A /* SpokenLanguageResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECA714F2A0A1A5D0091094A /* SpokenLanguageResponse.swift */; };
 		CECFD2432AAEA95E0023D93A /* ExpandableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECFD2422AAEA95E0023D93A /* ExpandableTextView.swift */; };
 		CECFD2452AAEB5FF0023D93A /* CustomLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECFD2442AAEB5FF0023D93A /* CustomLabelStyle.swift */; };
+		CEEA020A2AE7727700AEFE31 /* PersonPopularResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEA02092AE7727700AEFE31 /* PersonPopularResponse.swift */; };
+		CEEA020C2AE774E300AEFE31 /* PersonPopularModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEA020B2AE774E300AEFE31 /* PersonPopularModel.swift */; };
 		CEEEDEE52931F7E800976696 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = CEEEDEE42931F7E800976696 /* .swiftlint.yml */; };
 		CEEFC2162A57BC8D006FDADC /* FavoriteRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEFC2152A57BC8D006FDADC /* FavoriteRepository.swift */; };
 		CEEFC2182A57C1DB006FDADC /* FavoriteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEFC2172A57C1DB006FDADC /* FavoriteModel.swift */; };
@@ -179,6 +181,8 @@
 		CECA714F2A0A1A5D0091094A /* SpokenLanguageResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpokenLanguageResponse.swift; sourceTree = "<group>"; };
 		CECFD2422AAEA95E0023D93A /* ExpandableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableTextView.swift; sourceTree = "<group>"; };
 		CECFD2442AAEB5FF0023D93A /* CustomLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLabelStyle.swift; sourceTree = "<group>"; };
+		CEEA02092AE7727700AEFE31 /* PersonPopularResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonPopularResponse.swift; sourceTree = "<group>"; };
+		CEEA020B2AE774E300AEFE31 /* PersonPopularModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonPopularModel.swift; sourceTree = "<group>"; };
 		CEEEDEE42931F7E800976696 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		CEEFC2152A57BC8D006FDADC /* FavoriteRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteRepository.swift; sourceTree = "<group>"; };
 		CEEFC2172A57C1DB006FDADC /* FavoriteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteModel.swift; sourceTree = "<group>"; };
@@ -495,6 +499,7 @@
 				CE1F2C7B2A540CEA00478B2A /* ContentRatingResponse.swift */,
 				CEA218CF2A87403D00237BFB /* TvShowCreditResponse.swift */,
 				CEFAA5F62AB29F0F00B3FD37 /* TvShowSeasonDetailResponse.swift */,
+				CEEA02092AE7727700AEFE31 /* PersonPopularResponse.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -522,6 +527,7 @@
 				CEEFC2172A57C1DB006FDADC /* FavoriteModel.swift */,
 				CEA218D52A874EB100237BFB /* TvShowSeasonModel.swift */,
 				CEFAA5F82AB2A2A000B3FD37 /* TvShowSeasonDetailModel.swift */,
+				CEEA020B2AE774E300AEFE31 /* PersonPopularModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -776,9 +782,11 @@
 				CE57626F2A4146D40094A16D /* CreditDetailItemView.swift in Sources */,
 				CEA218D62A874EB100237BFB /* TvShowSeasonModel.swift in Sources */,
 				CEC6551E292F5C52007B393A /* API.swift in Sources */,
+				CEEA020A2AE7727700AEFE31 /* PersonPopularResponse.swift in Sources */,
 				CEFAA5F92AB2A2A000B3FD37 /* TvShowSeasonDetailModel.swift in Sources */,
 				CE1F2C6D2A53B7AC00478B2A /* TvShowDataSource.swift in Sources */,
 				CEFAA5F72AB29F0F00B3FD37 /* TvShowSeasonDetailResponse.swift in Sources */,
+				CEEA020C2AE774E300AEFE31 /* PersonPopularModel.swift in Sources */,
 				CE1F2C732A53F18E00478B2A /* TvShowDetailModel.swift in Sources */,
 				CE9E30E129305B48001BFB57 /* MovieRouter.swift in Sources */,
 				CE5762752A4162E70094A16D /* CreditDetailPresenter.swift in Sources */,

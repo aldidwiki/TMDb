@@ -10,6 +10,7 @@ import Combine
 
 protocol PersonUseCase {
     func getPerson() -> AnyPublisher<PersonModel, Error>
+    func getPopularPerson() -> AnyPublisher<[PersonPopularModel], Error>
 }
 
 class PersonInteractor: PersonUseCase {
@@ -23,5 +24,9 @@ class PersonInteractor: PersonUseCase {
     
     func getPerson() -> AnyPublisher<PersonModel, Error> {
         return repository.getPerson(personId: self.personId)
+    }
+    
+    func getPopularPerson() -> AnyPublisher<[PersonPopularModel], Error> {
+        return repository.getPopularPerson()
     }
 }

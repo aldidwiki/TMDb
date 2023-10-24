@@ -10,6 +10,7 @@ import Combine
 
 protocol PersonRepositoryProtocol {
     func getPerson(personId: Int) -> AnyPublisher<PersonModel, Error>
+    func getPopularPerson() -> AnyPublisher<[PersonPopularModel], Error>
 }
 
 final class PersonRepository: NSObject {
@@ -22,7 +23,7 @@ final class PersonRepository: NSObject {
     }
     
     static let sharedInstance: PersonRepositoryInstance = { personDataSource in
-         return PersonRepository(personDataSource: personDataSource)
+        return PersonRepository(personDataSource: personDataSource)
     }
 }
 
@@ -31,6 +32,13 @@ extension PersonRepository: PersonRepositoryProtocol {
         return self.personDataSource.getPerson(personId: personId)
             .map {
                 Mapper.mapPersonResponseToDomain(input: $0)
+            }.eraseToAnyPublisher()
+    }
+    
+    func getPopularPerson() -> AnyPublisher<[PersonPopularModel], Error> {
+        return self.personDataSource.getPopularPerson()
+            .map {
+                Mapper.mapPersonPopularResponseToDomains(input: $0)
             }.eraseToAnyPublisher()
     }
 }

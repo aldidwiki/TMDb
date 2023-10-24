@@ -215,6 +215,18 @@ final class Mapper {
         }
     }
     
+    static func mapPersonPopularResponseToDomains(
+        input personPopularResponse: PersonPopularResponse
+    ) -> [PersonPopularModel] {
+        return personPopularResponse.results.map { person in
+            PersonPopularModel(
+                id: person.id,
+                name: person.name ?? "",
+                profilePath: person.profilePath ?? ""
+            )
+        }
+    }
+    
     private static func mapMovieCreditResponseModelToDomains(
         input creditResponse: MovieCreditResponse
     ) -> [CreditModel] {
