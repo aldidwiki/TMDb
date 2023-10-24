@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PersonView: View {
     @ObservedObject var presenter: PersonPresenter
+    @State var personQuery = ""
     
     var body: some View {
         NavigationStack {
@@ -20,7 +21,9 @@ struct PersonView: View {
                         EmptyView(emptyTitle: "No Person Found")
                     } else {
                         List(presenter.personPopular) { personPopular in
-                            PersonItemView(personPopular: personPopular)
+                            presenter.toPersonDetailView(personId: personPopular.id) {
+                                PersonItemView(personPopular: personPopular)
+                            }
                         }
                     }
                 }
@@ -30,6 +33,14 @@ struct PersonView: View {
                 }
             }
             .navigationTitle("Popular Person")
+        }
+        .searchable(text: $personQuery, placement: .automatic)
+        .onChange(of: personQuery) { _, query in
+            if !query.isEmpty {
+                presenter.searchPerson(query: query)
+            } else {
+                presenter.getPopularPerson()
+            }
         }
     }
 }

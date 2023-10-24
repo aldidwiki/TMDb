@@ -14,6 +14,7 @@ class PersonPresenter: ObservableObject {
     
     private let personUseCase: PersonUseCase
     private let router = PersonRouter()
+    private let personRouter = DetailRouter()
     
     @Published var errorMessage = ""
     @Published var loadingState = false
@@ -104,6 +105,15 @@ class PersonPresenter: ObservableObject {
         @ViewBuilder content: () -> Content
     ) -> some View {
         NavigationLink(destination: router.makeCreditDetailView(creditModelList: creditModelList)) {
+            content()
+        }
+    }
+    
+    func toPersonDetailView<Content: View>(
+        personId: Int,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        NavigationLink(destination: personRouter.makePersonDetailView(for: personId)) {
             content()
         }
     }
