@@ -8,7 +8,7 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
-struct PersonView: View {
+struct PersonDetailView: View {
     @ObservedObject var presenter: PersonPresenter
     
     var body: some View {
@@ -48,7 +48,7 @@ struct PersonView: View {
     }
 }
 
-extension PersonView {
+extension PersonDetailView {
     var profilePoster: some View {
         WebImage(url: URL(string: API.profileImageBaseUrl + presenter.person.profilePath))
             .resizable()
@@ -162,6 +162,6 @@ extension PersonView {
 struct PersonView_Previews: PreviewProvider {
     static var previews: some View {
         let personUseCase = Injection.init().providePersonUseCase(personId: 73457)
-        PersonView(presenter: PersonPresenter(personUseCase: personUseCase))
+        PersonDetailView(presenter: PersonPresenter(personUseCase: personUseCase))
     }
 }

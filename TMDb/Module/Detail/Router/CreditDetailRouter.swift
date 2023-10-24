@@ -11,7 +11,7 @@ import SwiftUI
 class CreditDetailRouter {
     func makePersonDetailView(for personId: Int) -> some View {
         let personUseCase = Injection.init().providePersonUseCase(personId: personId)
-        return PersonView(presenter: PersonPresenter(personUseCase: personUseCase))
+        return PersonDetailView(presenter: PersonPresenter(personUseCase: personUseCase))
     }
     
     func makeMovieDetailView(for movieId: Int) -> some View {
