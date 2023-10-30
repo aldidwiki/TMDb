@@ -20,9 +20,9 @@ struct TvShowEpisodeItemView: View {
             VStack(alignment: .leading) {
                 HStack {
                     episodePoster
-                        .padding(.leading)
-                        .padding(.top)
-                        .padding(.bottom)
+                        .clipShape(
+                            .rect(topLeadingRadius: 6)
+                        )
                     
                     VStack(alignment: .leading) {
                         Text("\(episodeModel.episodeNumber)  \(episodeModel.name)")
@@ -51,7 +51,7 @@ struct TvShowEpisodeItemView: View {
                 
                 Text(episodeModel.overview)
                     .font(.system(size: 14))
-                    .padding(.horizontal)
+                    .padding(.horizontal, 6)
                 
                 Spacer()
             }
