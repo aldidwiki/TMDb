@@ -21,7 +21,10 @@ struct TvShowEpisodeItemView: View {
                 HStack {
                     episodePoster
                         .clipShape(
-                            .rect(topLeadingRadius: 6)
+                            .rect(
+                                topLeadingRadius: 6,
+                                bottomTrailingRadius: 6
+                            )
                         )
                     
                     VStack(alignment: .leading) {
