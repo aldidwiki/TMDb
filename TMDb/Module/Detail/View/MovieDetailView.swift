@@ -170,7 +170,9 @@ extension MovieDetailView {
                 }
                 .padding(.horizontal)
                 .padding(.bottom)
+                .scrollTargetLayout()
             }
+            .scrollTargetBehavior(.viewAligned)
         }
         .padding(.top)
     }
