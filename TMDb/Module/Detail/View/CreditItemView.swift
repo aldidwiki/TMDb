@@ -20,6 +20,10 @@ struct CreditItemView: View {
             
             VStack(alignment: .leading) {
                 creditPoster
+                    .clipShape(.rect(
+                        topLeadingRadius: 6,
+                        topTrailingRadius: 6
+                    ))
                 
                 Text(creditModel.name)
                     .fontWeight(.medium)
@@ -50,7 +54,6 @@ extension CreditItemView {
             .indicator(.activity)
             .transition(.fade(duration: 0.5))
             .frame(width: 120, height: 150)
-            .cornerRadius(6)
     }
 }
 
