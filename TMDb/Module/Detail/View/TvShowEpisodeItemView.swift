@@ -10,10 +10,11 @@ import SDWebImageSwiftUI
 
 struct TvShowEpisodeItemView: View {
     var episodeModel: TvShowSeasonDetailModel
+    private let radiusValue: CGFloat = 6
     
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 6, style: .continuous)
+            RoundedRectangle(cornerRadius: radiusValue, style: .continuous)
                 .fill(Color("card_color"))
                 .shadow(radius: 4)
             
@@ -22,8 +23,8 @@ struct TvShowEpisodeItemView: View {
                     episodePoster
                         .clipShape(
                             .rect(
-                                topLeadingRadius: 6,
-                                bottomTrailingRadius: 6
+                                topLeadingRadius: radiusValue,
+                                bottomTrailingRadius: radiusValue
                             )
                         )
                     
