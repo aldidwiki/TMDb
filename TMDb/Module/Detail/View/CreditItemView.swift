@@ -68,7 +68,8 @@ struct CreditItemView_Previews: PreviewProvider {
                 order: 0,
                 popularity: 47.542,
                 releaseDate: "",
-                episodeCount: 0
+                episodeCount: 0,
+                mediaType: "movie"
             ),
             isPersonView: true
         )

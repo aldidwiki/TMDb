@@ -17,20 +17,24 @@ struct PersonCreditResponse: Decodable {
 
 struct PersonCreditResponseModel: Decodable {
     let id: Int
-    let title: String?
+    let movieTitle: String?
     let posterPath: String?
     let characterName: String?
     let releaseDate: String?
     let order: Int?
     let popularity: Double
+    let mediaType: String
+    let tvTitle: String?
     
     private enum CodingKeys: String, CodingKey {
         case id
-        case title
+        case movieTitle = "title"
         case posterPath = "poster_path"
         case characterName = "character"
         case releaseDate = "release_date"
         case order
         case popularity
+        case mediaType = "media_type"
+        case tvTitle = "name"
     }
 }

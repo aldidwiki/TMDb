@@ -51,7 +51,7 @@ struct CreditDetailView: View {
                 .animation(.default, value: creditModelList)
             } else {
                 List(creditModelList) { credit in
-                    presenter.toMovieDetailView(for: credit.id) {
+                    presenter.toContentDetailView(contentId: credit.id, mediaType: credit.mediaType) {
                         CreditDetailItemView(creditModel: credit, isFromPersonView: true)
                     }
                 }
@@ -75,7 +75,8 @@ struct CreditDetailView_Previews: PreviewProvider {
                     order: 0,
                     popularity: 47.542,
                     releaseDate: "",
-                    episodeCount: 0
+                    episodeCount: 0,
+                    mediaType: "movie"
                 ),
                 CreditModel(
                     id: 73457,
@@ -85,7 +86,8 @@ struct CreditDetailView_Previews: PreviewProvider {
                     order: 0,
                     popularity: 47.542,
                     releaseDate: "",
-                    episodeCount: 0
+                    episodeCount: 0,
+                    mediaType: "movie"
                 ),
                 CreditModel(
                     id: 73457,
@@ -95,7 +97,8 @@ struct CreditDetailView_Previews: PreviewProvider {
                     order: 0,
                     popularity: 47.542,
                     releaseDate: "",
-                    episodeCount: 0
+                    episodeCount: 0,
+                    mediaType: "movie"
                 )
             ])
     }

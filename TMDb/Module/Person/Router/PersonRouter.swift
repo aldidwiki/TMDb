@@ -15,6 +15,15 @@ class PersonRouter {
         return MovieDetailView(presenter: MovieDetailPresenter(detailUseCase: detailUseCase, favoriteUseCase: favoriteUseCase))
     }
     
+    func makeTvShowDetailView(for tvId: Int) -> some View {
+        let tvShowUseCase = Injection.init().provideTvShowUseCase()
+        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
+        return TvShowDetailView(
+            presenter: TvShowDetailPresenter(tvShowUseCase: tvShowUseCase, favoriteUseCase: favoriteUseCase),
+            tvShowId: tvId
+        )
+    }
+    
     func makeCreditDetailView(creditModelList: [CreditModel]) -> some View {
         return CreditDetailView(presenter: CreditDetailPresenter(navigateType: NavigateType.detailView), creditModelList: creditModelList)
     }

@@ -239,7 +239,8 @@ final class Mapper {
                 order: cast.order ?? 0,
                 popularity: cast.popularity,
                 releaseDate: "",
-                episodeCount: 0
+                episodeCount: 0,
+                mediaType: Constants.movieResponseType
             )
         }
     }
@@ -256,7 +257,8 @@ final class Mapper {
                 order: tvShowCast.order ?? 0,
                 popularity: tvShowCast.popularity,
                 releaseDate: "",
-                episodeCount: tvShowCast.totalEpisodeCount
+                episodeCount: tvShowCast.totalEpisodeCount,
+                mediaType: Constants.tvType
             )
         }.sorted {
             $0.order < $1.order
@@ -305,13 +307,14 @@ final class Mapper {
         return personResponse.credits.cast.map { cast in
             CreditModel(
                 id: cast.id,
-                name: cast.title ?? "",
+                name: cast.movieTitle ?? cast.tvTitle ?? "",
                 profilePath: cast.posterPath ?? "",
                 characterName: cast.characterName ?? "",
                 order: cast.order ?? 0,
                 popularity: cast.popularity,
                 releaseDate: cast.releaseDate ?? "",
-                episodeCount: 0
+                episodeCount: 0,
+                mediaType: cast.mediaType
             )
         }.sorted {
             $0.releaseDate > $1.releaseDate

@@ -16,4 +16,5 @@ struct CreditModel: Identifiable, Equatable {
     let popularity: Double
     let releaseDate: String
     let episodeCount: Int
+    let mediaType: String
 }

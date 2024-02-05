@@ -91,10 +91,17 @@ class PersonPresenter: ObservableObject {
     }
     
     func linkBuilder<Content: View>(
-        movieId: Int,
+        contentId: Int,
+        mediaType: String,
         @ViewBuilder content: () -> Content
     ) -> some View {
-        NavigationLink(destination: router.makeMovieDetailView(for: movieId)) {
+        let destinationView = if mediaType == Constants.movieResponseType {
+            AnyView(router.makeMovieDetailView(for: contentId))
+        } else {
+            AnyView(router.makeTvShowDetailView(for: contentId))
+        }
+        
+        return NavigationLink(destination: destinationView) {
             content()
         }
         .buttonStyle(.plain)

@@ -24,7 +24,7 @@ final class PersonDataSource: NSObject {
 extension PersonDataSource: PersonDataSourceProtocol {
     func getPerson(personId: Int) -> AnyPublisher<PersonResponse, Error> {
         let param: Parameters = [
-            "append_to_response": "movie_credits,external_ids"
+            "append_to_response": "combined_credits,external_ids"
         ]
         
         return Future<PersonResponse, Error> {completion in

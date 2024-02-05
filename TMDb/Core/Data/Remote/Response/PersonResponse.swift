@@ -30,7 +30,7 @@ struct PersonResponse: Decodable {
         case biography
         case birthplace = "place_of_birth"
         case knownFor = "known_for_department"
-        case credits = "movie_credits"
+        case credits = "combined_credits"
         case externalMedia = "external_ids"
     }
 }

@@ -25,11 +25,18 @@ class CreditDetailPresenter: ObservableObject {
         }
     }
     
-    func toMovieDetailView<Content: View>(
-        for movieId: Int,
+    func toContentDetailView<Content: View>(
+        contentId: Int,
+        mediaType: String,
         @ViewBuilder content: () -> Content
     ) -> some View {
-        NavigationLink(destination: router.makeMovieDetailView(for: movieId)) {
+        let contentDestination = if mediaType == Constants.movieResponseType {
+            AnyView(router.makeMovieDetailView(for: contentId))
+        } else {
+            AnyView(router.makeTvShowDetailView(for: contentId))
+        }
+        
+        return NavigationLink(destination: contentDestination) {
             content()
         }
     }
