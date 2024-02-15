@@ -141,4 +141,13 @@ class PersonPresenter: ObservableObject {
             content()
         }
     }
+    
+    func toPersonImageView<Content: View>(
+        personId: Int,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        NavigationLink(destination: router.makePersonImageView(personId: personId)) {
+            content()
+        }
+    }
 }

@@ -19,7 +19,9 @@ struct PersonDetailView: View {
             } else {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack {
-                        profilePoster
+                        presenter.toPersonImageView(personId: personId) {
+                            profilePoster
+                        }
                         
                         Text(presenter.person.name)
                             .font(.title)

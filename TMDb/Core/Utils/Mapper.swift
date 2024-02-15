@@ -233,7 +233,7 @@ final class Mapper {
         return personImageResponse.profileImages.map { personImage in
             PersonImageModel(
                 id: personImageResponse.personId,
-                filePath: personImage.filePath
+                filePath: personImage.filePath ?? ""
             )
         }
     }

@@ -27,4 +27,12 @@ class PersonRouter {
     func makeCreditDetailView(creditModelList: [CreditModel]) -> some View {
         return CreditDetailView(presenter: CreditDetailPresenter(navigateType: NavigateType.detailView), creditModelList: creditModelList)
     }
+    
+    func makePersonImageView(personId: Int) -> some View {
+        let personUseCase = Injection.init().providePersonUseCase()
+        return PersonImageView(
+            personPresenter: PersonPresenter(personUseCase: personUseCase),
+            personId: personId
+        )
+    }
 }

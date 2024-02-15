@@ -9,5 +9,5 @@ import Foundation
 
 struct PersonImageModel: Identifiable {
     let id: Int
-    let filePath: String?
+    let filePath: String
 }
