@@ -25,6 +25,8 @@
 		CE1F9AEB2B7DABD30031518F /* PersonImageResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1F9AEA2B7DABD30031518F /* PersonImageResponse.swift */; };
 		CE1F9AED2B7DAE8B0031518F /* PersonImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1F9AEC2B7DAE8B0031518F /* PersonImageModel.swift */; };
 		CE1F9AEF2B7DF7800031518F /* PersonImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1F9AEE2B7DF7800031518F /* PersonImageView.swift */; };
+		CE1F9AF22B7E0B6C0031518F /* ImageViewer in Frameworks */ = {isa = PBXBuildFile; productRef = CE1F9AF12B7E0B6C0031518F /* ImageViewer */; };
+		CE1F9AF42B7E0B6C0031518F /* ImageViewerRemote in Frameworks */ = {isa = PBXBuildFile; productRef = CE1F9AF32B7E0B6C0031518F /* ImageViewerRemote */; };
 		CE57626F2A4146D40094A16D /* CreditDetailItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE57626E2A4146D40094A16D /* CreditDetailItemView.swift */; };
 		CE5762712A4149D40094A16D /* CreditDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5762702A4149D40094A16D /* CreditDetailView.swift */; };
 		CE5762752A4162E70094A16D /* CreditDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5762742A4162E70094A16D /* CreditDetailPresenter.swift */; };
@@ -215,10 +217,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE1F9AF42B7E0B6C0031518F /* ImageViewerRemote in Frameworks */,
 				CEC654FF292F54EA007B393A /* Alamofire in Frameworks */,
 				CEC654FC292F54DA007B393A /* SDWebImageSwiftUI in Frameworks */,
 				CE9E30E729306F8F001BFB57 /* Realm in Frameworks */,
 				CE9E30E929306F8F001BFB57 /* RealmSwift in Frameworks */,
+				CE1F9AF22B7E0B6C0031518F /* ImageViewer in Frameworks */,
 				CEC654F9292F54C8007B393A /* SDWebImage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -656,6 +660,8 @@
 				CEC654FE292F54EA007B393A /* Alamofire */,
 				CE9E30E629306F8F001BFB57 /* Realm */,
 				CE9E30E829306F8F001BFB57 /* RealmSwift */,
+				CE1F9AF12B7E0B6C0031518F /* ImageViewer */,
+				CE1F9AF32B7E0B6C0031518F /* ImageViewerRemote */,
 			);
 			productName = TMDb;
 			productReference = CEC654E1292F5381007B393A /* TMDb.app */;
@@ -690,6 +696,7 @@
 				CEC654FA292F54DA007B393A /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 				CEC654FD292F54EA007B393A /* XCRemoteSwiftPackageReference "Alamofire" */,
 				CE9E30E529306F8F001BFB57 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				CE1F9AF02B7E0B6C0031518F /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */,
 			);
 			productRefGroup = CEC654E2292F5381007B393A /* Products */;
 			projectDirPath = "";
@@ -1034,6 +1041,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		CE1F9AF02B7E0B6C0031518F /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Jake-Short/swiftui-image-viewer.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.3.1;
+			};
+		};
 		CE9E30E529306F8F001BFB57 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/realm-swift.git";
@@ -1069,6 +1084,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		CE1F9AF12B7E0B6C0031518F /* ImageViewer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CE1F9AF02B7E0B6C0031518F /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */;
+			productName = ImageViewer;
+		};
+		CE1F9AF32B7E0B6C0031518F /* ImageViewerRemote */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CE1F9AF02B7E0B6C0031518F /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */;
+			productName = ImageViewerRemote;
+		};
 		CE9E30E629306F8F001BFB57 /* Realm */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CE9E30E529306F8F001BFB57 /* XCRemoteSwiftPackageReference "realm-swift" */;

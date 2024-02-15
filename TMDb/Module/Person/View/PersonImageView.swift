@@ -7,9 +7,13 @@
 
 import SwiftUI
 import SDWebImageSwiftUI
+import ImageViewerRemote
 
 struct PersonImageView: View {
     @ObservedObject var personPresenter: PersonPresenter
+    @State var imgUrl = ""
+    @State var showImageView = false
+    
     var personId: Int
     
     let columns = [
@@ -22,15 +26,22 @@ struct PersonImageView: View {
         ScrollView {
             LazyVGrid(columns: columns) {
                 ForEach(personPresenter.personImages, id: \.filePath) { personImage in
-                    WebImage(url: URL(string: API.profileImageBaseUrl + personImage.filePath))
+                    WebImage(url: URL(string: API.profileOriginalBaseUrl + personImage.filePath))
                         .resizable()
                         .indicator(.activity)
                         .transition(.fade(duration: 0.5))
                         .scaledToFit()
                         .cornerRadius(8)
+                        .onTapGesture {
+                            self.imgUrl = API.profileOriginalBaseUrl + personImage.filePath
+                            self.showImageView.toggle()
+                        }
                 }
             }
             .padding(.horizontal)
+        }
+        .overlay {
+            ImageViewerRemote(imageURL: $imgUrl, viewerShown: $showImageView, closeButtonTopRight: true)
         }
         .onAppear {
             personPresenter.getPersonImage(personId: personId)
