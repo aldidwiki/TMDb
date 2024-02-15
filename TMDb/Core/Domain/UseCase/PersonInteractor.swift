@@ -12,6 +12,7 @@ protocol PersonUseCase {
     func getPerson(personId: Int) -> AnyPublisher<PersonModel, Error>
     func getPopularPerson() -> AnyPublisher<[PersonPopularModel], Error>
     func searchPerson(query: String) -> AnyPublisher<[PersonPopularModel], Error>
+    func getPersonImage(personId: Int) -> AnyPublisher<[PersonImageModel], Error>
 }
 
 class PersonInteractor: PersonUseCase {
@@ -31,5 +32,9 @@ class PersonInteractor: PersonUseCase {
     
     func searchPerson(query: String) -> AnyPublisher<[PersonPopularModel], Error> {
         return repository.searchPerson(query: query)
+    }
+    
+    func getPersonImage(personId: Int) -> AnyPublisher<[PersonImageModel], Error> {
+        return repository.getPersonImages(personId: personId)
     }
 }

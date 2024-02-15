@@ -13,6 +13,7 @@ class API {
     static let imageBaseUrl = "https://image.tmdb.org/t/p/w500"
     static let backdropBaseUrl = "https://image.tmdb.org/t/p/w1280"
     static let profileImageBaseUrl = "https://image.tmdb.org/t/p/h632"
+    static let profileOriginalBaseUrl = "https://image.tmdb.org/t/p/original"
     static let logoImageBaseUrl = "https://image.tmdb.org/t/p/w92"
     static let episodeStillBaseUrl = "https://image.tmdb.org/t/p/w300"
     

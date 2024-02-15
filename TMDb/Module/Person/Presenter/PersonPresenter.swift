@@ -37,6 +37,7 @@ class PersonPresenter: ObservableObject {
     )
     
     @Published var personPopular: [PersonPopularModel] = []
+    @Published var personImages: [PersonImageModel] = []
     
     init(personUseCase: PersonUseCase) {
         self.personUseCase = personUseCase
@@ -87,6 +88,22 @@ class PersonPresenter: ObservableObject {
                 }
             } receiveValue: { personResult in
                 self.personPopular = personResult
+            }.store(in: &cancellable)
+    }
+    
+    func getPersonImage(personId: Int) {
+        self.loadingState = true
+        personUseCase.getPersonImage(personId: personId)
+            .receive(on: RunLoop.main)
+            .sink { completion in
+                switch completion {
+                    case .failure:
+                        self.errorMessage = String(describing: completion)
+                    case .finished:
+                        self.loadingState = false
+                }
+            } receiveValue: { personImageResult in
+                self.personImages = personImageResult
             }.store(in: &cancellable)
     }
     

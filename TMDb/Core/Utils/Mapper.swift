@@ -227,6 +227,17 @@ final class Mapper {
         }
     }
     
+    static func mapPersonImageResponseToDomains(
+        input personImageResponse: PersonImageResponse
+    ) -> [PersonImageModel] {
+        return personImageResponse.profileImages.map { personImage in
+            PersonImageModel(
+                id: personImageResponse.personId,
+                filePath: personImage.filePath
+            )
+        }
+    }
+    
     private static func mapMovieCreditResponseModelToDomains(
         input creditResponse: MovieCreditResponse
     ) -> [CreditModel] {

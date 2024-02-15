@@ -12,6 +12,7 @@ protocol PersonRepositoryProtocol {
     func getPerson(personId: Int) -> AnyPublisher<PersonModel, Error>
     func getPopularPerson() -> AnyPublisher<[PersonPopularModel], Error>
     func searchPerson(query: String) -> AnyPublisher<[PersonPopularModel], Error>
+    func getPersonImages(personId: Int) -> AnyPublisher<[PersonImageModel], Error>
 }
 
 final class PersonRepository: NSObject {
@@ -47,6 +48,13 @@ extension PersonRepository: PersonRepositoryProtocol {
         return self.personDataSource.searchPerson(query: query)
             .map {
                 Mapper.mapPersonPopularResponseToDomains(input: $0)
+            }.eraseToAnyPublisher()
+    }
+    
+    func getPersonImages(personId: Int) -> AnyPublisher<[PersonImageModel], Error> {
+        return self.personDataSource.getPersonImage(personId: personId)
+            .map { personImageResponse in
+                Mapper.mapPersonImageResponseToDomains(input: personImageResponse)
             }.eraseToAnyPublisher()
     }
 }
