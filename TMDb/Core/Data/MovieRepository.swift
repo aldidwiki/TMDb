@@ -12,6 +12,7 @@ protocol MovieRepositoryProtocol {
     func getMovies() -> AnyPublisher<[MovieModel], Error>
     func getMovie(movieId: Int) -> AnyPublisher<MovieDetailModel, Error>
     func searchMovie(query: String) -> AnyPublisher<[MovieModel], Error>
+    func getMovieBackdrops(movieId: Int) -> AnyPublisher<[ImageModel], Error>
 }
 
 final class MovieRepository: NSObject {
@@ -47,6 +48,13 @@ extension MovieRepository: MovieRepositoryProtocol {
         return self.movieDataSource.searchMovie(query: query)
             .map {
                 Mapper.mapMovieResponseModelsToDomains(input: $0)
+            }.eraseToAnyPublisher()
+    }
+    
+    func getMovieBackdrops(movieId: Int) -> AnyPublisher<[ImageModel], Error> {
+        return self.movieDataSource.getMovieBackdrops(movieId: movieId)
+            .map {
+                Mapper.mapImageResponseToImageDomains(input: $0)
             }.eraseToAnyPublisher()
     }
 }

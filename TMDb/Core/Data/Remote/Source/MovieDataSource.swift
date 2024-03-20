@@ -13,6 +13,7 @@ protocol MovieDataSourceProtocol {
     func getMovies() -> AnyPublisher<[MovieResponseModel], Error>
     func getMovie(movieId: Int) -> AnyPublisher<MovieDetailResponse, Error>
     func searchMovie(query: String) -> AnyPublisher<[MovieResponseModel], Error>
+    func getMovieBackdrops(movieId: Int) -> AnyPublisher<ImageResponse, Error>
 }
 
 final class MovieDataSource: NSObject {
@@ -74,6 +75,23 @@ extension MovieDataSource: MovieDataSourceProtocol {
                             case .success(let value):
                                 completion(.success(value.movies))
                             case . failure:
+                                completion(.failure(URLError.invalidResponse))
+                        }
+                    }
+            }
+        }.eraseToAnyPublisher()
+    }
+    
+    func getMovieBackdrops(movieId: Int) -> AnyPublisher<ImageResponse, Error> {
+        return Future<ImageResponse, Error> { completion in
+            if let url = URL(string: "\(API.baseUrl)movie/\(movieId)/images") {
+                AF.request(url, headers: API.headers)
+                    .validate()
+                    .responseDecodable(of: ImageResponse.self) { response in
+                        switch response.result {
+                            case .success(let value):
+                                completion(.success(value))
+                            case .failure:
                                 completion(.failure(URLError.invalidResponse))
                         }
                     }

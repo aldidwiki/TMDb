@@ -230,14 +230,29 @@ final class Mapper {
     static func mapImageResponseToPersonImageDomains(
         input imageResponse: ImageResponse
     ) -> [PersonImageModel] {
-        guard let imageResponseModelList = imageResponse.profileImages else {
+        guard let profileImages = imageResponse.profileImages else {
             return []
         }
         
-        return imageResponseModelList.map { personResponseModel in
+        return profileImages.map { personResponseModel in
             PersonImageModel(
                 id: imageResponse.imageId,
                 filePath: personResponseModel.filePath ?? ""
+            )
+        }
+    }
+    
+    static func mapImageResponseToImageDomains(
+        input imageResponse: ImageResponse
+    ) -> [ImageModel] {
+        guard let backdrops = imageResponse.backdrops else {
+            return []
+        }
+        
+        return backdrops.map { imageResponseModel in
+            ImageModel(
+                id: imageResponse.imageId,
+                filePath: imageResponseModel.filePath ?? ""
             )
         }
     }
