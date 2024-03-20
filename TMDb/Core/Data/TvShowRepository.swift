@@ -13,6 +13,7 @@ protocol TvShowRepositoryProtocol {
     func getTvShow(tvShowId: Int) -> AnyPublisher<TvShowDetailModel, Error>
     func getTvShowSeasonDetail(tvShowId: Int, seasonNumber: Int) -> AnyPublisher<[TvShowSeasonDetailModel], Error>
     func searchTvShows(query: String) -> AnyPublisher<[TvShowModel], Error>
+    func getTvShowBackdrops(tvId: Int) -> AnyPublisher<[ImageModel], Error>
 }
 
 final class TvShowRepository: NSObject {
@@ -55,6 +56,13 @@ extension TvShowRepository: TvShowRepositoryProtocol {
         return self.tvShowDataSource.getTvShowSeasonDetail(tvShowId: tvShowId, seasonNumber: seasonNumber)
             .map {
                 Mapper.mapTvShowSeasonDetailResponseToDomains(input: $0)
+            }.eraseToAnyPublisher()
+    }
+    
+    func getTvShowBackdrops(tvId: Int) -> AnyPublisher<[ImageModel], Error> {
+        return self.tvShowDataSource.getTvShowBackdrops(tvId: tvId)
+            .map {
+                Mapper.mapImageResponseToImageDomains(input: $0)
             }.eraseToAnyPublisher()
     }
 }

@@ -13,6 +13,7 @@ protocol TvShowUseCase {
     func getTvShow(tvShowId: Int) -> AnyPublisher<TvShowDetailModel, Error>
     func getTvShowSeasonDetail(tvShowId: Int, seasonNumber: Int) -> AnyPublisher<[TvShowSeasonDetailModel], Error>
     func searchTvShows(query: String) -> AnyPublisher<[TvShowModel], Error>
+    func getTvShowBackdrop(tvId: Int) -> AnyPublisher<[ImageModel], Error>
 }
 
 class TvShowInteractor: TvShowUseCase {
@@ -36,5 +37,9 @@ class TvShowInteractor: TvShowUseCase {
     
     func getTvShowSeasonDetail(tvShowId: Int, seasonNumber: Int) -> AnyPublisher<[TvShowSeasonDetailModel], Error> {
         return repository.getTvShowSeasonDetail(tvShowId: tvShowId, seasonNumber: seasonNumber)
+    }
+    
+    func getTvShowBackdrop(tvId: Int) -> AnyPublisher<[ImageModel], Error> {
+        return repository.getTvShowBackdrops(tvId: tvId)
     }
 }

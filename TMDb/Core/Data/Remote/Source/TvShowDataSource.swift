@@ -14,6 +14,7 @@ protocol TvShowDataSourceProtocol {
     func getTvShow(tvShowId: Int) -> AnyPublisher<TvShowDetailResponse, Error>
     func getTvShowSeasonDetail(tvShowId: Int, seasonNumber: Int) -> AnyPublisher<TvShowSeasonDetailResponse, Error>
     func searchTvShow(query: String) -> AnyPublisher<[TvResponseModel], Error>
+    func getTvShowBackdrops(tvId: Int) -> AnyPublisher<ImageResponse, Error>
 }
 
 final class TvShowDataSource: NSObject {
@@ -88,6 +89,23 @@ extension TvShowDataSource: TvShowDataSourceProtocol {
                 AF.request(url, headers: API.headers)
                     .validate()
                     .responseDecodable(of: TvShowSeasonDetailResponse.self) { response in
+                        switch response.result {
+                            case .success(let value):
+                                completion(.success(value))
+                            case .failure:
+                                completion(.failure(URLError.invalidResponse))
+                        }
+                    }
+            }
+        }.eraseToAnyPublisher()
+    }
+    
+    func getTvShowBackdrops(tvId: Int) -> AnyPublisher<ImageResponse, Error> {
+        return Future<ImageResponse, Error> { completion in
+            if let url = URL(string: "\(API.baseUrl)/tv/\(tvId)/images") {
+                AF.request(url, headers: API.headers)
+                    .validate()
+                    .responseDecodable(of: ImageResponse.self) { response in
                         switch response.result {
                             case .success(let value):
                                 completion(.success(value))
