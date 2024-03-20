@@ -42,6 +42,7 @@ class MovieDetailPresenter: ObservableObject {
     @Published var errorMessage = ""
     @Published var loadingState = false
     @Published var isFavorite = false
+    @Published var movieImages = []
     
     init(detailUseCase: DetailUseCase, favoriteUseCase: FavoriteUseCase) {
         self.detailUseCase = detailUseCase
@@ -93,6 +94,21 @@ class MovieDetailPresenter: ObservableObject {
                 }
             } receiveValue: {
                 self.isFavorite = !$0
+            }.store(in: &cancellable)
+    }
+    
+    func getMovieBackdrops(movieId: Int) {
+        detailUseCase.getMovieBackdrops(movieId: movieId)
+            .receive(on: RunLoop.main)
+            .sink { completion in
+                switch completion {
+                    case .failure:
+                        self .errorMessage = String(describing: completion)
+                    case .finished:
+                        self.isFavorite = false
+                }
+            } receiveValue: { imageModel in
+                self.movieImages = imageModel
             }.store(in: &cancellable)
     }
     

@@ -36,6 +36,7 @@
 		CE57627F2A41A9100094A16D /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE57627E2A41A9100094A16D /* CircularProgressView.swift */; };
 		CE594C6C2A541D2D0060D0EC /* NetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE594C6B2A541D2D0060D0EC /* NetworkModel.swift */; };
 		CE7BB4D82BAA8C7D0080FA7F /* ImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7BB4D72BAA8C7D0080FA7F /* ImageModel.swift */; };
+		CE7BB4DA2BAA981C0080FA7F /* ImageGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7BB4D92BAA981C0080FA7F /* ImageGalleryView.swift */; };
 		CE8DDDEE2A0B303400F94CEE /* PersonCreditResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8DDDED2A0B303400F94CEE /* PersonCreditResponse.swift */; };
 		CE8DDDF12A0B3BED00F94CEE /* PersonRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8DDDF02A0B3BED00F94CEE /* PersonRouter.swift */; };
 		CE8E43D52A429CC400123AA6 /* VideoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8E43D42A429CC400123AA6 /* VideoResponse.swift */; };
@@ -141,6 +142,7 @@
 		CE57627E2A41A9100094A16D /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
 		CE594C6B2A541D2D0060D0EC /* NetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkModel.swift; sourceTree = "<group>"; };
 		CE7BB4D72BAA8C7D0080FA7F /* ImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageModel.swift; sourceTree = "<group>"; };
+		CE7BB4D92BAA981C0080FA7F /* ImageGalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageGalleryView.swift; sourceTree = "<group>"; };
 		CE8DDDED2A0B303400F94CEE /* PersonCreditResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonCreditResponse.swift; sourceTree = "<group>"; };
 		CE8DDDF02A0B3BED00F94CEE /* PersonRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonRouter.swift; sourceTree = "<group>"; };
 		CE8E43D42A429CC400123AA6 /* VideoResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoResponse.swift; sourceTree = "<group>"; };
@@ -299,6 +301,7 @@
 				CE57626E2A4146D40094A16D /* CreditDetailItemView.swift */,
 				CE5762702A4149D40094A16D /* CreditDetailView.swift */,
 				CE1F2C762A53FE0B00478B2A /* TvShowDetailView.swift */,
+				CE7BB4D92BAA981C0080FA7F /* ImageGalleryView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -839,6 +842,7 @@
 				CE5762772A41635C0094A16D /* CreditDetailRouter.swift in Sources */,
 				CECFD2432AAEA95E0023D93A /* ExpandableTextView.swift in Sources */,
 				CEBD44602A08E98F00BBD9B6 /* PersonDetailView.swift in Sources */,
+				CE7BB4DA2BAA981C0080FA7F /* ImageGalleryView.swift in Sources */,
 				CEFAA5FB2AB2A61000B3FD37 /* TvShowEpisodeItemView.swift in Sources */,
 				CE1F2C712A53ED5E00478B2A /* TvShowDetailResponse.swift in Sources */,
 				CEA218CC2A87339400237BFB /* TvShowRouter.swift in Sources */,
