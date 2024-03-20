@@ -42,7 +42,7 @@ class MovieDetailPresenter: ObservableObject {
     @Published var errorMessage = ""
     @Published var loadingState = false
     @Published var isFavorite = false
-    @Published var movieImages = []
+    @Published var movieImages: [ImageModel] = []
     
     init(detailUseCase: DetailUseCase, favoriteUseCase: FavoriteUseCase) {
         self.detailUseCase = detailUseCase
