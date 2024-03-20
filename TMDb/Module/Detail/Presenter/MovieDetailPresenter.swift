@@ -49,9 +49,9 @@ class MovieDetailPresenter: ObservableObject {
         self.favoriteUseCase = favoriteUseCase
     }
     
-    func getMovie() {
+    func getMovie(movieId: Int) {
         self.loadingState = true
-        detailUseCase.getMovie()
+        detailUseCase.getMovie(movieId: movieId)
             .receive(on: RunLoop.main)
             .sink { completion in
                 switch completion {
@@ -147,6 +147,15 @@ class MovieDetailPresenter: ObservableObject {
         @ViewBuilder content: () -> Content
     ) -> some View {
         NavigationLink(destination: router.makeCreditDetailView(for: credits)) {
+            content()
+        }
+    }
+    
+    func toMovieImageGallery<Content: View>(
+        for movieId: Int,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        NavigationLink(destination: router.makeMovieImageGalleryView(movieId: movieId)) {
             content()
         }
     }

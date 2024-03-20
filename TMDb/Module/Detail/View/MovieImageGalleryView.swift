@@ -9,7 +9,7 @@ import SwiftUI
 import SDWebImageSwiftUI
 import ImageViewerRemote
 
-struct ImageGalleryView: View {
+struct MovieImageGalleryView: View {
     @ObservedObject var presenter: MovieDetailPresenter
     @State var imgUrl = ""
     @State var showImageView = false
@@ -49,9 +49,9 @@ struct ImageGalleryView: View {
 }
 
 #Preview {
-    ImageGalleryView(
+    MovieImageGalleryView(
         presenter: MovieDetailPresenter(
-            detailUseCase: Injection.init().provideDetailUseCase(movieId: 693134),
+            detailUseCase: Injection.init().provideDetailUseCase(),
             favoriteUseCase: Injection.init().provideFavoriteUseCase()),
         contentId: 693134
     )

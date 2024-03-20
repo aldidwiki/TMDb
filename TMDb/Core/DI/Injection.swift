@@ -39,9 +39,9 @@ final class Injection: NSObject {
         return MovieInteractor(repository: repo)
     }
     
-    func provideDetailUseCase(movieId: Int) -> DetailUseCase {
+    func provideDetailUseCase() -> DetailUseCase {
         let repo = provideMovieRepository()
-        return DetailInteractor(repository: repo, movieId: movieId)
+        return DetailInteractor(repository: repo)
     }
     
     func provideFavoriteUseCase() -> FavoriteUseCase {

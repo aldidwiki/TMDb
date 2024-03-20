@@ -38,4 +38,14 @@ class DetailRouter {
             seasonName: seasonName
         )
     }
+    
+    func makeMovieImageGalleryView(movieId: Int) -> some View {
+        return MovieImageGalleryView(
+            presenter: MovieDetailPresenter(
+                detailUseCase: Injection.init().provideDetailUseCase(),
+                favoriteUseCase: Injection.init().provideFavoriteUseCase()
+            ),
+            contentId: movieId
+        )
+    }
 }

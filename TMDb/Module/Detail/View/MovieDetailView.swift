@@ -12,6 +12,8 @@ struct MovieDetailView: View {
     @ObservedObject var presenter: MovieDetailPresenter
     @State var showSheet = false
     
+    var movieId: Int
+    
     var body: some View {
         ZStack {
             if presenter.loadingState {
@@ -20,7 +22,9 @@ struct MovieDetailView: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(alignment: .leading) {
                         if !presenter.movie.backdropPath.isEmpty {
-                            movieBackdrop
+                            presenter.toMovieImageGallery(for: movieId) {
+                                movieBackdrop
+                            }
                         }
                         
                         movieContentDetail
@@ -49,7 +53,7 @@ struct MovieDetailView: View {
                 .animation(.spring(), value: showSheet)
             }
         }.onAppear {
-            presenter.getMovie()
+            presenter.getMovie(movieId: movieId)
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(presenter.movie.title)
@@ -287,8 +291,11 @@ extension MovieDetailView {
 
 struct MovieDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        let detailUseCase = Injection.init().provideDetailUseCase(movieId: 436270)
+        let detailUseCase = Injection.init().provideDetailUseCase()
         let favoriteUseCase = Injection.init().provideFavoriteUseCase()
-        MovieDetailView(presenter: MovieDetailPresenter(detailUseCase: detailUseCase, favoriteUseCase: favoriteUseCase))
+        MovieDetailView(
+            presenter: MovieDetailPresenter(detailUseCase: detailUseCase, favoriteUseCase: favoriteUseCase),
+            movieId: 436270
+        )
     }
 }
