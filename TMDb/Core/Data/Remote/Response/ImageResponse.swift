@@ -7,17 +7,19 @@
 
 import Foundation
 
-struct PersonImageResponse: Decodable {
-    let personId: Int
-    let profileImages: [PersonImageResponseModel]
+struct ImageResponse: Decodable {
+    let imageId: Int
+    let profileImages: [ImageResponseModel]?
+    let backdrops: [ImageResponseModel]?
     
     private enum CodingKeys: String, CodingKey {
-        case personId = "id"
+        case imageId = "id"
         case profileImages = "profiles"
+        case backdrops
     }
 }
 
-struct PersonImageResponseModel: Decodable {
+struct ImageResponseModel: Decodable {
     let filePath: String?
     let voteAverage: Double?
     

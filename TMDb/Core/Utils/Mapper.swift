@@ -227,13 +227,17 @@ final class Mapper {
         }
     }
     
-    static func mapPersonImageResponseToDomains(
-        input personImageResponse: PersonImageResponse
+    static func mapImageResponseToPersonImageDomains(
+        input imageResponse: ImageResponse
     ) -> [PersonImageModel] {
-        return personImageResponse.profileImages.map { personImage in
+        guard let imageResponseModelList = imageResponse.profileImages else {
+            return []
+        }
+        
+        return imageResponseModelList.map { personResponseModel in
             PersonImageModel(
-                id: personImageResponse.personId,
-                filePath: personImage.filePath ?? ""
+                id: imageResponse.imageId,
+                filePath: personResponseModel.filePath ?? ""
             )
         }
     }

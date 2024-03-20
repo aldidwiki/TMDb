@@ -13,7 +13,7 @@ protocol PersonDataSourceProtocol {
     func getPerson(personId: Int) -> AnyPublisher<PersonResponse, Error>
     func getPopularPerson() -> AnyPublisher<PersonPopularResponse, Error>
     func searchPerson(query: String) -> AnyPublisher<PersonPopularResponse, Error>
-    func getPersonImage(personId: Int) -> AnyPublisher<PersonImageResponse, Error>
+    func getPersonImage(personId: Int) -> AnyPublisher<ImageResponse, Error>
 }
 
 final class PersonDataSource: NSObject {
@@ -83,12 +83,12 @@ extension PersonDataSource: PersonDataSourceProtocol {
         }.eraseToAnyPublisher()
     }
     
-    func getPersonImage(personId: Int) -> AnyPublisher<PersonImageResponse, Error> {
-        return Future<PersonImageResponse, Error> { completion in
+    func getPersonImage(personId: Int) -> AnyPublisher<ImageResponse, Error> {
+        return Future<ImageResponse, Error> { completion in
             if let url = URL(string: "\(API.baseUrl)/person/\(personId)/images") {
                 AF.request(url, headers: API.headers)
                     .validate()
-                    .responseDecodable(of: PersonImageResponse.self) { response in
+                    .responseDecodable(of: ImageResponse.self) { response in
                         switch response.result {
                             case .success(let value):
                                 completion(.success(value))

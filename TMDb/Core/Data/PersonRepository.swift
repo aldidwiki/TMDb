@@ -53,8 +53,8 @@ extension PersonRepository: PersonRepositoryProtocol {
     
     func getPersonImages(personId: Int) -> AnyPublisher<[PersonImageModel], Error> {
         return self.personDataSource.getPersonImage(personId: personId)
-            .map { personImageResponse in
-                Mapper.mapPersonImageResponseToDomains(input: personImageResponse)
+            .map { imageResponse in
+                Mapper.mapImageResponseToPersonImageDomains(input: imageResponse)
             }.eraseToAnyPublisher()
     }
 }
