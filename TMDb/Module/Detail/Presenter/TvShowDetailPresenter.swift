@@ -43,6 +43,7 @@ class TvShowDetailPresenter: ObservableObject {
         seasons: []
     )
     @Published var isFavorite = false
+    @Published var tvShowImages: [ImageModel] = []
     
     init(tvShowUseCase: TvShowUseCase, favoriteUseCase: FavoriteUseCase) {
         self.tvShowUseCase = tvShowUseCase
@@ -96,6 +97,22 @@ class TvShowDetailPresenter: ObservableObject {
             } receiveValue: {
                 self.isFavorite = !$0
             }.store(in: &cancellable)
+    }
+    
+    func getTvShowBackdrop(tvShowId: Int) {
+        tvShowUseCase.getTvShowBackdrop(tvId: tvShowId)
+            .receive(on: RunLoop.main)
+            .sink { completion in
+                switch completion {
+                    case .failure:
+                        self.errorMessage = String(describing: completion)
+                    case .finished:
+                        self.loadingState = false
+                }
+            } receiveValue: { images in
+                self.tvShowImages = images
+            }.store(in: &cancellable)
+        
     }
     
     private func findFavorite(tvShowId: Int) {
