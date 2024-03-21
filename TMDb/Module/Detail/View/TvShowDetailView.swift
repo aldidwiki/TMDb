@@ -22,7 +22,9 @@ struct TvShowDetailView: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(alignment: .leading) {
                         if !presenter.tvShow.backdropPath.isEmpty {
-                            tvBackdrop
+                            presenter.toTvShowImageGallery(tvShowId: tvShowId) {
+                                tvBackdrop
+                            }
                         }
                         
                         tvContentDetail

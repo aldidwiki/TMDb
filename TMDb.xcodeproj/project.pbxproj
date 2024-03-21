@@ -35,6 +35,7 @@
 		CE57627B2A419EBF0094A16D /* ExternalMediaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE57627A2A419EBF0094A16D /* ExternalMediaView.swift */; };
 		CE57627F2A41A9100094A16D /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE57627E2A41A9100094A16D /* CircularProgressView.swift */; };
 		CE594C6C2A541D2D0060D0EC /* NetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE594C6B2A541D2D0060D0EC /* NetworkModel.swift */; };
+		CE6A3BF32BABCABC00907B82 /* TvShowImageGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6A3BF22BABCABC00907B82 /* TvShowImageGalleryView.swift */; };
 		CE7BB4D82BAA8C7D0080FA7F /* ImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7BB4D72BAA8C7D0080FA7F /* ImageModel.swift */; };
 		CE7BB4DA2BAA981C0080FA7F /* MovieImageGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7BB4D92BAA981C0080FA7F /* MovieImageGalleryView.swift */; };
 		CE8DDDEE2A0B303400F94CEE /* PersonCreditResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8DDDED2A0B303400F94CEE /* PersonCreditResponse.swift */; };
@@ -141,6 +142,7 @@
 		CE57627A2A419EBF0094A16D /* ExternalMediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalMediaView.swift; sourceTree = "<group>"; };
 		CE57627E2A41A9100094A16D /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
 		CE594C6B2A541D2D0060D0EC /* NetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkModel.swift; sourceTree = "<group>"; };
+		CE6A3BF22BABCABC00907B82 /* TvShowImageGalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShowImageGalleryView.swift; sourceTree = "<group>"; };
 		CE7BB4D72BAA8C7D0080FA7F /* ImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageModel.swift; sourceTree = "<group>"; };
 		CE7BB4D92BAA981C0080FA7F /* MovieImageGalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieImageGalleryView.swift; sourceTree = "<group>"; };
 		CE8DDDED2A0B303400F94CEE /* PersonCreditResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonCreditResponse.swift; sourceTree = "<group>"; };
@@ -292,16 +294,17 @@
 		CE9E30E229305C07001BFB57 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				CEA218D32A874E5A00237BFB /* TvShowSeasonItemView.swift */,
-				CEA218D72A87556600237BFB /* TvShowSeasonView.swift */,
-				CEFAA5FA2AB2A61000B3FD37 /* TvShowEpisodeItemView.swift */,
-				CEFAA5FC2AB2B8E400B3FD37 /* TvShowEpisodeView.swift */,
-				CE9E30E329305C15001BFB57 /* MovieDetailView.swift */,
-				CEBD44502A08A6D200BBD9B6 /* CreditItemView.swift */,
 				CE57626E2A4146D40094A16D /* CreditDetailItemView.swift */,
 				CE5762702A4149D40094A16D /* CreditDetailView.swift */,
-				CE1F2C762A53FE0B00478B2A /* TvShowDetailView.swift */,
+				CEBD44502A08A6D200BBD9B6 /* CreditItemView.swift */,
+				CE9E30E329305C15001BFB57 /* MovieDetailView.swift */,
 				CE7BB4D92BAA981C0080FA7F /* MovieImageGalleryView.swift */,
+				CE1F2C762A53FE0B00478B2A /* TvShowDetailView.swift */,
+				CEFAA5FA2AB2A61000B3FD37 /* TvShowEpisodeItemView.swift */,
+				CEFAA5FC2AB2B8E400B3FD37 /* TvShowEpisodeView.swift */,
+				CEA218D32A874E5A00237BFB /* TvShowSeasonItemView.swift */,
+				CEA218D72A87556600237BFB /* TvShowSeasonView.swift */,
+				CE6A3BF22BABCABC00907B82 /* TvShowImageGalleryView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -768,6 +771,7 @@
 				CEFAA5F52AB29DFB00B3FD37 /* AnimatingCellHeight.swift in Sources */,
 				CEBD444F2A08A38C00BBD9B6 /* MovieCreditResponse.swift in Sources */,
 				CE182B04292F831E00B5C857 /* MovieDetailPresenter.swift in Sources */,
+				CE6A3BF32BABCABC00907B82 /* TvShowImageGalleryView.swift in Sources */,
 				CE1F2C6B2A53B4BC00478B2A /* PersonRepository.swift in Sources */,
 				CE182AFC292F7F7000B5C857 /* MovieDetailResponse.swift in Sources */,
 				CEF796B52A52C4680046858F /* TvShowView.swift in Sources */,

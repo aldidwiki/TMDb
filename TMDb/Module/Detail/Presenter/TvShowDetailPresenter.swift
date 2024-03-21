@@ -179,4 +179,13 @@ class TvShowDetailPresenter: ObservableObject {
             content()
         }
     }
+    
+    func toTvShowImageGallery<Content: View>(
+        tvShowId: Int,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        NavigationLink(destination: router.makeTvShowImageGalleryView(tvShowId: tvShowId)) {
+            content()
+        }
+    }
 }
