@@ -6,14 +6,13 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 struct PersonItemView: View {
     var personPopular: PersonPopularModel
     
     var body: some View {
         HStack {
-            profileImage
+            PosterView(posterType: .person(path: personPopular.profilePath))
             
             Text(personPopular.name)
                 .font(.headline)
@@ -21,24 +20,6 @@ struct PersonItemView: View {
             
             Spacer()
         }
-    }
-}
-
-extension PersonItemView {
-    var profileImage: some View {
-        WebImage(url: URL(string: API.profileImageBaseUrl + personPopular.profilePath))
-            .resizable()
-            .placeholder(content: {
-                Image(systemName: "person")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 50, height: 50)
-            })
-            .indicator(.activity)
-            .transition(.fade(duration: 0.5))
-            .scaledToFit()
-            .frame(width: 100, height: 100)
-            .cornerRadius(20)
     }
 }
 

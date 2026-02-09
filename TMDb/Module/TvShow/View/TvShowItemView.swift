@@ -6,14 +6,13 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 struct TvShowItemView: View {
     var tvModel: TvShowModel
     
     var body: some View {
         HStack(alignment: .center) {
-            tvPoster
+            PosterView(posterType: .tv(path: tvModel.posterPath))
             content
             
             Spacer()
@@ -23,22 +22,6 @@ struct TvShowItemView: View {
 }
 
 extension TvShowItemView {
-    var tvPoster: some View {
-        WebImage(url: URL(string: API.imageBaseUrl + tvModel.posterPath))
-            .resizable()
-            .placeholder(content: {
-                Image(systemName: "photo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 50, height: 50)
-            })
-            .indicator(.activity)
-            .transition(.fade(duration: 0.5))
-            .scaledToFit()
-            .frame(width: 100, height: 100)
-            .cornerRadius(20)
-    }
-    
     var content: some View {
         VStack(alignment: .leading) {
             Text(tvModel.title)
