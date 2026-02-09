@@ -44,10 +44,11 @@ struct SplashView: View {
                         .frame(width: 150, height: 150)
                 }
                 .preferredColorScheme(.dark)
+                .ignoresSafeArea()
             }
         }
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 withAnimation {
                     self.isActive = true
                 }
