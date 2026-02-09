@@ -113,6 +113,7 @@
 		CEFAA5F92AB2A2A000B3FD37 /* TvShowSeasonDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAA5F82AB2A2A000B3FD37 /* TvShowSeasonDetailModel.swift */; };
 		CEFAA5FB2AB2A61000B3FD37 /* TvShowEpisodeItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAA5FA2AB2A61000B3FD37 /* TvShowEpisodeItemView.swift */; };
 		CEFAA5FD2AB2B8E400B3FD37 /* TvShowEpisodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAA5FC2AB2B8E400B3FD37 /* TvShowEpisodeView.swift */; };
+		FA9252052F39C40A00419C21 /* PosterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9252042F39C40A00419C21 /* PosterView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -216,6 +217,7 @@
 		CEFAA5F82AB2A2A000B3FD37 /* TvShowSeasonDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShowSeasonDetailModel.swift; sourceTree = "<group>"; };
 		CEFAA5FA2AB2A61000B3FD37 /* TvShowEpisodeItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShowEpisodeItemView.swift; sourceTree = "<group>"; };
 		CEFAA5FC2AB2B8E400B3FD37 /* TvShowEpisodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShowEpisodeView.swift; sourceTree = "<group>"; };
+		FA9252042F39C40A00419C21 /* PosterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -371,6 +373,7 @@
 				CECFD2422AAEA95E0023D93A /* ExpandableTextView.swift */,
 				CEFAA5F42AB29DFA00B3FD37 /* AnimatingCellHeight.swift */,
 				CECFD2442AAEB5FF0023D93A /* CustomLabelStyle.swift */,
+				FA9252042F39C40A00419C21 /* PosterView.swift */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -805,6 +808,7 @@
 				CEC65504292F5537007B393A /* MovieResponse.swift in Sources */,
 				CEEA02152AE77A0400AEFE31 /* PersonView.swift in Sources */,
 				CEBD445D2A08E6A500BBD9B6 /* PersonPresenter.swift in Sources */,
+				FA9252052F39C40A00419C21 /* PosterView.swift in Sources */,
 				CEC654E5292F5381007B393A /* TMDbApp.swift in Sources */,
 				CE5762712A4149D40094A16D /* CreditDetailView.swift in Sources */,
 				CEF796B72A52C76A0046858F /* TvResponse.swift in Sources */,
