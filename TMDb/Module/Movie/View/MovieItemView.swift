@@ -6,14 +6,13 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 struct MovieItemView: View {
     var movie: MovieModel
     
     var body: some View {
         HStack(alignment: .center) {
-            moviePoster
+            PosterView(posterType: .movie(path: movie.posterPath))
             content
             
             Spacer()
@@ -24,22 +23,6 @@ struct MovieItemView: View {
 }
 
 extension MovieItemView {
-    var moviePoster: some View {
-        WebImage(url: URL(string: API.imageBaseUrl + movie.posterPath))
-            .resizable()
-            .placeholder(content: {
-                Image(systemName: "photo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 50, height: 50)
-            })
-            .indicator(.activity)
-            .transition(.fade(duration: 0.5))
-            .scaledToFit()
-            .frame(width: 100, height: 100)
-            .cornerRadius(20)
-    }
-    
     var content: some View {
         VStack(alignment: .leading) {
             Text(movie.title)
