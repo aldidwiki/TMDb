@@ -57,7 +57,7 @@ struct MovieView: View {
             }
             .navigationTitle("Popular Movies")
         }
-        .searchable(text: $presenter.movieQuery, placement: .automatic, prompt: "Search Movies")
+        .searchable(text: $presenter.movieQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search Movies")
     }
 }
 

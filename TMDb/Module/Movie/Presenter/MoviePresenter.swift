@@ -30,6 +30,7 @@ class MoviePresenter: ObservableObject {
         $movieQuery
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
             .removeDuplicates()
+            .prepend("")
             .sink { query in
                 if !query.isEmpty {
                     self.searchMovies(reset: true, query: query)
