@@ -11,7 +11,7 @@ struct TvShowItemView: View {
     var tvModel: TvShowModel
     
     var body: some View {
-        HStack(alignment: .center) {
+        HStack {
             PosterView(posterType: .tv(path: tvModel.posterPath))
             content
             

@@ -9,10 +9,10 @@ import Foundation
 import Combine
 
 protocol TvShowUseCase {
-    func getTvShows() -> AnyPublisher<[TvShowModel], Error>
+    func getTvShows(page: Int) -> AnyPublisher<[TvShowModel], Error>
     func getTvShow(tvShowId: Int) -> AnyPublisher<TvShowDetailModel, Error>
     func getTvShowSeasonDetail(tvShowId: Int, seasonNumber: Int) -> AnyPublisher<[TvShowSeasonDetailModel], Error>
-    func searchTvShows(query: String) -> AnyPublisher<[TvShowModel], Error>
+    func searchTvShows(query: String, page: Int) -> AnyPublisher<[TvShowModel], Error>
     func getTvShowBackdrop(tvId: Int) -> AnyPublisher<[ImageModel], Error>
 }
 
@@ -23,12 +23,12 @@ class TvShowInteractor: TvShowUseCase {
         self.repository = repository
     }
     
-    func getTvShows() -> AnyPublisher<[TvShowModel], Error> {
-        return repository.getTvShows()
+    func getTvShows(page: Int) -> AnyPublisher<[TvShowModel], Error> {
+        return repository.getTvShows(page: page)
     }
     
-    func searchTvShows(query: String) -> AnyPublisher<[TvShowModel], Error> {
-        return repository.searchTvShows(query: query)
+    func searchTvShows(query: String, page: Int) -> AnyPublisher<[TvShowModel], Error> {
+        return repository.searchTvShows(query: query, page: page)
     }
     
     func getTvShow(tvShowId: Int) -> AnyPublisher<TvShowDetailModel, Error> {

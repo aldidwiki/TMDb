@@ -9,7 +9,6 @@ import SwiftUI
 
 struct TvShowView: View {
     @ObservedObject var presenter: TvShowPresenter
-    @State var tvQuery: String = ""
     
     var body: some View {
         NavigationView {
@@ -20,28 +19,51 @@ struct TvShowView: View {
                     if presenter.tvShows.isEmpty {
                         EmptyView(emptyTitle: "No Tv Show Found")
                     } else {
-                        List(self.presenter.tvShows) { tvShow in
-                            presenter.toTvShowDetailView(for: tvShow.id) {
-                                TvShowItemView(tvModel: tvShow)
+                        ScrollView {
+                            LazyVStack {
+                                ForEach(self.presenter.tvShows) { tvShow in
+                                    presenter.toTvShowDetailView(for: tvShow.id) {
+                                        VStack {
+                                            TvShowItemView(tvModel: tvShow)
+                                            
+                                            if tvShow != self.presenter.tvShows.last {
+                                                NativeDivider()
+                                            }
+                                        }
+                                    }
+                                    .onAppear {
+                                        if tvShow == self.presenter.tvShows.last {
+                                            if self.presenter.tvShowQuery.isEmpty {
+                                                self.presenter.getTvShows()
+                                            } else {
+                                                self.presenter.searchTvShows(query: self.presenter.tvShowQuery)
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                                if self.presenter.isFetchingMore {
+                                    HStack {
+                                        Spacer()
+                                        ProgressView()
+                                        Spacer()
+                                    }
+                                }
                             }
+                            .scrollTargetLayout()
+                            .padding()
                         }
                     }
                 }
-            }.onAppear {
+            }
+            .onAppear {
                 if self.presenter.tvShows.count == 0 {
-                    self.presenter.getTvShows()
+                    self.presenter.getTvShows(reset: true)
                 }
             }
             .navigationTitle("Popular Tv Shows")
         }
-        .searchable(text: $tvQuery, placement: .automatic, prompt: "Search Tv Show")
-        .onChange(of: tvQuery) { _, query in
-            if !query.isEmpty {
-                presenter.searchTvShows(query: query)
-            } else {
-                presenter.getTvShows()
-            }
-        }
+        .searchable(text: $presenter.tvShowQuery, placement: .automatic, prompt: "Search Tv Show")
     }
 }
 
