@@ -35,17 +35,13 @@ struct MovieView: View {
                                             }
                                         }
                                     }
-                                    
-                                    if movie == presenter.movies.last && presenter.isFetchingMore {
-                                        let _ = print(movie)
-                                        let _ = print(presenter.movies.last)
-                                        let _ = print(presenter.isFetchingMore)
-                                    
-                                        HStack {
-                                            Spacer()
-                                            ProgressView()
-                                            Spacer()
-                                        }
+                                }
+                                
+                                if presenter.isFetchingMore {
+                                    HStack {
+                                        Spacer()
+                                        ProgressView()
+                                        Spacer()
                                     }
                                 }
                             }

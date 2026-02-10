@@ -31,6 +31,7 @@ class MoviePresenter: ObservableObject {
             currentPage = 1
             canLoadMore = true
             loadingState = true
+            movies.removeAll()
         }
         
         guard canLoadMore && !isFetchingMore else { return }
@@ -49,14 +50,22 @@ class MoviePresenter: ObservableObject {
                     self.isFetchingMore = false
                 }
             } receiveValue: { newMovies in
-                if newMovies.isEmpty {
+                let uniqueNewMovies = newMovies.filter { newMovie in
+                    !self.movies.contains(where: { $0.id == newMovie.id })
+                }
+                
+                if uniqueNewMovies.isEmpty {
                     self.canLoadMore = false
+                    
+                    if self.currentPage == 1 {
+                        self.loadingState = false
+                        self.movies = newMovies
+                    }
                 } else {
                     if reset {
                         self.movies = newMovies
                     } else {
-                        self.isFetchingMore = false
-                        self.movies.append(contentsOf: newMovies)
+                        self.movies.append(contentsOf: uniqueNewMovies)
                     }
                     
                     if self.currentPage == 1 {
@@ -73,6 +82,7 @@ class MoviePresenter: ObservableObject {
             currentPage = 1
             canLoadMore = true
             loadingState = true
+            movies.removeAll()
         }
         
         guard canLoadMore && !isFetchingMore else { return }
@@ -91,15 +101,23 @@ class MoviePresenter: ObservableObject {
                     self.isFetchingMore = false
                 }
             } receiveValue: { newMovies in
-                if newMovies.isEmpty {
+                let uniqueNewMovies = newMovies.filter { newMovie in
+                    !self.movies.contains(where: { $0.id == newMovie.id })
+                }
+                
+                if uniqueNewMovies.isEmpty {
                     self.canLoadMore = false
+                    
+                    if self.currentPage == 1 {
+                        self.movies = newMovies
+                        self.loadingState = false
+                    }
                 } else {
                     if self.currentPage == 1 {
                         self.movies = newMovies
                         self.loadingState = false
                     } else {
-                        self.isFetchingMore = false
-                        self.movies.append(contentsOf: newMovies)
+                        self.movies.append(contentsOf: uniqueNewMovies)
                     }
                     
                     self.currentPage += 1
