@@ -16,41 +16,94 @@ class MoviePresenter: ObservableObject {
     
     @Published var movies: [MovieModel] = []
     @Published var errorMessage = ""
-    @Published var loadingState = false
+    @Published var loadingState = true
+    
+    @Published var isFetchingMore = false
+    private var currentPage = 1
+    private var canLoadMore = true
     
     init(movieUseCase: MovieUseCase) {
         self.movieUseCase = movieUseCase
     }
     
-    func getMovies() {
-        loadingState = true
-        movieUseCase.getMovies()
+    func getMovies(reset: Bool = false) {
+        if reset {
+            currentPage = 1
+            canLoadMore = true
+            loadingState = true
+        }
+        
+        guard canLoadMore && !isFetchingMore else { return }
+        
+        if currentPage > 1 {
+            isFetchingMore = true
+        }
+        
+        movieUseCase.getMovies(page: currentPage)
             .receive(on: RunLoop.main)
             .sink { completion in
                 switch completion {
-                    case .failure:
-                        self.errorMessage = String(describing: completion)
-                    case .finished:
-                        self.loadingState = false
+                case .failure:
+                    self.errorMessage = String(describing: completion)
+                case .finished:
+                    self.isFetchingMore = false
                 }
-            } receiveValue: { movies in
-                self.movies = movies
+            } receiveValue: { newMovies in
+                if newMovies.isEmpty {
+                    self.canLoadMore = false
+                } else {
+                    if reset {
+                        self.movies = newMovies
+                    } else {
+                        self.isFetchingMore = false
+                        self.movies.append(contentsOf: newMovies)
+                    }
+                    
+                    if self.currentPage == 1 {
+                        self.loadingState = false
+                    }
+                    
+                    self.currentPage += 1
+                }
             }.store(in: &cancellable)
     }
     
-    func searchMovies(query: String) {
-        loadingState = true
-        movieUseCase.searchMovies(query: query)
+    func searchMovies(reset: Bool = false, query: String) {
+        if reset {
+            currentPage = 1
+            canLoadMore = true
+            loadingState = true
+        }
+        
+        guard canLoadMore && !isFetchingMore else { return }
+        
+        if currentPage > 1 {
+            isFetchingMore = true
+        }
+        
+        movieUseCase.searchMovies(query: query, page: currentPage)
             .receive(on: RunLoop.main)
             .sink { completion in
                 switch completion {
-                    case .failure:
-                        self.errorMessage = String(describing: completion)
-                    case .finished:
-                        self.loadingState = false
+                case .failure:
+                    self.errorMessage = String(describing: completion)
+                case .finished:
+                    self.isFetchingMore = false
                 }
-            } receiveValue: { movies in
-                self.movies = movies
+            } receiveValue: { newMovies in
+                if newMovies.isEmpty {
+                    self.canLoadMore = false
+                } else {
+                    if self.currentPage == 1 {
+                        self.movies = newMovies
+                        self.loadingState = false
+                    } else {
+                        self.isFetchingMore = false
+                        self.movies.append(contentsOf: newMovies)
+                    }
+                    
+                    self.currentPage += 1
+                }
             }.store(in: &cancellable)
     }
     
@@ -61,5 +114,6 @@ class MoviePresenter: ObservableObject {
         NavigationLink(destination: router.makeDetailView(for: movieId)) {
             content()
         }
+        .buttonStyle(.plain)
     }
 }

@@ -20,26 +20,54 @@ struct MovieView: View {
                     if presenter.movies.isEmpty {
                         EmptyView(emptyTitle: "No Movies Found")
                     } else {
-                        List(self.presenter.movies) { movie in
-                            self.presenter.linkBuilder(for: movie.id) {
-                                MovieItemView(movie: movie)
+                        ScrollView {
+                            LazyVStack {
+                                ForEach(self.presenter.movies) { movie in
+                                    self.presenter.linkBuilder(for: movie.id) {
+                                        MovieItemView(movie: movie)
+                                    }
+                                    .onAppear {
+                                        if movie == self.presenter.movies.last {
+                                            if self.movieQuery.isEmpty {
+                                                presenter.getMovies()
+                                            } else {
+                                                presenter.searchMovies(query: self.movieQuery)
+                                            }
+                                        }
+                                    }
+                                    
+                                    if movie == presenter.movies.last && presenter.isFetchingMore {
+                                        let _ = print(movie)
+                                        let _ = print(presenter.movies.last)
+                                        let _ = print(presenter.isFetchingMore)
+                                    
+                                        HStack {
+                                            Spacer()
+                                            ProgressView()
+                                            Spacer()
+                                        }
+                                    }
+                                }
                             }
+                            .scrollTargetLayout()
+                            .padding()
                         }
                     }
                 }
-            }.onAppear {
+            }
+            .onAppear {
                 if self.presenter.movies.count == 0 {
-                    self.presenter.getMovies()
+                    self.presenter.getMovies(reset: true)
                 }
             }
             .navigationTitle("Popular Movies")
         }
-        .searchable(text: $movieQuery, placement: .automatic, prompt: "Search Movie")
+        .searchable(text: $movieQuery, placement: .automatic, prompt: "Search Movies")
         .onChange(of: movieQuery) { _, query in
             if !query.isEmpty {
-                presenter.searchMovies(query: query)
+                presenter.searchMovies(reset: true, query: query)
             } else {
-                presenter.getMovies()
+                presenter.getMovies(reset: true)
             }
         }
     }

@@ -9,9 +9,9 @@ import Foundation
 import Combine
 
 protocol MovieRepositoryProtocol {
-    func getMovies() -> AnyPublisher<[MovieModel], Error>
+    func getMovies(page: Int) -> AnyPublisher<[MovieModel], Error>
     func getMovie(movieId: Int) -> AnyPublisher<MovieDetailModel, Error>
-    func searchMovie(query: String) -> AnyPublisher<[MovieModel], Error>
+    func searchMovie(query: String, page: Int) -> AnyPublisher<[MovieModel], Error>
     func getMovieBackdrops(movieId: Int) -> AnyPublisher<[ImageModel], Error>
 }
 
@@ -30,8 +30,8 @@ final class MovieRepository: NSObject {
 }
 
 extension MovieRepository: MovieRepositoryProtocol {
-    func getMovies() -> AnyPublisher<[MovieModel], Error> {
-        return self.movieDataSource.getMovies()
+    func getMovies(page: Int) -> AnyPublisher<[MovieModel], Error> {
+        return self.movieDataSource.getMovies(page: page)
             .map {
                 Mapper.mapMovieResponseModelsToDomains(input: $0)
             }.eraseToAnyPublisher()
@@ -44,8 +44,8 @@ extension MovieRepository: MovieRepositoryProtocol {
             }.eraseToAnyPublisher()
     }
     
-    func searchMovie(query: String) -> AnyPublisher<[MovieModel], Error> {
-        return self.movieDataSource.searchMovie(query: query)
+    func searchMovie(query: String, page: Int) -> AnyPublisher<[MovieModel], Error> {
+        return self.movieDataSource.searchMovie(query: query, page: page)
             .map {
                 Mapper.mapMovieResponseModelsToDomains(input: $0)
             }.eraseToAnyPublisher()

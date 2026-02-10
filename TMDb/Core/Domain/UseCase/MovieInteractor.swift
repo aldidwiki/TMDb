@@ -9,8 +9,8 @@ import Foundation
 import Combine
 
 protocol MovieUseCase {
-    func getMovies() -> AnyPublisher<[MovieModel], Error>
-    func searchMovies(query: String) -> AnyPublisher<[MovieModel], Error>
+    func getMovies(page: Int) -> AnyPublisher<[MovieModel], Error>
+    func searchMovies(query: String, page: Int) -> AnyPublisher<[MovieModel], Error>
 }
 
 class MovieInteractor: MovieUseCase {
@@ -20,11 +20,11 @@ class MovieInteractor: MovieUseCase {
         self.repository = repository
     }
     
-    func getMovies() -> AnyPublisher<[MovieModel], Error> {
-        return repository.getMovies()
+    func getMovies(page: Int) -> AnyPublisher<[MovieModel], Error> {
+        return repository.getMovies(page: page)
     }
     
-    func searchMovies(query: String) -> AnyPublisher<[MovieModel], Error> {
-        return repository.searchMovie(query: query)
+    func searchMovies(query: String, page: Int) -> AnyPublisher<[MovieModel], Error> {
+        return repository.searchMovie(query: query, page: page)
     }
 }

@@ -10,9 +10,9 @@ import Alamofire
 import Combine
 
 protocol MovieDataSourceProtocol {
-    func getMovies() -> AnyPublisher<[MovieResponseModel], Error>
+    func getMovies(page: Int) -> AnyPublisher<[MovieResponseModel], Error>
     func getMovie(movieId: Int) -> AnyPublisher<MovieDetailResponse, Error>
-    func searchMovie(query: String) -> AnyPublisher<[MovieResponseModel], Error>
+    func searchMovie(query: String, page: Int) -> AnyPublisher<[MovieResponseModel], Error>
     func getMovieBackdrops(movieId: Int) -> AnyPublisher<ImageResponse, Error>
 }
 
@@ -23,10 +23,14 @@ final class MovieDataSource: NSObject {
 }
 
 extension MovieDataSource: MovieDataSourceProtocol {
-    func getMovies() -> AnyPublisher<[MovieResponseModel], Error> {
+    func getMovies(page: Int) -> AnyPublisher<[MovieResponseModel], Error> {
+        let param: Parameters = [
+            "page" : page
+        ]
+        
         return Future<[MovieResponseModel], Error> { completion in
             if let url = URL(string: "\(API.baseUrl)movie/popular") {
-                AF.request(url, headers: API.headers)
+                AF.request(url, parameters: param, headers: API.headers)
                     .validate()
                     .responseDecodable(of: MovieResponse.self) { response in
                         switch response.result {
@@ -61,9 +65,10 @@ extension MovieDataSource: MovieDataSourceProtocol {
         }.eraseToAnyPublisher()
     }
     
-    func searchMovie(query: String) -> AnyPublisher<[MovieResponseModel], Error> {
+    func searchMovie(query: String, page: Int) -> AnyPublisher<[MovieResponseModel], Error> {
         let param: Parameters = [
-            "query": query
+            "query": query,
+            "page": page
         ]
         
         return Future<[MovieResponseModel], Error> { completion in
