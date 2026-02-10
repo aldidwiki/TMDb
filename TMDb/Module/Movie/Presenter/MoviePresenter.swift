@@ -22,8 +22,22 @@ class MoviePresenter: ObservableObject {
     private var currentPage = 1
     private var canLoadMore = true
     
+    @Published var movieQuery: String = ""
+    
     init(movieUseCase: MovieUseCase) {
         self.movieUseCase = movieUseCase
+        
+        $movieQuery
+            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
+            .removeDuplicates()
+            .sink { query in
+                if !query.isEmpty {
+                    self.searchMovies(reset: true, query: query)
+                } else {
+                    self.getMovies(reset: true)
+                }
+            }
+            .store(in: &cancellable)
     }
     
     func getMovies(reset: Bool = false) {

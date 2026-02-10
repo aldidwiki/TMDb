@@ -9,7 +9,6 @@ import SwiftUI
 
 struct MovieView: View {
     @ObservedObject var presenter: MoviePresenter
-    @State var movieQuery: String = ""
     
     var body: some View {
         NavigationStack {
@@ -28,10 +27,10 @@ struct MovieView: View {
                                     }
                                     .onAppear {
                                         if movie == self.presenter.movies.last {
-                                            if self.movieQuery.isEmpty {
+                                            if self.presenter.movieQuery.isEmpty {
                                                 presenter.getMovies()
                                             } else {
-                                                presenter.searchMovies(query: self.movieQuery)
+                                                presenter.searchMovies(query: self.presenter.movieQuery)
                                             }
                                         }
                                     }
@@ -58,14 +57,7 @@ struct MovieView: View {
             }
             .navigationTitle("Popular Movies")
         }
-        .searchable(text: $movieQuery, placement: .automatic, prompt: "Search Movies")
-        .onChange(of: movieQuery) { _, query in
-            if !query.isEmpty {
-                presenter.searchMovies(reset: true, query: query)
-            } else {
-                presenter.getMovies(reset: true)
-            }
-        }
+        .searchable(text: $presenter.movieQuery, placement: .automatic, prompt: "Search Movies")
     }
 }
 
