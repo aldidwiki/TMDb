@@ -23,7 +23,13 @@ struct MovieView: View {
                             LazyVStack {
                                 ForEach(self.presenter.movies) { movie in
                                     self.presenter.linkBuilder(for: movie.id) {
-                                        MovieItemView(movie: movie)
+                                        VStack {
+                                            MovieItemView(movie: movie)
+                                            
+                                            if movie != self.presenter.movies.last {
+                                                NativeDivider()
+                                            }
+                                        }
                                     }
                                     .onAppear {
                                         if movie == self.presenter.movies.last {

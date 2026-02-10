@@ -78,7 +78,7 @@ class MoviePresenter: ObservableObject {
                     }
                 } else {
                     if reset {
-                        self.movies = newMovies
+                        self.movies = uniqueNewMovies
                     } else {
                         self.movies.append(contentsOf: uniqueNewMovies)
                     }
@@ -129,7 +129,7 @@ class MoviePresenter: ObservableObject {
                     }
                 } else {
                     if self.currentPage == 1 {
-                        self.movies = newMovies
+                        self.movies = uniqueNewMovies
                         self.loadingState = false
                     } else {
                         self.movies.append(contentsOf: uniqueNewMovies)
