@@ -39,6 +39,10 @@ class PersonPresenter: ObservableObject {
     @Published var personPopular: [PersonPopularModel] = []
     @Published var personImages: [PersonImageModel] = []
     
+    @Published var isFetchingMore = false
+    private var canLoadMore = true
+    private var currentPage = 1
+    
     init(personUseCase: PersonUseCase) {
         self.personUseCase = personUseCase
     }
@@ -49,29 +53,64 @@ class PersonPresenter: ObservableObject {
             .receive(on: RunLoop.main)
             .sink { completion in
                 switch completion {
-                    case .failure:
-                        self.errorMessage = String(describing: completion)
-                    case .finished:
-                        self.loadingState = false
+                case .failure:
+                    self.errorMessage = String(describing: completion)
+                case .finished:
+                    self.loadingState = false
                 }
             } receiveValue: { person in
                 self.person = person
             }.store(in: &cancellable)
     }
     
-    func getPopularPerson() {
-        self.loadingState = true
-        personUseCase.getPopularPerson()
+    func getPopularPerson(reset: Bool = false) {
+        if reset {
+            currentPage = 1
+            loadingState = true
+            canLoadMore = true
+            personPopular.removeAll()
+        }
+        
+        guard canLoadMore && !isFetchingMore else { return }
+        
+        if currentPage > 1 {
+            isFetchingMore = true
+        }
+        
+        personUseCase.getPopularPerson(page: currentPage)
             .receive(on: RunLoop.main)
             .sink { completion in
                 switch completion {
-                    case .failure:
-                        self.errorMessage = String(describing: completion)
-                    case .finished:
-                        self.loadingState = false
+                case .failure:
+                    self.errorMessage = String(describing: completion)
+                case .finished:
+                    self.isFetchingMore = false
                 }
-            } receiveValue: { popularPerson in
-                self.personPopular = popularPerson
+            } receiveValue: { newPersons in
+                let uniquePersons = newPersons.filter { newPerson in
+                    !self.personPopular.contains { $0.id == newPerson.id }
+                }
+                
+                if uniquePersons.isEmpty {
+                    self.canLoadMore = false
+                    
+                    if self.currentPage == 1 {
+                        self.loadingState = false
+                        self.personPopular = newPersons
+                    }
+                } else {
+                    if reset {
+                        self.personPopular = uniquePersons
+                    } else {
+                        self.personPopular.append(contentsOf: uniquePersons)
+                    }
+                    
+                    if self.currentPage == 1 {
+                        self.loadingState = false
+                    }
+                    
+                    self.currentPage += 1
+                }
             }.store(in: &cancellable)
     }
     
@@ -81,10 +120,10 @@ class PersonPresenter: ObservableObject {
             .receive(on: RunLoop.main)
             .sink { completion in
                 switch completion {
-                    case .failure:
-                        self.errorMessage = String(describing: completion)
-                    case .finished:
-                        self.loadingState = false
+                case .failure:
+                    self.errorMessage = String(describing: completion)
+                case .finished:
+                    self.loadingState = false
                 }
             } receiveValue: { personImageResult in
                 self.personImages = personImageResult
@@ -124,6 +163,7 @@ class PersonPresenter: ObservableObject {
         NavigationLink(destination: personRouter.makePersonDetailView(for: personId)) {
             content()
         }
+        .buttonStyle(.plain)
     }
     
     func toPersonImageView<Content: View>(

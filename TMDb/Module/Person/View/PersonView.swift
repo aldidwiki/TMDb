@@ -19,16 +19,41 @@ struct PersonView: View {
                     if presenter.personPopular.isEmpty {
                         EmptyView(emptyTitle: "No Person Found")
                     } else {
-                        List(presenter.personPopular) { personPopular in
-                            presenter.toPersonDetailView(personId: personPopular.id) {
-                                PersonItemView(personPopular: personPopular)
+                        ScrollView {
+                            LazyVStack {
+                                ForEach(self.presenter.personPopular) { personPopular in
+                                    self.presenter.toPersonDetailView(personId: personPopular.id) {
+                                        VStack {
+                                            PersonItemView(personPopular: personPopular)
+                                            
+                                            if personPopular != self.presenter.personPopular.last {
+                                                NativeDivider()
+                                            }
+                                        }
+                                    }
+                                    .onAppear {
+                                        if personPopular == self.presenter.personPopular.last {
+                                            self.presenter.getPopularPerson()
+                                        }
+                                    }
+                                }
+                                
+                                if presenter.isFetchingMore {
+                                    HStack {
+                                        Spacer()
+                                        ProgressView()
+                                        Spacer()
+                                    }
+                                }
                             }
+                            .padding()
                         }
                     }
                 }
-            }.onAppear {
+            }
+            .onAppear {
                 if presenter.personPopular.count == 0 {
-                    presenter.getPopularPerson()
+                    presenter.getPopularPerson(reset: true)
                 }
             }
             .navigationTitle("Popular Person")

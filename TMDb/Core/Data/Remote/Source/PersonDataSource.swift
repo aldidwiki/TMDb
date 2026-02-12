@@ -11,7 +11,7 @@ import Combine
 
 protocol PersonDataSourceProtocol {
     func getPerson(personId: Int) -> AnyPublisher<PersonResponse, Error>
-    func getPopularPerson() -> AnyPublisher<PersonPopularResponse, Error>
+    func getPopularPerson(page: Int) -> AnyPublisher<PersonPopularResponse, Error>
     func getPersonImage(personId: Int) -> AnyPublisher<ImageResponse, Error>
 }
 
@@ -43,10 +43,14 @@ extension PersonDataSource: PersonDataSourceProtocol {
         }.eraseToAnyPublisher()
     }
     
-    func getPopularPerson() -> AnyPublisher<PersonPopularResponse, Error> {
+    func getPopularPerson(page: Int) -> AnyPublisher<PersonPopularResponse, Error> {
         return Future<PersonPopularResponse, Error> { completion in
             if let url = URL(string: "\(API.baseUrl)person/popular") {
-                AF.request(url, headers: API.headers)
+                let param: Parameters = [
+                    "page": page
+                ]
+                
+                AF.request(url, parameters: param, headers: API.headers)
                     .validate()
                     .responseDecodable(of: PersonPopularResponse.self) { response in
                         switch response.result {
