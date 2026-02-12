@@ -34,6 +34,12 @@ final class Injection: NSObject {
         return TvShowRepository.sharedInstance(tvShowDataSource)
     }
     
+    private func provideSearchRepository() -> SearchRepositoryProtocol {
+        let searchDataSource = SearchDataSource.sharedInstance
+        
+        return SearchRepository.sharedInstance(searchDataSource)
+    }
+    
     func provideMovieUseCase() -> MovieUseCase {
         let repo = provideMovieRepository()
         return MovieInteractor(repository: repo)
@@ -57,5 +63,10 @@ final class Injection: NSObject {
     func provideTvShowUseCase() -> TvShowUseCase {
         let repo = provideTvShowRepository()
         return TvShowInteractor(repository: repo)
+    }
+    
+    func provideSearchUseCase() -> SearchUseCase {
+        let repo = provideSearchRepository()
+        return SearchInteractor(searchRepository: repo)
     }
 }

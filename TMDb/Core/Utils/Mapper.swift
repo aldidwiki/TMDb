@@ -257,6 +257,21 @@ final class Mapper {
         }
     }
     
+    static func mapSearchResponseModelToDomains(
+        input responseModel: [SearchResponseModel]
+    ) -> [SearchModel] {
+        return responseModel.map { model in
+            SearchModel(
+                id: model.id,
+                name: model.title ?? model.name ?? "",
+                releaseDate: model.releaseDate ?? model.firstAirDate ?? "",
+                imagePath: model.posterPath ?? model.profilePath ?? "",
+                voteAverage: model.voteAverage ?? 0.0,
+                mediaType: model.mediaType ?? ""
+            )
+        }
+    }
+    
     private static func mapMovieCreditResponseModelToDomains(
         input creditResponse: MovieCreditResponse
     ) -> [CreditModel] {
