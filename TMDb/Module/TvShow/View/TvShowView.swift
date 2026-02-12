@@ -33,11 +33,7 @@ struct TvShowView: View {
                                     }
                                     .onAppear {
                                         if tvShow == self.presenter.tvShows.last {
-                                            if self.presenter.tvShowQuery.isEmpty {
-                                                self.presenter.getTvShows()
-                                            } else {
-                                                self.presenter.searchTvShows(query: self.presenter.tvShowQuery)
-                                            }
+                                            self.presenter.getTvShows()
                                         }
                                     }
                                 }
@@ -50,7 +46,6 @@ struct TvShowView: View {
                                     }
                                 }
                             }
-                            .scrollTargetLayout()
                             .padding()
                         }
                     }
@@ -63,7 +58,6 @@ struct TvShowView: View {
             }
             .navigationTitle("Popular Tv Shows")
         }
-        .searchable(text: $presenter.tvShowQuery, placement: .automatic, prompt: "Search Tv Show")
     }
 }
 

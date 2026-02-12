@@ -13,7 +13,6 @@ protocol TvShowDataSourceProtocol {
     func getTvShows(page: Int) -> AnyPublisher<[TvResponseModel], Error>
     func getTvShow(tvShowId: Int) -> AnyPublisher<TvShowDetailResponse, Error>
     func getTvShowSeasonDetail(tvShowId: Int, seasonNumber: Int) -> AnyPublisher<TvShowSeasonDetailResponse, Error>
-    func searchTvShow(query: String, page: Int) -> AnyPublisher<[TvResponseModel], Error>
     func getTvShowBackdrops(tvId: Int) -> AnyPublisher<ImageResponse, Error>
 }
 
@@ -31,28 +30,6 @@ extension TvShowDataSource: TvShowDataSourceProtocol {
         
         return Future<[TvResponseModel], Error> { completion in
             if let url = URL(string: "\(API.baseUrl)tv/popular") {
-                AF.request(url, parameters: param, headers: API.headers)
-                    .validate()
-                    .responseDecodable(of: TvResponse.self) { response in
-                        switch response.result {
-                            case .success(let value):
-                                completion(.success(value.tvShows))
-                            case .failure:
-                                completion(.failure(URLError.invalidResponse))
-                        }
-                    }
-            }
-        }.eraseToAnyPublisher()
-    }
-    
-    func searchTvShow(query: String, page: Int) -> AnyPublisher<[TvResponseModel], Error> {
-        let param: Parameters = [
-            "query": query,
-            "page": page
-        ]
-        
-        return Future<[TvResponseModel], Error> { completion in
-            if let url = URL(string: "\(API.baseUrl)/search/tv") {
                 AF.request(url, parameters: param, headers: API.headers)
                     .validate()
                     .responseDecodable(of: TvResponse.self) { response in

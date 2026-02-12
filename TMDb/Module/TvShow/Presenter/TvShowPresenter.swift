@@ -23,23 +23,8 @@ class TvShowPresenter: ObservableObject {
     private var canLoadMore = true
     private var currentPage = 1
     
-    @Published var tvShowQuery: String = ""
-    
     init(tvShowUseCase: TvShowUseCase) {
         self.tvShowUseCase = tvShowUseCase
-        
-        $tvShowQuery
-            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
-            .removeDuplicates()
-            .prepend("")
-            .sink { query in
-                if !query.isEmpty {
-                    self.searchTvShows(query: query, reset: true)
-                } else {
-                    self.getTvShows(reset: true)
-                }
-            }
-            .store(in: &cancellable)
     }
     
     func getTvShows(reset: Bool = false) {
@@ -91,57 +76,6 @@ class TvShowPresenter: ObservableObject {
                     self.currentPage += 1
                 } 
             }.store(in: &cancellable)
-    }
-    
-    func searchTvShows(query: String, reset: Bool = false) {
-        if reset {
-            currentPage = 1
-            loadingState = true
-            canLoadMore = true
-        }
-        
-        guard canLoadMore && !isFetchingMore else { return }
-        
-        if currentPage > 1 {
-            isFetchingMore = true
-        }
-        
-        tvShowUseCase.searchTvShows(query: query, page: currentPage)
-            .receive(on: RunLoop.main)
-            .sink { completion in
-                switch completion {
-                case .failure:
-                    self.errorMessage = String(describing: completion)
-                case .finished:
-                    self.isFetchingMore = false
-                }
-            } receiveValue: { newTvShows in
-                let uniqueTvShows = newTvShows.filter({ newMovie in
-                    !self.tvShows.contains { $0.id == newMovie.id }
-                })
-                
-                if uniqueTvShows.isEmpty {
-                    self.canLoadMore = false
-                    
-                    if self.currentPage == 1 {
-                        self.loadingState = false
-                        self.tvShows = newTvShows
-                    }
-                } else {
-                    if reset {
-                        self.tvShows = uniqueTvShows
-                    } else {
-                        self.tvShows.append(contentsOf: uniqueTvShows)
-                    }
-                    
-                    if self.currentPage == 1 {
-                        self.loadingState = false
-                    }
-                    
-                    self.currentPage += 1
-                }
-            }.store(in: &cancellable)
-        
     }
     
     func toTvShowDetailView<Content: View>(
