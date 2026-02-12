@@ -11,7 +11,6 @@ import Combine
 protocol MovieRepositoryProtocol {
     func getMovies(page: Int) -> AnyPublisher<[MovieModel], Error>
     func getMovie(movieId: Int) -> AnyPublisher<MovieDetailModel, Error>
-    func searchMovie(query: String, page: Int) -> AnyPublisher<[MovieModel], Error>
     func getMovieBackdrops(movieId: Int) -> AnyPublisher<[ImageModel], Error>
 }
 
@@ -41,13 +40,6 @@ extension MovieRepository: MovieRepositoryProtocol {
         return self.movieDataSource.getMovie(movieId: movieId)
             .map {
                 Mapper.mapMovieDetailResponseToDomain(input: $0)
-            }.eraseToAnyPublisher()
-    }
-    
-    func searchMovie(query: String, page: Int) -> AnyPublisher<[MovieModel], Error> {
-        return self.movieDataSource.searchMovie(query: query, page: page)
-            .map {
-                Mapper.mapMovieResponseModelsToDomains(input: $0)
             }.eraseToAnyPublisher()
     }
     

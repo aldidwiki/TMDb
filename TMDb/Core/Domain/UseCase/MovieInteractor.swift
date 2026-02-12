@@ -10,7 +10,6 @@ import Combine
 
 protocol MovieUseCase {
     func getMovies(page: Int) -> AnyPublisher<[MovieModel], Error>
-    func searchMovies(query: String, page: Int) -> AnyPublisher<[MovieModel], Error>
 }
 
 class MovieInteractor: MovieUseCase {
@@ -22,9 +21,5 @@ class MovieInteractor: MovieUseCase {
     
     func getMovies(page: Int) -> AnyPublisher<[MovieModel], Error> {
         return repository.getMovies(page: page)
-    }
-    
-    func searchMovies(query: String, page: Int) -> AnyPublisher<[MovieModel], Error> {
-        return repository.searchMovie(query: query, page: page)
     }
 }

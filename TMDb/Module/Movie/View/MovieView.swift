@@ -33,11 +33,7 @@ struct MovieView: View {
                                     }
                                     .onAppear {
                                         if movie == self.presenter.movies.last {
-                                            if self.presenter.movieQuery.isEmpty {
-                                                presenter.getMovies()
-                                            } else {
-                                                presenter.searchMovies(query: self.presenter.movieQuery)
-                                            }
+                                            presenter.getMovies()
                                         }
                                     }
                                 }
@@ -50,7 +46,6 @@ struct MovieView: View {
                                     }
                                 }
                             }
-                            .scrollTargetLayout()
                             .padding()
                         }
                     }
@@ -63,7 +58,6 @@ struct MovieView: View {
             }
             .navigationTitle("Popular Movies")
         }
-        .searchable(text: $presenter.movieQuery, placement: .automatic, prompt: "Search Movies")
     }
 }
 

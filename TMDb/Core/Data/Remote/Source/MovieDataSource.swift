@@ -12,7 +12,6 @@ import Combine
 protocol MovieDataSourceProtocol {
     func getMovies(page: Int) -> AnyPublisher<[MovieResponseModel], Error>
     func getMovie(movieId: Int) -> AnyPublisher<MovieDetailResponse, Error>
-    func searchMovie(query: String, page: Int) -> AnyPublisher<[MovieResponseModel], Error>
     func getMovieBackdrops(movieId: Int) -> AnyPublisher<ImageResponse, Error>
 }
 
@@ -58,28 +57,6 @@ extension MovieDataSource: MovieDataSourceProtocol {
                             case .success(let value):
                                 completion(.success(value))
                             case.failure:
-                                completion(.failure(URLError.invalidResponse))
-                        }
-                    }
-            }
-        }.eraseToAnyPublisher()
-    }
-    
-    func searchMovie(query: String, page: Int) -> AnyPublisher<[MovieResponseModel], Error> {
-        let param: Parameters = [
-            "query": query,
-            "page": page
-        ]
-        
-        return Future<[MovieResponseModel], Error> { completion in
-            if let url = URL(string: "\(API.baseUrl)search/movie") {
-                AF.request(url, parameters: param, headers: API.headers)
-                    .validate()
-                    .responseDecodable(of: MovieResponse.self) { response in
-                        switch response.result {
-                            case .success(let value):
-                                completion(.success(value.movies))
-                            case . failure:
                                 completion(.failure(URLError.invalidResponse))
                         }
                     }
