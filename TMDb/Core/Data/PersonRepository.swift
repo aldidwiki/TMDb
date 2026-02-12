@@ -11,7 +11,6 @@ import Combine
 protocol PersonRepositoryProtocol {
     func getPerson(personId: Int) -> AnyPublisher<PersonModel, Error>
     func getPopularPerson() -> AnyPublisher<[PersonPopularModel], Error>
-    func searchPerson(query: String) -> AnyPublisher<[PersonPopularModel], Error>
     func getPersonImages(personId: Int) -> AnyPublisher<[PersonImageModel], Error>
 }
 
@@ -39,13 +38,6 @@ extension PersonRepository: PersonRepositoryProtocol {
     
     func getPopularPerson() -> AnyPublisher<[PersonPopularModel], Error> {
         return self.personDataSource.getPopularPerson()
-            .map {
-                Mapper.mapPersonPopularResponseToDomains(input: $0)
-            }.eraseToAnyPublisher()
-    }
-    
-    func searchPerson(query: String) -> AnyPublisher<[PersonPopularModel], Error> {
-        return self.personDataSource.searchPerson(query: query)
             .map {
                 Mapper.mapPersonPopularResponseToDomains(input: $0)
             }.eraseToAnyPublisher()

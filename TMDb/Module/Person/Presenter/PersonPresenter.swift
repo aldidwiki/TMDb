@@ -75,22 +75,6 @@ class PersonPresenter: ObservableObject {
             }.store(in: &cancellable)
     }
     
-    func searchPerson(query: String) {
-        self.loadingState = true
-        personUseCase.searchPerson(query: query)
-            .receive(on: RunLoop.main)
-            .sink { completion in
-                switch completion {
-                    case .failure:
-                        self.errorMessage = String(describing: completion)
-                    case .finished:
-                        self.loadingState = false
-                }
-            } receiveValue: { personResult in
-                self.personPopular = personResult
-            }.store(in: &cancellable)
-    }
-    
     func getPersonImage(personId: Int) {
         self.loadingState = true
         personUseCase.getPersonImage(personId: personId)

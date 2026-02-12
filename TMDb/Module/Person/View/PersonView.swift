@@ -9,7 +9,6 @@ import SwiftUI
 
 struct PersonView: View {
     @ObservedObject var presenter: PersonPresenter
-    @State var personQuery = ""
     
     var body: some View {
         NavigationStack {
@@ -33,14 +32,6 @@ struct PersonView: View {
                 }
             }
             .navigationTitle("Popular Person")
-        }
-        .searchable(text: $personQuery, placement: .automatic, prompt: "Search Person")
-        .onChange(of: personQuery) { _, query in
-            if !query.isEmpty {
-                presenter.searchPerson(query: query)
-            } else {
-                presenter.getPopularPerson()
-            }
         }
     }
 }
