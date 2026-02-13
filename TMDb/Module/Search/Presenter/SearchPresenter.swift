@@ -7,9 +7,11 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 class SearchPresenter: ObservableObject {
     private var cancellable: Set<AnyCancellable> = []
+    private let router = SearchRouter()
     
     private let searchUseCase: SearchUseCase
     
@@ -84,5 +86,27 @@ class SearchPresenter: ObservableObject {
                 }
             }
             .store(in: &cancellable)
+    }
+    
+    func linkBuilder<Content: View>(
+        for contentId: Int,
+        mediaType: String,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        NavigationLink(destination: {
+            switch mediaType {
+            case Constants.movieResponseType:
+                router.goToMovieDetailView(for: contentId)
+            case Constants.tvShowResponseType:
+                router.goToTvDetailView(for: contentId)
+            case Constants.personResponseType:
+                router.goToPersonDetailView(for: contentId)
+            default:
+                EmptyView(emptyTitle: "")
+            }
+        }, label: {
+            content()
+        })
+        .buttonStyle(.plain)
     }
 }

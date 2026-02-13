@@ -23,7 +23,12 @@ struct SearchView: View {
                             LazyVStack {
                                 ForEach(presenter.searchResults) { searchResult in
                                     VStack {
-                                        searchResult.destinationView()
+                                        self.presenter.linkBuilder(
+                                            for: searchResult.id,
+                                            mediaType: searchResult.mediaType
+                                        ) {
+                                            searchResult.destinationView()
+                                        }
                                         
                                         if searchResult != self.presenter.searchResults.last {
                                             NativeDivider()
