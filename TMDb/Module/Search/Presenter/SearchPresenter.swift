@@ -15,7 +15,7 @@ class SearchPresenter: ObservableObject {
     
     @Published var searchResults: [SearchModel] = []
     @Published var errorMessage = ""
-    @Published var loadingState = true
+    @Published var loadingState = false
     
     @Published var isFetchingMore = false
     private var currentPage = 1
@@ -27,15 +27,11 @@ class SearchPresenter: ObservableObject {
         self.searchUseCase = searchUseCase
         
         $searchQuery
-            .receive(on: RunLoop.main)
+            .dropFirst()
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
             .removeDuplicates()
             .sink { query in
-                if query.isEmpty {
-                    self.search(query: query, reset: true)
-                } else {
-                    self.search(query: query)
-                }
+                self.search(query: query, reset: true)
             }
             .store(in: &cancellable)
     }
@@ -44,12 +40,16 @@ class SearchPresenter: ObservableObject {
         if reset {
             currentPage = 1
             canLoadMore = true
-            isFetchingMore = true
+            loadingState = true
             searchResults.removeAll()
         }
         
+        if currentPage > 1 {
+            isFetchingMore = true
+        }
+        
         searchUseCase.search(query: query, page: currentPage)
-            .receive(on: RunLoop.main)
+            .receive(on: DispatchQueue.main)
             .sink { completion in
                 switch completion {
                 case .failure:

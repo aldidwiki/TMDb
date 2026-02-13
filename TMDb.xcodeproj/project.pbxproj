@@ -113,6 +113,8 @@
 		CEFAA5F92AB2A2A000B3FD37 /* TvShowSeasonDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAA5F82AB2A2A000B3FD37 /* TvShowSeasonDetailModel.swift */; };
 		CEFAA5FB2AB2A61000B3FD37 /* TvShowEpisodeItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAA5FA2AB2A61000B3FD37 /* TvShowEpisodeItemView.swift */; };
 		CEFAA5FD2AB2B8E400B3FD37 /* TvShowEpisodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFAA5FC2AB2B8E400B3FD37 /* TvShowEpisodeView.swift */; };
+		FA273C352F3F0B160017D24A /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA273C342F3F0B160017D24A /* SearchView.swift */; };
+		FA273C3A2F3F1DE00017D24A /* AlamofireNetworkActivityLogger in Frameworks */ = {isa = PBXBuildFile; productRef = FA273C392F3F1DE00017D24A /* AlamofireNetworkActivityLogger */; };
 		FA7A1AB22F3DBDFA00019A36 /* SearchResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7A1AB12F3DBDFA00019A36 /* SearchResponse.swift */; };
 		FA7A1AB42F3DC32600019A36 /* SearchDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7A1AB32F3DC32600019A36 /* SearchDataSource.swift */; };
 		FA7A1AB62F3DC7E800019A36 /* SearchRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7A1AB52F3DC7E800019A36 /* SearchRepository.swift */; };
@@ -225,6 +227,7 @@
 		CEFAA5F82AB2A2A000B3FD37 /* TvShowSeasonDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShowSeasonDetailModel.swift; sourceTree = "<group>"; };
 		CEFAA5FA2AB2A61000B3FD37 /* TvShowEpisodeItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShowEpisodeItemView.swift; sourceTree = "<group>"; };
 		CEFAA5FC2AB2B8E400B3FD37 /* TvShowEpisodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TvShowEpisodeView.swift; sourceTree = "<group>"; };
+		FA273C342F3F0B160017D24A /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		FA7A1AB12F3DBDFA00019A36 /* SearchResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResponse.swift; sourceTree = "<group>"; };
 		FA7A1AB32F3DC32600019A36 /* SearchDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDataSource.swift; sourceTree = "<group>"; };
 		FA7A1AB52F3DC7E800019A36 /* SearchRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRepository.swift; sourceTree = "<group>"; };
@@ -247,6 +250,7 @@
 				CEC654FC292F54DA007B393A /* SDWebImageSwiftUI in Frameworks */,
 				CE9E30E729306F8F001BFB57 /* Realm in Frameworks */,
 				CE9E30E929306F8F001BFB57 /* RealmSwift in Frameworks */,
+				FA273C3A2F3F1DE00017D24A /* AlamofireNetworkActivityLogger in Frameworks */,
 				CE1F9AF22B7E0B6C0031518F /* ImageViewer in Frameworks */,
 				CEC654F9292F54C8007B393A /* SDWebImage in Frameworks */,
 			);
@@ -675,9 +679,18 @@
 			path = Presenter;
 			sourceTree = "<group>";
 		};
+		FA273C332F3F0B070017D24A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				FA273C342F3F0B160017D24A /* SearchView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		FA7A1ABB2F3DCC9E00019A36 /* Search */ = {
 			isa = PBXGroup;
 			children = (
+				FA273C332F3F0B070017D24A /* View */,
 				FA7A1ABC2F3DCCAE00019A36 /* Presenter */,
 			);
 			path = Search;
@@ -716,6 +729,7 @@
 				CE9E30E829306F8F001BFB57 /* RealmSwift */,
 				CE1F9AF12B7E0B6C0031518F /* ImageViewer */,
 				CE1F9AF32B7E0B6C0031518F /* ImageViewerRemote */,
+				FA273C392F3F1DE00017D24A /* AlamofireNetworkActivityLogger */,
 			);
 			productName = TMDb;
 			productReference = CEC654E1292F5381007B393A /* TMDb.app */;
@@ -751,6 +765,7 @@
 				CEC654FD292F54EA007B393A /* XCRemoteSwiftPackageReference "Alamofire" */,
 				CE9E30E529306F8F001BFB57 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				CE1F9AF02B7E0B6C0031518F /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */,
+				FA273C382F3F1DE00017D24A /* XCRemoteSwiftPackageReference "AlamofireNetworkActivityLogger" */,
 			);
 			productRefGroup = CEC654E2292F5381007B393A /* Products */;
 			projectDirPath = "";
@@ -811,6 +826,7 @@
 				CEBD444D2A089C3E00BBD9B6 /* GenreResponse.swift in Sources */,
 				CEBD44632A08FB5400BBD9B6 /* DetailRouter.swift in Sources */,
 				CE182AFE292F813800B5C857 /* MovieDetailModel.swift in Sources */,
+				FA273C352F3F0B160017D24A /* SearchView.swift in Sources */,
 				CEC65509292F5744007B393A /* MovieModel.swift in Sources */,
 				CEF796C22A52D0C30046858F /* TvShowItemView.swift in Sources */,
 				CE8E43D92A42B4AA00123AA6 /* Constants.swift in Sources */,
@@ -1151,6 +1167,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		FA273C382F3F1DE00017D24A /* XCRemoteSwiftPackageReference "AlamofireNetworkActivityLogger" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/konkab/AlamofireNetworkActivityLogger.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.4.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1188,6 +1212,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CEC654FD292F54EA007B393A /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		FA273C392F3F1DE00017D24A /* AlamofireNetworkActivityLogger */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FA273C382F3F1DE00017D24A /* XCRemoteSwiftPackageReference "AlamofireNetworkActivityLogger" */;
+			productName = AlamofireNetworkActivityLogger;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

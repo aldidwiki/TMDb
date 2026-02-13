@@ -12,6 +12,7 @@ struct ContentView: View {
     @EnvironmentObject var favoritePresenter: FavoritePresenter
     @EnvironmentObject var tvShowPresenter: TvShowPresenter
     @EnvironmentObject var personPresenter: PersonPresenter
+    @EnvironmentObject var searchPresenter: SearchPresenter
     
     var body: some View {
         TabView {
@@ -28,6 +29,11 @@ struct ContentView: View {
             PersonView(presenter: personPresenter)
                 .tabItem {
                     Label("Person", systemImage: "person.fill")
+                }
+            
+            SearchView(presenter: searchPresenter)
+                .tabItem {
+                    Label("Search", systemImage: "magnifyingglass")
                 }
             
             FavoriteView(presenter: favoritePresenter)

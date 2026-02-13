@@ -25,11 +25,15 @@ struct SplashView: View {
                 let personUseCase = Injection.init().providePersonUseCase()
                 let personPresenter = PersonPresenter(personUseCase: personUseCase)
                 
+                let searchUseCase = Injection.init().provideSearchUseCase()
+                let searchPresenter = SearchPresenter(searchUseCase: searchUseCase)
+                
                 ContentView()
                     .environmentObject(moviePresenter)
                     .environmentObject(favoritePresenter)
                     .environmentObject(tvShowPresenter)
                     .environmentObject(personPresenter)
+                    .environmentObject(searchPresenter)
                     .transition(.scale)
             } else {
                 ZStack {

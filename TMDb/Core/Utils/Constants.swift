@@ -20,6 +20,7 @@ class Constants {
     
     static let movieResponseType = "movie"
     static let tvShowResponseType = "tv"
+    static let personResponseType = "person"
 }
 
 enum NavigateType {
