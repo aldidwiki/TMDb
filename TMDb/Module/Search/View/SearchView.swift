@@ -16,47 +16,56 @@ struct SearchView: View {
                 if presenter.loadingState {
                     ProgressView("Loading")
                 } else {
-                    if presenter.searchResults.isEmpty {
-                        EmptyView(emptyTitle: "No Data Found")
-                    } else {
+                    GeometryReader { geometry in
                         ScrollView {
-                            LazyVStack {
-                                ForEach(presenter.searchResults) { searchResult in
-                                    VStack {
-                                        self.presenter.linkBuilder(
-                                            for: searchResult.id,
-                                            mediaType: searchResult.mediaType
-                                        ) {
-                                            searchResult.destinationView()
+                            if presenter.searchResults.isEmpty {
+                                VStack {
+                                    Spacer()
+                                    ContentUnavailableView.search(text: presenter.searchQuery)
+                                    Spacer()
+                                }
+                                .animation(.default, value: presenter.searchResults.isEmpty)
+                                .frame(minHeight: geometry.size.height)
+                                .id("EMPTY_STATE")
+                            } else {
+                                LazyVStack {
+                                    ForEach(presenter.searchResults) { searchResult in
+                                        VStack {
+                                            self.presenter.linkBuilder(
+                                                for: searchResult.id,
+                                                mediaType: searchResult.mediaType
+                                            ) {
+                                                searchResult.destinationView()
+                                            }
+                                            
+                                            if searchResult != self.presenter.searchResults.last {
+                                                NativeDivider()
+                                            }
                                         }
-                                        
-                                        if searchResult != self.presenter.searchResults.last {
-                                            NativeDivider()
+                                        .onAppear {
+                                            if searchResult == self.presenter.searchResults.last {
+                                                self.presenter.search(query: self.presenter.searchQuery)
+                                            }
                                         }
                                     }
-                                    .onAppear {
-                                        if searchResult == self.presenter.searchResults.last {
-                                            self.presenter.search(query: self.presenter.searchQuery)
+                                    
+                                    if presenter.isFetchingMore {
+                                        HStack {
+                                            Spacer()
+                                            ProgressView()
+                                            Spacer()
                                         }
                                     }
                                 }
-                                
-                                if presenter.isFetchingMore {
-                                    HStack {
-                                        Spacer()
-                                        ProgressView()
-                                        Spacer()
-                                    }
-                                }
+                                .padding()
                             }
-                            .padding()
                         }
                     }
                 }
             }
             .navigationTitle("Search")
+            .searchable(text: $presenter.searchQuery, prompt: "Look for something")
         }
-        .searchable(text: $presenter.searchQuery, placement:.navigationBarDrawer(displayMode: .always), prompt: "Look for something")
     }
 }
 
