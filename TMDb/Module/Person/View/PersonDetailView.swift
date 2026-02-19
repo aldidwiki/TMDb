@@ -9,7 +9,7 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct PersonDetailView: View {
-    @ObservedObject var presenter: PersonPresenter
+    @StateObject var presenter: PersonPresenter
     var personId: Int
     
     var body: some View {

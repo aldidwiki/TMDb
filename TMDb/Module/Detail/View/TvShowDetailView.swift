@@ -9,7 +9,7 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct TvShowDetailView: View {
-    @ObservedObject var presenter: TvShowDetailPresenter
+    @StateObject var presenter: TvShowDetailPresenter
     @State var showSheet = false
     @State var isFavorite = false
     var tvShowId: Int

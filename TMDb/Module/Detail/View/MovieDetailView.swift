@@ -9,7 +9,7 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct MovieDetailView: View {
-    @ObservedObject var presenter: MovieDetailPresenter
+    @StateObject var presenter: MovieDetailPresenter
     @State var showSheet = false
     
     var movieId: Int
