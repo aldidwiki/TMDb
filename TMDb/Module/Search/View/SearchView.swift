@@ -56,7 +56,7 @@ struct SearchView: View {
             }
             .navigationTitle("Search")
         }
-        .searchable(text: $presenter.searchQuery, prompt: "Look for something")
+        .searchable(text: $presenter.searchQuery, placement:.navigationBarDrawer(displayMode: .always), prompt: "Look for something")
     }
 }
 
