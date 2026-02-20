@@ -53,7 +53,9 @@ struct MovieDetailView: View {
                 .animation(.spring(), value: showSheet)
             }
         }.onAppear {
-            presenter.getMovie(movieId: movieId)
+            if presenter.movie.id == 0 {
+                presenter.getMovie(movieId: movieId)
+            }
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(presenter.movie.title)

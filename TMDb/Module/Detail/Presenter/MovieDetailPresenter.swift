@@ -17,7 +17,7 @@ class MovieDetailPresenter: ObservableObject {
     private let favoriteUseCase: FavoriteUseCase
     
     @Published var movie = MovieDetailModel(
-        id: 436270,
+        id: 0,
         title: "",
         rating: 7.1,
         posterPath: "/bQXAqRx2Fgc46uCVWgoPz5L5Dtr.jpg",
