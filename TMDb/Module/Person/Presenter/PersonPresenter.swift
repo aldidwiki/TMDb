@@ -20,7 +20,7 @@ class PersonPresenter: ObservableObject {
     @Published var loadingState = false
     @Published var isFavorite = false
     @Published var person = PersonModel(
-        id: 73457,
+        id: 0,
         name: "",
         profilePath: "/83o3koL82jt30EJ0rz4Bnzrt2dd.jpg",
         birthday: "1979-06-21",

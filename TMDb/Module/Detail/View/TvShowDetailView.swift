@@ -53,7 +53,9 @@ struct TvShowDetailView: View {
                 .animation(.spring(), value: showSheet)
             }
         }.onAppear {
-            presenter.getTvShow(tvShowId: tvShowId)
+            if presenter.tvShow.id == 0 && presenter.tvShow.title.isEmpty {
+                presenter.getTvShow(tvShowId: tvShowId)                
+            }
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(presenter.tvShow.title)

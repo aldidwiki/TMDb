@@ -19,7 +19,7 @@ class TvShowDetailPresenter: ObservableObject {
     @Published var errorMessage = ""
     @Published var loadingState = false
     @Published var tvShow = TvShowDetailModel(
-        id: 114472,
+        id: 0,
         backdropPath: "",
         releaseDate: "",
         title: "",

@@ -45,7 +45,9 @@ struct PersonDetailView: View {
                 }
             }
         }.onAppear {
-            presenter.getPerson(personId: self.personId)
+            if presenter.person.id == 0 && presenter.person.name.isEmpty {
+                presenter.getPerson(personId: self.personId)                
+            }
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(presenter.person.name)
