@@ -16,19 +16,30 @@ struct FavoriteView: View {
                 if presenter.loadingState {
                     ProgressView("Loading")
                 } else {
-                    if presenter.favorites.isEmpty {
-                        EmptyView(emptyTitle: "No Favorites Found")
-                    } else {
-                        List(self.presenter.favorites) { favorite in
-                            presenter.linkBuilder(for: favorite) {
-                                MovieItemView(movie: Mapper.mapFavoriteModelToMovieModel(input: favorite))
+                    ScrollView {
+                        if presenter.favorites.isEmpty {
+                            EmptyView(emptyTitle: "No Favorites Found")
+                        } else {
+                            ForEach(presenter.favorites) { favorite in
+                                presenter.linkBuilder(for: favorite) {
+                                    VStack {
+                                        MovieItemView(movie: favorite.toMovieModel)
+                                        
+                                        if favorite != presenter.favorites.last {
+                                            NativeDivider()
+                                        }
+                                    }
+                                }
+                                .padding(.horizontal)
                             }
                         }
                     }
                 }
-            }.onAppear {
+            }
+            .onAppear {
                 self.presenter.getFavorites()
-            }.navigationTitle("Favorites")
+            }
+            .navigationTitle("Favorites")
         }
     }
 }

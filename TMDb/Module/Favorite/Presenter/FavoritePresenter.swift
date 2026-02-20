@@ -25,7 +25,7 @@ class FavoritePresenter: ObservableObject {
     func getFavorites() {
         self.loadingState = true
         favoriteUseCase.getFavorites()
-            .receive(on: RunLoop.main)
+            .receive(on: DispatchQueue.main)
             .sink { completion in
                 switch completion {
                     case .failure:
@@ -51,5 +51,6 @@ class FavoritePresenter: ObservableObject {
         } label: {
             content()
         }
+        .buttonStyle(.plain)
     }
 }

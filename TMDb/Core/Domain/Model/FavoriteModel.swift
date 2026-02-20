@@ -14,4 +14,8 @@ struct FavoriteModel: Equatable, Identifiable {
     let rating: Double
     let releaseDate: String
     let mediaType: String
+    
+    var toMovieModel : MovieModel {
+        return Mapper.mapFavoriteModelToMovieModel(input: self)
+    }
 }
