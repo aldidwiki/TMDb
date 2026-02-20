@@ -17,22 +17,24 @@ struct FavoriteView: View {
                     ProgressView("Loading")
                 } else {
                     ScrollView {
-                        if presenter.favorites.isEmpty {
-                            EmptyView(emptyTitle: "No Favorites Found")
-                        } else {
-                            ForEach(presenter.favorites) { favorite in
-                                presenter.linkBuilder(for: favorite) {
-                                    VStack {
-                                        MovieItemView(movie: favorite.toMovieModel)
-                                        
-                                        if favorite != presenter.favorites.last {
-                                            NativeDivider()
+                        LazyVStack {
+                            if presenter.favorites.isEmpty {
+                                EmptyView(emptyTitle: "No Favorites Found")
+                            } else {
+                                ForEach(presenter.favorites) { favorite in
+                                    presenter.linkBuilder(for: favorite) {
+                                        VStack {
+                                            MovieItemView(movie: favorite.toMovieModel)
+                                            
+                                            if favorite != presenter.favorites.last {
+                                                NativeDivider()
+                                            }
                                         }
                                     }
                                 }
-                                .padding(.horizontal)
                             }
                         }
+                        .padding()
                     }
                 }
             }

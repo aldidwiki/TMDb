@@ -50,7 +50,7 @@ class PersonPresenter: ObservableObject {
     func getPerson(personId: Int) {
         self.loadingState = true
         personUseCase.getPerson(personId: personId)
-            .receive(on: RunLoop.main)
+            .receive(on: DispatchQueue.main)
             .sink { completion in
                 switch completion {
                 case .failure:

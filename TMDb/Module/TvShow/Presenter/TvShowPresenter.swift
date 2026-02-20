@@ -42,7 +42,7 @@ class TvShowPresenter: ObservableObject {
         }
         
         tvShowUseCase.getTvShows(page: currentPage)
-            .receive(on: RunLoop.main)
+            .receive(on: DispatchQueue.main)
             .sink { completion in
                 switch completion {
                 case .failure:
