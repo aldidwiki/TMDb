@@ -26,14 +26,14 @@ struct ContentView: View {
                     Label("Tv Show", systemImage: "tv")
                 }
             
-            PersonView(presenter: personPresenter)
-                .tabItem {
-                    Label("Person", systemImage: "person.fill")
-                }
-            
             SearchView(presenter: searchPresenter)
                 .tabItem {
                     Label("Search", systemImage: "magnifyingglass")
+                }
+            
+            PersonView(presenter: personPresenter)
+                .tabItem {
+                    Label("Person", systemImage: "person.fill")
                 }
             
             FavoriteView(presenter: favoritePresenter)
