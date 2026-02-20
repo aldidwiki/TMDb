@@ -49,12 +49,12 @@ struct TvShowDetailView: View {
                         .padding(.vertical)
                     }
                 }
-                .blur(radius: showSheet ? 10 : 0)
+                .blur(radius: showSheet ? 6 : 0)
                 .animation(.spring(), value: showSheet)
             }
         }.onAppear {
             if presenter.tvShow.id == 0 && presenter.tvShow.title.isEmpty {
-                presenter.getTvShow(tvShowId: tvShowId)                
+                presenter.getTvShow(tvShowId: tvShowId)
             }
         }
         .navigationBarTitleDisplayMode(.inline)
@@ -192,12 +192,26 @@ extension TvShowDetailView {
         }
         .buttonStyle(.plain)
         .sheet(isPresented: $showSheet) {
+            let rowHeight: CGFloat = 44
+            let headerHeight: CGFloat = 100
+            let totalHeight = CGFloat(presenter.tvShow.videos.count) * rowHeight + headerHeight
+            
             VStack(alignment: .leading) {
-                Text("Choose Trailer")
-                    .font(.title2)
-                    .fontWeight(.medium)
-                    .padding(.leading, 20)
-                    .padding(.top)
+                HStack(alignment: .center) {
+                    Text("Choose Trailer")
+                        .font(.title2)
+                        .fontWeight(.medium)
+                    Spacer()
+                    Button {
+                        showSheet = false
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.title3)
+                    }
+                    .buttonStyle(.plain)
+                }
+                .padding(.top)
+                .padding(.horizontal, 20)
                 
                 List(presenter.tvShow.videos, id: \.id) { video in
                     Link(video.name, destination: URL(string: Constants.youtubeBaseUrl + video.key)!)
@@ -205,9 +219,12 @@ extension TvShowDetailView {
                         .padding(.vertical, 1)
                 }
                 .listStyle(.plain)
-                .presentationDetents([.height(300), .medium])
             }
             .padding(.vertical)
+            .presentationDragIndicator(.automatic)
+            .presentationDetents([.height(totalHeight)])
+            .presentationCornerRadius(30)
+            .interactiveDismissDisabled(true)
         }
     }
     
