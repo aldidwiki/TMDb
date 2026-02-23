@@ -125,7 +125,21 @@
 		FA8A51A42F3B0E3D0040ED03 /* NativeDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8A51A32F3B0E3D0040ED03 /* NativeDivider.swift */; };
 		FA9252052F39C40A00419C21 /* PosterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9252042F39C40A00419C21 /* PosterView.swift */; };
 		FA9739D92F39CCE4000F5D71 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA9739D82F39CCE4000F5D71 /* LaunchScreen.storyboard */; };
+		FAF2BCC72F4C34850060DA36 /* SwiftUIIntrospect in Frameworks */ = {isa = PBXBuildFile; productRef = FAF2BCC62F4C34850060DA36 /* SwiftUIIntrospect */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		FAF2BCCD2F4C39140060DA36 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		CE0FF1292A458782009D3B26 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
@@ -247,6 +261,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAF2BCC72F4C34850060DA36 /* SwiftUIIntrospect in Frameworks */,
 				CE1F9AF42B7E0B6C0031518F /* ImageViewerRemote in Frameworks */,
 				CEC654FF292F54EA007B393A /* Alamofire in Frameworks */,
 				CEC654FC292F54DA007B393A /* SDWebImageSwiftUI in Frameworks */,
@@ -446,6 +461,7 @@
 			children = (
 				CEEEDEE42931F7E800976696 /* .swiftlint.yml */,
 				CEC654E3292F5381007B393A /* TMDb */,
+				FAF2BCCE2F4C3A4E0060DA36 /* Frameworks */,
 				CEC654E2292F5381007B393A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -715,6 +731,13 @@
 			path = Presenter;
 			sourceTree = "<group>";
 		};
+		FAF2BCCE2F4C3A4E0060DA36 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -726,6 +749,7 @@
 				CEC654DE292F5381007B393A /* Frameworks */,
 				CEC654DF292F5381007B393A /* Resources */,
 				CEEEDEE32931F79E00976696 /* ShellScript */,
+				FAF2BCCD2F4C39140060DA36 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -741,6 +765,7 @@
 				CE1F9AF12B7E0B6C0031518F /* ImageViewer */,
 				CE1F9AF32B7E0B6C0031518F /* ImageViewerRemote */,
 				FA273C392F3F1DE00017D24A /* AlamofireNetworkActivityLogger */,
+				FAF2BCC62F4C34850060DA36 /* SwiftUIIntrospect */,
 			);
 			productName = TMDb;
 			productReference = CEC654E1292F5381007B393A /* TMDb.app */;
@@ -777,6 +802,7 @@
 				CE9E30E529306F8F001BFB57 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				CE1F9AF02B7E0B6C0031518F /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */,
 				FA273C382F3F1DE00017D24A /* XCRemoteSwiftPackageReference "AlamofireNetworkActivityLogger" */,
+				FAF2BCC52F4C34850060DA36 /* XCRemoteSwiftPackageReference "swiftui-introspect" */,
 			);
 			productRefGroup = CEC654E2292F5381007B393A /* Products */;
 			projectDirPath = "";
@@ -1187,6 +1213,14 @@
 				minimumVersion = 3.4.0;
 			};
 		};
+		FAF2BCC52F4C34850060DA36 /* XCRemoteSwiftPackageReference "swiftui-introspect" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/siteline/swiftui-introspect";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1229,6 +1263,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FA273C382F3F1DE00017D24A /* XCRemoteSwiftPackageReference "AlamofireNetworkActivityLogger" */;
 			productName = AlamofireNetworkActivityLogger;
+		};
+		FAF2BCC62F4C34850060DA36 /* SwiftUIIntrospect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FAF2BCC52F4C34850060DA36 /* XCRemoteSwiftPackageReference "swiftui-introspect" */;
+			productName = SwiftUIIntrospect;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

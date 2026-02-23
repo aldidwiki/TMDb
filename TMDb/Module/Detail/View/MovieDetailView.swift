@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SDWebImageSwiftUI
+import SwiftUIIntrospect
 
 struct MovieDetailView: View {
     @StateObject var presenter: MovieDetailPresenter
@@ -270,7 +271,7 @@ extension MovieDetailView {
         }
         .buttonStyle(.plain)
         .sheet(isPresented: $showSheet) {
-            let rowHeight: CGFloat = 50
+            let rowHeight: CGFloat = 55
             let headerHeight: CGFloat = 100
             let totalHeight = CGFloat(presenter.movie.videos.count) * rowHeight + headerHeight
             
@@ -298,6 +299,10 @@ extension MovieDetailView {
                         .padding(.vertical, 1)
                 }
                 .listStyle(.plain)
+                .introspect(.list, on: .iOS(.v17, .v18)) { tableView in
+                    tableView.bounces = false
+                    tableView.showsVerticalScrollIndicator = false
+                }
             }
             .padding(.vertical)
             .presentationDragIndicator(.automatic)
