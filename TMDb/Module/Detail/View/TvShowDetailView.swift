@@ -50,7 +50,6 @@ struct TvShowDetailView: View {
                     }
                 }
                 .blur(radius: showSheet ? 6 : 0)
-                .animation(.spring(), value: showSheet)
             }
         }.onAppear {
             if presenter.tvShow.id == 0 && presenter.tvShow.title.isEmpty {
@@ -192,7 +191,7 @@ extension TvShowDetailView {
         }
         .buttonStyle(.plain)
         .sheet(isPresented: $showSheet) {
-            let rowHeight: CGFloat = 44
+            let rowHeight: CGFloat = 50
             let headerHeight: CGFloat = 100
             let totalHeight = CGFloat(presenter.tvShow.videos.count) * rowHeight + headerHeight
             
@@ -216,6 +215,7 @@ extension TvShowDetailView {
                 List(presenter.tvShow.videos, id: \.id) { video in
                     Link(video.name, destination: URL(string: Constants.youtubeBaseUrl + video.key)!)
                         .buttonStyle(.plain)
+                        .lineLimit(2)
                         .padding(.vertical, 1)
                 }
                 .listStyle(.plain)

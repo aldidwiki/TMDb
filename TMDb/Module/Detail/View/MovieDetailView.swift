@@ -50,7 +50,6 @@ struct MovieDetailView: View {
                     }
                 }
                 .blur(radius: showSheet ? 6 : 0)
-                .animation(.spring(), value: showSheet)
             }
         }.onAppear {
             if presenter.movie.id == 0 && presenter.movie.title.isEmpty {
@@ -271,7 +270,7 @@ extension MovieDetailView {
         }
         .buttonStyle(.plain)
         .sheet(isPresented: $showSheet) {
-            let rowHeight: CGFloat = 44
+            let rowHeight: CGFloat = 50
             let headerHeight: CGFloat = 100
             let totalHeight = CGFloat(presenter.movie.videos.count) * rowHeight + headerHeight
             
@@ -295,6 +294,7 @@ extension MovieDetailView {
                 List(presenter.movie.videos, id: \.id) { video in
                     Link(video.name, destination: URL(string: Constants.youtubeBaseUrl + video.key)!)
                         .buttonStyle(.plain)
+                        .lineLimit(2)
                         .padding(.vertical, 1)
                 }
                 .listStyle(.plain)
