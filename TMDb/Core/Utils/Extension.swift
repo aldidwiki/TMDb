@@ -6,6 +6,9 @@
 //
 
 import Foundation
+import UIKit
+import DominantColors
+import SwiftUI
 
 extension String {
     func formatDateString(input inFormat: String = "yyyy-MM-dd", output outFormat: String = "dd MMMM yyyy") -> String {
@@ -125,5 +128,31 @@ extension [SpokenLanguageResponse] {
         }
         
         return spokenLanguage
+    }
+}
+
+extension UIImage {
+    func extractPalette(completion : @escaping (Color, Color, Color) -> Void) {
+        DispatchQueue.global(qos: .userInteractive).async {
+            do {
+                let dominantColors = try self.dominantColors().map { $0.cgColor }
+                
+                if let contrastColors = ContrastColors(colors: dominantColors) {
+                    DispatchQueue.main.async {
+                        let bgColor = Color(uiColor: UIColor(cgColor: contrastColors.background))
+                        let primaryColor = Color(uiColor: UIColor(cgColor: contrastColors.primary))
+                        var secondaryColor: Color = .primary
+                        
+                        if let secondary = contrastColors.secondary {
+                            secondaryColor = Color(uiColor: UIColor(cgColor: secondary))
+                        }
+                        
+                        completion(bgColor, primaryColor, secondaryColor)
+                    }
+                }
+            } catch {
+                print("Error extracting colors")
+            }
+        }
     }
 }

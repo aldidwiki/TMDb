@@ -11,18 +11,20 @@ struct CircularProgressView: View {
     let progress: Double
     let lineWidth: CGFloat
     
+    var circularColor: Color = Color("circular_color")
+    
     var body: some View {
         ZStack {
             Circle()
                 .stroke(
-                    Color("circular_color").opacity(0.5),
+                    circularColor.opacity(0.5),
                     lineWidth: self.lineWidth
                 )
             
             Circle()
                 .trim(from: 0, to: progress)
                 .stroke(
-                    Color("circular_color"),
+                    circularColor,
                     style: StrokeStyle(
                         lineWidth: self.lineWidth,
                         lineCap: .round
@@ -36,6 +38,6 @@ struct CircularProgressView: View {
 
 struct CircularProgressView_Previews: PreviewProvider {
     static var previews: some View {
-        CircularProgressView(progress: 0.25, lineWidth: 5)
+        CircularProgressView(progress: 0.25, lineWidth: 5, circularColor: Color("circular_color"))
     }
 }

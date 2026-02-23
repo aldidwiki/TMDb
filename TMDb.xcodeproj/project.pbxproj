@@ -116,6 +116,7 @@
 		FA273C352F3F0B160017D24A /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA273C342F3F0B160017D24A /* SearchView.swift */; };
 		FA273C3A2F3F1DE00017D24A /* AlamofireNetworkActivityLogger in Frameworks */ = {isa = PBXBuildFile; productRef = FA273C392F3F1DE00017D24A /* AlamofireNetworkActivityLogger */; };
 		FA273C3D2F3F29B20017D24A /* SearchRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA273C3C2F3F29B20017D24A /* SearchRouter.swift */; };
+		FA4193002F4C43C600E5FF6F /* DominantColors in Frameworks */ = {isa = PBXBuildFile; productRef = FA4192FF2F4C43C600E5FF6F /* DominantColors */; };
 		FA7A1AB22F3DBDFA00019A36 /* SearchResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7A1AB12F3DBDFA00019A36 /* SearchResponse.swift */; };
 		FA7A1AB42F3DC32600019A36 /* SearchDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7A1AB32F3DC32600019A36 /* SearchDataSource.swift */; };
 		FA7A1AB62F3DC7E800019A36 /* SearchRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7A1AB52F3DC7E800019A36 /* SearchRepository.swift */; };
@@ -261,6 +262,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA4193002F4C43C600E5FF6F /* DominantColors in Frameworks */,
 				FAF2BCC72F4C34850060DA36 /* SwiftUIIntrospect in Frameworks */,
 				CE1F9AF42B7E0B6C0031518F /* ImageViewerRemote in Frameworks */,
 				CEC654FF292F54EA007B393A /* Alamofire in Frameworks */,
@@ -766,6 +768,7 @@
 				CE1F9AF32B7E0B6C0031518F /* ImageViewerRemote */,
 				FA273C392F3F1DE00017D24A /* AlamofireNetworkActivityLogger */,
 				FAF2BCC62F4C34850060DA36 /* SwiftUIIntrospect */,
+				FA4192FF2F4C43C600E5FF6F /* DominantColors */,
 			);
 			productName = TMDb;
 			productReference = CEC654E1292F5381007B393A /* TMDb.app */;
@@ -803,6 +806,7 @@
 				CE1F9AF02B7E0B6C0031518F /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */,
 				FA273C382F3F1DE00017D24A /* XCRemoteSwiftPackageReference "AlamofireNetworkActivityLogger" */,
 				FAF2BCC52F4C34850060DA36 /* XCRemoteSwiftPackageReference "swiftui-introspect" */,
+				FA4192FE2F4C43C600E5FF6F /* XCRemoteSwiftPackageReference "DominantColors" */,
 			);
 			productRefGroup = CEC654E2292F5381007B393A /* Products */;
 			projectDirPath = "";
@@ -1213,6 +1217,14 @@
 				minimumVersion = 3.4.0;
 			};
 		};
+		FA4192FE2F4C43C600E5FF6F /* XCRemoteSwiftPackageReference "DominantColors" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/DenDmitriev/DominantColors.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.2;
+			};
+		};
 		FAF2BCC52F4C34850060DA36 /* XCRemoteSwiftPackageReference "swiftui-introspect" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/siteline/swiftui-introspect";
@@ -1263,6 +1275,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FA273C382F3F1DE00017D24A /* XCRemoteSwiftPackageReference "AlamofireNetworkActivityLogger" */;
 			productName = AlamofireNetworkActivityLogger;
+		};
+		FA4192FF2F4C43C600E5FF6F /* DominantColors */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FA4192FE2F4C43C600E5FF6F /* XCRemoteSwiftPackageReference "DominantColors" */;
+			productName = DominantColors;
 		};
 		FAF2BCC62F4C34850060DA36 /* SwiftUIIntrospect */ = {
 			isa = XCSwiftPackageProductDependency;

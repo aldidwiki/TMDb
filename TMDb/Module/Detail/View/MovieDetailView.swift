@@ -13,6 +13,10 @@ struct MovieDetailView: View {
     @StateObject var presenter: MovieDetailPresenter
     @State var showSheet = false
     
+    @State private var bgColor: Color = .clear
+    @State private var primaryColor: Color = .primary
+    @State private var secondaryColor: Color = .primary
+    
     var movieId: Int
     
     var body: some View {
@@ -22,18 +26,22 @@ struct MovieDetailView: View {
             } else {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(alignment: .leading) {
-                        if !presenter.movie.backdropPath.isEmpty {
-                            presenter.toMovieImageGallery(for: movieId) {
-                                movieBackdrop
+                        VStack {
+                            if !presenter.movie.backdropPath.isEmpty {
+                                presenter.toMovieImageGallery(for: movieId) {
+                                    movieBackdrop
+                                }
                             }
+                            
+                            movieContentDetail
+                                .padding([.top, .horizontal])
+                            
+                            movieContentUtils
+                            
+                            movieOverview
                         }
-                        
-                        movieContentDetail
-                            .padding([.top, .horizontal])
-                        
-                        movieContentUtils
-                        
-                        movieOverview
+                        .padding(.bottom)
+                        .background(bgColor)
                         
                         if !presenter.movie.cast.isEmpty {
                             movieCredits
@@ -73,6 +81,7 @@ struct MovieDetailView: View {
                 }.disabled(self.presenter.loadingState)
             }
         }
+        .animation(.easeInOut, value: bgColor)
     }
 }
 
@@ -80,6 +89,13 @@ extension MovieDetailView {
     var moviePoster: some View {
         WebImage(url: URL(string: API.imageBaseUrl + presenter.movie.posterPath))
             .resizable()
+            .onSuccess(perform: { image, _, _ in
+                image.extractPalette { bg, primary, secondary in
+                    self.bgColor = bg
+                    self.primaryColor = primary
+                    self.secondaryColor = secondary
+                }
+            })
             .indicator(.activity)
             .transition(.fade(duration: 0.5))
             .scaledToFit()
@@ -102,26 +118,33 @@ extension MovieDetailView {
                 Text(presenter.movie.title)
                     .font(.title2)
                     .fontWeight(.bold)
+                    .foregroundColor(primaryColor)
                     .multilineTextAlignment(.center)
                 
                 Text(presenter.movie.releaseDate.formatDateString())
                     .multilineTextAlignment(.center)
+                    .foregroundColor(secondaryColor)
                 
                 HStack {
                     if presenter.movie.runtime != 0 {
                         Text(presenter.movie.runtime.formatRuntime())
                             .multilineTextAlignment(.center)
+                            .foregroundColor(secondaryColor)
                     }
                     
                     if !presenter.movie.certification.isEmpty {
                         Text("\u{2022}")
+                            .foregroundColor(secondaryColor)
+                        
                         Text(presenter.movie.certification)
                             .multilineTextAlignment(.center)
+                            .foregroundColor(secondaryColor)
                     }
                 }
                 
                 Text(presenter.movie.genre)
                     .multilineTextAlignment(.center)
+                    .foregroundColor(secondaryColor)
                     .padding(.top, 1)
                 
                 if !presenter.movie.tagline.isEmpty {
@@ -129,6 +152,7 @@ extension MovieDetailView {
                         .fontWeight(.medium)
                         .multilineTextAlignment(.center)
                         .italic()
+                        .foregroundColor(primaryColor)
                         .padding(.top, 2)
                 }
             }
@@ -139,12 +163,14 @@ extension MovieDetailView {
     var movieOverview: some View {
         VStack(alignment: .leading) {
             Text("Overview")
+                .foregroundColor(primaryColor)
                 .padding([.top, .horizontal])
                 .padding(.bottom, 1)
                 .font(.title2)
                 .fontWeight(.semibold)
             
             Text(presenter.movie.overview)
+                .foregroundColor(secondaryColor)
                 .padding(.horizontal)
         }
     }
@@ -231,17 +257,20 @@ extension MovieDetailView {
         HStack(alignment: .center) {
             Spacer()
             ZStack {
-                CircularProgressView(progress: presenter.movie.rating / 10, lineWidth: 3)
+                CircularProgressView(progress: presenter.movie.rating / 10, lineWidth: 3, circularColor: secondaryColor)
                     .frame(width: 35, height: 35)
                 
                 Text((presenter.movie.rating / 10).toPercentage())
                     .font(.system(size: 11))
+                    .foregroundColor(primaryColor)
             }
             
             Text("User Score")
+                .foregroundColor(primaryColor)
             
             if presenter.movie.videos.count > 1 {
                 Text("\u{FF5C}")
+                    .foregroundColor(primaryColor)
                     .fontWeight(.medium)
                     .padding(.horizontal)
                 
@@ -249,6 +278,7 @@ extension MovieDetailView {
             } else {
                 if let firstKey = presenter.movie.videos.first?.key {
                     Text("\u{FF5C}")
+                        .foregroundColor(primaryColor)
                         .fontWeight(.medium)
                         .padding(.horizontal)
                     
@@ -256,6 +286,7 @@ extension MovieDetailView {
                         Label("Play Trailer", systemImage: "play.fill")
                     }
                     .buttonStyle(.plain)
+                    .foregroundColor(primaryColor)
                 }
             }
             Spacer()
@@ -270,6 +301,7 @@ extension MovieDetailView {
             Label("Play Trailer", systemImage: "play.fill")
         }
         .buttonStyle(.plain)
+        .foregroundColor(primaryColor)
         .sheet(isPresented: $showSheet) {
             let rowHeight: CGFloat = 55
             let headerHeight: CGFloat = 100
