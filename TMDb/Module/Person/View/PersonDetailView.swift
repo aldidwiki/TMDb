@@ -46,7 +46,7 @@ struct PersonDetailView: View {
             }
         }.onAppear {
             if presenter.person.id == 0 && presenter.person.name.isEmpty {
-                presenter.getPerson(personId: self.personId)                
+                presenter.getPerson(personId: self.personId)
             }
         }
         .navigationBarTitleDisplayMode(.inline)
@@ -123,10 +123,12 @@ extension PersonDetailView {
                 .fontWeight(.medium)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
-            Text(presenter.person.biography)
-                .fontWeight(.thin)
-                .multilineTextAlignment(.leading)
-                .padding(.top, 1)
+            ExpandableTextView(
+                textData: presenter.person.biography,
+                maxTextLine: 7
+            )
+            .fontWeight(.thin)
+            .padding(.top, 1)
         }
         .padding(.top)
         .padding(.horizontal)
