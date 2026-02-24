@@ -10,6 +10,8 @@ import SDWebImageSwiftUI
 import SwiftUIIntrospect
 
 struct MovieDetailView: View {
+    @Environment(\.dismiss) private var dismiss
+    
     @StateObject var presenter: MovieDetailPresenter
     @State var showSheet = false
     
@@ -66,9 +68,29 @@ struct MovieDetailView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
-        .navigationTitle(presenter.movie.title)
+        .navigationBarBackButtonHidden(true)
+        .toolbarBackground(bgColor, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
-            ToolbarItem {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .fontWeight(.bold)
+                        .foregroundStyle(primaryColor)
+                }
+            }
+            
+            ToolbarItem(placement: .principal) {
+                Text(presenter.movie.title)
+                    .font(.headline)
+                    .lineLimit(1)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(primaryColor)
+            }
+            
+            ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     if !presenter.isFavorite {
                         self.presenter.addFavorite(movie: self.presenter.movie)
@@ -78,6 +100,7 @@ struct MovieDetailView: View {
                 } label: {
                     Image(systemName: self.presenter.isFavorite ? "heart.fill" : "heart")
                         .contentTransition(.symbolEffect(.replace))
+                        .foregroundStyle(primaryColor)
                 }.disabled(self.presenter.loadingState)
             }
         }
@@ -118,33 +141,33 @@ extension MovieDetailView {
                 Text(presenter.movie.title)
                     .font(.title2)
                     .fontWeight(.bold)
-                    .foregroundColor(primaryColor)
+                    .foregroundStyle(primaryColor)
                     .multilineTextAlignment(.center)
                 
                 Text(presenter.movie.releaseDate.formatDateString())
                     .multilineTextAlignment(.center)
-                    .foregroundColor(secondaryColor)
+                    .foregroundStyle(secondaryColor)
                 
                 HStack {
                     if presenter.movie.runtime != 0 {
                         Text(presenter.movie.runtime.formatRuntime())
                             .multilineTextAlignment(.center)
-                            .foregroundColor(secondaryColor)
+                            .foregroundStyle(secondaryColor)
                     }
                     
                     if !presenter.movie.certification.isEmpty {
                         Text("\u{2022}")
-                            .foregroundColor(secondaryColor)
+                            .foregroundStyle(secondaryColor)
                         
                         Text(presenter.movie.certification)
                             .multilineTextAlignment(.center)
-                            .foregroundColor(secondaryColor)
+                            .foregroundStyle(secondaryColor)
                     }
                 }
                 
                 Text(presenter.movie.genre)
                     .multilineTextAlignment(.center)
-                    .foregroundColor(secondaryColor)
+                    .foregroundStyle(secondaryColor)
                     .padding(.top, 1)
                 
                 if !presenter.movie.tagline.isEmpty {
@@ -152,7 +175,7 @@ extension MovieDetailView {
                         .fontWeight(.medium)
                         .multilineTextAlignment(.center)
                         .italic()
-                        .foregroundColor(primaryColor)
+                        .foregroundStyle(primaryColor)
                         .padding(.top, 2)
                 }
             }
@@ -163,14 +186,14 @@ extension MovieDetailView {
     var movieOverview: some View {
         VStack(alignment: .leading) {
             Text("Overview")
-                .foregroundColor(primaryColor)
+                .foregroundStyle(primaryColor)
                 .padding([.top, .horizontal])
                 .padding(.bottom, 1)
                 .font(.title2)
                 .fontWeight(.semibold)
             
             Text(presenter.movie.overview)
-                .foregroundColor(secondaryColor)
+                .foregroundStyle(secondaryColor)
                 .padding(.horizontal)
         }
     }
@@ -262,15 +285,15 @@ extension MovieDetailView {
                 
                 Text((presenter.movie.rating / 10).toPercentage())
                     .font(.system(size: 11))
-                    .foregroundColor(primaryColor)
+                    .foregroundStyle(primaryColor)
             }
             
             Text("User Score")
-                .foregroundColor(primaryColor)
+                .foregroundStyle(primaryColor)
             
             if presenter.movie.videos.count > 1 {
                 Text("\u{FF5C}")
-                    .foregroundColor(primaryColor)
+                    .foregroundStyle(primaryColor)
                     .fontWeight(.medium)
                     .padding(.horizontal)
                 
@@ -278,7 +301,7 @@ extension MovieDetailView {
             } else {
                 if let firstKey = presenter.movie.videos.first?.key {
                     Text("\u{FF5C}")
-                        .foregroundColor(primaryColor)
+                        .foregroundStyle(primaryColor)
                         .fontWeight(.medium)
                         .padding(.horizontal)
                     
@@ -286,7 +309,7 @@ extension MovieDetailView {
                         Label("Play Trailer", systemImage: "play.fill")
                     }
                     .buttonStyle(.plain)
-                    .foregroundColor(primaryColor)
+                    .foregroundStyle(primaryColor)
                 }
             }
             Spacer()
@@ -301,7 +324,7 @@ extension MovieDetailView {
             Label("Play Trailer", systemImage: "play.fill")
         }
         .buttonStyle(.plain)
-        .foregroundColor(primaryColor)
+        .foregroundStyle(primaryColor)
         .sheet(isPresented: $showSheet) {
             let rowHeight: CGFloat = 55
             let headerHeight: CGFloat = 100
