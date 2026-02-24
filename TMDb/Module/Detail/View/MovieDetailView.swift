@@ -68,6 +68,7 @@ struct MovieDetailView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(presenter.movie.title)
         .navigationBarBackButtonHidden(true)
         .toolbarBackground(bgColor, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
