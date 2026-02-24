@@ -10,9 +10,16 @@ import SDWebImageSwiftUI
 import SwiftUIIntrospect
 
 struct TvShowDetailView: View {
+    @Environment(\.dismiss) private var dismiss
+    
     @StateObject var presenter: TvShowDetailPresenter
     @State var showSheet = false
     @State var isFavorite = false
+    
+    @State private var bgColor: Color = .clear
+    @State private var primaryColor: Color = .primary
+    @State private var secondaryColor: Color = .primary
+    
     var tvShowId: Int
     
     var body: some View {
@@ -22,18 +29,22 @@ struct TvShowDetailView: View {
             } else {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(alignment: .leading) {
-                        if !presenter.tvShow.backdropPath.isEmpty {
-                            presenter.toTvShowImageGallery(tvShowId: tvShowId) {
-                                tvBackdrop
+                        VStack {
+                            if !presenter.tvShow.backdropPath.isEmpty {
+                                presenter.toTvShowImageGallery(tvShowId: tvShowId) {
+                                    tvBackdrop
+                                }
                             }
+                            
+                            tvContentDetail
+                                .padding([.top, .horizontal])
+                            
+                            tvContentUtils
+                            
+                            tvOverview
                         }
-                        
-                        tvContentDetail
-                            .padding([.top, .horizontal])
-                        
-                        tvContentUtils
-                        
-                        tvOverview
+                        .padding(.bottom)
+                        .background(bgColor)
                         
                         if !presenter.tvShow.credits.isEmpty {
                             tvCredits
@@ -59,8 +70,29 @@ struct TvShowDetailView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(presenter.tvShow.title)
+        .navigationBarBackButtonHidden(true)
+        .toolbarBackground(bgColor, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
-            ToolbarItem {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .fontWeight(.bold)
+                        .foregroundStyle(primaryColor)
+                }
+            }
+            
+            ToolbarItem(placement: .principal) {
+                Text(presenter.tvShow.title)
+                    .font(.headline)
+                    .lineLimit(1)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(primaryColor)
+            }
+            
+            ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     if !presenter.isFavorite {
                         self.presenter.addFavorite(tvShowDetailModel: self.presenter.tvShow)
@@ -70,10 +102,12 @@ struct TvShowDetailView: View {
                 } label: {
                     Image(systemName: self.presenter.isFavorite ? "heart.fill" : "heart")
                         .contentTransition(.symbolEffect(.replace))
+                        .foregroundStyle(primaryColor)
                 }
                 .disabled(self.presenter.loadingState)
             }
         }
+        .animation(.easeInOut, value: bgColor)
     }
 }
 
@@ -81,6 +115,13 @@ extension TvShowDetailView {
     var tvPoster: some View {
         WebImage(url: URL(string: API.imageBaseUrl + presenter.tvShow.posterPath))
             .resizable()
+            .onSuccess(perform: { image, _, _ in
+                image.extractPalette { bg, primary, secondary in
+                    self.bgColor = bg
+                    self.primaryColor = primary
+                    self.secondaryColor = secondary
+                }
+            })
             .indicator(.activity)
             .transition(.fade(duration: 0.5))
             .scaledToFit()
@@ -104,23 +145,30 @@ extension TvShowDetailView {
                     .font(.title2)
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
+                    .foregroundStyle(primaryColor)
                 
                 Text(presenter.tvShow.releaseDate.formatDateString())
                     .multilineTextAlignment(.center)
+                    .foregroundStyle(secondaryColor)
                 
                 HStack {
                     if presenter.tvShow.runtime != 0 {
                         Text(presenter.tvShow.runtime.formatRuntime())
                             .multilineTextAlignment(.center)
+                            .foregroundStyle(secondaryColor)
+                        
                         Text("\u{2022}")
+                            .foregroundStyle(secondaryColor)
                     }
                     
                     Text(presenter.tvShow.contentRating)
                         .multilineTextAlignment(.center)
+                        .foregroundStyle(secondaryColor)
                 }
                 
                 Text(presenter.tvShow.genre)
                     .multilineTextAlignment(.center)
+                    .foregroundStyle(secondaryColor)
                     .padding(.top, 1)
                 
                 if !presenter.tvShow.tagline.isEmpty {
@@ -128,6 +176,7 @@ extension TvShowDetailView {
                         .fontWeight(.medium)
                         .multilineTextAlignment(.center)
                         .italic()
+                        .foregroundStyle(secondaryColor)
                         .padding(.top, 2)
                 }
             }
@@ -138,12 +187,14 @@ extension TvShowDetailView {
     var tvOverview: some View {
         VStack(alignment: .leading) {
             Text("Overview")
+                .foregroundStyle(primaryColor)
                 .padding([.top, .horizontal])
                 .padding(.bottom, 1)
                 .font(.title2)
                 .fontWeight(.semibold)
             
             Text(presenter.tvShow.overview)
+                .foregroundStyle(secondaryColor)
                 .padding(.horizontal)
         }
     }
@@ -152,18 +203,21 @@ extension TvShowDetailView {
         HStack(alignment: .center) {
             Spacer()
             ZStack {
-                CircularProgressView(progress: presenter.tvShow.rating / 10, lineWidth: 3)
+                CircularProgressView(progress: presenter.tvShow.rating / 10, lineWidth: 3, circularColor: secondaryColor)
                     .frame(width: 35, height: 35)
                 
                 Text((presenter.tvShow.rating / 10).toPercentage())
                     .font(.system(size: 11))
+                    .foregroundStyle(primaryColor)
             }
             
             Text("User Score")
+                .foregroundStyle(primaryColor)
             
             if presenter.tvShow.videos.count > 1 {
                 Text("\u{FF5C}")
                     .fontWeight(.medium)
+                    .foregroundStyle(primaryColor)
                     .padding(.horizontal)
                 
                 tvTrailerBottomSheet
@@ -171,12 +225,14 @@ extension TvShowDetailView {
                 if let firstKey = presenter.tvShow.videos.first?.key {
                     Text("\u{FF5C}")
                         .fontWeight(.medium)
+                        .foregroundStyle(primaryColor)
                         .padding(.horizontal)
                     
                     Link(destination: URL(string: Constants.youtubeBaseUrl + firstKey)!) {
                         Label("Play Trailer", systemImage: "play.fill")
                     }
                     .buttonStyle(.plain)
+                    .foregroundStyle(primaryColor)
                 }
             }
             Spacer()
@@ -191,6 +247,7 @@ extension TvShowDetailView {
             Label("Play Trailer", systemImage: "play.fill")
         }
         .buttonStyle(.plain)
+        .foregroundStyle(primaryColor)
         .sheet(isPresented: $showSheet) {
             let rowHeight: CGFloat = 55
             let headerHeight: CGFloat = 100
