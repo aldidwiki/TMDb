@@ -162,4 +162,17 @@ extension View {
         print(value)
         return self
     }
+    
+    func elevation(_ size: CGFloat) -> some View {
+        self.overlay(
+            LinearGradient(
+                gradient: Gradient(colors: [.black.opacity(0.3), .clear]),
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: size)
+            .offset(y: size), // Moves it just below the bottom edge
+            alignment: .bottom
+        )
+    }
 }

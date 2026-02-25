@@ -45,6 +45,7 @@ struct TvShowDetailView: View {
                         }
                         .padding(.bottom)
                         .background(bgColor)
+                        .elevation(5)
                         
                         if !presenter.tvShow.credits.isEmpty {
                             tvCredits

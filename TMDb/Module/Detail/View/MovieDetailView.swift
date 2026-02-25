@@ -44,6 +44,7 @@ struct MovieDetailView: View {
                         }
                         .padding(.bottom)
                         .background(bgColor)
+                        .elevation(5)
                         
                         if !presenter.movie.cast.isEmpty {
                             movieCredits
