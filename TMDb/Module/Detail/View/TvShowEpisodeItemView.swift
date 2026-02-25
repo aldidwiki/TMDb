@@ -13,54 +13,45 @@ struct TvShowEpisodeItemView: View {
     private let radiusValue: CGFloat = 6
     
     var body: some View {
-        ZStack {
+        VStack(alignment: .leading, spacing: 0) {
+            episodePoster
+                .clipShape(
+                    .rect(topLeadingRadius: radiusValue, topTrailingRadius: radiusValue)
+                )
+            
+            HStack {
+                Text("\(episodeModel.episodeNumber)  \(episodeModel.name)")
+                    .font(.system(size: 16))
+                    .fontWeight(.medium)
+                    .lineLimit(2)
+                
+                ContentRatingView(contentRating: episodeModel.rating)
+            }
+            .padding(.horizontal)
+            .padding(.top)
+            
+            HStack {
+                Text(episodeModel.airDate.formatDateString())
+                    .font(.system(size: 12))
+                    .fontWeight(.light)
+                
+                Text("\u{2022}")
+                    .fontWeight(.light)
+                
+                Text(episodeModel.runtime.formatRuntime())
+                    .font(.system(size: 12))
+                    .fontWeight(.light)
+            }
+            .padding(.horizontal)
+            
+            ExpandableTextView(textData: episodeModel.overview, maxTextLine: 5)
+        }
+        .padding(.bottom)
+        .background(
             RoundedRectangle(cornerRadius: radiusValue, style: .continuous)
                 .fill(Color("card_color"))
-                .shadow(radius: 4)
-            
-            VStack(alignment: .leading) {
-                HStack {
-                    episodePoster
-                        .clipShape(
-                            .rect(
-                                topLeadingRadius: radiusValue,
-                                bottomTrailingRadius: radiusValue
-                            )
-                        )
-                    
-                    VStack(alignment: .leading) {
-                        Text("\(episodeModel.episodeNumber)  \(episodeModel.name)")
-                            .font(.system(size: 16))
-                            .fontWeight(.medium)
-                            .lineLimit(2)
-                        
-                        HStack {
-                            Text(episodeModel.airDate.formatDateString())
-                                .font(.system(size: 12))
-                                .fontWeight(.light)
-                            
-                            Text("\u{2022}")
-                                .fontWeight(.light)
-                            
-                            Text(episodeModel.runtime.formatRuntime())
-                                .font(.system(size: 12))
-                                .fontWeight(.light)
-                        }
-                        
-                        ContentRatingView(contentRating: episodeModel.rating)
-                    }
-                    
-                    Spacer()
-                }
-                
-                Text(episodeModel.overview)
-                    .font(.system(size: 14))
-                    .padding(.horizontal, 6)
-                
-                Spacer()
-            }
-        }
-        .padding(.vertical, 8)
+                .shadow(color: .black.opacity(0.2), radius: radiusValue)
+        )
     }
 }
 
@@ -72,11 +63,14 @@ extension TvShowEpisodeItemView {
                 Image(systemName: "photo")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 50, height: 50)
+                    .frame(width: 75, height: 75)
             })
             .indicator(.activity)
+            .scaledToFill()
             .transition(.fade(duration: 0.5))
-            .frame(width: 180, height: 110)
+            .frame(maxWidth: .infinity)
+            .frame(height: 200)
+            .clipped()
     }
 }
 
