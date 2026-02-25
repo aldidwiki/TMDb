@@ -156,3 +156,10 @@ extension UIImage {
         }
     }
 }
+
+extension View {
+    func debugPrint(_ value: Any) -> some View {
+        print(value)
+        return self
+    }
+}

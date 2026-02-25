@@ -16,7 +16,10 @@ struct TvShowEpisodeItemView: View {
         VStack(alignment: .leading, spacing: 0) {
             episodePoster
                 .clipShape(
-                    .rect(topLeadingRadius: radiusValue, topTrailingRadius: radiusValue)
+                    .rect(
+                        topLeadingRadius: radiusValue,
+                        topTrailingRadius: radiusValue
+                    )
                 )
             
             HStack {
@@ -44,7 +47,10 @@ struct TvShowEpisodeItemView: View {
             }
             .padding(.horizontal)
             
-            ExpandableTextView(textData: episodeModel.overview, maxTextLine: 5)
+            Text(episodeModel.overview)
+                .font(.system(size: 14))
+                .padding(.horizontal)
+                .padding(.top, 8)
         }
         .padding(.bottom)
         .background(
@@ -57,20 +63,22 @@ struct TvShowEpisodeItemView: View {
 
 extension TvShowEpisodeItemView {
     var episodePoster: some View {
-        WebImage(url: URL(string: API.episodeStillBaseUrl + episodeModel.stillPath))
-            .resizable()
-            .placeholder(content: {
-                Image(systemName: "photo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 75, height: 75)
-            })
-            .indicator(.activity)
-            .scaledToFill()
-            .transition(.fade(duration: 0.5))
-            .frame(maxWidth: .infinity)
-            .frame(height: 200)
-            .clipped()
+        WebImage(
+            url: URL(string: API.episodeStillBaseUrl + episodeModel.stillPath)
+        )
+        .resizable()
+        .placeholder(content: {
+            Image(systemName: "photo")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 75, height: 75)
+        })
+        .indicator(.activity)
+        .scaledToFill()
+        .transition(.fade(duration: 0.5))
+        .frame(maxWidth: .infinity)
+        .frame(height: 200)
+        .clipped()
     }
 }
 
