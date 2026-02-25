@@ -201,26 +201,23 @@ extension MovieDetailView {
     
     var movieCredits: some View {
         VStack(alignment: .leading) {
-            HStack(alignment: .center) {
-                Text("Top Billed Cast")
-                    .padding(.horizontal)
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                
-                Spacer()
-                
-                presenter.toCreditDetailView(for: presenter.movie.cast) {
-                    Text("FULL CAST")
-                        .padding(.horizontal)
-                        .font(.subheadline)
-                }
-            }
+            Text("Top Billed Cast")
+                .padding(.horizontal)
+                .font(.title2)
+                .fontWeight(.semibold)
             
             ScrollView(.horizontal) {
                 LazyHStack(spacing: 20) {
                     ForEach(presenter.movie.cast.take(length: 10), id: \.id) { cast in
                         presenter.toPersonDetail(for: cast.id) {
                             CreditItemView(creditModel: cast, isPersonView: false)
+                        }
+                    }
+                    
+                    presenter.toCreditDetailView(for: presenter.movie.cast) {
+                        HStack {
+                            Text("View more")
+                            Image(systemName: "arrow.right.circle.fill")
                         }
                     }
                 }
