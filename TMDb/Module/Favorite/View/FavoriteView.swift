@@ -16,29 +16,32 @@ struct FavoriteView: View {
                 if presenter.loadingState {
                     ProgressView("Loading")
                 } else {
-                    ScrollView {
-                        LazyVStack {
+                    GeometryReader { geometry in
+                        ScrollView {
                             if presenter.favorites.isEmpty {
                                 EmptyView(emptyTitle: "No Favorites Found")
+                                    .frame(maxWidth: geometry.size.width, minHeight: geometry.size.height)
                             } else {
-                                ForEach(presenter.favorites) { favorite in
-                                    presenter.linkBuilder(for: favorite) {
-                                        VStack {
-                                            if favorite.mediaType == Constants.personType {
-                                                PersonItemView(personPopular: favorite.toPopularPersonModel)
-                                            } else {
-                                                MovieItemView(movie: favorite.toMovieModel)                                                
-                                            }
-                                            
-                                            if favorite != presenter.favorites.last {
-                                                NativeDivider()
+                                LazyVStack {
+                                    ForEach(presenter.favorites) { favorite in
+                                        presenter.linkBuilder(for: favorite) {
+                                            VStack {
+                                                if favorite.mediaType == Constants.personType {
+                                                    PersonItemView(personPopular: favorite.toPopularPersonModel)
+                                                } else {
+                                                    MovieItemView(movie: favorite.toMovieModel)
+                                                }
+                                                
+                                                if favorite != presenter.favorites.last {
+                                                    NativeDivider()
+                                                }
                                             }
                                         }
                                     }
                                 }
+                                .padding()
                             }
                         }
-                        .padding()
                     }
                 }
             }

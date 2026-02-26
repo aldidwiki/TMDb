@@ -10,10 +10,10 @@ import AlamofireNetworkActivityLogger
 
 @main
 struct TMDbApp: App {
-    init() {
-        NetworkActivityLogger.shared.startLogging()
-        NetworkActivityLogger.shared.level = .debug
-    }
+//    init() {
+//        NetworkActivityLogger.shared.startLogging()
+//        NetworkActivityLogger.shared.level = .debug
+//    }
     
     var body: some Scene {
         WindowGroup {
