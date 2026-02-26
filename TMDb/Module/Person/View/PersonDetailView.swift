@@ -152,26 +152,24 @@ extension PersonDetailView {
     
     var personCredits: some View {
         VStack {
-            HStack(alignment: .center) {
-                Text("Known For")
-                    .font(.title2)
-                    .fontWeight(.medium)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                
-                Spacer()
-                
-                presenter.toCreditDetailView(creditModelList: presenter.person.credits) {
-                    Text("SHOW ALL")
-                        .font(.subheadline)
-                }
-            }
-            .padding(.horizontal)
+            Text("Known For")
+                .font(.title2)
+                .fontWeight(.medium)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal)
             
             ScrollView(.horizontal) {
                 LazyHStack(spacing: 20) {
                     ForEach(presenter.person.credits.take(length: 10), id: \.id) { cast in
                         presenter.linkBuilder(contentId: cast.id, mediaType: cast.mediaType) {
                             CreditItemView(creditModel: cast, isPersonView: true)
+                        }
+                    }
+                    
+                    presenter.toCreditDetailView(creditModelList: presenter.person.credits) {
+                        HStack {
+                            Text("See more")
+                            Image(systemName: "arrow.right.circle.fill")
                         }
                     }
                 }
