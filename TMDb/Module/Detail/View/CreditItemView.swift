@@ -32,11 +32,11 @@ struct CreditItemView: View {
             Spacer()
         }
         .frame(width: 120, height: 250)
-        .background(
+        .background(content: {
             RoundedRectangle(cornerRadius: 6, style: .continuous)
                 .fill(Color("card_color"))
                 .shadow(color: .black.opacity(0.3), radius: 4)
-        )
+        })
         .offset(y: 6)
     }
 }

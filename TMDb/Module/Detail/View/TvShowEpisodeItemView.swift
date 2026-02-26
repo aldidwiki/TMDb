@@ -53,11 +53,11 @@ struct TvShowEpisodeItemView: View {
                 .padding(.top, 8)
         }
         .padding(.bottom)
-        .background(
+        .background {
             RoundedRectangle(cornerRadius: radiusValue, style: .continuous)
                 .fill(Color("card_color"))
                 .shadow(color: .black.opacity(0.3), radius: radiusValue)
-        )
+        }
     }
 }
 
