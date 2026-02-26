@@ -62,6 +62,7 @@ class PersonPresenter: ObservableObject {
                 }
             } receiveValue: { person in
                 self.person = person
+                self.findFavorite(personId: person.id)
             }.store(in: &cancellable)
     }
     
@@ -165,7 +166,7 @@ class PersonPresenter: ObservableObject {
             .store(in: &cancellable)
     }
     
-    func findFavorite(personId: Int) {
+    private func findFavorite(personId: Int) {
         self.loadingState = true
         favoriteUseCase.getFavorites()
             .receive(on: DispatchQueue.main)

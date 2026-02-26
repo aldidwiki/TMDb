@@ -51,6 +51,22 @@ struct PersonDetailView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(presenter.person.name)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    if !presenter.isFavorite {
+                        presenter.addFavorite(person: presenter.person)
+                    } else {
+                        presenter.deleteFavorite(personId: presenter.person.id)
+                    }
+                } label: {
+                    Image(systemName: self.presenter.isFavorite ? "heart.fill" : "heart")
+                        .contentTransition(.symbolEffect(.replace))
+                        .foregroundStyle(.red)
+                }
+                .disabled(presenter.loadingState)
+            }
+        }
     }
 }
 
