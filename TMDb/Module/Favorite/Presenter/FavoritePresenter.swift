@@ -47,6 +47,8 @@ class FavoritePresenter: ObservableObject {
                 router.makeDetailView(movieId: favoriteModel.id)
             } else if favoriteModel.mediaType == Constants.tvType {
                 router.makeTvDetailView(tvShowId: favoriteModel.id)
+            } else if favoriteModel.mediaType == Constants.personType {
+                router.makePersonDetailView(personId: favoriteModel.id)
             }
         } label: {
             content()

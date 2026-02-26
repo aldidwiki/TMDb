@@ -155,6 +155,16 @@ final class Mapper {
         )
     }
     
+    static func mapFavoriteModelToPersonPopularModel(
+        input favoriteModel: FavoriteModel
+    ) -> PersonPopularModel {
+        return PersonPopularModel(
+            id: favoriteModel.id,
+            name: favoriteModel.title,
+            profilePath: favoriteModel.posterPath
+        )
+    }
+    
     static func mapFavoriteModelToTvShowModel(
         input favoriteModel: FavoriteModel
     ) -> TvShowModel {

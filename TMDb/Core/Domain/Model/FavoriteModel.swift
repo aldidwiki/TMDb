@@ -18,4 +18,8 @@ struct FavoriteModel: Equatable, Identifiable {
     var toMovieModel : MovieModel {
         return Mapper.mapFavoriteModelToMovieModel(input: self)
     }
+    
+    var toPopularPersonModel: PersonPopularModel {
+        return Mapper.mapFavoriteModelToPersonPopularModel(input: self)
+    }
 }

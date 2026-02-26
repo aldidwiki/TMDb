@@ -24,7 +24,11 @@ struct FavoriteView: View {
                                 ForEach(presenter.favorites) { favorite in
                                     presenter.linkBuilder(for: favorite) {
                                         VStack {
-                                            MovieItemView(movie: favorite.toMovieModel)
+                                            if favorite.mediaType == Constants.personType {
+                                                PersonItemView(personPopular: favorite.toPopularPersonModel)
+                                            } else {
+                                                MovieItemView(movie: favorite.toMovieModel)                                                
+                                            }
                                             
                                             if favorite != presenter.favorites.last {
                                                 NativeDivider()
