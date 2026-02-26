@@ -62,7 +62,10 @@ struct PersonView: View {
 }
 
 #Preview {
-    PersonView(
-        presenter: PersonPresenter(personUseCase: Injection.init().providePersonUseCase())
+    let presenter = PersonPresenter(
+        personUseCase: Injection.init().providePersonUseCase(),
+        favoriteUseCase: Injection.init().provideFavoriteUseCase()
     )
+    
+    PersonView(presenter: presenter)
 }

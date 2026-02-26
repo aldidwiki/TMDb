@@ -13,6 +13,7 @@ class PersonPresenter: ObservableObject {
     private var cancellable: Set<AnyCancellable> = []
     
     private let personUseCase: PersonUseCase
+    private let favoriteUseCase: FavoriteUseCase
     private let router = PersonRouter()
     private let personRouter = DetailRouter()
     
@@ -43,8 +44,9 @@ class PersonPresenter: ObservableObject {
     private var canLoadMore = true
     private var currentPage = 1
     
-    init(personUseCase: PersonUseCase) {
+    init(personUseCase: PersonUseCase, favoriteUseCase: FavoriteUseCase) {
         self.personUseCase = personUseCase
+        self.favoriteUseCase = favoriteUseCase
     }
     
     func getPerson(personId: Int) {
@@ -128,6 +130,62 @@ class PersonPresenter: ObservableObject {
             } receiveValue: { personImageResult in
                 self.personImages = personImageResult
             }.store(in: &cancellable)
+    }
+    
+    func addFavorite(person: PersonModel) {
+        favoriteUseCase.addFavorite(person: person)
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                switch completion {
+                case .failure:
+                    self.errorMessage = String(describing: completion)
+                    self.isFavorite = false
+                case .finished:
+                    self.isFavorite = true
+                }
+            } receiveValue: {
+                self.isFavorite = $0
+            }
+            .store(in: &cancellable)
+    }
+    
+    func deleteFavorite(personId: Int) {
+        favoriteUseCase.deleteFavorite(for: personId)
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                switch completion {
+                case .failure:
+                    self.errorMessage = String(describing: completion)
+                case .finished:
+                    self.isFavorite = false
+                }
+            } receiveValue: {
+                self.isFavorite = !$0
+            }
+            .store(in: &cancellable)
+    }
+    
+    func findFavorite(personId: Int) {
+        self.loadingState = true
+        favoriteUseCase.getFavorites()
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                switch completion {
+                case .failure:
+                    self.errorMessage = String(describing: completion)
+                case .finished:
+                    self.loadingState = false
+                }
+            } receiveValue: { favorites in
+                if favorites.first(where: { person in
+                    person.id == personId
+                }) != nil {
+                    self.isFavorite = true
+                } else {
+                    self.isFavorite = false
+                }
+            }
+            .store(in: &cancellable)
     }
     
     func linkBuilder<Content: View>(

@@ -12,6 +12,7 @@ protocol FavoriteUseCase {
     func getFavorites() -> AnyPublisher<[FavoriteModel], Error>
     func addFavorite(movie: MovieDetailModel) -> AnyPublisher<Bool, Error>
     func addFavorite(tvShow: TvShowDetailModel) -> AnyPublisher<Bool, Error>
+    func addFavorite(person: PersonModel) -> AnyPublisher<Bool, Error>
     func deleteFavorite(for favoriteId: Int) -> AnyPublisher<Bool, Error>
 }
 
@@ -34,6 +35,10 @@ class FavoriteInteractor: FavoriteUseCase {
     
     func addFavorite(tvShow: TvShowDetailModel) -> AnyPublisher<Bool, Error> {
         return repository.addFavorite(for: Mapper.mapTvShowDetailModelToFavoriteEntity(input: tvShow))
+    }
+    
+    func addFavorite(person: PersonModel) -> AnyPublisher<Bool, any Error> {
+        return repository.addFavorite(for: Mapper.mapPersonModelToFavoriteEntity(input: person))
     }
     
     func deleteFavorite(for favoriteId: Int) -> AnyPublisher<Bool, Error> {

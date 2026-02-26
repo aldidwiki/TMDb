@@ -172,6 +172,10 @@ extension PersonDetailView {
 struct PersonView_Previews: PreviewProvider {
     static var previews: some View {
         let personUseCase = Injection.init().providePersonUseCase()
-        PersonDetailView(presenter: PersonPresenter(personUseCase: personUseCase), personId: 73457)
+        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
+        PersonDetailView(
+            presenter: PersonPresenter(personUseCase: personUseCase, favoriteUseCase: favoriteUseCase),
+            personId: 73457
+        )
     }
 }

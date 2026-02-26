@@ -50,8 +50,13 @@ struct PersonImageView: View {
 }
 
 #Preview {
+    let presenter = PersonPresenter(
+        personUseCase: Injection.init().providePersonUseCase(),
+        favoriteUseCase: Injection.init().provideFavoriteUseCase()
+    )
+    
     PersonImageView(
-        personPresenter: PersonPresenter(personUseCase: Injection.init().providePersonUseCase()),
+        personPresenter: presenter,
         personId: 2112859
     )
 }

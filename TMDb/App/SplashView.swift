@@ -23,7 +23,7 @@ struct SplashView: View {
                 let tvShowPresenter = TvShowPresenter(tvShowUseCase: tvShowUseCase)
                 
                 let personUseCase = Injection.init().providePersonUseCase()
-                let personPresenter = PersonPresenter(personUseCase: personUseCase)
+                let personPresenter = PersonPresenter(personUseCase: personUseCase, favoriteUseCase: favoriteUseCase)
                 
                 let searchUseCase = Injection.init().provideSearchUseCase()
                 let searchPresenter = SearchPresenter(searchUseCase: searchUseCase)

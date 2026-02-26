@@ -17,6 +17,7 @@ class Constants {
     
     static let movieType = "movie_type"
     static let tvType = "tv_type"
+    static let personType = "person_type"
     
     static let movieResponseType = "movie"
     static let tvShowResponseType = "tv"

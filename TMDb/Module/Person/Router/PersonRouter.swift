@@ -33,8 +33,9 @@ class PersonRouter {
     
     func makePersonImageView(personId: Int) -> some View {
         let personUseCase = Injection.init().providePersonUseCase()
+        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         return PersonImageView(
-            personPresenter: PersonPresenter(personUseCase: personUseCase),
+            personPresenter: PersonPresenter(personUseCase: personUseCase, favoriteUseCase: favoriteUseCase),
             personId: personId
         )
     }

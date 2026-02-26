@@ -117,6 +117,17 @@ final class Mapper {
         return favoriteEntity
     }
     
+    static func mapPersonModelToFavoriteEntity(
+        input personModel: PersonModel
+    ) -> FavoriteEntity {
+        let favoriteEntity = FavoriteEntity()
+        favoriteEntity.id = personModel.id
+        favoriteEntity.title = personModel.name
+        favoriteEntity.posterPath = personModel.profilePath
+        favoriteEntity.mediaType = Constants.personType
+        return favoriteEntity
+    }
+    
     static func mapFavoriteEntitiesToDomains(
         input favoriteEntities: [FavoriteEntity]
     ) -> [FavoriteModel] {
