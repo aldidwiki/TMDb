@@ -308,7 +308,7 @@ extension TvShowDetailView {
                     
                     presenter.toCreditDetailView(for: presenter.tvShow.credits) {
                         HStack {
-                            Text("View more")
+                            Text("See more")
                             Image(systemName: "arrow.right.circle.fill")
                         }
                     }
@@ -333,7 +333,7 @@ extension TvShowDetailView {
                 Spacer()
                 
                 presenter.toTvShowSeasonView(for: presenter.tvShow.seasons, title: presenter.tvShow.title, id: presenter.tvShow.id) {
-                    Text("SEE SEASONS")
+                    Text("All SEASONS")
                         .padding(.horizontal)
                         .font(.subheadline)
                 }

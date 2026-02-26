@@ -217,7 +217,7 @@ extension MovieDetailView {
                     
                     presenter.toCreditDetailView(for: presenter.movie.cast) {
                         HStack {
-                            Text("View more")
+                            Text("See more")
                             Image(systemName: "arrow.right.circle.fill")
                         }
                     }

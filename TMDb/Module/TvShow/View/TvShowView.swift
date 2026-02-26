@@ -17,7 +17,7 @@ struct TvShowView: View {
                     ProgressView("Loading")
                 } else {
                     if presenter.tvShows.isEmpty {
-                        EmptyView(emptyTitle: "No Tv Show Found")
+                        EmptyView(emptyTitle: "No Shows Found")
                     } else {
                         ScrollView {
                             LazyVStack {
@@ -56,7 +56,7 @@ struct TvShowView: View {
                     self.presenter.getTvShows(reset: true)
                 }
             }
-            .navigationTitle("Popular Tv Shows")
+            .navigationTitle("Popular Shows")
         }
     }
 }

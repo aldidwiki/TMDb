@@ -18,12 +18,12 @@ struct ContentView: View {
         TabView {
             MovieView(presenter: self.moviePresenter)
                 .tabItem {
-                    Label("Movie", systemImage: "film")
+                    Label("Movies", systemImage: "film")
                 }
             
             TvShowView(presenter: tvShowPresenter)
                 .tabItem {
-                    Label("Tv Show", systemImage: "tv")
+                    Label("Shows", systemImage: "tv")
                 }
             
             PersonView(presenter: personPresenter)
