@@ -13,31 +13,31 @@ struct CreditItemView: View {
     var isPersonView: Bool
     
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 6, style: .continuous)
-                .fill(Color("card_color"))
-                .shadow(radius: 4)
+        VStack(alignment: .leading) {
+            creditPoster
+                .clipShape(.rect(
+                    topLeadingRadius: 6,
+                    topTrailingRadius: 6
+                ))
             
-            VStack(alignment: .leading) {
-                creditPoster
-                    .clipShape(.rect(
-                        topLeadingRadius: 6,
-                        topTrailingRadius: 6
-                    ))
-                
-                Text(creditModel.name)
-                    .fontWeight(.medium)
-                    .padding(.horizontal, 6)
-                
-                Text(creditModel.characterName)
-                    .fontWeight(.thin)
-                    .padding(.horizontal, 6)
-                    .padding(.bottom)
-                
-                Spacer()
-            }
+            Text(creditModel.name)
+                .fontWeight(.medium)
+                .padding(.horizontal, 6)
+            
+            Text(creditModel.characterName)
+                .fontWeight(.thin)
+                .padding(.horizontal, 6)
+                .padding(.bottom)
+            
+            Spacer()
         }
         .frame(width: 120, height: 250)
+        .background(
+            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                .fill(Color("card_color"))
+                .shadow(color: .black.opacity(0.3), radius: 4)
+        )
+        .offset(y: 6)
     }
 }
 

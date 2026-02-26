@@ -56,7 +56,7 @@ struct TvShowEpisodeItemView: View {
         .background(
             RoundedRectangle(cornerRadius: radiusValue, style: .continuous)
                 .fill(Color("card_color"))
-                .shadow(color: .black.opacity(0.2), radius: radiusValue)
+                .shadow(color: .black.opacity(0.3), radius: radiusValue)
         )
     }
 }
