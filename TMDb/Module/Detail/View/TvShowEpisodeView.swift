@@ -8,10 +8,17 @@
 import SwiftUI
 
 struct TvShowEpisodeView: View {
-    @ObservedObject var presenter: TvShowSeasonDetailPresenter
-    var tvShowId: Int
-    var seasonNumber: Int
-    var seasonName: String
+    @State private var presenter: TvShowSeasonDetailPresenter
+    private let tvShowId: Int
+    private let seasonNumber: Int
+    private let seasonName: String
+    
+    init(tvShowUseCase: TvShowUseCase, tvShowId: Int, seasonNumber: Int, seasonName: String) {
+        _presenter = State(initialValue: TvShowSeasonDetailPresenter(tvShowUseCase: tvShowUseCase))
+        self.tvShowId = tvShowId
+        self.seasonName = seasonName
+        self.seasonNumber = seasonNumber
+    }
     
     var body: some View {
         ZStack {
@@ -37,7 +44,7 @@ struct TvShowEpisodeView_Previews: PreviewProvider {
         let tvShowUseCase = Injection.init().provideTvShowUseCase()
         
         TvShowEpisodeView(
-            presenter: TvShowSeasonDetailPresenter(tvShowUseCase: tvShowUseCase),
+            tvShowUseCase: tvShowUseCase,
             tvShowId: 973190,
             seasonNumber: 4,
             seasonName: "Season 4"

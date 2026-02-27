@@ -5,18 +5,19 @@
 //  Created by Aldi Dwiki Prahasta on 14/09/23.
 //
 
-import Foundation
+import Observation
 import Combine
 import SwiftUI
 
-class TvShowSeasonDetailPresenter: ObservableObject {
+@Observable
+class TvShowSeasonDetailPresenter {
     private var cancellable: Set<AnyCancellable> = []
     
     private let tvShowUseCase: TvShowUseCase
     
-    @Published var loadingState = false
-    @Published var errorMessage = ""
-    @Published var tvShowEpisodes: [TvShowSeasonDetailModel] = []
+    var loadingState = false
+    var errorMessage = ""
+    var tvShowEpisodes: [TvShowSeasonDetailModel] = []
     
     init(tvShowUseCase: TvShowUseCase) {
         self.tvShowUseCase = tvShowUseCase
