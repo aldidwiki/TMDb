@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct MovieView: View {
-    @ObservedObject var presenter: MoviePresenter
+    @State private var presenter: MoviePresenter
+    
+    init(movieUseCase: MovieUseCase) {
+        _presenter = State(initialValue: MoviePresenter(movieUseCase: movieUseCase))
+    }
     
     var body: some View {
         NavigationStack {
@@ -64,6 +68,6 @@ struct MovieView: View {
 struct MovieView_Previews: PreviewProvider {
     static var previews: some View {
         let movieUseCase = Injection.init().provideMovieUseCase()
-        MovieView(presenter: MoviePresenter(movieUseCase: movieUseCase))
+        MovieView(movieUseCase: movieUseCase)
     }
 }

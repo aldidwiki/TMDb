@@ -7,18 +7,20 @@
 
 import SwiftUI
 import Combine
+import Observation
 
-class MoviePresenter: ObservableObject {
+@Observable
+class MoviePresenter {
     private var cancellable: Set<AnyCancellable> = []
     
     private let router = MovieRouter()
     private let movieUseCase: MovieUseCase
     
-    @Published var movies: [MovieModel] = []
-    @Published var errorMessage = ""
-    @Published var loadingState = true
+    var movies: [MovieModel] = []
+    var errorMessage = ""
+    var loadingState = true
     
-    @Published var isFetchingMore = false
+    var isFetchingMore = false
     private var currentPage = 1
     private var canLoadMore = true
     

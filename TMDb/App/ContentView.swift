@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var moviePresenter: MoviePresenter
     @EnvironmentObject var favoritePresenter: FavoritePresenter
     @EnvironmentObject var tvShowPresenter: TvShowPresenter
     @EnvironmentObject var personPresenter: PersonPresenter
@@ -16,7 +15,7 @@ struct ContentView: View {
     
     var body: some View {
         TabView {
-            MovieView(presenter: self.moviePresenter)
+            MovieView(movieUseCase: Injection.init().provideMovieUseCase())
                 .tabItem {
                     Label("Movies", systemImage: "film")
                 }
@@ -46,6 +45,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .environmentObject(MoviePresenter(movieUseCase: Injection.init().provideMovieUseCase()))
         .environmentObject(FavoritePresenter(favoriteUseCase: Injection.init().provideFavoriteUseCase()))
 }

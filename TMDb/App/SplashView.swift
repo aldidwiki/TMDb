@@ -12,10 +12,7 @@ struct SplashView: View {
     
     var body: some View {
         ZStack {
-            if isActive {
-                let movieUseCase = Injection.init().provideMovieUseCase()
-                let moviePresenter = MoviePresenter(movieUseCase: movieUseCase)
-                
+            if isActive {                
                 let favoriteUseCase = Injection.init().provideFavoriteUseCase()
                 let favoritePresenter = FavoritePresenter(favoriteUseCase: favoriteUseCase)
                 
@@ -29,7 +26,6 @@ struct SplashView: View {
                 let searchPresenter = SearchPresenter(searchUseCase: searchUseCase)
                 
                 ContentView()
-                    .environmentObject(moviePresenter)
                     .environmentObject(favoritePresenter)
                     .environmentObject(tvShowPresenter)
                     .environmentObject(personPresenter)
