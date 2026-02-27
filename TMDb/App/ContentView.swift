@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var favoritePresenter: FavoritePresenter
-    @EnvironmentObject var tvShowPresenter: TvShowPresenter
     @EnvironmentObject var personPresenter: PersonPresenter
     @EnvironmentObject var searchPresenter: SearchPresenter
     
@@ -20,7 +19,7 @@ struct ContentView: View {
                     Label("Movies", systemImage: "film")
                 }
             
-            TvShowView(presenter: tvShowPresenter)
+            TvShowView(tvShowUseCase: Injection.init().provideTvShowUseCase())
                 .tabItem {
                     Label("Shows", systemImage: "tv")
                 }

@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct TvShowView: View {
-    @ObservedObject var presenter: TvShowPresenter
+    @State private var presenter: TvShowPresenter
+    
+    init(tvShowUseCase: TvShowUseCase) {
+        _presenter = State(initialValue: TvShowPresenter(tvShowUseCase: tvShowUseCase))
+    }
     
     var body: some View {
         NavigationView {
@@ -64,6 +68,6 @@ struct TvShowView: View {
 struct TvShowView_Previews: PreviewProvider {
     static var previews: some View {
         let tvShowUseCase = Injection.init().provideTvShowUseCase()
-        TvShowView(presenter: TvShowPresenter(tvShowUseCase: tvShowUseCase))
+        TvShowView(tvShowUseCase: tvShowUseCase)
     }
 }

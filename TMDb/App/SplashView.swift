@@ -16,9 +16,6 @@ struct SplashView: View {
                 let favoriteUseCase = Injection.init().provideFavoriteUseCase()
                 let favoritePresenter = FavoritePresenter(favoriteUseCase: favoriteUseCase)
                 
-                let tvShowUseCase = Injection.init().provideTvShowUseCase()
-                let tvShowPresenter = TvShowPresenter(tvShowUseCase: tvShowUseCase)
-                
                 let personUseCase = Injection.init().providePersonUseCase()
                 let personPresenter = PersonPresenter(personUseCase: personUseCase, favoriteUseCase: favoriteUseCase)
                 
@@ -27,7 +24,6 @@ struct SplashView: View {
                 
                 ContentView()
                     .environmentObject(favoritePresenter)
-                    .environmentObject(tvShowPresenter)
                     .environmentObject(personPresenter)
                     .environmentObject(searchPresenter)
                     .transition(.scale)

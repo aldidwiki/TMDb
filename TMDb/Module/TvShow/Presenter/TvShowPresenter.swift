@@ -5,21 +5,22 @@
 //  Created by Aldi Dwiki Prahasta on 03/07/23.
 //
 
-import Foundation
+import Observation
 import Combine
 import SwiftUI
 
-class TvShowPresenter: ObservableObject {
+@Observable
+class TvShowPresenter {
     private var cancellable: Set<AnyCancellable> = []
     private let router = TvShowRouter()
     
     private let tvShowUseCase: TvShowUseCase
     
-    @Published var tvShows: [TvShowModel] = []
-    @Published var errorMessage = ""
-    @Published var loadingState = true
+    var tvShows: [TvShowModel] = []
+    var errorMessage = ""
+    var loadingState = true
     
-    @Published var isFetchingMore = false
+    var isFetchingMore = false
     private var canLoadMore = true
     private var currentPage = 1
     
