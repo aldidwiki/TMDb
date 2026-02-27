@@ -24,11 +24,10 @@ class FavoriteRouter {
     }
     
     func makePersonDetailView(personId: Int) -> some View {
-        let presenter = PersonPresenter(
+        return PersonDetailView(
             personUseCase: Injection.init().providePersonUseCase(),
-            favoriteUseCase: Injection.init().provideFavoriteUseCase()
+            favoriteUseCase: Injection.init().provideFavoriteUseCase(),
+            personId: personId
         )
-        
-        return PersonDetailView(presenter: presenter, personId: personId)
     }
 }

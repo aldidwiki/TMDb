@@ -9,8 +9,13 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct PersonDetailView: View {
-    @StateObject var presenter: PersonPresenter
-    var personId: Int
+    @State private var presenter: PersonPresenter
+    private let personId: Int
+    
+    init(personUseCase: PersonUseCase, favoriteUseCase: FavoriteUseCase, personId: Int) {
+        _presenter = State(initialValue: PersonPresenter(personUseCase: personUseCase, favoriteUseCase: favoriteUseCase))
+        self.personId = personId
+    }
     
     var body: some View {
         ZStack {
@@ -188,8 +193,9 @@ struct PersonView_Previews: PreviewProvider {
         let personUseCase = Injection.init().providePersonUseCase()
         let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         PersonDetailView(
-            presenter: PersonPresenter(personUseCase: personUseCase, favoriteUseCase: favoriteUseCase),
-            personId: 73457
+            personUseCase: personUseCase,
+            favoriteUseCase: favoriteUseCase,
+            personId: 0
         )
     }
 }

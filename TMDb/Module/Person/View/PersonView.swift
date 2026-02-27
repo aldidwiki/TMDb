@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct PersonView: View {
-    @ObservedObject var presenter: PersonPresenter
+    @State private var presenter: PersonPresenter
+    
+    init(personUseCase: PersonUseCase, favoriteUseCase: FavoriteUseCase) {
+        _presenter = State(initialValue: PersonPresenter(personUseCase: personUseCase, favoriteUseCase: favoriteUseCase))
+    }
     
     var body: some View {
         NavigationStack {
@@ -62,10 +66,8 @@ struct PersonView: View {
 }
 
 #Preview {
-    let presenter = PersonPresenter(
+    PersonView(
         personUseCase: Injection.init().providePersonUseCase(),
         favoriteUseCase: Injection.init().provideFavoriteUseCase()
     )
-    
-    PersonView(presenter: presenter)
 }

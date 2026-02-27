@@ -5,11 +5,12 @@
 //  Created by Aldi Dwiki Prahasta on 08/05/23.
 //
 
-import Foundation
+import Observation
 import Combine
 import SwiftUI
 
-class PersonPresenter: ObservableObject {
+@Observable
+class PersonPresenter {
     private var cancellable: Set<AnyCancellable> = []
     
     private let personUseCase: PersonUseCase
@@ -17,10 +18,10 @@ class PersonPresenter: ObservableObject {
     private let router = PersonRouter()
     private let personRouter = DetailRouter()
     
-    @Published var errorMessage = ""
-    @Published var loadingState = false
-    @Published var isFavorite = false
-    @Published var person = PersonModel(
+    var errorMessage = ""
+    var loadingState = false
+    var isFavorite = false
+    var person = PersonModel(
         id: 0,
         name: "",
         profilePath: "/83o3koL82jt30EJ0rz4Bnzrt2dd.jpg",
@@ -37,10 +38,10 @@ class PersonPresenter: ObservableObject {
         twitterId: ""
     )
     
-    @Published var personPopular: [PersonPopularModel] = []
-    @Published var personImages: [PersonImageModel] = []
+    var personPopular: [PersonPopularModel] = []
+    var personImages: [PersonImageModel] = []
     
-    @Published var isFetchingMore = false
+    var isFetchingMore = false
     private var canLoadMore = true
     private var currentPage = 1
     

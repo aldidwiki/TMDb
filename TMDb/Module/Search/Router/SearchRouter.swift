@@ -31,7 +31,8 @@ class SearchRouter {
         let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         
         return PersonDetailView(
-            presenter: PersonPresenter(personUseCase: personUseCase, favoriteUseCase: favoriteUseCase),
+            personUseCase: personUseCase,
+            favoriteUseCase: favoriteUseCase,
             personId: personId
         )
     }

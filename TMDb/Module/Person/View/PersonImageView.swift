@@ -10,11 +10,23 @@ import SDWebImageSwiftUI
 import ImageViewerRemote
 
 struct PersonImageView: View {
-    @ObservedObject var personPresenter: PersonPresenter
+    @State private var personPresenter: PersonPresenter
     @State var imgUrl = ""
     @State var showImageView = false
+
+    private let personId: Int
     
-    var personId: Int
+    init(
+        personUseCase: PersonUseCase,
+        favoriteUseCase: FavoriteUseCase,
+        personId: Int
+    ) {
+        _personPresenter = State(initialValue: PersonPresenter(
+            personUseCase: personUseCase,
+            favoriteUseCase: favoriteUseCase
+        ))
+        self.personId = personId
+    }
     
     let columns = [
         GridItem(.flexible()),
@@ -50,13 +62,9 @@ struct PersonImageView: View {
 }
 
 #Preview {
-    let presenter = PersonPresenter(
-        personUseCase: Injection.init().providePersonUseCase(),
-        favoriteUseCase: Injection.init().provideFavoriteUseCase()
-    )
-    
     PersonImageView(
-        personPresenter: presenter,
-        personId: 2112859
+        personUseCase: Injection.init().providePersonUseCase(),
+        favoriteUseCase: Injection.init().provideFavoriteUseCase(),
+        personId: 0
     )
 }

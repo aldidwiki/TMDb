@@ -35,7 +35,8 @@ class PersonRouter {
         let personUseCase = Injection.init().providePersonUseCase()
         let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         return PersonImageView(
-            personPresenter: PersonPresenter(personUseCase: personUseCase, favoriteUseCase: favoriteUseCase),
+            personUseCase: personUseCase,
+            favoriteUseCase: favoriteUseCase,
             personId: personId
         )
     }

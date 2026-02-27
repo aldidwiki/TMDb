@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var favoritePresenter: FavoritePresenter
-    @EnvironmentObject var personPresenter: PersonPresenter
     @EnvironmentObject var searchPresenter: SearchPresenter
     
     var body: some View {
@@ -24,7 +23,11 @@ struct ContentView: View {
                     Label("Shows", systemImage: "tv")
                 }
             
-            PersonView(presenter: personPresenter)
+            PersonView(
+                personUseCase: Injection.init().providePersonUseCase(),
+                favoriteUseCase: Injection.init().provideFavoriteUseCase()
+            )
+            
                 .tabItem {
                     Label("Person", systemImage: "person.fill")
                 }

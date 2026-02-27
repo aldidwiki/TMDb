@@ -13,7 +13,8 @@ class CreditDetailRouter {
         let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         let personUseCase = Injection.init().providePersonUseCase()
         return PersonDetailView(
-            presenter: PersonPresenter(personUseCase: personUseCase, favoriteUseCase: favoriteUseCase),
+            personUseCase: personUseCase,
+            favoriteUseCase: favoriteUseCase,
             personId: personId
         )
     }
