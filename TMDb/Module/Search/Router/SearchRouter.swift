@@ -20,8 +20,7 @@ class SearchRouter {
         let tvShowUseCase = Injection.init().provideTvShowUseCase()
         let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         return TvShowDetailView(
-            presenter: TvShowDetailPresenter(tvShowUseCase: tvShowUseCase, favoriteUseCase: favoriteUseCase),
-            tvShowId: tvId
+            tvShowUseCase: tvShowUseCase, favoriteUseCase: favoriteUseCase, tvShowId: tvId
         )
     }
     

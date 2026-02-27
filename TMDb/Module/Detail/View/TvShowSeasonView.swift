@@ -8,10 +8,23 @@
 import SwiftUI
 
 struct TvShowSeasonView: View {
-    var tvShowId: Int
-    var tvShowTitle: String
-    var tvShowSeasonList: [TvShowSeasonModel]
-    @ObservedObject var tvShowDetailPresenter: TvShowDetailPresenter
+    private let tvShowId: Int
+    private let tvShowTitle: String
+    private let tvShowSeasonList: [TvShowSeasonModel]
+    @State private var tvShowDetailPresenter: TvShowDetailPresenter
+    
+    init(
+        tvShowUseCase: TvShowUseCase,
+        favoriteUseCase: FavoriteUseCase,
+        tvShowId: Int,
+        tvShowTitle: String,
+        tvShowSeasonList: [TvShowSeasonModel]
+    ) {
+        _tvShowDetailPresenter = State(initialValue: TvShowDetailPresenter(tvShowUseCase: tvShowUseCase, favoriteUseCase: favoriteUseCase))
+        self.tvShowId = tvShowId
+        self.tvShowTitle = tvShowTitle
+        self.tvShowSeasonList = tvShowSeasonList
+    }
     
     var body: some View {
         List(tvShowSeasonList, id: \.id) { tvShowSeason in
@@ -33,7 +46,9 @@ struct TvShowSeasonView_Previews: PreviewProvider {
         let favoriteUseCase: FavoriteUseCase = Injection.init().provideFavoriteUseCase()
         
         TvShowSeasonView(
-            tvShowId: 123,
+            tvShowUseCase: tvShowUseCase,
+            favoriteUseCase: favoriteUseCase,
+            tvShowId: 0,
             tvShowTitle: "Game of Thrones",
             tvShowSeasonList: [
                 TvShowSeasonModel(
@@ -63,10 +78,7 @@ struct TvShowSeasonView_Previews: PreviewProvider {
                     seasonNumber: 1,
                     seasonOverview: "When an unexpected accident at the S.T.A.R. Labs Particle Accelerator facility strikes Barry, he finds himself suddenly charged with the incredible power to move at super speeds. While Barry has always been a hero in his soul, his newfound powers have finally given him the ability to act like one. With the help of the research team at S.T.A.R. Labs, Barry begins testing the limits of his evolving powers and using them to stop crime. With a winning personality and a smile on his face, Barry Allen — aka The Flash — is finally moving forward in life … very, very fast!"
                 )
-            ],
-            tvShowDetailPresenter: TvShowDetailPresenter(
-                tvShowUseCase: tvShowUseCase,
-                favoriteUseCase: favoriteUseCase)
+            ]
         )
     }
 }

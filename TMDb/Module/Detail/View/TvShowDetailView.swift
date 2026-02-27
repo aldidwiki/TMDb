@@ -12,7 +12,7 @@ import SwiftUIIntrospect
 struct TvShowDetailView: View {
     @Environment(\.dismiss) private var dismiss
     
-    @StateObject var presenter: TvShowDetailPresenter
+    @State private var presenter: TvShowDetailPresenter
     @State var showSheet = false
     @State var isFavorite = false
     
@@ -20,7 +20,15 @@ struct TvShowDetailView: View {
     @State private var primaryColor: Color = .primary
     @State private var secondaryColor: Color = .primary
     
-    var tvShowId: Int
+    private let tvShowId: Int
+    
+    init(tvShowUseCase: TvShowUseCase, favoriteUseCase: FavoriteUseCase, tvShowId: Int) {
+        _presenter = State(initialValue: TvShowDetailPresenter(
+            tvShowUseCase: tvShowUseCase,
+            favoriteUseCase: favoriteUseCase
+        ))
+        self.tvShowId = tvShowId
+    }
     
     var body: some View {
         ZStack {
@@ -391,8 +399,7 @@ struct TvShowDetailView_Previews: PreviewProvider {
         let tvShowUseCase = Injection.init().provideTvShowUseCase()
         let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         TvShowDetailView(
-            presenter: TvShowDetailPresenter(tvShowUseCase: tvShowUseCase, favoriteUseCase: favoriteUseCase),
-            tvShowId: 114472
+            tvShowUseCase: tvShowUseCase, favoriteUseCase: favoriteUseCase, tvShowId: 0
         )
     }
 }

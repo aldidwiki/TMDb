@@ -10,11 +10,16 @@ import SDWebImageSwiftUI
 import ImageViewerRemote
 
 struct TvShowImageGalleryView: View {
-    @ObservedObject var presenter: TvShowDetailPresenter
+    @State private var presenter: TvShowDetailPresenter
     @State var imgUrl = ""
     @State var showImageView = false
     
-    var tvShowId: Int
+    private let tvShowId: Int
+    
+    init(tvShowUseCase: TvShowUseCase, favoriteUseCase: FavoriteUseCase, tvShowId: Int) {
+        _presenter = State(initialValue: TvShowDetailPresenter(tvShowUseCase: tvShowUseCase, favoriteUseCase: favoriteUseCase))
+        self.tvShowId = tvShowId
+    }
     
     let columns = [
         GridItem(.flexible()),
@@ -50,10 +55,8 @@ struct TvShowImageGalleryView: View {
 
 #Preview {
     TvShowImageGalleryView(
-        presenter: TvShowDetailPresenter(
-            tvShowUseCase: Injection.init().provideTvShowUseCase(),
-            favoriteUseCase: Injection.init().provideFavoriteUseCase()
-        ),
+        tvShowUseCase: Injection.init().provideTvShowUseCase(),
+        favoriteUseCase: Injection.init().provideFavoriteUseCase(),
         tvShowId: 82452
     )
 }

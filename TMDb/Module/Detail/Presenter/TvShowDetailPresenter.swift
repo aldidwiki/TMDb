@@ -5,20 +5,21 @@
 //  Created by Aldi Dwiki Prahasta on 04/07/23.
 //
 
-import Foundation
+import Observation
 import Combine
 import SwiftUI
 
-class TvShowDetailPresenter: ObservableObject {
+@Observable
+class TvShowDetailPresenter {
     private var cancellable: Set<AnyCancellable> = []
     
     private let router = DetailRouter()
     private let tvShowUseCase: TvShowUseCase
     private let favoriteUseCase: FavoriteUseCase
     
-    @Published var errorMessage = ""
-    @Published var loadingState = false
-    @Published var tvShow = TvShowDetailModel(
+    var errorMessage = ""
+    var loadingState = false
+    var tvShow = TvShowDetailModel(
         id: 0,
         backdropPath: "",
         releaseDate: "",
@@ -42,8 +43,8 @@ class TvShowDetailPresenter: ObservableObject {
         networks: [],
         seasons: []
     )
-    @Published var isFavorite = false
-    @Published var tvShowImages: [ImageModel] = []
+    var isFavorite = false
+    var tvShowImages: [ImageModel] = []
     
     init(tvShowUseCase: TvShowUseCase, favoriteUseCase: FavoriteUseCase) {
         self.tvShowUseCase = tvShowUseCase
