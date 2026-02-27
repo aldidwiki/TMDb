@@ -13,14 +13,10 @@ struct SplashView: View {
     var body: some View {
         ZStack {
             if isActive {                
-                let favoriteUseCase = Injection.init().provideFavoriteUseCase()
-                let favoritePresenter = FavoritePresenter(favoriteUseCase: favoriteUseCase)
-                
                 let searchUseCase = Injection.init().provideSearchUseCase()
                 let searchPresenter = SearchPresenter(searchUseCase: searchUseCase)
                 
                 ContentView()
-                    .environmentObject(favoritePresenter)
                     .environmentObject(searchPresenter)
                     .transition(.scale)
             } else {

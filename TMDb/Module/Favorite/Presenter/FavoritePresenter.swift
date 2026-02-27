@@ -7,16 +7,18 @@
 
 import SwiftUI
 import Combine
+import Observation
 
-class FavoritePresenter: ObservableObject {
+@Observable
+class FavoritePresenter {
     private var cancellable: Set<AnyCancellable> = []
     
     private let router = FavoriteRouter()
     private let favoriteUseCase: FavoriteUseCase
     
-    @Published var favorites = [FavoriteModel]()
-    @Published var errorMessage = ""
-    @Published var loadingState = false
+    var favorites = [FavoriteModel]()
+    var errorMessage = ""
+    var loadingState = false
     
     init(favoriteUseCase: FavoriteUseCase) {
         self.favoriteUseCase = favoriteUseCase

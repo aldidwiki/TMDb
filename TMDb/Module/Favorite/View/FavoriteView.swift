@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct FavoriteView: View {
-    @ObservedObject var presenter: FavoritePresenter
+    @State private var presenter: FavoritePresenter
+    
+    init(favoriteUseCase: FavoriteUseCase){
+        _presenter = State(initialValue: FavoritePresenter(favoriteUseCase: favoriteUseCase))
+    }
     
     var body: some View {
         NavigationView {
@@ -56,6 +60,6 @@ struct FavoriteView: View {
 struct FavoriteView_Previews: PreviewProvider {
     static var previews: some View {
         let favoriteUseCase = Injection.init().provideFavoriteUseCase()
-        FavoriteView(presenter: FavoritePresenter(favoriteUseCase: favoriteUseCase))
+        FavoriteView(favoriteUseCase: favoriteUseCase)
     }
 }

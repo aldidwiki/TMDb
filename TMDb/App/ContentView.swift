@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var favoritePresenter: FavoritePresenter
     @EnvironmentObject var searchPresenter: SearchPresenter
     
     var body: some View {
@@ -27,12 +26,11 @@ struct ContentView: View {
                 personUseCase: Injection.init().providePersonUseCase(),
                 favoriteUseCase: Injection.init().provideFavoriteUseCase()
             )
+            .tabItem {
+                Label("Person", systemImage: "person.fill")
+            }
             
-                .tabItem {
-                    Label("Person", systemImage: "person.fill")
-                }
-            
-            FavoriteView(presenter: favoritePresenter)
+            FavoriteView(favoriteUseCase: Injection.init().provideFavoriteUseCase())
                 .tabItem {
                     Label("Favorite", systemImage: "heart")
                 }
@@ -47,5 +45,4 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .environmentObject(FavoritePresenter(favoriteUseCase: Injection.init().provideFavoriteUseCase()))
 }
