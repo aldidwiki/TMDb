@@ -12,14 +12,19 @@ import SwiftUIIntrospect
 struct MovieDetailView: View {
     @Environment(\.dismiss) private var dismiss
     
-    @StateObject var presenter: MovieDetailPresenter
+    @State private var presenter: MovieDetailPresenter
     @State var showSheet = false
     
     @State private var bgColor: Color = .clear
     @State private var primaryColor: Color = .primary
     @State private var secondaryColor: Color = .primary
     
-    var movieId: Int
+    private let movieId: Int
+    
+    init(detailUseCase: DetailUseCase, favoriteUseCase: FavoriteUseCase, movieId: Int) {
+        _presenter = State(initialValue: MovieDetailPresenter(detailUseCase: detailUseCase, favoriteUseCase: favoriteUseCase))
+        self.movieId = movieId
+    }
     
     var body: some View {
         ZStack {
@@ -372,8 +377,7 @@ struct MovieDetailView_Previews: PreviewProvider {
         let detailUseCase = Injection.init().provideDetailUseCase()
         let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         MovieDetailView(
-            presenter: MovieDetailPresenter(detailUseCase: detailUseCase, favoriteUseCase: favoriteUseCase),
-            movieId: 436270
+            detailUseCase: detailUseCase, favoriteUseCase: favoriteUseCase, movieId: 0
         )
     }
 }

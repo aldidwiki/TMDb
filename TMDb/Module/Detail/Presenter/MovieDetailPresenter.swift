@@ -7,8 +7,10 @@
 
 import SwiftUI
 import Combine
+import Observation
 
-class MovieDetailPresenter: ObservableObject {
+@Observable
+class MovieDetailPresenter {
     private var cancellable: Set<AnyCancellable> = []
     
     private let router = DetailRouter()
@@ -16,7 +18,7 @@ class MovieDetailPresenter: ObservableObject {
     private let detailUseCase: DetailUseCase
     private let favoriteUseCase: FavoriteUseCase
     
-    @Published var movie = MovieDetailModel(
+    var movie = MovieDetailModel(
         id: 0,
         title: "",
         rating: 7.1,
@@ -39,10 +41,10 @@ class MovieDetailPresenter: ObservableObject {
         imdbId: "",
         videos: []
     )
-    @Published var errorMessage = ""
-    @Published var loadingState = false
-    @Published var isFavorite = false
-    @Published var movieImages: [ImageModel] = []
+    var errorMessage = ""
+    var loadingState = false
+    var isFavorite = false
+    var movieImages: [ImageModel] = []
     
     init(detailUseCase: DetailUseCase, favoriteUseCase: FavoriteUseCase) {
         self.detailUseCase = detailUseCase

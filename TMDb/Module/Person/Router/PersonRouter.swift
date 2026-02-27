@@ -13,8 +13,7 @@ class PersonRouter {
         let detailUseCase = Injection.init().provideDetailUseCase()
         let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         return MovieDetailView(
-            presenter: MovieDetailPresenter(detailUseCase: detailUseCase, favoriteUseCase: favoriteUseCase),
-            movieId: movieId
+            detailUseCase: detailUseCase, favoriteUseCase: favoriteUseCase, movieId: movieId
         )
     }
     
