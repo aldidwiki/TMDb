@@ -6,29 +6,36 @@
 //
 
 import Foundation
+import Observation
 import Combine
 import SwiftUI
 
-class SearchPresenter: ObservableObject {
+@Observable
+class SearchPresenter {
     private var cancellable: Set<AnyCancellable> = []
     private let router = SearchRouter()
     
     private let searchUseCase: SearchUseCase
     
-    @Published var searchResults: [SearchModel] = []
-    @Published var errorMessage = ""
-    @Published var loadingState = false
+    var searchResults: [SearchModel] = []
+    var errorMessage = ""
+    var loadingState = false
     
-    @Published var isFetchingMore = false
+    var isFetchingMore = false
     private var currentPage = 1
     private var canLoadMore = true
+    private let searchSubject = CurrentValueSubject<String, Never>("")
     
-    @Published var searchQuery: String = ""
+    var searchQuery: String = "" {
+        didSet {
+            searchSubject.send(searchQuery)
+        }
+    }
     
     init(searchUseCase: SearchUseCase) {
         self.searchUseCase = searchUseCase
         
-        $searchQuery
+        searchSubject
             .dropFirst()
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
             .removeDuplicates()

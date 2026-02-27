@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct SearchView: View {
-    @ObservedObject var presenter: SearchPresenter
+    @State private var presenter: SearchPresenter
+    
+    init(searchUseCase: SearchUseCase) {
+        _presenter = State(initialValue: SearchPresenter(searchUseCase: searchUseCase))
+    }
     
     var body: some View {
         NavigationStack {
@@ -71,5 +75,5 @@ struct SearchView: View {
 
 #Preview {
     let useCase = Injection.init().provideSearchUseCase()
-    SearchView(presenter: SearchPresenter(searchUseCase: useCase))
+    SearchView(searchUseCase: useCase)
 }

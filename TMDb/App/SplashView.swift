@@ -12,12 +12,8 @@ struct SplashView: View {
     
     var body: some View {
         ZStack {
-            if isActive {                
-                let searchUseCase = Injection.init().provideSearchUseCase()
-                let searchPresenter = SearchPresenter(searchUseCase: searchUseCase)
-                
+            if isActive {
                 ContentView()
-                    .environmentObject(searchPresenter)
                     .transition(.scale)
             } else {
                 ZStack {

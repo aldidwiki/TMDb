@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var searchPresenter: SearchPresenter
-    
     var body: some View {
         TabView {
             MovieView(movieUseCase: Injection.init().provideMovieUseCase())
@@ -35,7 +33,7 @@ struct ContentView: View {
                     Label("Favorite", systemImage: "heart")
                 }
             
-            SearchView(presenter: searchPresenter)
+            SearchView(searchUseCase: Injection.init().provideSearchUseCase())
                 .tabItem {
                     Label("Search", systemImage: "magnifyingglass")
                 }
