@@ -22,18 +22,16 @@ struct TvShowEpisodeItemView: View {
                     )
                 )
             
+            Text("\(episodeModel.episodeNumber)  \(episodeModel.name)")
+                .font(.system(size: 16))
+                .fontWeight(.medium)
+                .lineLimit(2)
+                .padding(.horizontal)
+                .padding(.top)
+           
             HStack {
-                Text("\(episodeModel.episodeNumber)  \(episodeModel.name)")
-                    .font(.system(size: 16))
-                    .fontWeight(.medium)
-                    .lineLimit(2)
-                
                 ContentRatingView(contentRating: episodeModel.rating)
-            }
-            .padding(.horizontal)
-            .padding(.top)
-            
-            HStack {
+                
                 Text(episodeModel.airDate.formatDateString())
                     .font(.system(size: 12))
                     .fontWeight(.light)
@@ -46,6 +44,7 @@ struct TvShowEpisodeItemView: View {
                     .fontWeight(.light)
             }
             .padding(.horizontal)
+            .padding(.top, 4)
             
             Text(episodeModel.overview)
                 .font(.system(size: 14))
