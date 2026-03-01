@@ -26,9 +26,9 @@ struct ExpandableTextView: View {
                 }
             } label: {
                 HStack(spacing: 4) {
-                    Text(isExpanded ? "Collapse" : "Expand")
                     Image(systemName: "chevron.up")
                         .rotationEffect(.degrees(isExpanded ? 0 : 180))
+                    Text(isExpanded ? "Collapse" : "Expand")
                 }
                 .font(.system(size: 14))
                 .fontWeight(.medium)
