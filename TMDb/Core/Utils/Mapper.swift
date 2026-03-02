@@ -339,7 +339,7 @@ final class Mapper {
                 id: tvShowSeasonResponseModel.id,
                 posterPath: tvShowSeasonResponseModel.posterPath ?? "",
                 seasonName: tvShowSeasonResponseModel.seasonName ?? "",
-                releaseYear: tvShowSeasonResponseModel.airDate ?? "",
+                seasonAirDate: tvShowSeasonResponseModel.airDate ?? "",
                 episodeCount: tvShowSeasonResponseModel.episodeCount ?? 0,
                 seasonNumber: tvShowSeasonResponseModel.seasonNumber,
                 seasonOverview: tvShowSeasonResponseModel.overview ?? ""

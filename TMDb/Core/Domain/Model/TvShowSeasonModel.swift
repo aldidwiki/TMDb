@@ -11,7 +11,7 @@ struct TvShowSeasonModel: Identifiable {
     let id: Int
     let posterPath: String
     let seasonName: String
-    let releaseYear: String
+    let seasonAirDate: String
     let episodeCount: Int
     let seasonNumber: Int
     let seasonOverview: String
