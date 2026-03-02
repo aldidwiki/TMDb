@@ -16,6 +16,7 @@ class TvShowDetailPresenter {
     private let router = DetailRouter()
     private let tvShowUseCase: TvShowUseCase
     private let favoriteUseCase: FavoriteUseCase
+    private let maxVisibleNetworks = 3
     
     var errorMessage = ""
     var loadingState = false
@@ -45,6 +46,20 @@ class TvShowDetailPresenter {
     )
     var isFavorite = false
     var tvShowImages: [ImageModel] = []
+    
+    var showMoreButtonForNetworks: Bool {
+        return tvShow.networks.count >= maxVisibleNetworks
+    }
+    
+    var isNetworksExpanded: Bool = false
+    
+    var allowedVisibleNetworks: [NetworkModel] {
+        if isNetworksExpanded {
+            return tvShow.networks
+        } else {
+            return tvShow.networks.take(length: maxVisibleNetworks)
+        }
+    }
     
     init(tvShowUseCase: TvShowUseCase, favoriteUseCase: FavoriteUseCase) {
         self.tvShowUseCase = tvShowUseCase

@@ -371,12 +371,23 @@ extension TvShowDetailView {
             HStack(alignment: .top) {
                 VStack {
                     Text("Network")
-                    ForEach(presenter.tvShow.networks) { network in
+                    ForEach(presenter.allowedVisibleNetworks) { network in
                         WebImage(url: URL(string: API.logoImageBaseUrl + network.logoPath))
                             .resizable()
                             .indicator(.activity)
                             .scaledToFill()
                             .frame(width: 15, height: 15)
+                    }
+                    
+                    if presenter.showMoreButtonForNetworks {
+                        Button {
+                            withAnimation {
+                                presenter.isNetworksExpanded.toggle()
+                            }
+                        } label: {
+                            Text(presenter.isNetworksExpanded ? "show less" : "show more")
+                                .font(.system(size: 14))
+                        }
                     }
                 }
                 .frame(maxWidth: 200)
