@@ -26,7 +26,8 @@ class PersonRouter {
     }
     
     func makeCreditDetailView(creditModelList: [CreditModel]) -> some View {
-        return CreditDetailView(presenter: CreditDetailPresenter(navigateType: NavigateType.detailView), creditModelList: creditModelList)
+        return CreditDetailView(creditModelList: creditModelList)
+            .environment(CreditDetailPresenter(navigateType: NavigateType.detailView))
     }
     
     func makePersonImageView(personId: Int) -> some View {

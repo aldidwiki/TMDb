@@ -20,7 +20,8 @@ class DetailRouter {
     }
     
     func makeCreditDetailView(for credits: [CreditModel]) -> some View {
-        return CreditDetailView(presenter: CreditDetailPresenter(navigateType: NavigateType.personView), creditModelList: credits)
+        return CreditDetailView(creditModelList: credits)
+            .environment(CreditDetailPresenter(navigateType: NavigateType.personView))
     }
     
     func makeTvShowSeasonView(for tvShowSeasonList: [TvShowSeasonModel], title tvShowTitle: String, id tvShowId: Int) -> some View {

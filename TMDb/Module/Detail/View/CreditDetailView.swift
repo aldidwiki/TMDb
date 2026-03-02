@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CreditDetailView: View {
-    @ObservedObject var presenter: CreditDetailPresenter
+    @Environment(CreditDetailPresenter.self) private var presenter
     @State var creditModelList: [CreditModel]
     
     @State var isSelected = (popular: false, name: false, character: false, recent: true)
@@ -65,7 +65,6 @@ struct CreditDetailView: View {
 struct CreditDetailView_Previews: PreviewProvider {
     static var previews: some View {
         CreditDetailView(
-            presenter: CreditDetailPresenter(navigateType: NavigateType.personView),
             creditModelList: [
                 CreditModel(
                     id: 73457,

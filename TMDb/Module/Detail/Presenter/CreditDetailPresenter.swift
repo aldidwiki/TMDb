@@ -5,12 +5,13 @@
 //  Created by Aldi Dwiki Prahasta on 20/06/23.
 //
 
-import Foundation
+import Observation
 import SwiftUI
 
-class CreditDetailPresenter: ObservableObject {
+@Observable
+class CreditDetailPresenter {
     private let router = CreditDetailRouter()
-    @Published var navigateType: NavigateType
+    var navigateType: NavigateType
     
     init(navigateType: NavigateType) {
         self.navigateType = navigateType
