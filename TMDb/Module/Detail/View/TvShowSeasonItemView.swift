@@ -22,7 +22,12 @@ struct TvShowSeasonItemView: View {
                     .fontWeight(.bold)
                     .font(.title3)
                 
-                Text("\(seasonModel.seasonAirDate.formatDateString(input: "YYYY-MM-DD", output: "YYYY")) \u{2022} \(seasonModel.episodeCount) episodes")
+                HStack {
+                    ContentRatingView(contentRating: seasonModel.seasonVoteAverage)
+
+                    Text("\(seasonModel.seasonAirDate.formatDateString(input: "YYYY-MM-DD", output: "YYYY")) \u{2022} \(seasonModel.episodeCount) episodes")
+                }
+                .font(.system(size: 14))
                 
                 Text("Season \(seasonModel.seasonNumber) of \(tvTitle) premiered on \(seasonModel.seasonAirDate.formatDateString(output: "MMMM dd, yyyy"))")
                     .padding(.top, 2)
@@ -62,7 +67,8 @@ struct TvShowSeasonItemView_Previews: PreviewProvider {
                 seasonAirDate: "2016-10-24",
                 episodeCount: 23,
                 seasonNumber: 1,
-                seasonOverview: "When an unexpected accident at the S.T.A.R. Labs Particle Accelerator facility strikes Barry, he finds himself suddenly charged with the incredible power to move at super speeds. While Barry has always been a hero in his soul, his newfound powers have finally given him the ability to act like one. With the help of the research team at S.T.A.R. Labs, Barry begins testing the limits of his evolving powers and using them to stop crime. With a winning personality and a smile on his face, Barry Allen — aka The Flash — is finally moving forward in life … very, very fast!"
+                seasonOverview: "When an unexpected accident at the S.T.A.R. Labs Particle Accelerator facility strikes Barry, he finds himself suddenly charged with the incredible power to move at super speeds. While Barry has always been a hero in his soul, his newfound powers have finally given him the ability to act like one. With the help of the research team at S.T.A.R. Labs, Barry begins testing the limits of his evolving powers and using them to stop crime. With a winning personality and a smile on his face, Barry Allen — aka The Flash — is finally moving forward in life … very, very fast!",
+                seasonVoteAverage: 6.3
             ),
             tvTitle: "The Flash"
         )

@@ -71,6 +71,7 @@ struct TvShowSeasonResponseModel: Decodable {
     let posterPath: String?
     let seasonNumber: Int
     let overview: String?
+    let voteAverage: Double?
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -80,5 +81,6 @@ struct TvShowSeasonResponseModel: Decodable {
         case posterPath = "poster_path"
         case seasonNumber = "season_number"
         case overview
+        case voteAverage = "vote_average"
     }
 }

@@ -15,4 +15,5 @@ struct TvShowSeasonModel: Identifiable {
     let episodeCount: Int
     let seasonNumber: Int
     let seasonOverview: String
+    let seasonVoteAverage: Double
 }
