@@ -10,28 +10,24 @@ import SwiftUI
 
 class CreditDetailRouter {
     func makePersonDetailView(for personId: Int) -> some View {
-        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         let personUseCase = Injection.init().providePersonUseCase()
         return PersonDetailView(
             personUseCase: personUseCase,
-            favoriteUseCase: favoriteUseCase,
             personId: personId
         )
     }
     
     func makeMovieDetailView(for movieId: Int) -> some View {
         let detailUseCase = Injection.init().provideDetailUseCase()
-        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         return MovieDetailView(
-            detailUseCase: detailUseCase, favoriteUseCase: favoriteUseCase, movieId: movieId
+            detailUseCase: detailUseCase, movieId: movieId
         )
     }
     
     func makeTvShowDetailView(for tvId: Int) -> some View {
         let tvShowUseCase = Injection.init().provideTvShowUseCase()
-        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         return TvShowDetailView(
-            tvShowUseCase: tvShowUseCase, favoriteUseCase: favoriteUseCase, tvShowId: tvId
+            tvShowUseCase: tvShowUseCase, tvShowId: tvId
         )
     }
 }

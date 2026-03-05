@@ -18,12 +18,10 @@ struct PersonImageView: View {
     
     init(
         personUseCase: PersonUseCase,
-        favoriteUseCase: FavoriteUseCase,
         personId: Int
     ) {
         _personPresenter = State(initialValue: PersonPresenter(
-            personUseCase: personUseCase,
-            favoriteUseCase: favoriteUseCase
+            personUseCase: personUseCase
         ))
         self.personId = personId
     }
@@ -64,7 +62,6 @@ struct PersonImageView: View {
 #Preview {
     PersonImageView(
         personUseCase: Injection.init().providePersonUseCase(),
-        favoriteUseCase: Injection.init().provideFavoriteUseCase(),
         personId: 0
     )
 }

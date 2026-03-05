@@ -8,26 +8,35 @@
 import SwiftUI
 import SDWebImageSwiftUI
 import SwiftUIIntrospect
+import SwiftData
 
 struct TvShowDetailView: View {
     @Environment(\.dismiss) private var dismiss
     
     @State private var presenter: TvShowDetailPresenter
     @State var showSheet = false
-    @State var isFavorite = false
     
     @State private var bgColor: Color = .clear
     @State private var primaryColor: Color = .primary
     @State private var secondaryColor: Color = .primary
     
+    @Query private var favorites: [FavoriteEntity]
+    
+    private var isFavorite: Bool {
+        !favorites.isEmpty
+    }
+    
     private let tvShowId: Int
     
-    init(tvShowUseCase: TvShowUseCase, favoriteUseCase: FavoriteUseCase, tvShowId: Int) {
+    init(tvShowUseCase: TvShowUseCase, tvShowId: Int) {
         _presenter = State(initialValue: TvShowDetailPresenter(
-            tvShowUseCase: tvShowUseCase,
-            favoriteUseCase: favoriteUseCase
+            tvShowUseCase: tvShowUseCase
         ))
         self.tvShowId = tvShowId
+        
+        _favorites = Query(filter: #Predicate<FavoriteEntity> { favorite in
+            favorite.id == tvShowId
+        })
     }
     
     var body: some View {
@@ -103,13 +112,13 @@ struct TvShowDetailView: View {
             
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    if !presenter.isFavorite {
-                        self.presenter.addFavorite(tvShowDetailModel: self.presenter.tvShow)
+                    if !isFavorite {
+                        self.presenter.addFavorite()
                     } else {
-                        self.presenter.deleteFavorite(tvShowId: self.presenter.tvShow.id)
+                        self.presenter.deleteFavorite()
                     }
                 } label: {
-                    Image(systemName: self.presenter.isFavorite ? "heart.fill" : "heart")
+                    Image(systemName: isFavorite ? "heart.fill" : "heart")
                         .contentTransition(.symbolEffect(.replace))
                         .foregroundStyle(primaryColor)
                 }
@@ -408,9 +417,8 @@ extension TvShowDetailView {
 struct TvShowDetailView_Previews: PreviewProvider {
     static var previews: some View {
         let tvShowUseCase = Injection.init().provideTvShowUseCase()
-        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         TvShowDetailView(
-            tvShowUseCase: tvShowUseCase, favoriteUseCase: favoriteUseCase, tvShowId: 0
+            tvShowUseCase: tvShowUseCase, tvShowId: 0
         )
     }
 }

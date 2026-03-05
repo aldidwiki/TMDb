@@ -8,6 +8,7 @@
 import SwiftUI
 import SDWebImageSwiftUI
 import SwiftUIIntrospect
+import SwiftData
 
 struct MovieDetailView: View {
     @Environment(\.dismiss) private var dismiss
@@ -19,11 +20,23 @@ struct MovieDetailView: View {
     @State private var primaryColor: Color = .primary
     @State private var secondaryColor: Color = .primary
     
+    @Query private var favorites: [FavoriteEntity]
+    
+    private var isFavorite: Bool {
+        !favorites.isEmpty
+    }
+    
     private let movieId: Int
     
-    init(detailUseCase: DetailUseCase, favoriteUseCase: FavoriteUseCase, movieId: Int) {
-        _presenter = State(initialValue: MovieDetailPresenter(detailUseCase: detailUseCase, favoriteUseCase: favoriteUseCase))
+    init(detailUseCase: DetailUseCase, movieId: Int) {
+        _presenter = State(initialValue: MovieDetailPresenter(
+            detailUseCase: detailUseCase
+        ))
         self.movieId = movieId
+        
+        _favorites = Query(filter: #Predicate<FavoriteEntity> { favorite in
+            favorite.id == movieId
+        })
     }
     
     var body: some View {
@@ -99,13 +112,13 @@ struct MovieDetailView: View {
             
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    if !presenter.isFavorite {
-                        self.presenter.addFavorite(movie: self.presenter.movie)
+                    if !isFavorite {
+                        presenter.addFavorite()
                     } else {
-                        self.presenter.deleteFavorite(movieId: self.presenter.movie.id)
+                        presenter.deleteFavorite()
                     }
                 } label: {
-                    Image(systemName: self.presenter.isFavorite ? "heart.fill" : "heart")
+                    Image(systemName: isFavorite ? "heart.fill" : "heart")
                         .contentTransition(.symbolEffect(.replace))
                         .foregroundStyle(primaryColor)
                 }.disabled(self.presenter.loadingState)
@@ -375,9 +388,6 @@ extension MovieDetailView {
 struct MovieDetailView_Previews: PreviewProvider {
     static var previews: some View {
         let detailUseCase = Injection.init().provideDetailUseCase()
-        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
-        MovieDetailView(
-            detailUseCase: detailUseCase, favoriteUseCase: favoriteUseCase, movieId: 0
-        )
+        MovieDetailView(detailUseCase: detailUseCase, movieId: 0)
     }
 }

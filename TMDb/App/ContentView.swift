@@ -21,14 +21,13 @@ struct ContentView: View {
                 }
             
             PersonView(
-                personUseCase: Injection.init().providePersonUseCase(),
-                favoriteUseCase: Injection.init().provideFavoriteUseCase()
+                personUseCase: Injection.init().providePersonUseCase()
             )
             .tabItem {
                 Label("Person", systemImage: "person.fill")
             }
             
-            FavoriteView(favoriteUseCase: Injection.init().provideFavoriteUseCase())
+            FavoriteView()
                 .tabItem {
                     Label("Favorite", systemImage: "heart")
                 }

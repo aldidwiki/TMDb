@@ -94,38 +94,38 @@ final class Mapper {
     static func mapMovieDetailModelToFavoriteEntity(
         input movieDetailModel: MovieDetailModel
     ) -> FavoriteEntity {
-        let favoriteEntity = FavoriteEntity()
-        favoriteEntity.id = movieDetailModel.id
-        favoriteEntity.title = movieDetailModel.title
-        favoriteEntity.posterPath = movieDetailModel.posterPath
-        favoriteEntity.rating = movieDetailModel.rating
-        favoriteEntity.releasedDate = movieDetailModel.releaseDate
-        favoriteEntity.mediaType = Constants.movieType
-        return favoriteEntity
+        return FavoriteEntity(
+            id: movieDetailModel.id,
+            title: movieDetailModel.title,
+            posterPath: movieDetailModel.posterPath,
+            releasedDate: movieDetailModel.releaseDate,
+            rating: movieDetailModel.rating,
+            mediaType: Constants.movieType
+        )
     }
     
     static func mapTvShowDetailModelToFavoriteEntity(
         input tvShowDetailModel: TvShowDetailModel
     ) -> FavoriteEntity {
-        let favoriteEntity = FavoriteEntity()
-        favoriteEntity.id = tvShowDetailModel.id
-        favoriteEntity.title = tvShowDetailModel.title
-        favoriteEntity.posterPath = tvShowDetailModel.posterPath
-        favoriteEntity.rating = tvShowDetailModel.rating
-        favoriteEntity.releasedDate = tvShowDetailModel.releaseDate
-        favoriteEntity.mediaType = Constants.tvType
-        return favoriteEntity
+        return FavoriteEntity(
+            id: tvShowDetailModel.id,
+            title: tvShowDetailModel.title,
+            posterPath: tvShowDetailModel.posterPath,
+            releasedDate: tvShowDetailModel.releaseDate,
+            rating: tvShowDetailModel.rating,
+            mediaType: Constants.tvType
+        )
     }
     
     static func mapPersonModelToFavoriteEntity(
         input personModel: PersonModel
     ) -> FavoriteEntity {
-        let favoriteEntity = FavoriteEntity()
-        favoriteEntity.id = personModel.id
-        favoriteEntity.title = personModel.name
-        favoriteEntity.posterPath = personModel.profilePath
-        favoriteEntity.mediaType = Constants.personType
-        return favoriteEntity
+        return FavoriteEntity(
+            id: personModel.id,
+            title: personModel.name,
+            posterPath: personModel.profilePath,
+            mediaType: Constants.personType
+        )
     }
     
     static func mapFavoriteEntitiesToDomains(

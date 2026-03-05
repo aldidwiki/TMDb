@@ -11,17 +11,15 @@ import SwiftUI
 class PersonRouter {
     func makeMovieDetailView(for movieId: Int) -> some View {
         let detailUseCase = Injection.init().provideDetailUseCase()
-        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         return MovieDetailView(
-            detailUseCase: detailUseCase, favoriteUseCase: favoriteUseCase, movieId: movieId
+            detailUseCase: detailUseCase, movieId: movieId
         )
     }
     
     func makeTvShowDetailView(for tvId: Int) -> some View {
         let tvShowUseCase = Injection.init().provideTvShowUseCase()
-        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         return TvShowDetailView(
-            tvShowUseCase: tvShowUseCase, favoriteUseCase: favoriteUseCase, tvShowId: tvId
+            tvShowUseCase: tvShowUseCase, tvShowId: tvId
         )
     }
     
@@ -32,10 +30,8 @@ class PersonRouter {
     
     func makePersonImageView(personId: Int) -> some View {
         let personUseCase = Injection.init().providePersonUseCase()
-        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         return PersonImageView(
             personUseCase: personUseCase,
-            favoriteUseCase: favoriteUseCase,
             personId: personId
         )
     }

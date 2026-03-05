@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AlamofireNetworkActivityLogger
+import SwiftData
 
 @main
 struct TMDbApp: App {
@@ -19,5 +20,6 @@ struct TMDbApp: App {
         WindowGroup {
             SplashView()
         }
+        .modelContainer(SwiftDataContextManager.shared.container)
     }
 }

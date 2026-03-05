@@ -14,31 +14,6 @@ class FavoritePresenter {
     private var cancellable: Set<AnyCancellable> = []
     
     private let router = FavoriteRouter()
-    private let favoriteUseCase: FavoriteUseCase
-    
-    var favorites = [FavoriteModel]()
-    var errorMessage = ""
-    var loadingState = false
-    
-    init(favoriteUseCase: FavoriteUseCase) {
-        self.favoriteUseCase = favoriteUseCase
-    }
-    
-    func getFavorites() {
-        self.loadingState = true
-        favoriteUseCase.getFavorites()
-            .receive(on: DispatchQueue.main)
-            .sink { completion in
-                switch completion {
-                    case .failure:
-                        self.errorMessage = String(describing: completion)
-                    case .finished:
-                        self.loadingState = false
-                }
-            } receiveValue: { favorites in
-                self.favorites = favorites
-            }.store(in: &cancellable)
-    }
     
     func linkBuilder<Content: View>(
         for favoriteModel: FavoriteModel,

@@ -15,13 +15,6 @@ final class Injection: NSObject {
         return MovieRepository.sharedInstance(movieDataSource)
     }
     
-    private func provideFavoriteRepository() -> FavoriteRepositoryProtocol {
-        let realm = try? Realm()
-        let localDataSource = LocaleDataSource.sharedInstance(realm)
-        
-        return FavoriteRepository.sharedInstance(localDataSource)
-    }
-    
     private func providePersonRepository() -> PersonRepositoryProtocol {
         let personDataSource = PersonDataSource.sharedInstance
         
@@ -48,11 +41,6 @@ final class Injection: NSObject {
     func provideDetailUseCase() -> DetailUseCase {
         let repo = provideMovieRepository()
         return DetailInteractor(repository: repo)
-    }
-    
-    func provideFavoriteUseCase() -> FavoriteUseCase {
-        let repo = provideFavoriteRepository()
-        return FavoriteInteractor(repository: repo)
     }
     
     func providePersonUseCase() -> PersonUseCase {

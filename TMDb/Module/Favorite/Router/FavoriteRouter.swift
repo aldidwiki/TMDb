@@ -10,22 +10,19 @@ import SwiftUI
 class FavoriteRouter {
     func makeDetailView(movieId: Int) -> some View {
         let detailUseCase = Injection.init().provideDetailUseCase()
-        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         return MovieDetailView(
-            detailUseCase: detailUseCase, favoriteUseCase: favoriteUseCase, movieId: movieId
+            detailUseCase: detailUseCase, movieId: movieId
         )
     }
     
     func makeTvDetailView(tvShowId: Int) -> some View {
         let tvShowUseCase = Injection.init().provideTvShowUseCase()
-        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
-        return TvShowDetailView(tvShowUseCase: tvShowUseCase, favoriteUseCase: favoriteUseCase, tvShowId: tvShowId)
+        return TvShowDetailView(tvShowUseCase: tvShowUseCase, tvShowId: tvShowId)
     }
     
     func makePersonDetailView(personId: Int) -> some View {
         return PersonDetailView(
             personUseCase: Injection.init().providePersonUseCase(),
-            favoriteUseCase: Injection.init().provideFavoriteUseCase(),
             personId: personId
         )
     }

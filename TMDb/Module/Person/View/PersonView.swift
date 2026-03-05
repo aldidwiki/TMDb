@@ -10,8 +10,8 @@ import SwiftUI
 struct PersonView: View {
     @State private var presenter: PersonPresenter
     
-    init(personUseCase: PersonUseCase, favoriteUseCase: FavoriteUseCase) {
-        _presenter = State(initialValue: PersonPresenter(personUseCase: personUseCase, favoriteUseCase: favoriteUseCase))
+    init(personUseCase: PersonUseCase) {
+        _presenter = State(initialValue: PersonPresenter(personUseCase: personUseCase))
     }
     
     var body: some View {
@@ -67,7 +67,6 @@ struct PersonView: View {
 
 #Preview {
     PersonView(
-        personUseCase: Injection.init().providePersonUseCase(),
-        favoriteUseCase: Injection.init().provideFavoriteUseCase()
+        personUseCase: Injection.init().providePersonUseCase()
     )
 }

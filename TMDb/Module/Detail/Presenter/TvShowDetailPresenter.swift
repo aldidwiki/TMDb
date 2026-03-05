@@ -8,14 +8,15 @@
 import Observation
 import Combine
 import SwiftUI
+import SwiftData
 
+@MainActor
 @Observable
 class TvShowDetailPresenter {
     private var cancellable: Set<AnyCancellable> = []
     
     private let router = DetailRouter()
     private let tvShowUseCase: TvShowUseCase
-    private let favoriteUseCase: FavoriteUseCase
     private let maxVisibleNetworks = 3
     
     var errorMessage = ""
@@ -44,7 +45,7 @@ class TvShowDetailPresenter {
         networks: [],
         seasons: []
     )
-    var isFavorite = false
+    
     var tvShowImages: [ImageModel] = []
     
     var showMoreButtonForNetworks: Bool {
@@ -61,9 +62,12 @@ class TvShowDetailPresenter {
         }
     }
     
-    init(tvShowUseCase: TvShowUseCase, favoriteUseCase: FavoriteUseCase) {
+    private var context: ModelContext {
+        SwiftDataContextManager.shared.context
+    }
+    
+    init(tvShowUseCase: TvShowUseCase) {
         self.tvShowUseCase = tvShowUseCase
-        self.favoriteUseCase = favoriteUseCase
     }
     
     func getTvShow(tvShowId: Int) {
@@ -79,40 +83,33 @@ class TvShowDetailPresenter {
                 }
             } receiveValue: { tvShow in
                 self.tvShow = tvShow
-                self.findFavorite(tvShowId: tvShow.id)
             }.store(in: &cancellable)
     }
     
-    func addFavorite(tvShowDetailModel: TvShowDetailModel) {
-        favoriteUseCase.addFavorite(tvShow: tvShowDetailModel)
-            .receive(on: RunLoop.main)
-            .sink { completion in
-                switch completion {
-                    case .failure:
-                        self.errorMessage = String(describing: completion)
-                        self.isFavorite = false
-                    case .finished:
-                        self.isFavorite = true
-                }
-            } receiveValue: {
-                self.isFavorite = $0
+    func addFavorite() {
+        context.insert(Mapper.mapTvShowDetailModelToFavoriteEntity(input: tvShow))
+    }
+    
+    func deleteFavorite() {
+        let tvId = tvShow.id // Assuming your movie model has an id
+        
+        // 1. Create a predicate to find the EXISTING entity
+        let predicate = #Predicate<FavoriteEntity> { favorite in
+            favorite.id == tvId
+        }
+        
+        // 2. Fetch the entity from the context
+        let descriptor = FetchDescriptor<FavoriteEntity>(predicate: predicate)
+        
+        do {
+            // 3. If it exists in the DB, delete THAT specific instance
+            if let entityToDelete = try context.fetch(descriptor).first {
+                context.delete(entityToDelete)
+                // try context.save() // Optional: force the write
             }
-            .store(in: &cancellable)
-    }
-    
-    func deleteFavorite(tvShowId: Int) {
-        favoriteUseCase.deleteFavorite(for: tvShowId)
-            .receive(on: RunLoop.main)
-            .sink { completion in
-                switch completion {
-                    case .failure:
-                        self.errorMessage = String(describing: completion)
-                    case.finished:
-                        self.isFavorite = false
-                }
-            } receiveValue: {
-                self.isFavorite = !$0
-            }.store(in: &cancellable)
+        } catch {
+            print("Failed to fetch favorite for deletion: \(error)")
+        }
     }
     
     func getTvShowBackdrop(tvShowId: Int) {
@@ -129,26 +126,6 @@ class TvShowDetailPresenter {
                 self.tvShowImages = images
             }.store(in: &cancellable)
         
-    }
-    
-    private func findFavorite(tvShowId: Int) {
-        self.loadingState = true
-        favoriteUseCase.getFavorites()
-            .receive(on: RunLoop.main)
-            .sink { completion in
-                switch completion {
-                    case .failure:
-                        self.errorMessage = String(describing: completion)
-                    case.finished:
-                        self.loadingState = false
-                }
-            } receiveValue: { favorites in
-                if favorites.first(where: { tvShow in tvShow.id == tvShowId }) != nil {
-                    self.isFavorite = true
-                } else {
-                    self.isFavorite = false
-                }
-            }.store(in: &cancellable)
     }
     
     func toPersonView<Content: View>(

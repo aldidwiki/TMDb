@@ -10,9 +10,8 @@ import SwiftUI
 class MovieRouter {
     func makeDetailView(for movieId: Int) -> some View {
         let detailUseCase = Injection.init().provideDetailUseCase()
-        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         return MovieDetailView(
-            detailUseCase: detailUseCase, favoriteUseCase: favoriteUseCase, movieId: movieId
+            detailUseCase: detailUseCase, movieId: movieId
         )
     }
 }

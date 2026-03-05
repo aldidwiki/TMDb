@@ -7,14 +7,25 @@
 
 import SwiftUI
 import SDWebImageSwiftUI
+import SwiftData
 
 struct PersonDetailView: View {
     @State private var presenter: PersonPresenter
     private let personId: Int
     
-    init(personUseCase: PersonUseCase, favoriteUseCase: FavoriteUseCase, personId: Int) {
-        _presenter = State(initialValue: PersonPresenter(personUseCase: personUseCase, favoriteUseCase: favoriteUseCase))
+    @Query private var favorites: [FavoriteEntity]
+    
+    private var isFavorite: Bool {
+        !favorites.isEmpty
+    }
+    
+    init(personUseCase: PersonUseCase, personId: Int) {
+        _presenter = State(initialValue: PersonPresenter(personUseCase: personUseCase))
         self.personId = personId
+        
+        _favorites = Query(filter: #Predicate<FavoriteEntity> { favorite in
+            favorite.id == personId
+        })
     }
     
     var body: some View {
@@ -59,13 +70,13 @@ struct PersonDetailView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    if !presenter.isFavorite {
-                        presenter.addFavorite(person: presenter.person)
+                    if !isFavorite {
+                        presenter.addFavorite()
                     } else {
-                        presenter.deleteFavorite(personId: presenter.person.id)
+                        presenter.deleteFavorite()
                     }
                 } label: {
-                    Image(systemName: self.presenter.isFavorite ? "heart.fill" : "heart")
+                    Image(systemName: isFavorite ? "heart.fill" : "heart")
                         .contentTransition(.symbolEffect(.replace))
                         .foregroundStyle(.red)
                 }
@@ -191,10 +202,8 @@ extension PersonDetailView {
 struct PersonView_Previews: PreviewProvider {
     static var previews: some View {
         let personUseCase = Injection.init().providePersonUseCase()
-        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         PersonDetailView(
             personUseCase: personUseCase,
-            favoriteUseCase: favoriteUseCase,
             personId: 0
         )
     }

@@ -16,8 +16,8 @@ struct TvShowImageGalleryView: View {
     
     private let tvShowId: Int
     
-    init(tvShowUseCase: TvShowUseCase, favoriteUseCase: FavoriteUseCase, tvShowId: Int) {
-        _presenter = State(initialValue: TvShowDetailPresenter(tvShowUseCase: tvShowUseCase, favoriteUseCase: favoriteUseCase))
+    init(tvShowUseCase: TvShowUseCase, tvShowId: Int) {
+        _presenter = State(initialValue: TvShowDetailPresenter(tvShowUseCase: tvShowUseCase))
         self.tvShowId = tvShowId
     }
     
@@ -56,7 +56,6 @@ struct TvShowImageGalleryView: View {
 #Preview {
     TvShowImageGalleryView(
         tvShowUseCase: Injection.init().provideTvShowUseCase(),
-        favoriteUseCase: Injection.init().provideFavoriteUseCase(),
         tvShowId: 82452
     )
 }

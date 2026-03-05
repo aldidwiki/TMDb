@@ -6,17 +6,30 @@
 //
 
 import Foundation
-import RealmSwift
+import SwiftData
 
-class FavoriteEntity: Object {
-    @objc dynamic var id: Int = 0
-    @objc dynamic var title: String = ""
-    @objc dynamic var posterPath: String = ""
-    @objc dynamic var releasedDate: String = ""
-    @objc dynamic var rating: Double = 0.0
-    @objc dynamic var mediaType: String = ""
+@Model
+class FavoriteEntity {
+    @Attribute(.unique) var id: Int
+    var title: String
+    var posterPath: String
+    var releasedDate: String
+    var rating: Double
+    var mediaType: String
     
-    override class func primaryKey() -> String? {
-        return "id"
+    init(
+        id: Int,
+        title: String,
+        posterPath: String,
+        releasedDate: String = "",
+        rating: Double = 0.0,
+        mediaType: String
+    ) {
+        self.id = id
+        self.title = title
+        self.posterPath = posterPath
+        self.releasedDate = releasedDate
+        self.rating = rating
+        self.mediaType = mediaType
     }
 }

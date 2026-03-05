@@ -8,7 +8,9 @@
 import SwiftUI
 import Combine
 import Observation
+import SwiftData
 
+@MainActor
 @Observable
 class MovieDetailPresenter {
     private var cancellable: Set<AnyCancellable> = []
@@ -16,7 +18,6 @@ class MovieDetailPresenter {
     private let router = DetailRouter()
     
     private let detailUseCase: DetailUseCase
-    private let favoriteUseCase: FavoriteUseCase
     
     var movie = MovieDetailModel(
         id: 0,
@@ -43,12 +44,14 @@ class MovieDetailPresenter {
     )
     var errorMessage = ""
     var loadingState = false
-    var isFavorite = false
     var movieImages: [ImageModel] = []
     
-    init(detailUseCase: DetailUseCase, favoriteUseCase: FavoriteUseCase) {
+    private var context: ModelContext {
+        SwiftDataContextManager.shared.context
+    }
+    
+    init(detailUseCase: DetailUseCase) {
         self.detailUseCase = detailUseCase
-        self.favoriteUseCase = favoriteUseCase
     }
     
     func getMovie(movieId: Int) {
@@ -57,45 +60,13 @@ class MovieDetailPresenter {
             .receive(on: RunLoop.main)
             .sink { completion in
                 switch completion {
-                    case .failure:
-                        self.errorMessage = String(describing: completion)
-                    case .finished:
-                        self.loadingState = false
+                case .failure:
+                    self.errorMessage = String(describing: completion)
+                case .finished:
+                    self.loadingState = false
                 }
             } receiveValue: { movie in
                 self.movie = movie
-                self.findFavorite(movieId: movie.id)
-            }.store(in: &cancellable)
-    }
-    
-    func addFavorite(movie: MovieDetailModel) {
-        favoriteUseCase.addFavorite(movie: movie)
-            .receive(on: RunLoop.main)
-            .sink { completion in
-                switch completion {
-                    case .failure:
-                        self.errorMessage = String(describing: completion)
-                        self.isFavorite = false
-                    case .finished:
-                        self.isFavorite = true
-                }
-            } receiveValue: {
-                self.isFavorite = $0
-            }.store(in: &cancellable)
-    }
-    
-    func deleteFavorite(movieId: Int) {
-        favoriteUseCase.deleteFavorite(for: movieId)
-            .receive(on: RunLoop.main)
-            .sink { completion in
-                switch completion {
-                    case .failure:
-                        self.errorMessage = String(describing: completion)
-                    case.finished:
-                        self.isFavorite = false
-                }
-            } receiveValue: {
-                self.isFavorite = !$0
             }.store(in: &cancellable)
     }
     
@@ -104,34 +75,40 @@ class MovieDetailPresenter {
             .receive(on: RunLoop.main)
             .sink { completion in
                 switch completion {
-                    case .failure:
-                        self .errorMessage = String(describing: completion)
-                    case .finished:
-                        self.isFavorite = false
+                case .failure:
+                    self .errorMessage = String(describing: completion)
+                default:
+                    break
                 }
             } receiveValue: { imageModel in
                 self.movieImages = imageModel
             }.store(in: &cancellable)
     }
     
-    private func findFavorite(movieId: Int) {
-        self.loadingState = true
-        favoriteUseCase.getFavorites()
-            .receive(on: RunLoop.main)
-            .sink { completion in
-                switch completion {
-                    case .failure:
-                        self.errorMessage = String(describing: completion)
-                    case.finished:
-                        self.loadingState = false
-                }
-            } receiveValue: { favorites in
-                if favorites.first(where: { movie in movie.id == movieId }) != nil {
-                    self.isFavorite = true
-                } else {
-                    self.isFavorite = false
-                }
-            }.store(in: &cancellable)
+    func addFavorite() {
+        context.insert(Mapper.mapMovieDetailModelToFavoriteEntity(input: movie))
+    }
+    
+    func deleteFavorite() {
+        let movieId = movie.id // Assuming your movie model has an id
+        
+        // 1. Create a predicate to find the EXISTING entity
+        let predicate = #Predicate<FavoriteEntity> { favorite in
+            favorite.id == movieId
+        }
+        
+        // 2. Fetch the entity from the context
+        let descriptor = FetchDescriptor<FavoriteEntity>(predicate: predicate)
+        
+        do {
+            // 3. If it exists in the DB, delete THAT specific instance
+            if let entityToDelete = try context.fetch(descriptor).first {
+                context.delete(entityToDelete)
+                // try context.save() // Optional: force the write
+            }
+        } catch {
+            print("Failed to fetch favorite for deletion: \(error)")
+        }
     }
     
     func toPersonDetail<Content: View>(

@@ -6,51 +6,49 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct FavoriteView: View {
     @State private var presenter: FavoritePresenter
     
-    init(favoriteUseCase: FavoriteUseCase){
-        _presenter = State(initialValue: FavoritePresenter(favoriteUseCase: favoriteUseCase))
+    @Query private var favoriteEntities: [FavoriteEntity]
+    
+    var favorites: [FavoriteModel] {
+        return Mapper.mapFavoriteEntitiesToDomains(input: favoriteEntities)
+    }
+    
+    init(){
+        _presenter = State(initialValue: FavoritePresenter())
     }
     
     var body: some View {
         NavigationView {
-            ZStack {
-                if presenter.loadingState {
-                    ProgressView("Loading")
-                } else {
-                    GeometryReader { geometry in
-                        ScrollView {
-                            if presenter.favorites.isEmpty {
-                                EmptyView(emptyTitle: "No Favorites Found")
-                                    .frame(maxWidth: geometry.size.width, minHeight: geometry.size.height)
-                            } else {
-                                LazyVStack {
-                                    ForEach(presenter.favorites) { favorite in
-                                        presenter.linkBuilder(for: favorite) {
-                                            VStack {
-                                                if favorite.mediaType == Constants.personType {
-                                                    PersonItemView(personPopular: favorite.toPopularPersonModel)
-                                                } else {
-                                                    MovieItemView(movie: favorite.toMovieModel)
-                                                }
-                                                
-                                                if favorite != presenter.favorites.last {
-                                                    NativeDivider()
-                                                }
-                                            }
+            GeometryReader { geometry in
+                ScrollView {
+                    if favorites.isEmpty {
+                        EmptyView(emptyTitle: "No Favorites Found")
+                            .frame(maxWidth: geometry.size.width, minHeight: geometry.size.height)
+                    } else {
+                        LazyVStack {
+                            ForEach(favorites) { favorite in
+                                presenter.linkBuilder(for: favorite) {
+                                    VStack {
+                                        if favorite.mediaType == Constants.personType {
+                                            PersonItemView(personPopular: favorite.toPopularPersonModel)
+                                        } else {
+                                            MovieItemView(movie: favorite.toMovieModel)
+                                        }
+                                        
+                                        if favorite != favorites.last {
+                                            NativeDivider()
                                         }
                                     }
                                 }
-                                .padding()
                             }
                         }
+                        .padding()
                     }
                 }
-            }
-            .onAppear {
-                self.presenter.getFavorites()
             }
             .navigationTitle("Favorites")
         }
@@ -59,7 +57,6 @@ struct FavoriteView: View {
 
 struct FavoriteView_Previews: PreviewProvider {
     static var previews: some View {
-        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
-        FavoriteView(favoriteUseCase: favoriteUseCase)
+        FavoriteView()
     }
 }

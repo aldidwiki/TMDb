@@ -11,10 +11,8 @@ import SwiftUI
 class DetailRouter {
     func makePersonDetailView(for personId: Int) -> some View {
         let personUseCase = Injection.init().providePersonUseCase()
-        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         return PersonDetailView(
             personUseCase: personUseCase,
-            favoriteUseCase: favoriteUseCase,
             personId: personId
         )
     }
@@ -26,11 +24,9 @@ class DetailRouter {
     
     func makeTvShowSeasonView(for tvShowSeasonList: [TvShowSeasonModel], title tvShowTitle: String, id tvShowId: Int) -> some View {
         let tvShowUseCase = Injection.init().provideTvShowUseCase()
-        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         
         return TvShowSeasonView(
             tvShowUseCase: tvShowUseCase,
-            favoriteUseCase: favoriteUseCase,
             tvShowId: tvShowId,
             tvShowTitle: tvShowTitle,
             tvShowSeasonList: tvShowSeasonList
@@ -50,7 +46,6 @@ class DetailRouter {
     func makeMovieImageGalleryView(movieId: Int) -> some View {
         return MovieImageGalleryView(
             detailUseCase: Injection.init().provideDetailUseCase(),
-            favoriteUseCase: Injection.init().provideFavoriteUseCase(),
             contentId: movieId
         )
     }
@@ -58,7 +53,6 @@ class DetailRouter {
     func makeTvShowImageGalleryView(tvShowId: Int) -> some View {
         return TvShowImageGalleryView(
             tvShowUseCase: Injection.init().provideTvShowUseCase(),
-            favoriteUseCase: Injection.init().provideFavoriteUseCase(),
             tvShowId: tvShowId
         )
     }

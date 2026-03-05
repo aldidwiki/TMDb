@@ -8,19 +8,19 @@
 import Observation
 import Combine
 import SwiftUI
+import SwiftData
 
+@MainActor
 @Observable
 class PersonPresenter {
     private var cancellable: Set<AnyCancellable> = []
     
     private let personUseCase: PersonUseCase
-    private let favoriteUseCase: FavoriteUseCase
     private let router = PersonRouter()
     private let personRouter = DetailRouter()
     
     var errorMessage = ""
     var loadingState = false
-    var isFavorite = false
     var person = PersonModel(
         id: 0,
         name: "",
@@ -45,9 +45,12 @@ class PersonPresenter {
     private var canLoadMore = true
     private var currentPage = 1
     
-    init(personUseCase: PersonUseCase, favoriteUseCase: FavoriteUseCase) {
+    private var context: ModelContext {
+        SwiftDataContextManager.shared.context
+    }
+    
+    init(personUseCase: PersonUseCase) {
         self.personUseCase = personUseCase
-        self.favoriteUseCase = favoriteUseCase
     }
     
     func getPerson(personId: Int) {
@@ -63,7 +66,6 @@ class PersonPresenter {
                 }
             } receiveValue: { person in
                 self.person = person
-                self.findFavorite(personId: person.id)
             }.store(in: &cancellable)
     }
     
@@ -134,60 +136,30 @@ class PersonPresenter {
             }.store(in: &cancellable)
     }
     
-    func addFavorite(person: PersonModel) {
-        favoriteUseCase.addFavorite(person: person)
-            .receive(on: DispatchQueue.main)
-            .sink { completion in
-                switch completion {
-                case .failure:
-                    self.errorMessage = String(describing: completion)
-                    self.isFavorite = false
-                case .finished:
-                    self.isFavorite = true
-                }
-            } receiveValue: {
-                self.isFavorite = $0
-            }
-            .store(in: &cancellable)
+    func addFavorite() {
+        context.insert(Mapper.mapPersonModelToFavoriteEntity(input: person))
     }
     
-    func deleteFavorite(personId: Int) {
-        favoriteUseCase.deleteFavorite(for: personId)
-            .receive(on: DispatchQueue.main)
-            .sink { completion in
-                switch completion {
-                case .failure:
-                    self.errorMessage = String(describing: completion)
-                case .finished:
-                    self.isFavorite = false
-                }
-            } receiveValue: {
-                self.isFavorite = !$0
+    func deleteFavorite() {
+        let personId = person.id // Assuming your movie model has an id
+        
+        // 1. Create a predicate to find the EXISTING entity
+        let predicate = #Predicate<FavoriteEntity> { favorite in
+            favorite.id == personId
+        }
+        
+        // 2. Fetch the entity from the context
+        let descriptor = FetchDescriptor<FavoriteEntity>(predicate: predicate)
+        
+        do {
+            // 3. If it exists in the DB, delete THAT specific instance
+            if let entityToDelete = try context.fetch(descriptor).first {
+                context.delete(entityToDelete)
+                // try context.save() // Optional: force the write
             }
-            .store(in: &cancellable)
-    }
-    
-    private func findFavorite(personId: Int) {
-        self.loadingState = true
-        favoriteUseCase.getFavorites()
-            .receive(on: DispatchQueue.main)
-            .sink { completion in
-                switch completion {
-                case .failure:
-                    self.errorMessage = String(describing: completion)
-                case .finished:
-                    self.loadingState = false
-                }
-            } receiveValue: { favorites in
-                if favorites.first(where: { person in
-                    person.id == personId
-                }) != nil {
-                    self.isFavorite = true
-                } else {
-                    self.isFavorite = false
-                }
-            }
-            .store(in: &cancellable)
+        } catch {
+            print("Failed to fetch favorite for deletion: \(error)")
+        }
     }
     
     func linkBuilder<Content: View>(
