@@ -20,12 +20,6 @@ struct MovieDetailView: View {
     @State private var primaryColor: Color = .primary
     @State private var secondaryColor: Color = .primary
     
-    @Query private var favorites: [FavoriteEntity]
-    
-    private var isFavorite: Bool {
-        !favorites.isEmpty
-    }
-    
     private let movieId: Int
     
     init(detailUseCase: DetailUseCase, movieId: Int) {
@@ -33,10 +27,6 @@ struct MovieDetailView: View {
             detailUseCase: detailUseCase
         ))
         self.movieId = movieId
-        
-        _favorites = Query(filter: #Predicate<FavoriteEntity> { favorite in
-            favorite.id == movieId
-        })
     }
     
     var body: some View {
@@ -85,6 +75,8 @@ struct MovieDetailView: View {
             if presenter.movie.id == 0 && presenter.movie.title.isEmpty {
                 presenter.getMovie(movieId: movieId)
             }
+            
+            presenter.checkFavoriteStatus(movieId: movieId)
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(presenter.movie.title)
@@ -112,13 +104,9 @@ struct MovieDetailView: View {
             
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    if !isFavorite {
-                        presenter.addFavorite()
-                    } else {
-                        presenter.deleteFavorite()
-                    }
+                    presenter.toggleFavorite()
                 } label: {
-                    Image(systemName: isFavorite ? "heart.fill" : "heart")
+                    Image(systemName: presenter.isFavorite ? "heart.fill" : "heart")
                         .contentTransition(.symbolEffect(.replace))
                         .foregroundStyle(primaryColor)
                 }.disabled(self.presenter.loadingState)

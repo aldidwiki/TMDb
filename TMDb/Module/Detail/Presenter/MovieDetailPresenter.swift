@@ -45,6 +45,7 @@ class MovieDetailPresenter {
     var errorMessage = ""
     var loadingState = false
     var movieImages: [ImageModel] = []
+    var isFavorite: Bool = false
     
     private var context: ModelContext {
         SwiftDataContextManager.shared.context
@@ -85,11 +86,26 @@ class MovieDetailPresenter {
             }.store(in: &cancellable)
     }
     
-    func addFavorite() {
-        context.insert(Mapper.mapMovieDetailModelToFavoriteEntity(input: movie))
+    func checkFavoriteStatus(movieId: Int) {
+        let descriptor = FetchDescriptor<FavoriteEntity>(predicate: #Predicate { $0.id == movieId })
+        let results = (try? context.fetch(descriptor)) ?? []
+        self.isFavorite = !results.isEmpty
     }
     
-    func deleteFavorite() {
+    func toggleFavorite() {
+        if isFavorite {
+            deleteFavorite()
+        } else {
+            addFavorite()
+        }
+    }
+    
+    private func addFavorite() {
+        context.insert(Mapper.mapMovieDetailModelToFavoriteEntity(input: movie))
+        isFavorite = true
+    }
+    
+    private func deleteFavorite() {
         let movieId = movie.id // Assuming your movie model has an id
         
         // 1. Create a predicate to find the EXISTING entity
@@ -104,6 +120,7 @@ class MovieDetailPresenter {
             // 3. If it exists in the DB, delete THAT specific instance
             if let entityToDelete = try context.fetch(descriptor).first {
                 context.delete(entityToDelete)
+                isFavorite = false
                 // try context.save() // Optional: force the write
             }
         } catch {
