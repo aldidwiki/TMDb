@@ -8,12 +8,27 @@
 import SwiftUI
 import Combine
 import Observation
+import SwiftData
 
+@MainActor
 @Observable
 class FavoritePresenter {
-    private var cancellable: Set<AnyCancellable> = []
-    
     private let router = FavoriteRouter()
+    
+    private var context: ModelContext {
+        SwiftDataContextManager.shared.context
+    }
+    
+    var favorites: [FavoriteModel] = []
+    
+    func getFavorites() {
+        let descriptor = FetchDescriptor<FavoriteEntity>()
+        
+        let entities = try? context.fetch(descriptor)
+        if let _entities = entities {
+            favorites = Mapper.mapFavoriteEntitiesToDomains(input: _entities)
+        }
+    }
     
     func linkBuilder<Content: View>(
         for favoriteModel: FavoriteModel,

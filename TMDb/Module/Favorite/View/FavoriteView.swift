@@ -10,13 +10,7 @@ import SwiftData
 
 struct FavoriteView: View {
     @State private var presenter: FavoritePresenter
-    
-    @Query private var favoriteEntities: [FavoriteEntity]
-    
-    var favorites: [FavoriteModel] {
-        return Mapper.mapFavoriteEntitiesToDomains(input: favoriteEntities)
-    }
-    
+
     init(){
         _presenter = State(initialValue: FavoritePresenter())
     }
@@ -25,12 +19,12 @@ struct FavoriteView: View {
         NavigationView {
             GeometryReader { geometry in
                 ScrollView {
-                    if favorites.isEmpty {
+                    if presenter.favorites.isEmpty {
                         EmptyView(emptyTitle: "No Favorites Found")
                             .frame(maxWidth: geometry.size.width, minHeight: geometry.size.height)
                     } else {
                         LazyVStack {
-                            ForEach(favorites) { favorite in
+                            ForEach(presenter.favorites) { favorite in
                                 presenter.linkBuilder(for: favorite) {
                                     VStack {
                                         if favorite.mediaType == Constants.personType {
@@ -39,7 +33,7 @@ struct FavoriteView: View {
                                             MovieItemView(movie: favorite.toMovieModel)
                                         }
                                         
-                                        if favorite != favorites.last {
+                                        if favorite != presenter.favorites.last {
                                             NativeDivider()
                                         }
                                     }
@@ -48,6 +42,9 @@ struct FavoriteView: View {
                         }
                         .padding()
                     }
+                }
+                .onAppear {
+                    presenter.getFavorites()
                 }
             }
             .navigationTitle("Favorites")
