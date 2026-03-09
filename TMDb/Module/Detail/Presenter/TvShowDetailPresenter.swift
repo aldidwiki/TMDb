@@ -19,6 +19,7 @@ class TvShowDetailPresenter {
     private let tvShowUseCase: TvShowUseCase
     private let maxVisibleNetworks = 3
     
+    var isFavorite = false
     var errorMessage = ""
     var loadingState = false
     var tvShow = TvShowDetailModel(
@@ -86,11 +87,26 @@ class TvShowDetailPresenter {
             }.store(in: &cancellable)
     }
     
-    func addFavorite() {
-        context.insert(Mapper.mapTvShowDetailModelToFavoriteEntity(input: tvShow))
+    func checkFavoriteStatus(tvId: Int) {
+        let descriptor = FetchDescriptor<FavoriteEntity>(predicate: #Predicate { $0.id == tvId })
+        let results = (try? context.fetch(descriptor)) ?? []
+        isFavorite = !results.isEmpty
     }
     
-    func deleteFavorite() {
+    func toggleFavorite() {
+        if isFavorite {
+            deleteFavorite()
+        } else {
+            addFavorite()
+        }
+    }
+    
+    private func addFavorite() {
+        context.insert(Mapper.mapTvShowDetailModelToFavoriteEntity(input: tvShow))
+        isFavorite = true
+    }
+    
+    private func deleteFavorite() {
         let tvId = tvShow.id // Assuming your movie model has an id
         
         // 1. Create a predicate to find the EXISTING entity
@@ -105,6 +121,7 @@ class TvShowDetailPresenter {
             // 3. If it exists in the DB, delete THAT specific instance
             if let entityToDelete = try context.fetch(descriptor).first {
                 context.delete(entityToDelete)
+                isFavorite = false
                 // try context.save() // Optional: force the write
             }
         } catch {

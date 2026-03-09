@@ -20,12 +20,6 @@ struct TvShowDetailView: View {
     @State private var primaryColor: Color = .primary
     @State private var secondaryColor: Color = .primary
     
-    @Query private var favorites: [FavoriteEntity]
-    
-    private var isFavorite: Bool {
-        !favorites.isEmpty
-    }
-    
     private let tvShowId: Int
     
     init(tvShowUseCase: TvShowUseCase, tvShowId: Int) {
@@ -33,10 +27,6 @@ struct TvShowDetailView: View {
             tvShowUseCase: tvShowUseCase
         ))
         self.tvShowId = tvShowId
-        
-        _favorites = Query(filter: #Predicate<FavoriteEntity> { favorite in
-            favorite.id == tvShowId
-        })
     }
     
     var body: some View {
@@ -85,6 +75,8 @@ struct TvShowDetailView: View {
             if presenter.tvShow.id == 0 && presenter.tvShow.title.isEmpty {
                 presenter.getTvShow(tvShowId: tvShowId)
             }
+            
+            presenter.checkFavoriteStatus(tvId: tvShowId)
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(presenter.tvShow.title)
@@ -112,13 +104,9 @@ struct TvShowDetailView: View {
             
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    if !isFavorite {
-                        self.presenter.addFavorite()
-                    } else {
-                        self.presenter.deleteFavorite()
-                    }
+                    presenter.toggleFavorite()
                 } label: {
-                    Image(systemName: isFavorite ? "heart.fill" : "heart")
+                    Image(systemName: presenter.isFavorite ? "heart.fill" : "heart")
                         .contentTransition(.symbolEffect(.replace))
                         .foregroundStyle(primaryColor)
                 }
