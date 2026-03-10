@@ -13,19 +13,9 @@ struct PersonDetailView: View {
     @State private var presenter: PersonPresenter
     private let personId: Int
     
-    @Query private var favorites: [FavoriteEntity]
-    
-    private var isFavorite: Bool {
-        !favorites.isEmpty
-    }
-    
     init(personUseCase: PersonUseCase, personId: Int) {
         _presenter = State(initialValue: PersonPresenter(personUseCase: personUseCase))
         self.personId = personId
-        
-        _favorites = Query(filter: #Predicate<FavoriteEntity> { favorite in
-            favorite.id == personId
-        })
     }
     
     var body: some View {
@@ -64,19 +54,17 @@ struct PersonDetailView: View {
             if presenter.person.id == 0 && presenter.person.name.isEmpty {
                 presenter.getPerson(personId: self.personId)
             }
+            
+            presenter.checkFavoriteStatus(personId: personId)
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(presenter.person.name)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    if !isFavorite {
-                        presenter.addFavorite()
-                    } else {
-                        presenter.deleteFavorite()
-                    }
+                    presenter.toggleFavorite()
                 } label: {
-                    Image(systemName: isFavorite ? "heart.fill" : "heart")
+                    Image(systemName: presenter.isFavorite ? "heart.fill" : "heart")
                         .contentTransition(.symbolEffect(.replace))
                         .foregroundStyle(.red)
                 }

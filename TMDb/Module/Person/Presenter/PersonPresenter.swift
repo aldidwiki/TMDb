@@ -19,6 +19,7 @@ class PersonPresenter {
     private let router = PersonRouter()
     private let personRouter = DetailRouter()
     
+    var isFavorite = false
     var errorMessage = ""
     var loadingState = false
     var person = PersonModel(
@@ -136,11 +137,26 @@ class PersonPresenter {
             }.store(in: &cancellable)
     }
     
-    func addFavorite() {
-        context.insert(Mapper.mapPersonModelToFavoriteEntity(input: person))
+    func checkFavoriteStatus(personId: Int) {
+        let descriptor = FetchDescriptor(predicate: #Predicate<FavoriteEntity> { $0.id == personId })
+        let result = (try? context.fetch(descriptor)) ?? []
+        isFavorite = !result.isEmpty
     }
     
-    func deleteFavorite() {
+    func toggleFavorite() {
+        if isFavorite {
+            deleteFavorite()
+        } else {
+            addFavorite()
+        }
+    }
+    
+    private func addFavorite() {
+        context.insert(Mapper.mapPersonModelToFavoriteEntity(input: person))
+        isFavorite = true
+    }
+    
+    private func deleteFavorite() {
         let personId = person.id // Assuming your movie model has an id
         
         // 1. Create a predicate to find the EXISTING entity
@@ -155,6 +171,7 @@ class PersonPresenter {
             // 3. If it exists in the DB, delete THAT specific instance
             if let entityToDelete = try context.fetch(descriptor).first {
                 context.delete(entityToDelete)
+                isFavorite = false
                 // try context.save() // Optional: force the write
             }
         } catch {
