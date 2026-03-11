@@ -22,7 +22,9 @@ class FavoritePresenter {
     var favorites: [FavoriteModel] = []
     
     func getFavorites() {
-        let descriptor = FetchDescriptor<FavoriteEntity>()
+        let descriptor = FetchDescriptor<FavoriteEntity>(
+            sortBy: [SortDescriptor(\.createdAt, order: .reverse)]
+        )
         
         let entities = try? context.fetch(descriptor)
         if let _entities = entities {

@@ -16,6 +16,7 @@ class FavoriteEntity {
     var releasedDate: String
     var rating: Double
     var mediaType: String
+    var createdAt: Date
     
     init(
         id: Int,
@@ -23,7 +24,8 @@ class FavoriteEntity {
         posterPath: String,
         releasedDate: String = "",
         rating: Double = 0.0,
-        mediaType: String
+        mediaType: String,
+        createdAt: Date = .now
     ) {
         self.id = id
         self.title = title
@@ -31,5 +33,6 @@ class FavoriteEntity {
         self.releasedDate = releasedDate
         self.rating = rating
         self.mediaType = mediaType
+        self.createdAt = createdAt
     }
 }
