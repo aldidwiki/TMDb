@@ -27,8 +27,8 @@ class FavoritePresenter {
         )
         
         let entities = try? context.fetch(descriptor)
-        if let _entities = entities {
-            favorites = Mapper.mapFavoriteEntitiesToDomains(input: _entities)
+        if let entityList = entities {
+            favorites = Mapper.mapFavoriteEntitiesToDomains(input: entityList)
         }
     }
     
