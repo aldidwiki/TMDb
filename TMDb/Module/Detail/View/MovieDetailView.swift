@@ -74,7 +74,6 @@ struct MovieDetailView: View {
                             .padding(.vertical)
                         }
                     }
-                    .blur(radius: showSheet ? 6 : 0)
                 }
             }
         }.onAppear {
@@ -118,6 +117,7 @@ struct MovieDetailView: View {
         }
         .toolbarBackground(bgColor, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
+        .blur(radius: showSheet ? 6 : 0, opaque: true)
         .animation(.easeInOut, value: bgColor)
     }
 }
@@ -365,15 +365,10 @@ extension MovieDetailView {
                         .padding(.vertical, 1)
                 }
                 .listStyle(.plain)
-                .introspect(.list, on: .iOS(.v17, .v18)) { tableView in
-                    tableView.bounces = false
-                    tableView.showsVerticalScrollIndicator = false
-                }
             }
             .padding(.vertical)
             .presentationDragIndicator(.automatic)
             .presentationDetents([.height(totalHeight)])
-            .presentationCornerRadius(30)
             .interactiveDismissDisabled(true)
         }
     }
