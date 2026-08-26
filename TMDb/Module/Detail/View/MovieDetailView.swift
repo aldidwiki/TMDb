@@ -34,42 +34,48 @@ struct MovieDetailView: View {
             if presenter.loadingState {
                 ProgressView("Loading")
             } else {
-                ScrollView(.vertical, showsIndicators: false) {
-                    VStack(alignment: .leading) {
-                        VStack {
-                            if !presenter.movie.backdropPath.isEmpty {
-                                presenter.toMovieImageGallery(for: movieId) {
-                                    movieBackdrop
+                ZStack(alignment: .top) {
+                    bgColor
+                        .ignoresSafeArea(edges: .top)
+                        .frame(height: 0)
+                    
+                    ScrollView(.vertical, showsIndicators: false) {
+                        VStack(alignment: .leading) {
+                            VStack {
+                                if !presenter.movie.backdropPath.isEmpty {
+                                    presenter.toMovieImageGallery(for: movieId) {
+                                        movieBackdrop
+                                    }
                                 }
+                                
+                                movieContentDetail
+                                    .padding([.top, .horizontal])
+                                
+                                movieContentUtils
+                                
+                                movieOverview
+                            }
+                            .padding(.bottom)
+                            .background(bgColor)
+                            .elevation(5)
+                            
+                            if !presenter.movie.cast.isEmpty {
+                                movieCredits
                             }
                             
-                            movieContentDetail
-                                .padding([.top, .horizontal])
+                            movieDetailInfo
                             
-                            movieContentUtils
-                            
-                            movieOverview
+                            ExternalMediaView(
+                                instagramId: presenter.movie.instagramId,
+                                facebookId: presenter.movie.facebookId,
+                                twitterId: presenter.movie.twitterId,
+                                imdbId: presenter.movie.imdbId
+                            )
+                            .padding(.vertical)
                         }
-                        .padding(.bottom)
-                        .background(bgColor)
-                        .elevation(5)
-                        
-                        if !presenter.movie.cast.isEmpty {
-                            movieCredits
-                        }
-                        
-                        movieDetailInfo
-                        
-                        ExternalMediaView(
-                            instagramId: presenter.movie.instagramId,
-                            facebookId: presenter.movie.facebookId,
-                            twitterId: presenter.movie.twitterId,
-                            imdbId: presenter.movie.imdbId
-                        )
-                        .padding(.vertical)
                     }
+                    .blur(radius: showSheet ? 6 : 0)
                 }
-                .blur(radius: showSheet ? 6 : 0)
             }
         }.onAppear {
             if presenter.movie.id == 0 && presenter.movie.title.isEmpty {
@@ -81,8 +87,6 @@ struct MovieDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(presenter.movie.title)
         .navigationBarBackButtonHidden(true)
-        .toolbarBackground(bgColor, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
@@ -112,6 +116,8 @@ struct MovieDetailView: View {
                 }.disabled(self.presenter.loadingState)
             }
         }
+        .toolbarBackground(bgColor, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
         .animation(.easeInOut, value: bgColor)
     }
 }

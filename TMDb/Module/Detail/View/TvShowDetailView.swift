@@ -34,42 +34,48 @@ struct TvShowDetailView: View {
             if presenter.loadingState {
                 ProgressView("Loading")
             } else {
-                ScrollView(.vertical, showsIndicators: false) {
-                    VStack(alignment: .leading) {
-                        VStack {
-                            if !presenter.tvShow.backdropPath.isEmpty {
-                                presenter.toTvShowImageGallery(tvShowId: tvShowId) {
-                                    tvBackdrop
+                ZStack(alignment: .top) {
+                    bgColor
+                        .ignoresSafeArea(edges: .top)
+                        .frame(height: 0)
+                    
+                    ScrollView(.vertical, showsIndicators: false) {
+                        VStack(alignment: .leading) {
+                            VStack {
+                                if !presenter.tvShow.backdropPath.isEmpty {
+                                    presenter.toTvShowImageGallery(tvShowId: tvShowId) {
+                                        tvBackdrop
+                                    }
                                 }
+                                
+                                tvContentDetail
+                                    .padding([.top, .horizontal])
+                                
+                                tvContentUtils
+                                
+                                tvOverview
+                            }
+                            .padding(.bottom)
+                            .background(bgColor)
+                            .elevation(5)
+                            
+                            if !presenter.tvShow.credits.isEmpty {
+                                tvCredits
                             }
                             
-                            tvContentDetail
-                                .padding([.top, .horizontal])
+                            tvDetailInfo
                             
-                            tvContentUtils
-                            
-                            tvOverview
+                            ExternalMediaView(
+                                instagramId: presenter.tvShow.instagramId,
+                                facebookId: presenter.tvShow.facebookId,
+                                twitterId: presenter.tvShow.twitterId,
+                                imdbId: presenter.tvShow.imdbId
+                            )
+                            .padding(.vertical)
                         }
-                        .padding(.bottom)
-                        .background(bgColor)
-                        .elevation(5)
-                        
-                        if !presenter.tvShow.credits.isEmpty {
-                            tvCredits
-                        }
-                        
-                        tvDetailInfo
-                        
-                        ExternalMediaView(
-                            instagramId: presenter.tvShow.instagramId,
-                            facebookId: presenter.tvShow.facebookId,
-                            twitterId: presenter.tvShow.twitterId,
-                            imdbId: presenter.tvShow.imdbId
-                        )
-                        .padding(.vertical)
                     }
+                    .blur(radius: showSheet ? 6 : 0)
                 }
-                .blur(radius: showSheet ? 6 : 0)
             }
         }.onAppear {
             if presenter.tvShow.id == 0 && presenter.tvShow.title.isEmpty {
@@ -81,8 +87,6 @@ struct TvShowDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(presenter.tvShow.title)
         .navigationBarBackButtonHidden(true)
-        .toolbarBackground(bgColor, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
@@ -113,6 +117,8 @@ struct TvShowDetailView: View {
                 .disabled(self.presenter.loadingState)
             }
         }
+        .toolbarBackground(bgColor, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
         .animation(.easeInOut, value: bgColor)
     }
 }
