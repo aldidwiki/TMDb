@@ -11,6 +11,7 @@ import Combine
 protocol FavoriteUseCase: AnyObject {
     func addToFavorite(_ requestModel: FavoriteRequest) -> AnyPublisher<Bool, Never>
     func getMoviesFavorite() -> AnyPublisher<[FavoriteModel], Error>
+    func isFavorited(mediaId: Int) -> AnyPublisher<Bool, Never>
 }
 
 class FavoriteInteractor: FavoriteUseCase {
@@ -38,6 +39,19 @@ class FavoriteInteractor: FavoriteUseCase {
                     )
                 }
             }
+            .eraseToAnyPublisher()
+    }
+    
+    func isFavorited(mediaId: Int) -> AnyPublisher<Bool, Never> {
+        return favoriteRepository.getMoviesFavorite()
+            .map { response in
+                let favorite = response.movies.first { responseModel in
+                    responseModel.id == mediaId
+                }
+                
+                return favorite != nil
+            }
+            .replaceError(with: false)
             .eraseToAnyPublisher()
     }
 }

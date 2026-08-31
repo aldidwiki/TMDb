@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct FavoriteView: View {
     @State private var presenter: FavoritePresenter

@@ -8,9 +8,7 @@
 import SwiftUI
 import Combine
 import Observation
-import SwiftData
 
-@MainActor
 @Observable
 class MovieDetailPresenter {
     private var cancellable: Set<AnyCancellable> = []
@@ -47,10 +45,6 @@ class MovieDetailPresenter {
     var loadingState = false
     var movieImages: [ImageModel] = []
     var isFavorite: Bool = false
-    
-    private var context: ModelContext {
-        SwiftDataContextManager.shared.context
-    }
     
     init(detailUseCase: DetailUseCase, favoriteUseCase: FavoriteUseCase) {
         self.detailUseCase = detailUseCase
@@ -89,52 +83,25 @@ class MovieDetailPresenter {
     }
     
     func checkFavoriteStatus(movieId: Int) {
-        //        let descriptor = FetchDescriptor<FavoriteEntity>(predicate: #Predicate { $0.id == movieId })
-        //        let results = (try? context.fetch(descriptor)) ?? []
-        //        self.isFavorite = !results.isEmpty
+        favoriteUseCase.isFavorited(mediaId: movieId)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isFavorited in
+                self?.isFavorite = isFavorited
+            }
+            .store(in: &cancellable)
     }
     
     func toggleFavorite() {
-        if isFavorite {
-            deleteFavorite()
-        } else {
-            addFavorite()
-        }
-    }
-    
-    private func addFavorite() {
-        let request = FavoriteRequest(mediaType: "movie", mediaId: movie.id, isFavorite: true)
+        let request = FavoriteRequest(mediaType: "movie", mediaId: movie.id, isFavorite: !isFavorite)
         
         favoriteUseCase
             .addToFavorite(request)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isSuccess in
-                self?.isFavorite = isSuccess
+                guard isSuccess, let self = self else { return }
+                self.isFavorite = !self.isFavorite
             }
             .store(in: &cancellable)
-    }
-    
-    private func deleteFavorite() {
-        let movieId = movie.id // Assuming your movie model has an id
-        
-        // 1. Create a predicate to find the EXISTING entity
-        let predicate = #Predicate<FavoriteEntity> { favorite in
-            favorite.id == movieId
-        }
-        
-        // 2. Fetch the entity from the context
-        let descriptor = FetchDescriptor<FavoriteEntity>(predicate: predicate)
-        
-        do {
-            // 3. If it exists in the DB, delete THAT specific instance
-            if let entityToDelete = try context.fetch(descriptor).first {
-                context.delete(entityToDelete)
-                isFavorite = false
-                // try context.save() // Optional: force the write
-            }
-        } catch {
-            print("Failed to fetch favorite for deletion: \(error)")
-        }
     }
     
     func toPersonDetail<Content: View>(
