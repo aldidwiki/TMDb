@@ -12,6 +12,7 @@ import SwiftData
 
 struct TvShowDetailView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) private var colorScheme
     
     @State private var presenter: TvShowDetailPresenter
     @State var showSheet = false
@@ -128,6 +129,7 @@ extension TvShowDetailView {
         WebImage(url: URL(string: API.imageBaseUrl + presenter.tvShow.posterPath))
             .resizable()
             .onSuccess(perform: { image, _, _ in
+                if colorScheme == .dark { return }
                 image.extractPalette { bg, primary, secondary in
                     self.bgColor = bg
                     self.primaryColor = primary

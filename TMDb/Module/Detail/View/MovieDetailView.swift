@@ -12,6 +12,7 @@ import SwiftData
 
 struct MovieDetailView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) private var colorScheme
     
     @State private var presenter: MovieDetailPresenter
     @State var showSheet = false
@@ -127,6 +128,7 @@ extension MovieDetailView {
         WebImage(url: URL(string: API.imageBaseUrl + presenter.movie.posterPath))
             .resizable()
             .onSuccess(perform: { image, _, _ in
+                if colorScheme == .dark { return }
                 image.extractPalette { bg, primary, secondary in
                     self.bgColor = bg
                     self.primaryColor = primary
