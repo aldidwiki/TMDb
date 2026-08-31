@@ -21,40 +21,6 @@ class FavoriteInteractor: FavoriteUseCase {
         self.favoriteRepository = favoriteRepository
     }
     
-    private func getMoviesFavorite() -> AnyPublisher<[FavoriteModel], any Error> {
-        return favoriteRepository.getMoviesFavorite()
-            .map { response in
-                response.movies.map { responseModel in
-                    FavoriteModel(
-                        id: responseModel.id,
-                        title: responseModel.title,
-                        posterPath: responseModel.posterPath ?? "",
-                        rating: responseModel.rating ?? 0.0,
-                        releaseDate: responseModel.releaseDate ?? "",
-                        mediaType: Constants.movieType
-                    )
-                }
-            }
-            .eraseToAnyPublisher()
-    }
-    
-    private func getTvsFavorite() -> AnyPublisher<[FavoriteModel], any Error> {
-        return favoriteRepository.getTvsFavorite()
-            .map { response in
-                response.tvShows.map { responseModel in
-                    FavoriteModel(
-                        id: responseModel.id,
-                        title: responseModel.title,
-                        posterPath: responseModel.posterPath ?? "",
-                        rating: responseModel.rating ?? 0.0,
-                        releaseDate: responseModel.releaseDate ?? "",
-                        mediaType: Constants.tvType
-                    )
-                }
-            }
-            .eraseToAnyPublisher()
-    }
-    
     func addToFavorite(_ requestModel: FavoriteRequest) -> AnyPublisher<Bool, Never> {
         return favoriteRepository.addToFavorite(requestModel)
     }

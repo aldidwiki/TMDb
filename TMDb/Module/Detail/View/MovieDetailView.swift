@@ -8,7 +8,6 @@
 import SwiftUI
 import SDWebImageSwiftUI
 import SwiftUIIntrospect
-import SwiftData
 
 struct MovieDetailView: View {
     @Environment(\.dismiss) private var dismiss
