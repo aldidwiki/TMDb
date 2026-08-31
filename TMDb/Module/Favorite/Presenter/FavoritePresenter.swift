@@ -8,9 +8,7 @@
 import SwiftUI
 import Combine
 import Observation
-import SwiftData
 
-@MainActor
 @Observable
 class FavoritePresenter {
     private let router = FavoriteRouter()
@@ -22,15 +20,11 @@ class FavoritePresenter {
         self.favoriteUseCase = favoriteUseCase
     }
     
-    private var context: ModelContext {
-        SwiftDataContextManager.shared.context
-    }
-    
     var favorites: [FavoriteModel] = []
     var isLoading = true
     
     func getFavorites() {
-        favoriteUseCase.getMoviesFavorite()
+        favoriteUseCase.getFavorites()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
                 switch completion {

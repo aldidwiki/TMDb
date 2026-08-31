@@ -10,7 +10,7 @@ import Combine
 
 protocol FavoriteUseCase: AnyObject {
     func addToFavorite(_ requestModel: FavoriteRequest) -> AnyPublisher<Bool, Never>
-    func getMoviesFavorite() -> AnyPublisher<[FavoriteModel], Error>
+    func getFavorites() -> AnyPublisher<[FavoriteModel], Error>
     func isFavorited(mediaId: Int) -> AnyPublisher<Bool, Never>
 }
 
@@ -21,11 +21,7 @@ class FavoriteInteractor: FavoriteUseCase {
         self.favoriteRepository = favoriteRepository
     }
     
-    func addToFavorite(_ requestModel: FavoriteRequest) -> AnyPublisher<Bool, Never> {
-        return favoriteRepository.addToFavorite(requestModel)
-    }
-    
-    func getMoviesFavorite() -> AnyPublisher<[FavoriteModel], any Error> {
+    private func getMoviesFavorite() -> AnyPublisher<[FavoriteModel], any Error> {
         return favoriteRepository.getMoviesFavorite()
             .map { response in
                 response.movies.map { responseModel in
@@ -42,16 +38,70 @@ class FavoriteInteractor: FavoriteUseCase {
             .eraseToAnyPublisher()
     }
     
-    func isFavorited(mediaId: Int) -> AnyPublisher<Bool, Never> {
-        return favoriteRepository.getMoviesFavorite()
+    private func getTvsFavorite() -> AnyPublisher<[FavoriteModel], any Error> {
+        return favoriteRepository.getTvsFavorite()
             .map { response in
-                let favorite = response.movies.first { responseModel in
-                    responseModel.id == mediaId
+                response.tvShows.map { responseModel in
+                    FavoriteModel(
+                        id: responseModel.id,
+                        title: responseModel.title,
+                        posterPath: responseModel.posterPath ?? "",
+                        rating: responseModel.rating ?? 0.0,
+                        releaseDate: responseModel.releaseDate ?? "",
+                        mediaType: Constants.tvType
+                    )
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func addToFavorite(_ requestModel: FavoriteRequest) -> AnyPublisher<Bool, Never> {
+        return favoriteRepository.addToFavorite(requestModel)
+    }
+    
+    func isFavorited(mediaId: Int) -> AnyPublisher<Bool, Never> {
+        return getFavorites()
+            .map { favorites in
+                let favorite = favorites.first { model in
+                    model.id == mediaId
                 }
                 
                 return favorite != nil
             }
             .replaceError(with: false)
             .eraseToAnyPublisher()
+    }
+    
+    func getFavorites() -> AnyPublisher<[FavoriteModel], any Error> {
+        return Publishers.Zip(
+            favoriteRepository.getMoviesFavorite(),
+            favoriteRepository.getTvsFavorite()
+        )
+        .map { movieResponse, tvResponse in
+            let movieFavorites = movieResponse.movies.map { movieResponseModel in
+                FavoriteModel(
+                    id: movieResponseModel.id,
+                    title: movieResponseModel.title,
+                    posterPath: movieResponseModel.posterPath ?? "",
+                    rating: movieResponseModel.rating ?? 0.0,
+                    releaseDate: movieResponseModel.releaseDate ?? "",
+                    mediaType: Constants.movieType
+                )
+            }
+            
+            let tvFavorites = tvResponse.tvShows.map { tvResponseModel in
+                FavoriteModel(
+                    id: tvResponseModel.id,
+                    title: tvResponseModel.title,
+                    posterPath: tvResponseModel.posterPath ?? "",
+                    rating: tvResponseModel.rating ?? 0.0,
+                    releaseDate: tvResponseModel.releaseDate ?? "",
+                    mediaType: Constants.tvType
+                )
+            }
+            
+            return movieFavorites + tvFavorites
+        }
+        .eraseToAnyPublisher()
     }
 }

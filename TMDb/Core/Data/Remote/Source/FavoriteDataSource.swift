@@ -12,6 +12,7 @@ import Combine
 protocol FavoriteDataSourceProtocol: AnyObject {
     func addToFavorite(_ requestModel: FavoriteRequest) -> AnyPublisher<Bool, Never>
     func getMoviesFavorite() -> AnyPublisher<MovieResponse, Error>
+    func getTvsFavorite() -> AnyPublisher<TvResponse, Error>
 }
 
 final class FavoriteDataSource: NSObject {
@@ -54,6 +55,28 @@ extension FavoriteDataSource: FavoriteDataSourceProtocol {
                 headers: API.headers
             )
             .responseDecodable(of: MovieResponse.self) { response in
+                switch response.result {
+                case .success(let value):
+                    promise(.success(value))
+                case .failure:
+                    promise(.failure(URLError.invalidResponse))
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    func getTvsFavorite() -> AnyPublisher<TvResponse, any Error> {
+        guard let url = URL(string: API.baseUrl + "account/\(API.accountId)/favorite/tv") else {
+            return Empty<TvResponse, Error>().eraseToAnyPublisher()
+        }
+        
+        return Future<TvResponse, Error> { promise in
+            AF.request(
+                url,
+                headers: API.headers
+            )
+            .responseDecodable(of: TvResponse.self) { response in
                 switch response.result {
                 case .success(let value):
                     promise(.success(value))

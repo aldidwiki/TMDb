@@ -8,9 +8,7 @@
 import Observation
 import Combine
 import SwiftUI
-import SwiftData
 
-@MainActor
 @Observable
 class TvShowDetailPresenter {
     private var cancellable: Set<AnyCancellable> = []
@@ -64,10 +62,6 @@ class TvShowDetailPresenter {
         }
     }
     
-    private var context: ModelContext {
-        SwiftDataContextManager.shared.context
-    }
-    
     init(tvShowUseCase: TvShowUseCase, favoriteUseCase: FavoriteUseCase) {
         self.tvShowUseCase = tvShowUseCase
         self.favoriteUseCase = favoriteUseCase
@@ -90,9 +84,12 @@ class TvShowDetailPresenter {
     }
     
     func checkFavoriteStatus(tvId: Int) {
-        let descriptor = FetchDescriptor<FavoriteEntity>(predicate: #Predicate { $0.id == tvId })
-        let results = (try? context.fetch(descriptor)) ?? []
-        isFavorite = !results.isEmpty
+        favoriteUseCase.isFavorited(mediaId: tvId)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isFavorited in
+                self?.isFavorite = isFavorited
+            }
+            .store(in: &cancellable)
     }
     
     func toggleFavorite() {

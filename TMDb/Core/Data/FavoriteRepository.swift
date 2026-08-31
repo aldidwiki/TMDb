@@ -11,6 +11,7 @@ import Combine
 protocol FavoriteRepositoryProtocol {
     func addToFavorite(_ requestModel: FavoriteRequest) -> AnyPublisher<Bool, Never>
     func getMoviesFavorite() -> AnyPublisher<MovieResponse, Error>
+    func getTvsFavorite() -> AnyPublisher<TvResponse, Error>
 }
 
 final class FavoriteRepository: NSObject {
@@ -34,5 +35,9 @@ extension FavoriteRepository: FavoriteRepositoryProtocol {
     
     func getMoviesFavorite() -> AnyPublisher<MovieResponse, any Error> {
         return favoriteDataSource.getMoviesFavorite()
+    }
+    
+    func getTvsFavorite() -> AnyPublisher<TvResponse, any Error> {
+        return favoriteDataSource.getTvsFavorite()
     }
 }
