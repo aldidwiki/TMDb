@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 protocol FavoriteRepositoryProtocol {
-    func addToFavorite(_ requestModel: FavoriteRequest) -> AnyPublisher<String, Error>
+    func addToFavorite(_ requestModel: FavoriteRequest) -> AnyPublisher<Bool, Never>
 }
 
 final class FavoriteRepository: NSObject {
@@ -27,7 +27,7 @@ final class FavoriteRepository: NSObject {
 }
 
 extension FavoriteRepository: FavoriteRepositoryProtocol {
-    func addToFavorite(_ requestModel: FavoriteRequest) -> AnyPublisher<String, any Error> {
+    func addToFavorite(_ requestModel: FavoriteRequest) -> AnyPublisher<Bool, Never> {
         return favoriteDataSource.addToFavorite(requestModel)
     }
 }

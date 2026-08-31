@@ -19,8 +19,11 @@ class CreditDetailRouter {
     
     func makeMovieDetailView(for movieId: Int) -> some View {
         let detailUseCase = Injection.init().provideDetailUseCase()
+        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         return MovieDetailView(
-            detailUseCase: detailUseCase, movieId: movieId
+            detailUseCase: detailUseCase,
+            favoriteUseCase: favoriteUseCase,
+            movieId: movieId
         )
     }
     

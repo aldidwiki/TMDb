@@ -18,6 +18,7 @@ class MovieDetailPresenter {
     private let router = DetailRouter()
     
     private let detailUseCase: DetailUseCase
+    private let favoriteUseCase: FavoriteUseCase
     
     var movie = MovieDetailModel(
         id: 0,
@@ -51,8 +52,9 @@ class MovieDetailPresenter {
         SwiftDataContextManager.shared.context
     }
     
-    init(detailUseCase: DetailUseCase) {
+    init(detailUseCase: DetailUseCase, favoriteUseCase: FavoriteUseCase) {
         self.detailUseCase = detailUseCase
+        self.favoriteUseCase = favoriteUseCase
     }
     
     func getMovie(movieId: Int) {
@@ -87,9 +89,9 @@ class MovieDetailPresenter {
     }
     
     func checkFavoriteStatus(movieId: Int) {
-        let descriptor = FetchDescriptor<FavoriteEntity>(predicate: #Predicate { $0.id == movieId })
-        let results = (try? context.fetch(descriptor)) ?? []
-        self.isFavorite = !results.isEmpty
+        //        let descriptor = FetchDescriptor<FavoriteEntity>(predicate: #Predicate { $0.id == movieId })
+        //        let results = (try? context.fetch(descriptor)) ?? []
+        //        self.isFavorite = !results.isEmpty
     }
     
     func toggleFavorite() {
@@ -101,8 +103,15 @@ class MovieDetailPresenter {
     }
     
     private func addFavorite() {
-        context.insert(Mapper.mapMovieDetailModelToFavoriteEntity(input: movie))
-        isFavorite = true
+        let request = FavoriteRequest(mediaType: "movie", mediaId: movie.id, isFavorite: true)
+        
+        favoriteUseCase
+            .addToFavorite(request)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isSuccess in
+                self?.isFavorite = isSuccess
+            }
+            .store(in: &cancellable)
     }
     
     private func deleteFavorite() {

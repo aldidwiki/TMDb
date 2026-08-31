@@ -23,9 +23,10 @@ struct MovieDetailView: View {
     
     private let movieId: Int
     
-    init(detailUseCase: DetailUseCase, movieId: Int) {
+    init(detailUseCase: DetailUseCase, favoriteUseCase: FavoriteUseCase, movieId: Int) {
         _presenter = State(initialValue: MovieDetailPresenter(
-            detailUseCase: detailUseCase
+            detailUseCase: detailUseCase,
+            favoriteUseCase: favoriteUseCase
         ))
         self.movieId = movieId
     }
@@ -379,6 +380,7 @@ extension MovieDetailView {
 struct MovieDetailView_Previews: PreviewProvider {
     static var previews: some View {
         let detailUseCase = Injection.init().provideDetailUseCase()
-        MovieDetailView(detailUseCase: detailUseCase, movieId: 0)
+        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
+        MovieDetailView(detailUseCase: detailUseCase, favoriteUseCase: favoriteUseCase, movieId: 0)
     }
 }

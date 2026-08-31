@@ -16,9 +16,10 @@ struct MovieImageGalleryView: View {
     
     private let contentId: Int
     
-    init(detailUseCase: DetailUseCase, contentId: Int) {
+    init(detailUseCase: DetailUseCase, favoriteUseCase: FavoriteUseCase, contentId: Int) {
         _presenter = State(initialValue: MovieDetailPresenter(
-            detailUseCase: detailUseCase
+            detailUseCase: detailUseCase,
+            favoriteUseCase: favoriteUseCase
         ))
         self.contentId = contentId
     }
@@ -56,8 +57,10 @@ struct MovieImageGalleryView: View {
 }
 
 #Preview {
+    let favoriteUseCase = Injection.init().provideFavoriteUseCase()
     MovieImageGalleryView(
         detailUseCase: Injection.init().provideDetailUseCase(),
+        favoriteUseCase: favoriteUseCase,
         contentId: 693134
     )
 }
