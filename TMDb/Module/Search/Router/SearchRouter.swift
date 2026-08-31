@@ -20,8 +20,11 @@ class SearchRouter {
     
     func goToTvDetailView(for tvId: Int) -> some View {
         let tvShowUseCase = Injection.init().provideTvShowUseCase()
+        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         return TvShowDetailView(
-            tvShowUseCase: tvShowUseCase, tvShowId: tvId
+            tvShowUseCase: tvShowUseCase,
+            favoriteUseCase: favoriteUseCase,
+            tvShowId: tvId
         )
     }
     

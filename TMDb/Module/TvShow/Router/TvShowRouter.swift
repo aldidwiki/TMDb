@@ -11,6 +11,11 @@ import SwiftUI
 class TvShowRouter {
     func makeTvShowDetailView(for tvShowId: Int) -> some View {
         let tvShowUseCase = Injection.init().provideTvShowUseCase()
-        return TvShowDetailView(tvShowUseCase: tvShowUseCase, tvShowId: tvShowId)
+        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
+        return TvShowDetailView(
+            tvShowUseCase: tvShowUseCase,
+            favoriteUseCase: favoriteUseCase,
+            tvShowId: tvShowId
+        )
     }
 }

@@ -24,9 +24,11 @@ class DetailRouter {
     
     func makeTvShowSeasonView(for tvShowSeasonList: [TvShowSeasonModel], title tvShowTitle: String, id tvShowId: Int) -> some View {
         let tvShowUseCase = Injection.init().provideTvShowUseCase()
+        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         
         return TvShowSeasonView(
             tvShowUseCase: tvShowUseCase,
+            favoriteUseCase: favoriteUseCase,
             tvShowId: tvShowId,
             tvShowTitle: tvShowTitle,
             tvShowSeasonList: tvShowSeasonList
@@ -53,8 +55,10 @@ class DetailRouter {
     }
     
     func makeTvShowImageGalleryView(tvShowId: Int) -> some View {
+        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         return TvShowImageGalleryView(
             tvShowUseCase: Injection.init().provideTvShowUseCase(),
+            favoriteUseCase: favoriteUseCase,
             tvShowId: tvShowId
         )
     }

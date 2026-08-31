@@ -17,6 +17,7 @@ class TvShowDetailPresenter {
     
     private let router = DetailRouter()
     private let tvShowUseCase: TvShowUseCase
+    private let favoriteUseCase: FavoriteUseCase
     private let maxVisibleNetworks = 3
     
     var isFavorite = false
@@ -67,8 +68,9 @@ class TvShowDetailPresenter {
         SwiftDataContextManager.shared.context
     }
     
-    init(tvShowUseCase: TvShowUseCase) {
+    init(tvShowUseCase: TvShowUseCase, favoriteUseCase: FavoriteUseCase) {
         self.tvShowUseCase = tvShowUseCase
+        self.favoriteUseCase = favoriteUseCase
     }
     
     func getTvShow(tvShowId: Int) {
@@ -94,39 +96,15 @@ class TvShowDetailPresenter {
     }
     
     func toggleFavorite() {
-        if isFavorite {
-            deleteFavorite()
-        } else {
-            addFavorite()
-        }
-    }
-    
-    private func addFavorite() {
-        context.insert(Mapper.mapTvShowDetailModelToFavoriteEntity(input: tvShow))
-        isFavorite = true
-    }
-    
-    private func deleteFavorite() {
-        let tvId = tvShow.id // Assuming your movie model has an id
+        let request = FavoriteRequest(mediaType: "tv", mediaId: tvShow.id, isFavorite: !isFavorite)
         
-        // 1. Create a predicate to find the EXISTING entity
-        let predicate = #Predicate<FavoriteEntity> { favorite in
-            favorite.id == tvId
-        }
-        
-        // 2. Fetch the entity from the context
-        let descriptor = FetchDescriptor<FavoriteEntity>(predicate: predicate)
-        
-        do {
-            // 3. If it exists in the DB, delete THAT specific instance
-            if let entityToDelete = try context.fetch(descriptor).first {
-                context.delete(entityToDelete)
-                isFavorite = false
-                // try context.save() // Optional: force the write
+        favoriteUseCase.addToFavorite(request)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isSuccess in
+                guard isSuccess, let self = self else { return }
+                self.isFavorite = !self.isFavorite
             }
-        } catch {
-            print("Failed to fetch favorite for deletion: \(error)")
-        }
+            .store(in: &cancellable)
     }
     
     func getTvShowBackdrop(tvShowId: Int) {

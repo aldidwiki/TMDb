@@ -15,11 +15,15 @@ struct TvShowSeasonView: View {
     
     init(
         tvShowUseCase: TvShowUseCase,
+        favoriteUseCase: FavoriteUseCase,
         tvShowId: Int,
         tvShowTitle: String,
         tvShowSeasonList: [TvShowSeasonModel]
     ) {
-        _tvShowDetailPresenter = State(initialValue: TvShowDetailPresenter(tvShowUseCase: tvShowUseCase))
+        _tvShowDetailPresenter = State(initialValue: TvShowDetailPresenter(
+            tvShowUseCase: tvShowUseCase,
+            favoriteUseCase: favoriteUseCase
+        ))
         self.tvShowId = tvShowId
         self.tvShowTitle = tvShowTitle
         self.tvShowSeasonList = tvShowSeasonList
@@ -42,9 +46,11 @@ struct TvShowSeasonView: View {
 struct TvShowSeasonView_Previews: PreviewProvider {
     static var previews: some View {
         let tvShowUseCase: TvShowUseCase = Injection.init().provideTvShowUseCase()
+        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         
         TvShowSeasonView(
             tvShowUseCase: tvShowUseCase,
+            favoriteUseCase: favoriteUseCase,
             tvShowId: 0,
             tvShowTitle: "Game of Thrones",
             tvShowSeasonList: [

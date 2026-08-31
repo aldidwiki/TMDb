@@ -8,7 +8,6 @@
 import SwiftUI
 import SDWebImageSwiftUI
 import SwiftUIIntrospect
-import SwiftData
 
 struct TvShowDetailView: View {
     @Environment(\.dismiss) private var dismiss
@@ -23,9 +22,10 @@ struct TvShowDetailView: View {
     
     private let tvShowId: Int
     
-    init(tvShowUseCase: TvShowUseCase, tvShowId: Int) {
+    init(tvShowUseCase: TvShowUseCase, favoriteUseCase: FavoriteUseCase, tvShowId: Int) {
         _presenter = State(initialValue: TvShowDetailPresenter(
-            tvShowUseCase: tvShowUseCase
+            tvShowUseCase: tvShowUseCase,
+            favoriteUseCase: favoriteUseCase
         ))
         self.tvShowId = tvShowId
     }
@@ -408,8 +408,11 @@ extension TvShowDetailView {
 struct TvShowDetailView_Previews: PreviewProvider {
     static var previews: some View {
         let tvShowUseCase = Injection.init().provideTvShowUseCase()
+        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
         TvShowDetailView(
-            tvShowUseCase: tvShowUseCase, tvShowId: 0
+            tvShowUseCase: tvShowUseCase,
+            favoriteUseCase: favoriteUseCase,
+            tvShowId: 0
         )
     }
 }
