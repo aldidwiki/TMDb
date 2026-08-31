@@ -14,22 +14,35 @@ import SwiftData
 @Observable
 class FavoritePresenter {
     private let router = FavoriteRouter()
+    private let favoriteUseCase: FavoriteUseCase
+    
+    private var cancellables = Set<AnyCancellable>()
+    
+    init(favoriteUseCase: FavoriteUseCase) {
+        self.favoriteUseCase = favoriteUseCase
+    }
     
     private var context: ModelContext {
         SwiftDataContextManager.shared.context
     }
     
     var favorites: [FavoriteModel] = []
+    var isLoading = true
     
     func getFavorites() {
-        let descriptor = FetchDescriptor<FavoriteEntity>(
-            sortBy: [SortDescriptor(\.createdAt, order: .reverse)]
-        )
-        
-        let entities = try? context.fetch(descriptor)
-        if let entityList = entities {
-            favorites = Mapper.mapFavoriteEntitiesToDomains(input: entityList)
-        }
+        favoriteUseCase.getMoviesFavorite()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] completion in
+                switch completion {
+                case .failure(let error):
+                    print(error)
+                case .finished:
+                    self?.isLoading = false
+                }
+            } receiveValue: { [weak self] favorites in
+                self?.favorites = favorites
+            }
+            .store(in: &cancellables)
     }
     
     func linkBuilder<Content: View>(

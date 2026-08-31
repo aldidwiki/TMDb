@@ -27,7 +27,9 @@ struct ContentView: View {
                 Label("Person", systemImage: "person.fill")
             }
             
-            FavoriteView()
+            FavoriteView(
+                favoriteUseCase: Injection.init().provideFavoriteUseCase()
+            )
                 .tabItem {
                     Label("Favorite", systemImage: "heart")
                 }
