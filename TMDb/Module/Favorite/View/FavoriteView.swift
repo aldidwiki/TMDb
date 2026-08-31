@@ -18,40 +18,57 @@ struct FavoriteView: View {
     
     var body: some View {
         NavigationView {
-            GeometryReader { geometry in
-                if presenter.isLoading {
-                    ProgressView("Loading...")
-                        .frame(maxWidth: geometry.size.width, maxHeight: geometry.size.height)
-                } else {
-                    ScrollView {
-                        if presenter.favorites.isEmpty {
-                            EmptyView(emptyTitle: "No Favorites Found")
-                                .frame(maxWidth: geometry.size.width, minHeight: geometry.size.height)
-                        } else {
-                            LazyVStack {
-                                ForEach(presenter.favorites) { favorite in
-                                    presenter.linkBuilder(for: favorite) {
-                                        VStack {
-                                            if favorite.mediaType == Constants.personType {
-                                                PersonItemView(personPopular: favorite.toPopularPersonModel)
-                                            } else {
-                                                MovieItemView(movie: favorite.toMovieModel)
-                                            }
-                                            
-                                            if favorite != presenter.favorites.last {
-                                                NativeDivider()
+            ScrollViewReader { proxy in
+                ScrollView {
+                    GeometryReader { geometry in
+                        Group {
+                            if presenter.isLoading {
+                                ProgressView("Loading...")
+                                    .frame(maxWidth: geometry.size.width, minHeight: geometry.size.height)
+                                    .containerRelativeFrame(.vertical)
+                            } else if presenter.favorites.isEmpty {
+                                EmptyView(emptyTitle: "No Favorites Found")
+                                    .frame(maxWidth: geometry.size.width, minHeight: geometry.size.height)
+                                    .containerRelativeFrame(.vertical)
+                            } else {
+                                LazyVStack {
+                                    // Anchor item for scroll reset
+                                    Color.clear
+                                        .frame(height: 0)
+                                        .id("TOP")
+                                    
+                                    ForEach(presenter.favorites) { favorite in
+                                        presenter.linkBuilder(for: favorite) {
+                                            VStack {
+                                                if favorite.mediaType == Constants.personType {
+                                                    PersonItemView(personPopular: favorite.toPopularPersonModel)
+                                                } else {
+                                                    MovieItemView(movie: favorite.toMovieModel)
+                                                }
+                                                
+                                                if favorite != presenter.favorites.last {
+                                                    NativeDivider()
+                                                }
                                             }
                                         }
                                     }
                                 }
+                                .padding()
                             }
-                            .padding()
                         }
                     }
                 }
+                .refreshable {
+                    await presenter.getFavorites()
+                }
+                .onChange(of: presenter.favorites.map(\.id)) { _, _ in
+                    withAnimation {
+                        proxy.scrollTo("TOP", anchor: .top)
+                    }
+                }
             }
-            .onAppear {
-                presenter.getFavorites()
+            .task {
+                await presenter.getFavorites()
             }
             .navigationTitle("Favorites")
         }

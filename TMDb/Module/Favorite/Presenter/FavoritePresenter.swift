@@ -23,20 +23,24 @@ class FavoritePresenter {
     var favorites: [FavoriteModel] = []
     var isLoading = true
     
-    func getFavorites() {
-        favoriteUseCase.getFavorites()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] completion in
-                switch completion {
-                case .failure(let error):
-                    print(error)
-                case .finished:
-                    self?.isLoading = false
+    func getFavorites() async {
+        let favorites = await withCheckedContinuation { continuation in
+            favoriteUseCase.getFavorites()
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] completion in
+                    switch completion {
+                    case .failure(let error):
+                        print(error)
+                    case .finished:
+                        self?.isLoading = false
+                    }
+                } receiveValue: { favorites in
+                    continuation.resume(returning: favorites)
                 }
-            } receiveValue: { [weak self] favorites in
-                self?.favorites = favorites
-            }
-            .store(in: &cancellables)
+                .store(in: &cancellables)
+        }
+        
+        self.favorites = favorites
     }
     
     func linkBuilder<Content: View>(
