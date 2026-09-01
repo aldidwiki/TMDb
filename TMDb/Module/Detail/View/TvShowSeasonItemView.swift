@@ -35,8 +35,10 @@ struct TvShowSeasonItemView: View {
                     .fontWeight(.light)
             }
             .padding(.leading, 4)
+            
+            Spacer()
         }
-        .padding(.vertical)
+        .padding(.vertical, 6)
     }
 }
 

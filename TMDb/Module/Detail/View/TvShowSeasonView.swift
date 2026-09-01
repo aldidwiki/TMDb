@@ -30,15 +30,26 @@ struct TvShowSeasonView: View {
     }
     
     var body: some View {
-        List(tvShowSeasonList, id: \.id) { tvShowSeason in
-            tvShowDetailPresenter.toTvShowEpisodeView(
-                tvShowId: tvShowId,
-                seasonNumber: tvShowSeason.seasonNumber,
-                seasonName: tvShowSeason.seasonName) {
-                    TvShowSeasonItemView(seasonModel: tvShowSeason, tvTitle: tvShowTitle)
+        ScrollView {
+            LazyVStack(spacing: 0) {
+                ForEach(tvShowSeasonList) { tvShowSeason in
+                    VStack(spacing: 0) {
+                        tvShowDetailPresenter.toTvShowEpisodeView(
+                            tvShowId: tvShowId,
+                            seasonNumber: tvShowSeason.seasonNumber,
+                            seasonName: tvShowSeason.seasonName) {
+                                TvShowSeasonItemView(seasonModel: tvShowSeason, tvTitle: tvShowTitle)
+                            }
+                            .buttonStyle(.plain)
+                        
+                        if tvShowSeason != tvShowSeasonList.last {
+                            NativeDivider()
+                        }
+                    }
                 }
+            }
+            .padding(.horizontal, 20)
         }
-        .listStyle(.plain)
         .navigationTitle("\(tvShowTitle) \(tvShowSeasonList.count > 1 ? "Seasons" : "Season")")
     }
 }

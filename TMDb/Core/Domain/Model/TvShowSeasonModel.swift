@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TvShowSeasonModel: Identifiable {
+struct TvShowSeasonModel: Identifiable, Equatable {
     let id: Int
     let posterPath: String
     let seasonName: String
