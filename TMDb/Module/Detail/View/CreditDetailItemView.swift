@@ -48,7 +48,6 @@ extension CreditDetailItemView {
                     .scaledToFit()
                     .frame(width: 35, height: 35)
             })
-            .indicator(.activity)
             .transition(.fade(duration: 0.5))
             .frame(width: 100, height: 130)
             .cornerRadius(6)

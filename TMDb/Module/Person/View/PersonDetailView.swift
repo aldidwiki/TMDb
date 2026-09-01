@@ -84,7 +84,6 @@ extension PersonDetailView {
                     .scaledToFit()
                     .frame(width: 100, height: 100)
             })
-            .indicator(.activity)
             .transition(.fade(duration: 0.5))
             .scaledToFit()
             .cornerRadius(8)

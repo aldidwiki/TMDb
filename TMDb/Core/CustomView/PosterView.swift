@@ -24,7 +24,6 @@ struct PosterView: View {
                     .scaledToFit()
                     .frame(width: self.width / 2, height: self.height / 2)
             })
-            .indicator(.activity)
             .transition(.fade(duration: 0.5))
             .scaledToFill()
             .frame(width: self.width, height: self.height)

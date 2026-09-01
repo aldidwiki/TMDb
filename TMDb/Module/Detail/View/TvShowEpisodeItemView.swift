@@ -72,7 +72,6 @@ extension TvShowEpisodeItemView {
                 .scaledToFit()
                 .frame(width: 75, height: 75)
         })
-        .indicator(.activity)
         .scaledToFill()
         .transition(.fade(duration: 0.5))
         .frame(maxWidth: .infinity)
