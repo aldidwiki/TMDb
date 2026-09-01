@@ -8,13 +8,19 @@
 import SwiftUI
 import Combine
 import Observation
+import SwiftData
 
+@MainActor
 @Observable
 class FavoritePresenter {
     private let router = FavoriteRouter()
     private let favoriteUseCase: FavoriteUseCase
     
     private var cancellables = Set<AnyCancellable>()
+    
+    private var context: ModelContext {
+        SwiftDataContextManager.shared.context
+    }
     
     init(favoriteUseCase: FavoriteUseCase) {
         self.favoriteUseCase = favoriteUseCase
@@ -41,6 +47,24 @@ class FavoritePresenter {
         }
         
         self.favorites = favorites
+        getFavoritesFromLocal()
+    }
+    
+    private func getFavoritesFromLocal() {
+        let personType = Constants.personType
+        let filteredPredicate = #Predicate<FavoriteEntity> { entity in
+            entity.mediaType == personType
+        }
+        
+        let descriptor = FetchDescriptor<FavoriteEntity>(
+            predicate: filteredPredicate,
+            sortBy: [SortDescriptor(\.createdAt, order: .reverse)]
+        )
+        
+        let entities = try? context.fetch(descriptor)
+        if let entityList = entities {
+            favorites += Mapper.mapFavoriteEntitiesToDomains(input: entityList)
+        }
     }
     
     func linkBuilder<Content: View>(
