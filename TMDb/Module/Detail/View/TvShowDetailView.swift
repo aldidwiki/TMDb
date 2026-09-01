@@ -112,6 +112,7 @@ struct TvShowDetailView: View {
                 } label: {
                     Image(systemName: presenter.isFavorite ? "heart.fill" : "heart")
                         .contentTransition(.symbolEffect(.replace))
+                        .symbolEffect(.bounce, value: presenter.isFavorite)
                         .foregroundStyle(primaryColor)
                 }
                 .disabled(self.presenter.loadingState)
