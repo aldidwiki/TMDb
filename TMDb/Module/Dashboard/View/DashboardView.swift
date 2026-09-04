@@ -10,16 +10,25 @@ import SwiftUI
 struct DashboardView: View {
     @State private var currentIndex: Int? = 0
     
+    private let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+    
     var body: some View {
         ScrollView(showsIndicators: false) {
-            VStack {
+            VStack(alignment: .leading) {
                 topAppBar
                 heroSection
                     .padding(.bottom, 20)
                 
                 newReleasesSection
                     .padding(.bottom, 30)
+                
                 popularTvShowSection
+                    .padding(.bottom, 10)
+                
+                genreSection
             }
         }
     }
@@ -184,6 +193,25 @@ extension DashboardView {
             }
             .scrollTargetBehavior(.viewAligned)
         }
+    }
+    
+    var genreSection: some View {
+        VStack(alignment: .leading) {
+            Text("Explore by Genre")
+                .font(.system(size: 24, weight: .medium))
+            
+            Text("Browse by cinematic category")
+                .font(.system(size: 14))
+                .foregroundStyle(Color.gray)
+            
+            LazyVGrid(columns: columns) {
+                ForEach(ColorPalette.palettes, id: \.self) { palette in
+                    GenreItemView(palette: palette)
+                }
+            }
+            .padding(.top, 10)
+        }
+        .padding(.horizontal, 20)
     }
 }
 
