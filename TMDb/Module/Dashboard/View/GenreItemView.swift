@@ -19,13 +19,13 @@ struct GenreItemView: View {
                     .font(.system(size: 22, weight: .bold))
                     .foregroundStyle(palette.title)
                 
-                Text("1,420")
+                Text("1,420 Titles")
                     .font(.system(size: 18, weight: .medium))
                     .foregroundStyle(palette.subtitle)
             }
             .padding()
         }
-        .frame(height: 150)
+        .frame(height: 130)
         .clipShape(RoundedRectangle(cornerRadius: 20))
     }
 }

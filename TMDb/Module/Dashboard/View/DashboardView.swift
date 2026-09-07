@@ -11,7 +11,7 @@ struct DashboardView: View {
     @State private var currentIndex: Int? = 0
     
     private let columns = [
-        GridItem(.flexible()),
+        GridItem(.flexible(), spacing: 10),
         GridItem(.flexible())
     ]
     
@@ -204,7 +204,7 @@ extension DashboardView {
                 .font(.system(size: 14))
                 .foregroundStyle(Color.gray)
             
-            LazyVGrid(columns: columns) {
+            LazyVGrid(columns: columns, spacing: 10) {
                 ForEach(ColorPalette.palettes, id: \.self) { palette in
                     GenreItemView(palette: palette)
                 }
