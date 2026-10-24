@@ -1,6 +1,6 @@
 # TMDb
 
-TMDb is a SwiftUI iOS application for browsing movies, TV shows, and people from The Movie Database (TMDb). The app includes search, detail screens, favorite management, and a clean modular architecture built around MVVM-style presentation layers and repository abstractions.
+TMDb is a SwiftUI iOS application for browsing movies, TV shows, and people from The Movie Database (TMDb). The app includes search, detail screens, favorite management, and a clean modular architecture built around VIPER-style presentation layers and repository abstractions.
 
 ## Features
 
