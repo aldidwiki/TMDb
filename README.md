@@ -55,8 +55,8 @@ TMDb is a SwiftUI iOS application for browsing movies, TV shows, and people from
       <sub>Person detail</sub>
     </td>
     <td align="center">
-      <img src="screenshots/movie_list_screen.png" alt="App preview" width="280"><br>
-      <sub>App overview</sub>
+      <img src="screenshots/movie_detail_screen.png" alt=Movie detail screen" width="280"><br>
+      <sub>Movie detail</sub>
     </td>
   </tr>
 </table>
