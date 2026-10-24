@@ -1,6 +1,6 @@
 # TMDb
 
-TMDb is a SwiftUI iOS application for browsing movies, TV shows, and people from The Movie Database (TMDb). The app includes search, detail screens, favorite management, and a clean modular architecture built around VIPER-style presentation layers and repository abstractions.
+TMDb is a SwiftUI iOS application for browsing movies, TV shows, and people from The Movie Database (TMDb). The app includes search, detail screens, favorite management, and a clean modular architecture built for iOS.
 
 ## Features
 
@@ -11,6 +11,57 @@ TMDb is a SwiftUI iOS application for browsing movies, TV shows, and people from
 - Save favorite items locally
 - Native iOS interface built with SwiftUI
 - Clean architecture using repositories, use cases, and coordinators-like routing layers
+
+## Screenshots
+
+<div align="center">
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="screenshots/movie_list_screen.png" alt="Movie list screen" width="280"><br>
+      <sub>Movie list</sub>
+    </td>
+    <td align="center">
+      <img src="screenshots/tv_list_screen.png" alt="TV list screen" width="280"><br>
+      <sub>TV list</sub>
+    </td>
+    <td align="center">
+      <img src="screenshots/favorite_list_screen.png" alt="Favorite list screen" width="280"><br>
+      <sub>Favorites</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="screenshots/search_result_screen.png" alt="Search result screen" width="280"><br>
+      <sub>Search</sub>
+    </td>
+    <td align="center">
+      <img src="screenshots/tv_detail_screen.png" alt="TV detail screen" width="280"><br>
+      <sub>TV detail</sub>
+    </td>
+    <td align="center">
+      <img src="screenshots/seasons_list_screen.png" alt="Seasons list screen" width="280"><br>
+      <sub>Seasons</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="screenshots/episodes_list_screen.png" alt="Episodes list screen" width="280"><br>
+      <sub>Episodes</sub>
+    </td>
+    <td align="center">
+      <img src="screenshots/person_detail_screen.png" alt="Person detail screen" width="280"><br>
+      <sub>Person detail</sub>
+    </td>
+    <td align="center">
+      <img src="screenshots/movie_list_screen.png" alt="App preview" width="280"><br>
+      <sub>App overview</sub>
+    </td>
+  </tr>
+</table>
+
+</div>
 
 ## Tech Stack
 
