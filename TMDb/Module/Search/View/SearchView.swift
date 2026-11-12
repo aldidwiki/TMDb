@@ -7,11 +7,14 @@
 
 import SwiftUI
 
-struct SearchView: View {
+struct SearchView<BottomBar: View>: View {
     @State private var presenter: SearchPresenter
+
+    private let bottomBar: BottomBar
     
-    init(searchUseCase: SearchUseCase) {
+    init(searchUseCase: SearchUseCase, @ViewBuilder bottomBar: () -> BottomBar) {
         _presenter = State(initialValue: SearchPresenter(searchUseCase: searchUseCase))
+        self.bottomBar = bottomBar()
     }
     
     var body: some View {
@@ -67,9 +70,17 @@ struct SearchView: View {
                     }
                 }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .navigationTitle("Search")
             .searchable(text: $presenter.searchQuery, prompt: "Look for something")
+            .safeAreaInset(edge: .bottom, spacing: 0) { bottomBar }
         }
+    }
+}
+
+extension SearchView where BottomBar == SwiftUI.EmptyView {
+    init(searchUseCase: SearchUseCase) {
+        self.init(searchUseCase: searchUseCase) { SwiftUI.EmptyView() }
     }
 }
 

@@ -12,6 +12,8 @@
 		8D59665930453250006C5E02 /* FavoriteResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D59665830453250006C5E02 /* FavoriteResponse.swift */; };
 		8D59665B30453387006C5E02 /* FavoriteRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D59665A30453387006C5E02 /* FavoriteRepository.swift */; };
 		8D59665D304534E7006C5E02 /* FavoriteInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D59665C304534E7006C5E02 /* FavoriteInteractor.swift */; };
+		A7D9BCEAA01240DE8F467B04 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9BCEAA01240DE8F467B01 /* DashboardView.swift */; };
+		A7D9BCEAA01240DE8F467B05 /* DashboardPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9BCEAA01240DE8F467B02 /* DashboardPresenter.swift */; };
 		CE0FF12A2A458782009D3B26 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0FF1292A458782009D3B26 /* SplashView.swift */; };
 		CE182AF7292F6E2D00B5C857 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE182AF6292F6E2D00B5C857 /* Extension.swift */; };
 		CE182AFC292F7F7000B5C857 /* MovieDetailResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE182AFB292F7F7000B5C857 /* MovieDetailResponse.swift */; };
@@ -151,6 +153,8 @@
 		8D59665830453250006C5E02 /* FavoriteResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteResponse.swift; sourceTree = "<group>"; };
 		8D59665A30453387006C5E02 /* FavoriteRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteRepository.swift; sourceTree = "<group>"; };
 		8D59665C304534E7006C5E02 /* FavoriteInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteInteractor.swift; sourceTree = "<group>"; };
+		A7D9BCEAA01240DE8F467B01 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		A7D9BCEAA01240DE8F467B02 /* DashboardPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardPresenter.swift; sourceTree = "<group>"; };
 		CE0FF1292A458782009D3B26 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		CE182AF6292F6E2D00B5C857 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		CE182AFB292F7F7000B5C857 /* MovieDetailResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailResponse.swift; sourceTree = "<group>"; };
@@ -290,6 +294,39 @@
 				8D59665430452C79006C5E02 /* FavoriteRequest.swift */,
 			);
 			path = Request;
+			sourceTree = "<group>";
+		};
+		A7D9BCEAA01240DE8F467B07 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				A7D9BCEAA01240DE8F467B08 /* View */,
+				A7D9BCEAA01240DE8F467B09 /* Presenter */,
+				A7D9BCEAA01240DE8F467B0A /* Router */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		A7D9BCEAA01240DE8F467B08 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				A7D9BCEAA01240DE8F467B01 /* DashboardView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		A7D9BCEAA01240DE8F467B09 /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				A7D9BCEAA01240DE8F467B02 /* DashboardPresenter.swift */,
+			);
+			path = Presenter;
+			sourceTree = "<group>";
+		};
+		A7D9BCEAA01240DE8F467B0A /* Router */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Router;
 			sourceTree = "<group>";
 		};
 		CE182B01292F82FF00B5C857 /* Detail */ = {
@@ -644,6 +681,7 @@
 		CEC65512292F59B9007B393A /* Module */ = {
 			isa = PBXGroup;
 			children = (
+				A7D9BCEAA01240DE8F467B07 /* Dashboard */,
 				FA7A1ABB2F3DCC9E00019A36 /* Search */,
 				CE182B01292F82FF00B5C857 /* Detail */,
 				CE9E30F82930B657001BFB57 /* Favorite */,
@@ -874,6 +912,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7D9BCEAA01240DE8F467B04 /* DashboardView.swift in Sources */,
+				A7D9BCEAA01240DE8F467B05 /* DashboardPresenter.swift in Sources */,
 				FA8A51A42F3B0E3D0040ED03 /* NativeDivider.swift in Sources */,
 				CE594C6C2A541D2D0060D0EC /* NetworkModel.swift in Sources */,
 				CE1F9AEF2B7DF7800031518F /* PersonImageView.swift in Sources */,
