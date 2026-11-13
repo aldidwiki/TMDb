@@ -263,7 +263,7 @@ struct DashboardView: View {
 
     private var genreSection: some View {
         let spacing: CGFloat = 6
-        let columns = Array(repeating: GridItem(.flexible(), spacing: spacing), count: 4)
+        let columns = Array(repeating: GridItem(.flexible(), spacing: spacing), count: 3)
 
         return VStack(alignment: .leading, spacing: 11) {
             sectionTitle("Browse by Genre")
