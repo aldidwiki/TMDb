@@ -32,10 +32,11 @@ struct ContentView: View {
             DashboardView(
                 dashboardUseCase: Injection().provideDashboardUseCase(),
                 detailUseCase: Injection().provideDetailUseCase()
-            )
-                .safeAreaInset(edge: .bottom, spacing: 0) { bottomNavigation }
-                .toolbar(.hidden, for: .tabBar)
-                .tag(BottomTab.home)
+            ) {
+                bottomNavigation
+            }
+            .toolbar(.hidden, for: .tabBar)
+            .tag(BottomTab.home)
 
             SearchView(searchUseCase: Injection().provideSearchUseCase()) {
                 bottomNavigation

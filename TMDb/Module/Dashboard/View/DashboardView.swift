@@ -1,7 +1,7 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
-struct DashboardView: View {
+struct DashboardView<BottomBar: View>: View {
     @Environment(\.layoutDirection) private var layoutDirection
     @Environment(\.openURL) private var openURL
     @State private var presenter: DashboardPresenter
@@ -9,40 +9,50 @@ struct DashboardView: View {
     @State private var showsTrailerError = false
     @State private var carouselProgress: CGFloat = 0
     @State private var selectedPage: Int?
+    private let bottomBar: BottomBar
+    private let router = DashboardRouter()
 
-    init(dashboardUseCase: DashboardUseCase, detailUseCase: DetailUseCase) {
+    init(dashboardUseCase: DashboardUseCase, detailUseCase: DetailUseCase, @ViewBuilder bottomBar: () -> BottomBar) {
         _presenter = State(initialValue: DashboardPresenter(
             dashboardUseCase: dashboardUseCase,
             detailUseCase: detailUseCase
         ))
+        self.bottomBar = bottomBar()
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
-                insetContent(
-                    Text("TMDb")
-                        .font(.system(size: 20, weight: .heavy))
-                        .foregroundStyle(DashboardDesign.accent)
-                        .padding(.bottom, 10)
-                        .accessibilityAddTraits(.isHeader)
-                )
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 0) {
+                    insetContent(
+                        Text("TMDb")
+                            .font(.system(size: 20, weight: .heavy))
+                            .foregroundStyle(DashboardDesign.accent)
+                            .padding(.bottom, 10)
+                            .accessibilityAddTraits(.isHeader)
+                    )
 
-                trendingSection
-                    .padding(.bottom)
+                    trendingSection
+                        .padding(.bottom)
 
-                insetContent(
-                    VStack(alignment: .leading, spacing: 24) {
-                        nowPlayingSection
-                        genreSection
-                    }
-                )
+                    insetContent(
+                        VStack(alignment: .leading, spacing: 24) {
+                            nowPlayingSection
+                            genreSection
+                        }
+                    )
+                }
+                .padding(.top, 4)
+                .padding(.bottom, 20)
             }
-            .padding(.top, 4)
-            .padding(.bottom, 20)
+            .scrollIndicators(.hidden)
+            .background(DashboardDesign.background.ignoresSafeArea())
+            .safeAreaInset(edge: .bottom, spacing: 0) { bottomBar }
+            .navigationDestination(for: Int.self) { movieID in
+                router.goToMovieDetailView(for: movieID)
+            }
+            .toolbar(.hidden, for: .navigationBar)
         }
-        .scrollIndicators(.hidden)
-        .background(DashboardDesign.background.ignoresSafeArea())
         .preferredColorScheme(.light)
         .task { presenter.load() }
         .alert("Trailer unavailable", isPresented: $showsTrailerError) {
@@ -110,8 +120,17 @@ struct DashboardView: View {
             ScrollView(.horizontal) {
                 LazyHStack(spacing: cardSpacing) {
                     ForEach(movies.indices, id: \.self) { index in
-                        featuredCard(movies[index])
-                            .frame(width: cardWidth)
+                        ZStack(alignment: .bottomLeading) {
+                            NavigationLink(value: movies[index].id) {
+                                featuredCard(movies[index])
+                            }
+                            .buttonStyle(.plain)
+
+                            trailerButton(movies[index])
+                                .padding(.leading, 16)
+                                .padding(.bottom, 10)
+                        }
+                        .frame(width: cardWidth)
                     }
                 }
                 .scrollTargetLayout()
@@ -170,7 +189,8 @@ struct DashboardView: View {
                     .padding(.top, 2)
             }
 
-            trailerButton(movie)
+            Color.clear
+                .frame(width: 170, height: 42)
                 .padding(.top, 13)
         }
         .foregroundStyle(DashboardDesign.surface)
@@ -230,8 +250,11 @@ struct DashboardView: View {
                 ScrollView(.horizontal) {
                     LazyHStack(spacing: spacing) {
                         ForEach(movies) { movie in
-                            nowPlayingCard(movie)
-                                .containerRelativeFrame(.horizontal, count: 3, spacing: spacing)
+                            NavigationLink(value: movie.id) {
+                                nowPlayingCard(movie)
+                            }
+                            .buttonStyle(.plain)
+                            .containerRelativeFrame(.horizontal, count: 3, spacing: spacing)
                         }
                     }
                 }
@@ -385,6 +408,14 @@ enum DashboardDesign {
             green: Double((hex >> 8) & 0xFF) / 255,
             blue: Double(hex & 0xFF) / 255
         )
+    }
+}
+
+extension DashboardView where BottomBar == SwiftUI.EmptyView {
+    init(dashboardUseCase: DashboardUseCase, detailUseCase: DetailUseCase) {
+        self.init(dashboardUseCase: dashboardUseCase, detailUseCase: detailUseCase) {
+            SwiftUI.EmptyView()
+        }
     }
 }
 

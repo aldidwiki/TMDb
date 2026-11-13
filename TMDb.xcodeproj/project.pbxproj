@@ -16,6 +16,7 @@
 		8D59665D304534E7006C5E02 /* FavoriteInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D59665C304534E7006C5E02 /* FavoriteInteractor.swift */; };
 		A7D9BCEAA01240DE8F467B04 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9BCEAA01240DE8F467B01 /* DashboardView.swift */; };
 		A7D9BCEAA01240DE8F467B05 /* DashboardPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9BCEAA01240DE8F467B02 /* DashboardPresenter.swift */; };
+		A7D9BCEAA01240DE8F467B11 /* DashboardRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9BCEAA01240DE8F467B10 /* DashboardRouter.swift */; };
 		CE0FF12A2A458782009D3B26 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0FF1292A458782009D3B26 /* SplashView.swift */; };
 		CE182AF7292F6E2D00B5C857 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE182AF6292F6E2D00B5C857 /* Extension.swift */; };
 		CE182AFC292F7F7000B5C857 /* MovieDetailResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE182AFB292F7F7000B5C857 /* MovieDetailResponse.swift */; };
@@ -159,6 +160,7 @@
 		8D59665C304534E7006C5E02 /* FavoriteInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteInteractor.swift; sourceTree = "<group>"; };
 		A7D9BCEAA01240DE8F467B01 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		A7D9BCEAA01240DE8F467B02 /* DashboardPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardPresenter.swift; sourceTree = "<group>"; };
+		A7D9BCEAA01240DE8F467B10 /* DashboardRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardRouter.swift; sourceTree = "<group>"; };
 		CE0FF1292A458782009D3B26 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		CE182AF6292F6E2D00B5C857 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		CE182AFB292F7F7000B5C857 /* MovieDetailResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailResponse.swift; sourceTree = "<group>"; };
@@ -329,6 +331,7 @@
 		A7D9BCEAA01240DE8F467B0A /* Router */ = {
 			isa = PBXGroup;
 			children = (
+				A7D9BCEAA01240DE8F467B10 /* DashboardRouter.swift */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -920,6 +923,7 @@
 			files = (
 				A7D9BCEAA01240DE8F467B04 /* DashboardView.swift in Sources */,
 				A7D9BCEAA01240DE8F467B05 /* DashboardPresenter.swift in Sources */,
+				A7D9BCEAA01240DE8F467B11 /* DashboardRouter.swift in Sources */,
 				A7D9BCEAA01240DE8F467B0B /* DashboardInteractor.swift in Sources */,
 				A7D9BCEAA01240DE8F467B0C /* GenreModel.swift in Sources */,
 				FA8A51A42F3B0E3D0040ED03 /* NativeDivider.swift in Sources */,
