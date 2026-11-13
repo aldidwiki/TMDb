@@ -35,12 +35,10 @@ struct DashboardView<BottomBar: View>: View {
                     trendingSection
                         .padding(.bottom)
 
-                    insetContent(
-                        VStack(alignment: .leading, spacing: 24) {
-                            nowPlayingSection
-                            genreSection
-                        }
-                    )
+                    VStack(alignment: .leading, spacing: 24) {
+                        nowPlayingSection
+                        insetContent(genreSection)
+                    }
                 }
                 .padding(.top, 4)
                 .padding(.bottom, 20)
@@ -247,7 +245,7 @@ struct DashboardView<BottomBar: View>: View {
         let spacing: CGFloat = 15
 
         return VStack(alignment: .leading, spacing: 9) {
-            sectionTitle("Now Playing")
+            insetContent(sectionTitle("Now Playing"))
 
             sectionContent(presenter.nowPlaying, emptyTitle: "No movies now playing", retry: presenter.loadNowPlaying) { movies in
                 ScrollView(.horizontal) {
@@ -261,6 +259,7 @@ struct DashboardView<BottomBar: View>: View {
                         }
                     }
                 }
+                .contentMargins(.horizontal, DashboardDesign.contentInset, for: .scrollContent)
                 .scrollIndicators(.hidden)
             }
         }

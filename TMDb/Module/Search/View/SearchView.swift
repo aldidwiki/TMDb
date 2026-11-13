@@ -295,7 +295,7 @@ struct SearchView<BottomBar: View>: View {
             .clipShape(RoundedRectangle(cornerRadius: DashboardDesign.controlRadius))
             .accessibilityHidden(true)
 
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 3) {
                 Text(result.name)
                     .font(.headline)
                     .foregroundStyle(DashboardDesign.text)
@@ -321,17 +321,19 @@ struct SearchView<BottomBar: View>: View {
                     Text(result.overview)
                         .font(.caption)
                         .foregroundStyle(DashboardDesign.secondaryText)
-                        .lineLimit(1)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
 
-                Spacer(minLength: 6)
+                Spacer(minLength: 0)
 
                 NavigationLink(value: result.id) {
                     Text("See Details")
-                        .font(.subheadline.weight(.semibold))
+                        .font(.footnote.weight(.semibold))
                         .foregroundStyle(DashboardDesign.surface)
                         .padding(.horizontal, 12)
-                        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                        .padding(.vertical, 4)
+                        .frame(maxWidth: .infinity, minHeight: 30, alignment: .leading)
                         .background(DashboardDesign.accent, in: RoundedRectangle(cornerRadius: DashboardDesign.controlRadius))
                 }
                 .buttonStyle(.plain)
