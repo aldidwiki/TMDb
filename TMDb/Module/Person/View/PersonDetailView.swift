@@ -226,7 +226,7 @@ struct PersonDetailView: View {
 
         return VStack(alignment: .leading, spacing: 8) {
             insetContent {
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: 0) {
                     HStack {
                         sectionTitle("Known for")
                         Spacer()
