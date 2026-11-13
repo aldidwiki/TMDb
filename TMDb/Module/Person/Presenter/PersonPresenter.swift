@@ -5,6 +5,7 @@
 //  Created by Aldi Dwiki Prahasta on 08/05/23.
 //
 
+import Foundation
 import Observation
 import Combine
 import SwiftUI
@@ -13,6 +14,18 @@ import SwiftData
 @MainActor
 @Observable
 class PersonPresenter {
+    struct KnownForItem: Identifiable {
+        let id: PersonRouter.CreditRoute
+        let credit: CreditModel
+    }
+
+    struct ProfileLink: Identifiable {
+        let title: String
+        let url: URL
+
+        var id: String { title }
+    }
+
     private var cancellable: Set<AnyCancellable> = []
     
     private let personUseCase: PersonUseCase
@@ -25,13 +38,14 @@ class PersonPresenter {
     var person = PersonModel(
         id: 0,
         name: "",
-        profilePath: "/83o3koL82jt30EJ0rz4Bnzrt2dd.jpg",
-        birthday: "1979-06-21",
+        profilePath: "",
+        birthday: "",
         deathday: "",
         gender: "Unknown",
-        biography: "Christopher Michael Pratt (born 21 June 1979) is an American actor, known for starring in both television and action films.",
-        birthplace: "Virginia, Minnesota, USA",
-        knownFor: "Acting",
+        biography: "",
+        birthplace: "",
+        knownFor: "",
+        alsoKnownAs: [],
         credits: [],
         instagramId: "",
         facebookId: "",
@@ -55,19 +69,65 @@ class PersonPresenter {
     }
     
     func getPerson(personId: Int) {
-        self.loadingState = true
+        guard !loadingState else { return }
+        loadingState = true
+        errorMessage = ""
         personUseCase.getPerson(personId: personId)
             .receive(on: DispatchQueue.main)
-            .sink { completion in
-                switch completion {
-                case .failure:
-                    self.errorMessage = String(describing: completion)
-                case .finished:
-                    self.loadingState = false
+            .sink { [weak self] completion in
+                self?.loadingState = false
+                if case .failure = completion {
+                    self?.errorMessage = "Couldn’t load person details"
                 }
-            } receiveValue: { person in
-                self.person = person
+            } receiveValue: { [weak self] person in
+                self?.person = person
             }.store(in: &cancellable)
+    }
+
+    var knownForItems: [KnownForItem] {
+        var items: [KnownForItem] = []
+        var seen: Set<PersonRouter.CreditRoute> = []
+        for credit in person.credits.sorted(by: { $0.popularity > $1.popularity }) {
+            guard credit.id > 0, !credit.name.isEmpty,
+                  let route = PersonRouter.CreditRoute(credit: credit),
+                  seen.insert(route).inserted else { continue }
+            items.append(KnownForItem(id: route, credit: credit))
+            if items.count == 10 { break }
+        }
+        return items
+    }
+
+    var profileLinks: [ProfileLink] {
+        let instagram = person.instagramId.trimmingCharacters(in: .whitespacesAndNewlines)
+        let imdb = person.imdbId.trimmingCharacters(in: .whitespacesAndNewlines)
+        let name = person.name.trimmingCharacters(in: .whitespacesAndNewlines)
+        var links: [ProfileLink] = []
+
+        if instagram.wholeMatch(of: #/[A-Za-z0-9_][A-Za-z0-9_.]{0,29}/#) != nil,
+           !instagram.hasSuffix("."), !instagram.contains(".."),
+           let url = URL(string: "https://www.instagram.com/\(instagram)/") {
+            links.append(ProfileLink(title: "Instagram", url: url))
+        }
+
+        if imdb.wholeMatch(of: #/nm[0-9]{7,}/#) != nil,
+           let url = URL(string: "https://www.imdb.com/name/\(imdb)/") {
+            links.append(ProfileLink(title: "IMDb", url: url))
+        }
+
+        if !name.isEmpty, name != "-" {
+            var components = URLComponents()
+            components.scheme = "https"
+            components.host = "www.google.com"
+            components.path = "/search"
+            components.queryItems = [URLQueryItem(name: "q", value: name)]
+            // Google treats a literal plus as a space in query parameters.
+            components.percentEncodedQuery = components.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
+            if let url = components.url {
+                links.append(ProfileLink(title: "Google", url: url))
+            }
+        }
+
+        return links
     }
     
     func getPopularPerson(reset: Bool = false) {
@@ -179,32 +239,6 @@ class PersonPresenter {
         }
     }
     
-    func linkBuilder<Content: View>(
-        contentId: Int,
-        mediaType: String,
-        @ViewBuilder content: () -> Content
-    ) -> some View {
-        let destinationView = if mediaType == Constants.movieResponseType {
-            AnyView(router.makeMovieDetailView(for: contentId))
-        } else {
-            AnyView(router.makeTvShowDetailView(for: contentId))
-        }
-        
-        return NavigationLink(destination: destinationView) {
-            content()
-        }
-        .buttonStyle(.plain)
-    }
-    
-    func toCreditDetailView<Content: View>(
-        creditModelList: [CreditModel],
-        @ViewBuilder content: () -> Content
-    ) -> some View {
-        NavigationLink(destination: router.makeCreditDetailView(creditModelList: creditModelList)) {
-            content()
-        }
-    }
-    
     func toPersonDetailView<Content: View>(
         personId: Int,
         @ViewBuilder content: () -> Content
@@ -219,8 +253,9 @@ class PersonPresenter {
         personId: Int,
         @ViewBuilder content: () -> Content
     ) -> some View {
-        NavigationLink(destination: router.makePersonImageView(personId: personId)) {
+        NavigationLink(destination: router.makePersonImageView(personId: personId).toolbar(.visible, for: .navigationBar)) {
             content()
         }
+        .buttonStyle(.plain)
     }
 }

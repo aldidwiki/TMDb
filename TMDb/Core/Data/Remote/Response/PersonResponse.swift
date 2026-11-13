@@ -17,7 +17,9 @@ struct PersonResponse: Decodable {
     let biography: String?
     let birthplace: String?
     let knownFor: String?
-    let credits: PersonCreditResponse
+    let alsoKnownAs: [String]?
+    let imdbId: String?
+    let credits: PersonCreditResponse?
     let externalMedia: ExternalMediaResponse?
     
     private enum CodingKeys: String, CodingKey {
@@ -30,6 +32,8 @@ struct PersonResponse: Decodable {
         case biography
         case birthplace = "place_of_birth"
         case knownFor = "known_for_department"
+        case alsoKnownAs = "also_known_as"
+        case imdbId = "imdb_id"
         case credits = "combined_credits"
         case externalMedia = "external_ids"
     }

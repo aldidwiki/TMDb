@@ -17,6 +17,7 @@ struct PersonModel: Identifiable, Equatable {
     let biography: String
     let birthplace: String
     let knownFor: String
+    let alsoKnownAs: [String]
     let credits: [CreditModel]
     let instagramId: String
     let facebookId: String

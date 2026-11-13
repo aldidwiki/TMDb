@@ -9,6 +9,27 @@ import Foundation
 import SwiftUI
 
 class PersonRouter {
+    enum CreditRoute: Hashable {
+        case movie(Int)
+        case tv(Int)
+
+        init?(credit: CreditModel) {
+            switch credit.mediaType {
+            case Constants.movieResponseType: self = .movie(credit.id)
+            case Constants.tvShowResponseType: self = .tv(credit.id)
+            default: return nil
+            }
+        }
+    }
+
+    @ViewBuilder
+    func destination(for route: CreditRoute) -> some View {
+        switch route {
+        case .movie(let id): makeMovieDetailView(for: id)
+        case .tv(let id): makeTvShowDetailView(for: id)
+        }
+    }
+
     func makeMovieDetailView(for movieId: Int) -> some View {
         let detailUseCase = Injection.init().provideDetailUseCase()
         let favoriteUseCase = Injection.init().provideFavoriteUseCase()

@@ -46,7 +46,6 @@ struct SearchView<BottomBar: View>: View {
             .safeAreaInset(edge: .bottom, spacing: 0) { bottomBar }
             .navigationDestination(for: SearchModel.ID.self) { id in
                 router.destination(for: id)
-                    .toolbar(.visible, for: .navigationBar)
             }
             .toolbar(.hidden, for: .navigationBar)
         }

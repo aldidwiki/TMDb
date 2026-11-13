@@ -204,10 +204,11 @@ final class Mapper {
             biography: personResponse.biography ?? "-",
             birthplace: personResponse.birthplace ?? "-",
             knownFor: personResponse.knownFor ?? "-",
+            alsoKnownAs: personResponse.alsoKnownAs ?? [],
             credits: mapPersonCreditResponseToDomains(input: personResponse),
             instagramId: personResponse.externalMedia?.instagramId ?? "",
             facebookId: personResponse.externalMedia?.facebookId ?? "",
-            imdbId: personResponse.externalMedia?.imdbId ?? "",
+            imdbId: personResponse.externalMedia?.imdbId ?? personResponse.imdbId ?? "",
             twitterId: personResponse.externalMedia?.twitterId ?? ""
         )
     }
@@ -382,17 +383,18 @@ final class Mapper {
     private static func mapPersonCreditResponseToDomains(
         input personResponse: PersonResponse
     ) -> [CreditModel] {
-        return personResponse.credits.cast.map { cast in
+        let credits = (personResponse.credits?.cast ?? []) + (personResponse.credits?.crew ?? [])
+        return credits.map { credit in
             CreditModel(
-                id: cast.id,
-                name: cast.movieTitle ?? cast.tvTitle ?? "",
-                profilePath: cast.posterPath ?? "",
-                characterName: cast.characterName ?? "",
-                order: cast.order ?? 0,
-                popularity: cast.popularity,
-                releaseDate: cast.releaseDate ?? "",
+                id: credit.id,
+                name: credit.movieTitle ?? credit.tvTitle ?? "",
+                profilePath: credit.posterPath ?? "",
+                characterName: credit.characterName ?? credit.job ?? "",
+                order: credit.order ?? 0,
+                popularity: credit.popularity ?? 0,
+                releaseDate: credit.releaseDate ?? credit.firstAirDate ?? "",
                 episodeCount: 0,
-                mediaType: cast.mediaType
+                mediaType: credit.mediaType
             )
         }.sorted {
             $0.releaseDate > $1.releaseDate
