@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 protocol SearchRepositoryProtocol {
-    func search(query: String, page: Int) -> AnyPublisher<[SearchModel], Error>
+    func search(query: String, page: Int) -> AnyPublisher<SearchPage, Error>
 }
 
 final class SearchRepository: NSObject {
@@ -27,10 +27,13 @@ final class SearchRepository: NSObject {
 }
 
 extension SearchRepository: SearchRepositoryProtocol {
-    func search(query: String, page: Int) -> AnyPublisher<[SearchModel], any Error> {
+    func search(query: String, page: Int) -> AnyPublisher<SearchPage, Error> {
         return searchDataSource.search(query: query, page: page)
             .map { response in
-                Mapper.mapSearchResponseModelToDomains(input: response)
+                SearchPage(
+                    results: Mapper.mapSearchResponseModelToDomains(input: response.searchResults ?? []),
+                    totalPages: response.totalPages
+                )
             }
             .eraseToAnyPublisher()
     }

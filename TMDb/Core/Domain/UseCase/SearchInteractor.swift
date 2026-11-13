@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 protocol SearchUseCase {
-    func search(query: String, page: Int) -> AnyPublisher<[SearchModel], Error>
+    func search(query: String, page: Int) -> AnyPublisher<SearchPage, Error>
 }
 
 class SearchInteractor: SearchUseCase {
@@ -19,7 +19,7 @@ class SearchInteractor: SearchUseCase {
         self.searchRepository = searchRepository
     }
     
-    func search(query: String, page: Int) -> AnyPublisher<[SearchModel], any Error> {
+    func search(query: String, page: Int) -> AnyPublisher<SearchPage, Error> {
         return searchRepository.search(query: query, page: page)
     }
 }

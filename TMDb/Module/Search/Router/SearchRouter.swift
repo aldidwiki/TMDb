@@ -8,6 +8,18 @@
 import SwiftUI
 
 class SearchRouter {
+    @ViewBuilder
+    func destination(for id: SearchModel.ID) -> some View {
+        switch id.mediaType {
+        case .movie:
+            goToMovieDetailView(for: id.value)
+        case .tv:
+            goToTvDetailView(for: id.value)
+        case .person:
+            goToPersonDetailView(for: id.value)
+        }
+    }
+
     func goToMovieDetailView(for movieId: Int) -> some View {
         let detailUseCase = Injection.init().provideDetailUseCase()
         let favoriteUseCase = Injection.init().provideFavoriteUseCase()

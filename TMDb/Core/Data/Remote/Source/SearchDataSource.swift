@@ -10,7 +10,7 @@ import Combine
 import Alamofire
 
 protocol SearchDataSourceProtocol {
-    func search(query: String, page: Int) -> AnyPublisher<[SearchResponseModel], Error>
+    func search(query: String, page: Int) -> AnyPublisher<SearchResponse, Error>
 }
 
 final class SearchDataSource: NSObject {
@@ -20,28 +20,18 @@ final class SearchDataSource: NSObject {
 }
 
 extension SearchDataSource: SearchDataSourceProtocol {
-    func search(query: String, page: Int) -> AnyPublisher<[SearchResponseModel], any Error> {
+    func search(query: String, page: Int) -> AnyPublisher<SearchResponse, Error> {
         let param: Parameters = [
             "query": query,
             "page": page
         ]
         
-        guard let url = URL(string: API.baseUrl + "search/multi") else { return Empty().eraseToAnyPublisher() }
-        
-        return Future<[SearchResponseModel], Error> { completion in
-            AF.request(url, parameters: param, headers: API.headers)
-                .validate()
-                .responseDecodable(of: SearchResponse.self) { response in
-                    switch response.result {
-                    case .success(let value):
-                        guard let results = value.searchResults else { return completion(.success([])) }
-                        completion(.success(results))
-                    case .failure:
-                        completion(.failure(URLError.invalidResponse))
-                    }
-                }
-        }
-        .eraseToAnyPublisher()
+        return AF.request(API.baseUrl + "search/multi", parameters: param, headers: API.headers)
+            .validate()
+            .publishDecodable(type: SearchResponse.self)
+            .value()
+            .mapError { _ in URLError.invalidResponse as Error }
+            .eraseToAnyPublisher()
     }
 }
 

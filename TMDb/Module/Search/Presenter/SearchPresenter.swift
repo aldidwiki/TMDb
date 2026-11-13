@@ -8,112 +8,143 @@
 import Foundation
 import Observation
 import Combine
-import SwiftUI
 
+@MainActor
 @Observable
-class SearchPresenter {
-    private var cancellable: Set<AnyCancellable> = []
-    private let router = SearchRouter()
-    
-    private let searchUseCase: SearchUseCase
-    
-    var searchResults: [SearchModel] = []
-    var errorMessage = ""
-    var loadingState = false
-    
-    var isFetchingMore = false
-    private var currentPage = 1
-    private var canLoadMore = true
-    private let searchSubject = CurrentValueSubject<String, Never>("")
-    
-    var searchQuery: String = "" {
-        didSet {
-            searchSubject.send(searchQuery)
+final class SearchPresenter {
+    enum Filter: String, CaseIterable {
+        case all = "All"
+        case movies = "Movies"
+        case tv = "TV"
+        case people = "People"
+
+        func includes(_ result: SearchModel) -> Bool {
+            switch self {
+            case .all: true
+            case .movies: result.id.mediaType == .movie
+            case .tv: result.id.mediaType == .tv
+            case .people: result.id.mediaType == .person
+            }
         }
     }
-    
+
+    enum Phase {
+        case idle
+        case loading
+        case results
+        case failed
+    }
+
+    private let searchUseCase: SearchUseCase
+    private let queryChanges = PassthroughSubject<String, Never>()
+    @ObservationIgnored private var querySubscription: AnyCancellable?
+    @ObservationIgnored private var pageRequest: AnyCancellable?
+    @ObservationIgnored private var requestID: UUID?
+    @ObservationIgnored private var resultIDs: Set<SearchModel.ID> = []
+
+    private var results: [SearchModel] = []
+    private var nextPage = 1
+    private var totalPages = 0
+
+    private(set) var phase: Phase = .idle
+    private(set) var isLoadingMore = false
+    private(set) var hasPaginationError = false
+    var filter: Filter = .all
+    var searchQuery = "" {
+        didSet {
+            let query = normalizedQuery
+            guard query != oldValue.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
+            resetSearch(for: query)
+            queryChanges.send(query)
+        }
+    }
+
     init(searchUseCase: SearchUseCase) {
         self.searchUseCase = searchUseCase
-        
-        searchSubject
-            .dropFirst()
+
+        querySubscription = queryChanges
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
-            .removeDuplicates()
-            .sink { query in
-                self.search(query: query, reset: true)
+            .sink { [weak self] query in
+                guard let self, !query.isEmpty, query == self.normalizedQuery else { return }
+                self.loadPage(query: query, page: 1)
             }
-            .store(in: &cancellable)
     }
-    
-    func search(query: String, reset: Bool = false) {
-        if reset {
-            currentPage = 1
-            canLoadMore = true
-            loadingState = true
-            searchResults.removeAll()
+
+    var visibleResults: [SearchModel] {
+        results.filter(filter.includes)
+    }
+
+    var canLoadMore: Bool {
+        phase == .results && nextPage <= totalPages
+    }
+
+    private var normalizedQuery: String {
+        searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    func count(for filter: Filter) -> Int {
+        results.count(where: filter.includes)
+    }
+
+    func retrySearch() {
+        guard phase == .failed else { return }
+        loadPage(query: normalizedQuery, page: 1)
+    }
+
+    func loadMore() {
+        guard canLoadMore, !isLoadingMore else { return }
+        loadPage(query: normalizedQuery, page: nextPage)
+    }
+
+    private func resetSearch(for query: String) {
+        requestID = nil
+        pageRequest?.cancel()
+        pageRequest = nil
+        resultIDs.removeAll()
+        results.removeAll()
+        nextPage = 1
+        totalPages = 0
+        isLoadingMore = false
+        hasPaginationError = false
+        phase = query.isEmpty ? .idle : .loading
+
+        if query.isEmpty {
+            filter = .all
         }
-        
-        if currentPage > 1 {
-            isFetchingMore = true
+    }
+
+    private func loadPage(query: String, page: Int) {
+        if page == 1 {
+            phase = .loading
+        } else {
+            isLoadingMore = true
+            hasPaginationError = false
         }
-        
-        searchUseCase.search(query: query, page: currentPage)
+
+        let id = UUID()
+        requestID = id
+        pageRequest = searchUseCase.search(query: query, page: page)
+            .map { Result<SearchPage, Error>.success($0) }
+            .catch { Just(Result<SearchPage, Error>.failure($0)) }
             .receive(on: DispatchQueue.main)
-            .sink { completion in
-                switch completion {
+            .sink { [weak self] result in
+                guard let self, self.requestID == id else { return }
+                self.isLoadingMore = false
+
+                switch result {
+                case .success(let response):
+                    let uniqueResults = response.results.filter { self.resultIDs.insert($0.id).inserted }
+                    self.results.append(contentsOf: uniqueResults)
+                    self.nextPage = page + 1
+                    self.totalPages = min(response.totalPages, 500)
+                    self.phase = .results
                 case .failure:
-                    self.errorMessage = String(describing: completion)
-                case .finished:
-                    self.isFetchingMore = false
-                }
-            } receiveValue: { newResults in
-                let uniqueResults = newResults.filter { result in
-                    !self.searchResults.contains(where: { $0.id == result.id })
-                }
-                
-                if uniqueResults.isEmpty {
-                    self.canLoadMore = false
-                    
-                    if self.currentPage == 1 {
-                        self.loadingState = false
-                        self.searchResults = newResults
-                    }
-                } else {
-                    if reset {
-                        self.searchResults = uniqueResults
+                    if page == 1 {
+                        self.phase = .failed
                     } else {
-                        self.searchResults.append(contentsOf: uniqueResults)
+                        self.hasPaginationError = true
                     }
-                    
-                    if self.currentPage == 1 {
-                        self.loadingState = false
-                    }
-                    
-                    self.currentPage += 1
                 }
             }
-            .store(in: &cancellable)
-    }
-    
-    func linkBuilder<Content: View>(
-        for contentId: Int,
-        mediaType: String,
-        @ViewBuilder content: () -> Content
-    ) -> some View {
-        NavigationLink(destination: {
-            switch mediaType {
-            case Constants.movieResponseType:
-                router.goToMovieDetailView(for: contentId)
-            case Constants.tvShowResponseType:
-                router.goToTvDetailView(for: contentId)
-            case Constants.personResponseType:
-                router.goToPersonDetailView(for: contentId)
-            default:
-                EmptyView(emptyTitle: "")
-            }
-        }, label: {
-            content()
-        })
-        .buttonStyle(.plain)
     }
 }

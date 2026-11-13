@@ -9,9 +9,11 @@ import Foundation
 
 struct SearchResponse: Decodable {
     let searchResults: [SearchResponseModel]?
+    let totalPages: Int
     
     private enum CodingKeys: String, CodingKey {
         case searchResults = "results"
+        case totalPages = "total_pages"
     }
 }
 
@@ -25,6 +27,8 @@ struct SearchResponseModel: Decodable {
     let name: String?
     let firstAirDate: String?
     let profilePath: String?
+    let overview: String?
+    let knownForDepartment: String?
     
     private enum CodingKeys: String, CodingKey {
         case id = "id"
@@ -36,5 +40,7 @@ struct SearchResponseModel: Decodable {
         case name = "name"
         case firstAirDate = "first_air_date"
         case profilePath = "profile_path"
+        case overview
+        case knownForDepartment = "known_for_department"
     }
 }
