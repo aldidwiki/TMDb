@@ -9,9 +9,15 @@ import Foundation
 
 struct MovieResponse: Decodable {
     let movies: [MovieResponseModel]
+    let page: Int?
+    let totalPages: Int?
+    let totalResults: Int?
     
     private enum CodingKeys: String, CodingKey {
         case movies = "results"
+        case page
+        case totalPages = "total_pages"
+        case totalResults = "total_results"
     }
 }
 
@@ -23,6 +29,7 @@ struct MovieResponseModel: Decodable {
     let genreIDs: [Int]?
     let rating: Double?
     let releaseDate: String?
+    let overview: String?
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -32,5 +39,6 @@ struct MovieResponseModel: Decodable {
         case genreIDs = "genre_ids"
         case rating = "vote_average"
         case releaseDate = "release_date"
+        case overview
     }
 }

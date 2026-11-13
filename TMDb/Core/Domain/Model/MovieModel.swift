@@ -15,6 +15,7 @@ struct MovieModel: Equatable, Identifiable {
     let releaseDate: String
     let backdropPath: String?
     let genreIDs: [Int]
+    let overview: String
 
     init(
         id: Int,
@@ -23,7 +24,8 @@ struct MovieModel: Equatable, Identifiable {
         rating: Double,
         releaseDate: String,
         backdropPath: String? = nil,
-        genreIDs: [Int] = []
+        genreIDs: [Int] = [],
+        overview: String = ""
     ) {
         self.id = id
         self.title = title
@@ -32,5 +34,6 @@ struct MovieModel: Equatable, Identifiable {
         self.releaseDate = releaseDate
         self.backdropPath = backdropPath
         self.genreIDs = genreIDs
+        self.overview = overview
     }
 }

@@ -1,17 +1,6 @@
+import Combine
 import Foundation
 import Observation
-
-struct GenreListingMovie: Identifiable {
-    let id: Int
-    let title: String
-    let year: Int
-    let duration: Int
-    let rating: Double
-    let overview: String
-    let posterColor: UInt32
-    let popularity: Int
-    let votes: Int
-}
 
 @MainActor
 @Observable
@@ -22,6 +11,16 @@ final class GenrePresenter {
         case highestRated = "Highest rated"
         case title = "Title A–Z"
         case mostVoted = "Most voted"
+
+        var apiValue: String {
+            switch self {
+            case .popularity: "popularity.desc"
+            case .newest: "primary_release_date.desc"
+            case .highestRated: "vote_average.desc"
+            case .title: "title.asc"
+            case .mostVoted: "vote_count.desc"
+            }
+        }
     }
 
     enum ReleaseYear: String, CaseIterable {
@@ -41,39 +40,105 @@ final class GenrePresenter {
         case nine = "9.0+"
         case any = "Any rating"
 
-        var value: Double { Double(rawValue.dropLast()) ?? 0 }
+        var value: Double? { Double(rawValue.dropLast()) }
     }
 
-    var sort: Sort = .popularity
-    var releaseYear: ReleaseYear = .all
-    var minimumRating: MinimumRating = .any
+    private(set) var sort: Sort = .popularity
+    private(set) var releaseYear: ReleaseYear = .all
+    private(set) var minimumRating: MinimumRating = .any
+    private(set) var movies: [MovieModel] = []
+    private(set) var totalResults = 0
+    private(set) var isLoading = false
+    private(set) var isLoadingMore = false
+    private(set) var hasLoaded = false
+    private(set) var loadError = false
+    private(set) var loadMoreError = false
+    private(set) var listVersion = 0
 
-    // Sample entries for the listing prototype. Detail links use real TMDb movie IDs.
-    private let sampleMovies: [GenreListingMovie] = [
-        .init(id: 693134, title: "Dune: Part Two", year: 2024, duration: 166, rating: 8.8,
-              overview: "A mythic journey across Arrakis.", posterColor: 0x292667, popularity: 6, votes: 142000),
-        .init(id: 670292, title: "The Creator", year: 2023, duration: 133, rating: 7.8,
-              overview: "Humanity faces a new intelligence.", posterColor: 0x173D49, popularity: 5, votes: 98000),
-        .init(id: 335984, title: "Blade Runner 2049", year: 2017, duration: 164, rating: 8.0,
-              overview: "A discovery changes everything.", posterColor: 0x3F3D67, popularity: 4, votes: 120000),
-        .init(id: 157336, title: "Interstellar", year: 2014, duration: 169, rating: 8.6,
-              overview: "A voyage beyond the stars.", posterColor: 0x2B5963, popularity: 3, votes: 180000),
-        .init(id: 545611, title: "Everything Everywhere All at Once", year: 2022, duration: 139, rating: 7.8,
-              overview: "An extraordinary journey through many worlds.", posterColor: 0x4D2848, popularity: 2, votes: 87000),
-        .init(id: 414906, title: "The Batman", year: 2022, duration: 176, rating: 7.7,
-              overview: "A new mystery unfolds in Gotham.", posterColor: 0x54293C, popularity: 1, votes: 110000)
-    ]
+    @ObservationIgnored private var request: AnyCancellable?
+    private let useCase: GenreUseCase
+    private let genreID: Int
+    private var nextPage = 1
+    private var totalPages = 1
+    private var requestGeneration = 0
 
-    var movies: [GenreListingMovie] {
-        let filtered = sampleMovies.filter { movie in
-            (releaseYear.value == nil || movie.year == releaseYear.value) && movie.rating >= minimumRating.value
-        }
-        switch sort {
-        case .popularity: return filtered.sorted { $0.popularity > $1.popularity }
-        case .newest: return filtered.sorted { $0.year > $1.year }
-        case .highestRated: return filtered.sorted { $0.rating > $1.rating }
-        case .title: return filtered.sorted { $0.title.localizedStandardCompare($1.title) == .orderedAscending }
-        case .mostVoted: return filtered.sorted { $0.votes > $1.votes }
-        }
+    init(useCase: GenreUseCase, genreID: Int) {
+        self.useCase = useCase
+        self.genreID = genreID
+    }
+
+    var canLoadMore: Bool {
+        hasLoaded && !movies.isEmpty && nextPage <= min(totalPages, 500)
+    }
+
+    func load() {
+        guard !hasLoaded && !isLoading else { return }
+        loadNextPage()
+    }
+
+    func apply(sort: Sort, year: ReleaseYear, rating: MinimumRating) {
+        guard self.sort != sort || releaseYear != year || minimumRating != rating else { return }
+        self.sort = sort
+        releaseYear = year
+        minimumRating = rating
+        request?.cancel()
+        requestGeneration += 1
+        nextPage = 1
+        totalPages = 1
+        totalResults = 0
+        hasLoaded = false
+        isLoading = false
+        isLoadingMore = false
+        loadError = false
+        loadMoreError = false
+        movies = []
+        listVersion += 1
+        loadNextPage()
+    }
+
+    func loadMoreIfNeeded(after movie: MovieModel) {
+        guard !loadMoreError && movies.suffix(3).contains(where: { $0.id == movie.id }) else { return }
+        loadNextPage()
+    }
+
+    func loadNextPage() {
+        guard !isLoading && !isLoadingMore && nextPage <= min(totalPages, 500) else { return }
+
+        let page = nextPage
+        let generation = requestGeneration
+        isLoading = page == 1
+        isLoadingMore = page > 1
+        loadError = false
+        loadMoreError = false
+
+        let query = GenreMovieQuery(
+            genreID: genreID,
+            sortBy: sort.apiValue,
+            releaseYear: releaseYear.value,
+            minimumRating: minimumRating.value,
+            page: page,
+            region: "ID"
+        )
+
+        request = useCase.discoverMovies(query: query)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] completion in
+                guard let self, generation == self.requestGeneration else { return }
+                if case .failure = completion {
+                    if page == 1 { self.loadError = true }
+                    else { self.loadMoreError = true }
+                }
+                self.isLoading = false
+                self.isLoadingMore = false
+                self.request = nil
+            } receiveValue: { [weak self] result in
+                guard let self, generation == self.requestGeneration else { return }
+                let knownIDs = Set(self.movies.map(\.id))
+                self.movies.append(contentsOf: result.movies.filter { !knownIDs.contains($0.id) })
+                self.totalResults = result.totalResults
+                self.totalPages = max(1, result.totalPages)
+                self.nextPage = result.movies.isEmpty ? self.totalPages + 1 : page + 1
+                self.hasLoaded = true
+            }
     }
 }

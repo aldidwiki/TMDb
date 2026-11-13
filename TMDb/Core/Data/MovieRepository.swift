@@ -13,6 +13,7 @@ protocol MovieRepositoryProtocol {
     func getTrendingMovies() -> AnyPublisher<[MovieModel], Error>
     func getNowPlayingMovies(page: Int, region: String) -> AnyPublisher<[MovieModel], Error>
     func getMovieGenres() -> AnyPublisher<[GenreModel], Error>
+    func discoverMovies(query: GenreMovieQuery) -> AnyPublisher<GenreMoviePage, Error>
     func getMovie(movieId: Int) -> AnyPublisher<MovieDetailModel, Error>
     func getMovieBackdrops(movieId: Int) -> AnyPublisher<[ImageModel], Error>
 }
@@ -54,6 +55,18 @@ extension MovieRepository: MovieRepositoryProtocol {
     func getMovieGenres() -> AnyPublisher<[GenreModel], Error> {
         movieDataSource.getMovieGenres()
             .map(Mapper.mapGenreResponseToDomains)
+            .eraseToAnyPublisher()
+    }
+
+    func discoverMovies(query: GenreMovieQuery) -> AnyPublisher<GenreMoviePage, Error> {
+        movieDataSource.discoverMovies(query: query)
+            .map { response in
+                GenreMoviePage(
+                    movies: Mapper.mapMovieResponseModelsToDomains(input: response.movies),
+                    totalPages: response.totalPages ?? 1,
+                    totalResults: response.totalResults ?? 0
+                )
+            }
             .eraseToAnyPublisher()
     }
     

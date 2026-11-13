@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B7A100012A00000000000004 /* GenreMoviePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A100012A00000000000014 /* GenreMoviePage.swift */; };
+		B7A100012A00000000000005 /* GenreInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A100012A00000000000015 /* GenreInteractor.swift */; };
 		B7A100012A00000000000001 /* GenreMovieListingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A100012A00000000000011 /* GenreMovieListingView.swift */; };
 		B7A100012A00000000000002 /* GenrePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A100012A00000000000012 /* GenrePresenter.swift */; };
 		B7A100012A00000000000003 /* GenreRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A100012A00000000000013 /* GenreRouter.swift */; };
@@ -154,6 +156,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B7A100012A00000000000014 /* GenreMoviePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreMoviePage.swift; sourceTree = "<group>"; };
+		B7A100012A00000000000015 /* GenreInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreInteractor.swift; sourceTree = "<group>"; };
 		B7A100012A00000000000011 /* GenreMovieListingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreMovieListingView.swift; sourceTree = "<group>"; };
 		B7A100012A00000000000012 /* GenrePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenrePresenter.swift; sourceTree = "<group>"; };
 		B7A100012A00000000000013 /* GenreRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreRouter.swift; sourceTree = "<group>"; };
@@ -672,6 +676,7 @@
 		CEC6550A292F5758007B393A /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				B7A100012A00000000000014 /* GenreMoviePage.swift */,
 				A7D9BCEAA01240DE8F467B0E /* GenreModel.swift */,
 				CEC65508292F5744007B393A /* MovieModel.swift */,
 				CE182AFD292F813800B5C857 /* MovieDetailModel.swift */,
@@ -695,6 +700,7 @@
 		CEC6550F292F5933007B393A /* UseCase */ = {
 			isa = PBXGroup;
 			children = (
+				B7A100012A00000000000015 /* GenreInteractor.swift */,
 				A7D9BCEAA01240DE8F467B0D /* DashboardInteractor.swift */,
 				CEC65510292F5940007B393A /* MovieInteractor.swift */,
 				CE182AFF292F825B00B5C857 /* DetailInteractor.swift */,
@@ -941,6 +947,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7A100012A00000000000004 /* GenreMoviePage.swift in Sources */,
+				B7A100012A00000000000005 /* GenreInteractor.swift in Sources */,
 				A7D9BCEAA01240DE8F467B04 /* DashboardView.swift in Sources */,
 				B7A100012A00000000000001 /* GenreMovieListingView.swift in Sources */,
 				B7A100012A00000000000002 /* GenrePresenter.swift in Sources */,

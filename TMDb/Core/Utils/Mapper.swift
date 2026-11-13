@@ -19,7 +19,8 @@ final class Mapper {
                 rating: item.rating ?? 0.0,
                 releaseDate: item.releaseDate ?? "",
                 backdropPath: item.backdropPath,
-                genreIDs: item.genreIDs ?? []
+                genreIDs: item.genreIDs ?? [],
+                overview: item.overview ?? ""
             )
         }
     }

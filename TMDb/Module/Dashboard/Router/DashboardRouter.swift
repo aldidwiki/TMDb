@@ -2,7 +2,7 @@ import SwiftUI
 
 final class DashboardRouter {
     func goToGenreMovieListing(for genre: GenreRoute) -> some View {
-        GenreMovieListingView(genre: genre)
+        GenreMovieListingView(genre: genre, useCase: Injection().provideGenreUseCase())
     }
 
     func goToMovieDetailView(for movieID: Int) -> some View {

@@ -1,4 +1,5 @@
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct GenreMovieListingView: View {
     private enum FilterSheet: String, Identifiable {
@@ -23,7 +24,7 @@ struct GenreMovieListingView: View {
     }
     
     @Environment(\.dismiss) private var dismiss
-    @State private var presenter = GenrePresenter()
+    @State private var presenter: GenrePresenter
     @State private var activeSheet: FilterSheet?
     @State private var draftSort: GenrePresenter.Sort = .popularity
     @State private var draftYear: GenrePresenter.ReleaseYear = .all
@@ -31,6 +32,11 @@ struct GenreMovieListingView: View {
     
     let genre: GenreRoute
     private let router = GenreRouter()
+
+    init(genre: GenreRoute, useCase: GenreUseCase) {
+        self.genre = genre
+        _presenter = State(initialValue: GenrePresenter(useCase: useCase, genreID: genre.id))
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -52,7 +58,19 @@ struct GenreMovieListingView: View {
             
             ScrollView(.vertical, showsIndicators: true) {
                 Group {
-                    if presenter.movies.isEmpty {
+                    if presenter.isLoading {
+                        ProgressView("Loading movies")
+                            .frame(maxWidth: .infinity)
+                            .padding(.top, 60)
+                    } else if presenter.loadError {
+                        VStack(spacing: 12) {
+                            Label("Couldn’t load movies", systemImage: "wifi.exclamationmark")
+                                .foregroundStyle(DashboardDesign.secondaryText)
+                            Button("Retry") { presenter.load() }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, 60)
+                    } else if presenter.hasLoaded && presenter.movies.isEmpty {
                         ContentUnavailableView("No movies found", systemImage: "movieclapper",
                                                description: Text("Try another year or rating."))
                         .frame(maxWidth: .infinity)
@@ -61,6 +79,17 @@ struct GenreMovieListingView: View {
                         LazyVStack(spacing: 12) {
                             ForEach(presenter.movies) { movie in
                                 movieCard(movie)
+                                    .onAppear { presenter.loadMoreIfNeeded(after: movie) }
+                            }
+                            if presenter.isLoadingMore {
+                                ProgressView()
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 12)
+                            } else if presenter.loadMoreError {
+                                Button("Couldn’t load more movies. Retry") { presenter.loadNextPage() }
+                                    .font(.footnote)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 12)
                             }
                         }
                     }
@@ -69,9 +98,11 @@ struct GenreMovieListingView: View {
                 .padding(.bottom, 28)
             }
             .scrollIndicators(.visible)
+            .id(presenter.listVersion)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(DashboardDesign.background.ignoresSafeArea())
+        .task { presenter.load() }
         .navigationBarBackButtonHidden()
         .toolbar(.hidden, for: .navigationBar)
         .navigationDestination(for: Int.self) { movieID in
@@ -118,7 +149,7 @@ struct GenreMovieListingView: View {
                 Text("\(genre.name) Movies")
                     .font(.system(size: 20, weight: .bold))
                     .foregroundStyle(DashboardDesign.text)
-                Text("\(presenter.movies.count) titles available")
+                Text("\(presenter.totalResults) titles available")
                     .font(.system(size: 11))
                     .foregroundStyle(DashboardDesign.secondaryText)
             }
@@ -147,19 +178,30 @@ struct GenreMovieListingView: View {
         .buttonStyle(.plain)
     }
     
-    private func movieCard(_ movie: GenreListingMovie) -> some View {
+    private func movieCard(_ movie: MovieModel) -> some View {
         HStack(alignment: .top, spacing: 12) {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(DashboardDesign.color(movie.posterColor))
-                .frame(width: 86, height: 134)
-                .accessibilityHidden(true)
+            Group {
+                if !movie.posterPath.isEmpty, let url = URL(string: API.imageBaseUrl + movie.posterPath) {
+                    WebImage(url: url)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 86, height: 134)
+                        .clipped()
+                        .background(DashboardDesign.color(0x292667))
+                } else {
+                    DashboardDesign.color(0x292667)
+                        .frame(width: 86, height: 134)
+                }
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .accessibilityHidden(true)
             
             VStack(alignment: .leading, spacing: 0) {
                 Text(movie.title)
                     .font(.system(size: 16, weight: .bold))
                     .foregroundStyle(DashboardDesign.text)
                     .lineLimit(1)
-                Text("\(movie.year) · \(movie.duration) min")
+                Text(String(movie.releaseDate.prefix(4)))
                     .font(.system(size: 11))
                     .foregroundStyle(DashboardDesign.secondaryText)
                     .padding(.top, 4)
@@ -167,7 +209,7 @@ struct GenreMovieListingView: View {
                     .font(.system(size: 13, weight: .bold))
                     .foregroundStyle(DashboardDesign.color(0xF59E0B))
                     .padding(.top, 4)
-                Text(movie.overview)
+                Text(movie.overview.isEmpty ? "Overview unavailable" : movie.overview)
                     .font(.system(size: 11))
                     .foregroundStyle(DashboardDesign.secondaryText)
                     .lineLimit(1)
@@ -201,12 +243,8 @@ struct GenreMovieListingView: View {
         withAnimation(.easeInOut(duration: 0.25)) { activeSheet = nil }
     }
     
-    private func apply(_ sheet: FilterSheet) {
-        switch sheet {
-        case .sort: presenter.sort = draftSort
-        case .year: presenter.releaseYear = draftYear
-        case .rating: presenter.minimumRating = draftRating
-        }
+    private func apply() {
+        presenter.apply(sort: draftSort, year: draftYear, rating: draftRating)
         closeSheet()
     }
     
@@ -249,7 +287,7 @@ struct GenreMovieListingView: View {
                 }
             }
             
-            Button { apply(sheet) } label: {
+            Button { apply() } label: {
                 Text(sheet.action)
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(DashboardDesign.surface)
@@ -304,6 +342,9 @@ struct GenreMovieListingView: View {
 
 #Preview {
     NavigationStack {
-        GenreMovieListingView(genre: GenreRoute(id: 878, name: "Sci-Fi"))
+        GenreMovieListingView(
+            genre: GenreRoute(id: 878, name: "Sci-Fi"),
+            useCase: Injection().provideGenreUseCase()
+        )
     }
 }
