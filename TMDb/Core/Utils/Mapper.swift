@@ -17,9 +17,15 @@ final class Mapper {
                 title: item.title,
                 posterPath: item.posterPath ?? "",
                 rating: item.rating ?? 0.0,
-                releaseDate: item.releaseDate ?? ""
+                releaseDate: item.releaseDate ?? "",
+                backdropPath: item.backdropPath,
+                genreIDs: item.genreIDs ?? []
             )
         }
+    }
+
+    static func mapGenreResponseToDomains(input: GenreResponse) -> [GenreModel] {
+        input.genres.map { GenreModel(id: $0.id, name: $0.genreName) }
     }
     
     static func mapMovieDetailResponseToDomain(

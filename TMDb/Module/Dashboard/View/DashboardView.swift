@@ -1,4 +1,5 @@
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct DashboardView: View {
     @Environment(\.layoutDirection) private var layoutDirection
@@ -7,9 +8,13 @@ struct DashboardView: View {
     @State private var showsExplore = false
     @State private var showsTrailerError = false
     @State private var carouselProgress: CGFloat = 0
+    @State private var selectedPage: Int?
 
-    init(detailUseCase: DetailUseCase) {
-        _presenter = State(initialValue: DashboardPresenter(detailUseCase: detailUseCase))
+    init(dashboardUseCase: DashboardUseCase, detailUseCase: DetailUseCase) {
+        _presenter = State(initialValue: DashboardPresenter(
+            dashboardUseCase: dashboardUseCase,
+            detailUseCase: detailUseCase
+        ))
     }
 
     var body: some View {
@@ -19,12 +24,12 @@ struct DashboardView: View {
                     Text("TMDb")
                         .font(.system(size: 20, weight: .heavy))
                         .foregroundStyle(DashboardDesign.accent)
-                        .padding(.bottom, 26)
+                        .padding(.bottom, 10)
                         .accessibilityAddTraits(.isHeader)
                 )
 
                 trendingSection
-                    .padding(.bottom, 10)
+                    .padding(.bottom)
 
                 insetContent(
                     VStack(alignment: .leading, spacing: 24) {
@@ -39,6 +44,7 @@ struct DashboardView: View {
         .scrollIndicators(.hidden)
         .background(DashboardDesign.background.ignoresSafeArea())
         .preferredColorScheme(.light)
+        .task { presenter.load() }
         .alert("Trailer unavailable", isPresented: $showsTrailerError) {
             Button("OK", role: .cancel) { }
         } message: {
@@ -51,55 +57,60 @@ struct DashboardView: View {
             insetContent(sectionTitle("Trending Now"))
                 .padding(.bottom, 15)
 
-            trendingCarousel
-
-            HStack(spacing: 6) {
-                ForEach(presenter.trendingMovies.indices, id: \.self) { index in
-                    let emphasis = max(0, 1 - abs(carouselProgress - CGFloat(index)))
-                    Capsule()
-                        .fill(DashboardDesign.indicator)
-                        .overlay {
-                            Capsule()
-                                .fill(DashboardDesign.accent)
-                                .opacity(Double(emphasis))
-                        }
-                        .frame(width: 6 + 12 * emphasis, height: 6)
-                }
+            sectionContent(presenter.trending, emptyTitle: "No trending movies", retry: presenter.loadTrending) { movies in
+                trendingCarousel(movies)
+                carouselIndicator(count: movies.count)
             }
-            .frame(maxWidth: .infinity)
-            .padding(.top, 8)
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Trending movies")
-            .accessibilityValue("\(presenter.selectedPage + 1) of \(presenter.trendingMovies.count)")
-            .accessibilityAdjustableAction { direction in
-                withAnimation {
-                    switch direction {
-                    case .increment:
-                        presenter.selectedPage = min(presenter.selectedPage + 1, presenter.trendingMovies.count - 1)
-                    case .decrement:
-                        presenter.selectedPage = max(presenter.selectedPage - 1, 0)
-                    @unknown default:
-                        break
+        }
+    }
+
+    private func carouselIndicator(count: Int) -> some View {
+        HStack(spacing: 6) {
+            ForEach(0..<count, id: \.self) { index in
+                let emphasis = max(0, 1 - abs(carouselProgress - CGFloat(index)))
+                Capsule()
+                    .fill(DashboardDesign.indicator)
+                    .overlay {
+                        Capsule()
+                            .fill(DashboardDesign.accent)
+                            .opacity(Double(emphasis))
                     }
+                    .frame(width: 6 + 12 * emphasis, height: 6)
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.top, 8)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Trending movies")
+        .accessibilityValue("\((selectedPage ?? 0) + 1) of \(count)")
+        .accessibilityAdjustableAction { direction in
+            withAnimation {
+                switch direction {
+                case .increment:
+                    selectedPage = min((selectedPage ?? 0) + 1, count - 1)
+                case .decrement:
+                    selectedPage = max((selectedPage ?? 0) - 1, 0)
+                @unknown default:
+                    break
                 }
             }
         }
     }
 
-    private var trendingCarousel: some View {
+    private func trendingCarousel(_ movies: [MovieModel]) -> some View {
         GeometryReader { geometry in
             let viewportWidth = geometry.size.width
             let inset = max(DashboardDesign.contentInset, (viewportWidth - DashboardDesign.contentWidth) / 2)
             let cardWidth = max(0, viewportWidth - inset * 2)
             let cardSpacing: CGFloat = 12
-            let lastPage = CGFloat(max(0, presenter.trendingMovies.count - 1))
+            let lastPage = CGFloat(movies.count - 1)
             let isRightToLeft = layoutDirection == .rightToLeft
             let viewport = "trendingCarouselViewport"
 
             ScrollView(.horizontal) {
                 LazyHStack(spacing: cardSpacing) {
-                    ForEach(presenter.trendingMovies.indices, id: \.self) { index in
-                        featuredCard(presenter.trendingMovies[index])
+                    ForEach(movies.indices, id: \.self) { index in
+                        featuredCard(movies[index])
                             .frame(width: cardWidth)
                     }
                 }
@@ -115,13 +126,7 @@ struct DashboardView: View {
             }
             .contentMargins(.horizontal, inset, for: .scrollContent)
             .scrollTargetBehavior(.viewAligned(limitBehavior: .always))
-            .scrollPosition(
-                id: Binding<Int?>(
-                    get: { presenter.selectedPage },
-                    set: { if let page = $0 { presenter.selectedPage = page } }
-                ),
-                anchor: .center
-            )
+            .scrollPosition(id: $selectedPage, anchor: .center)
             .scrollIndicators(.hidden)
             .coordinateSpace(.named(viewport))
         }
@@ -135,28 +140,35 @@ struct DashboardView: View {
             .frame(maxWidth: .infinity)
     }
 
-    private func featuredCard(_ movie: DashboardPresenter.FeaturedMovie) -> some View {
-        VStack(alignment: .leading, spacing: 0) {
+    private func featuredCard(_ movie: MovieModel) -> some View {
+        let rating = movie.rating.formatted(.number.precision(.fractionLength(1)))
+        let metadata = presenter.metadata(for: movie)
+
+        return VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 4) {
                 Image(systemName: "star.fill")
                     .font(.system(size: 8))
                     .accessibilityHidden(true)
-                Text(movie.rating)
+                Text(rating)
                     .font(.system(size: 11, weight: .bold))
             }
             .frame(minWidth: 52, minHeight: 24)
             .background(DashboardDesign.mediaFooter, in: RoundedRectangle(cornerRadius: 8))
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Rating \(movie.rating) out of 10")
+            .accessibilityLabel("Rating \(rating) out of 10")
 
             Spacer(minLength: 12)
 
             Text(movie.title)
                 .font(.system(size: 22, weight: .bold))
+                .lineLimit(2)
                 .accessibilityAddTraits(.isHeader)
-            Text(movie.metadata)
-                .font(.system(size: 12, weight: .medium))
-                .padding(.top, 2)
+            if !metadata.isEmpty {
+                Text(metadata)
+                    .font(.system(size: 12, weight: .medium))
+                    .lineLimit(1)
+                    .padding(.top, 2)
+            }
 
             trailerButton(movie)
                 .padding(.top, 13)
@@ -169,11 +181,13 @@ struct DashboardView: View {
         .background(alignment: .bottom) {
             DashboardDesign.mediaFooterGradient.frame(height: 120)
         }
-        .background(DashboardDesign.color(movie.backdrop))
+        .background {
+            artwork(path: movie.backdropPath, baseURL: API.backdropBaseUrl, fallback: 0x292667)
+        }
         .clipShape(RoundedRectangle(cornerRadius: DashboardDesign.controlRadius))
     }
 
-    private func trailerButton(_ movie: DashboardPresenter.FeaturedMovie) -> some View {
+    private func trailerButton(_ movie: MovieModel) -> some View {
         let isLoading = presenter.loadingTrailerID == movie.id
 
         return Button {
@@ -207,30 +221,44 @@ struct DashboardView: View {
     }
 
     private var nowPlayingSection: some View {
-        VStack(alignment: .leading, spacing: 9) {
-            sectionHeader("Now Playing")
+        let spacing: CGFloat = 15
 
-            HStack(spacing: 15) {
-                ForEach(presenter.nowPlaying) { poster in
-                    VStack {
-                        Spacer(minLength: 0)
+        return VStack(alignment: .leading, spacing: 9) {
+            sectionTitle("Now Playing")
 
-                        Text(poster.title)
-                            .font(.system(size: 9, weight: .bold))
-                            .foregroundStyle(DashboardDesign.surface)
-                            .frame(maxWidth: .infinity, minHeight: 42, alignment: .leading)
-                            .padding(.horizontal, 10)
+            sectionContent(presenter.nowPlaying, emptyTitle: "No movies now playing", retry: presenter.loadNowPlaying) { movies in
+                ScrollView(.horizontal) {
+                    LazyHStack(spacing: spacing) {
+                        ForEach(movies) { movie in
+                            nowPlayingCard(movie)
+                                .containerRelativeFrame(.horizontal, count: 3, spacing: spacing)
+                        }
                     }
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 150)
-                    .background(alignment: .bottom) {
-                        DashboardDesign.mediaFooterGradient.frame(height: 72)
-                    }
-                    .background(DashboardDesign.color(poster.color))
-                    .clipShape(RoundedRectangle(cornerRadius: DashboardDesign.controlRadius))
                 }
+                .scrollIndicators(.hidden)
             }
         }
+    }
+
+    private func nowPlayingCard(_ movie: MovieModel) -> some View {
+        VStack {
+            Spacer(minLength: 0)
+
+            Text(movie.title)
+                .font(.system(size: 9, weight: .bold))
+                .foregroundStyle(DashboardDesign.surface)
+                .lineLimit(2)
+                .frame(maxWidth: .infinity, minHeight: 42, alignment: .leading)
+                .padding(.horizontal, 10)
+        }
+        .frame(height: 150)
+        .background(alignment: .bottom) {
+            DashboardDesign.mediaFooterGradient.frame(height: 72)
+        }
+        .background {
+            artwork(path: movie.posterPath, baseURL: API.imageBaseUrl, fallback: 0x175469)
+        }
+        .clipShape(RoundedRectangle(cornerRadius: DashboardDesign.controlRadius))
     }
 
     private var genreSection: some View {
@@ -238,38 +266,79 @@ struct DashboardView: View {
         let columns = Array(repeating: GridItem(.flexible(), spacing: spacing), count: 4)
 
         return VStack(alignment: .leading, spacing: 11) {
-            sectionHeader("Browse by Genre")
+            sectionTitle("Browse by Genre")
 
-            LazyVGrid(columns: columns, spacing: spacing) {
-                ForEach(presenter.genres) { genre in
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text(genre.monogram)
-                            .font(.system(size: 8, weight: .bold))
-                            .foregroundStyle(DashboardDesign.color(genre.accent))
-                            .frame(width: 24, height: 24)
-                            .background(DashboardDesign.color(genre.accent).opacity(0.12), in: Circle())
-                            .accessibilityHidden(true)
+            sectionContent(presenter.allGenres, emptyTitle: "No movie genres", retry: presenter.loadGenres) { genres in
+                LazyVGrid(columns: columns, spacing: spacing) {
+                    ForEach(genres) { genre in
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(genre.monogram)
+                                .font(.system(size: 8, weight: .bold))
+                                .foregroundStyle(DashboardDesign.color(genre.accent))
+                                .frame(width: 24, height: 24)
+                                .background(DashboardDesign.color(genre.accent).opacity(0.12), in: Circle())
+                                .accessibilityHidden(true)
 
-                        Text(genre.title)
-                            .font(.system(size: 11, weight: .bold))
-                            .foregroundStyle(DashboardDesign.text)
-                            .padding(.top, 8)
-
-                        Text(genre.titleCount)
-                            .font(.system(size: 8, weight: .medium))
-                            .foregroundStyle(DashboardDesign.secondaryText)
-                            .padding(.top, 4)
+                            Text(genre.name)
+                                .font(.system(size: 11, weight: .bold))
+                                .foregroundStyle(DashboardDesign.text)
+                                .lineLimit(2)
+                        }
+                        .padding(.horizontal, 10)
+                        .padding(.top, 10)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(height: 78, alignment: .topLeading)
+                        .background(DashboardDesign.color(genre.background), in: RoundedRectangle(cornerRadius: 14))
+                        .accessibilityElement(children: .combine)
                     }
-                    .lineLimit(1)
-                    .padding(.horizontal, 10)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .frame(height: 78)
-                    .background(DashboardDesign.color(genre.background), in: RoundedRectangle(cornerRadius: 14))
-                    .accessibilityElement(children: .combine)
                 }
+                .padding(.horizontal, 2)
             }
-            .padding(.horizontal, 2)
         }
+    }
+
+    @ViewBuilder
+    private func sectionContent<Item, Content: View>(
+        _ state: DashboardPresenter.SectionState<Item>,
+        emptyTitle: String,
+        retry: @escaping () -> Void,
+        @ViewBuilder content: ([Item]) -> Content
+    ) -> some View {
+        switch state {
+        case .idle, .loading:
+            ProgressView()
+                .frame(maxWidth: .infinity, minHeight: 78)
+        case .loaded(let items) where items.isEmpty:
+            Text(emptyTitle)
+                .font(.footnote)
+                .foregroundStyle(DashboardDesign.secondaryText)
+                .frame(maxWidth: .infinity, minHeight: 78)
+        case .loaded(let items):
+            content(items)
+        case .failed:
+            VStack(spacing: 8) {
+                Text("Couldn’t load this section.")
+                    .foregroundStyle(DashboardDesign.secondaryText)
+                Button("Retry", action: retry)
+                    .tint(DashboardDesign.accent)
+            }
+            .font(.footnote)
+            .frame(maxWidth: .infinity, minHeight: 78)
+        }
+    }
+
+    private func artwork(path: String?, baseURL: String, fallback: UInt32) -> some View {
+        GeometryReader { geometry in
+            if let path, !path.isEmpty, let url = URL(string: baseURL + path) {
+                WebImage(url: url)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+                    .clipped()
+            }
+        }
+        .background(DashboardDesign.color(fallback))
+        .accessibilityHidden(true)
     }
 
     private func sectionTitle(_ title: String) -> some View {
@@ -277,28 +346,6 @@ struct DashboardView: View {
             .font(.system(size: 18, weight: .bold))
             .foregroundStyle(DashboardDesign.text)
             .accessibilityAddTraits(.isHeader)
-    }
-
-    private func sectionHeader(_ title: String) -> some View {
-        HStack {
-            sectionTitle(title)
-            Spacer(minLength: 8)
-            Button {
-                showsExplore = true
-            } label: {
-                HStack(spacing: 4) {
-                    Text("See All")
-                    Image(systemName: "arrow.right")
-                        .font(.system(size: 9, weight: .semibold))
-                }
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(DashboardDesign.accent)
-                .frame(width: 95, alignment: .leading)
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("See all, \(title)")
-        }
     }
 }
 
@@ -342,5 +389,9 @@ enum DashboardDesign {
 }
 
 #Preview {
-    DashboardView(detailUseCase: Injection().provideDetailUseCase())
+    let injection = Injection()
+    DashboardView(
+        dashboardUseCase: injection.provideDashboardUseCase(),
+        detailUseCase: injection.provideDetailUseCase()
+    )
 }

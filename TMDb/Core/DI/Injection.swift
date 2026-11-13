@@ -43,6 +43,10 @@ final class Injection: NSObject {
         let repo = provideMovieRepository()
         return MovieInteractor(repository: repo)
     }
+
+    func provideDashboardUseCase() -> DashboardUseCase {
+        DashboardInteractor(repository: provideMovieRepository())
+    }
     
     func provideDetailUseCase() -> DetailUseCase {
         let repo = provideMovieRepository()

@@ -10,6 +10,9 @@ import Combine
 
 protocol MovieRepositoryProtocol {
     func getMovies(page: Int) -> AnyPublisher<[MovieModel], Error>
+    func getTrendingMovies() -> AnyPublisher<[MovieModel], Error>
+    func getNowPlayingMovies(page: Int, region: String) -> AnyPublisher<[MovieModel], Error>
+    func getMovieGenres() -> AnyPublisher<[GenreModel], Error>
     func getMovie(movieId: Int) -> AnyPublisher<MovieDetailModel, Error>
     func getMovieBackdrops(movieId: Int) -> AnyPublisher<[ImageModel], Error>
 }
@@ -34,6 +37,24 @@ extension MovieRepository: MovieRepositoryProtocol {
             .map {
                 Mapper.mapMovieResponseModelsToDomains(input: $0)
             }.eraseToAnyPublisher()
+    }
+
+    func getTrendingMovies() -> AnyPublisher<[MovieModel], Error> {
+        movieDataSource.getTrendingMovies()
+            .map(Mapper.mapMovieResponseModelsToDomains)
+            .eraseToAnyPublisher()
+    }
+
+    func getNowPlayingMovies(page: Int, region: String) -> AnyPublisher<[MovieModel], Error> {
+        movieDataSource.getNowPlayingMovies(page: page, region: region)
+            .map(Mapper.mapMovieResponseModelsToDomains)
+            .eraseToAnyPublisher()
+    }
+
+    func getMovieGenres() -> AnyPublisher<[GenreModel], Error> {
+        movieDataSource.getMovieGenres()
+            .map(Mapper.mapGenreResponseToDomains)
+            .eraseToAnyPublisher()
     }
     
     func getMovie(movieId: Int) -> AnyPublisher<MovieDetailModel, Error> {

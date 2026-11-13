@@ -29,7 +29,10 @@ struct ContentView: View {
     
     var body: some View {
         TabView(selection: $activePage) {
-            DashboardView(detailUseCase: Injection().provideDetailUseCase())
+            DashboardView(
+                dashboardUseCase: Injection().provideDashboardUseCase(),
+                detailUseCase: Injection().provideDetailUseCase()
+            )
                 .safeAreaInset(edge: .bottom, spacing: 0) { bottomNavigation }
                 .toolbar(.hidden, for: .tabBar)
                 .tag(BottomTab.home)

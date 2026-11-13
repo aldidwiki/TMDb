@@ -13,4 +13,24 @@ struct MovieModel: Equatable, Identifiable {
     let posterPath: String
     let rating: Double
     let releaseDate: String
+    let backdropPath: String?
+    let genreIDs: [Int]
+
+    init(
+        id: Int,
+        title: String,
+        posterPath: String,
+        rating: Double,
+        releaseDate: String,
+        backdropPath: String? = nil,
+        genreIDs: [Int] = []
+    ) {
+        self.id = id
+        self.title = title
+        self.posterPath = posterPath
+        self.rating = rating
+        self.releaseDate = releaseDate
+        self.backdropPath = backdropPath
+        self.genreIDs = genreIDs
+    }
 }

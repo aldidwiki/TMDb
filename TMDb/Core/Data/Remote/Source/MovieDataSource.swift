@@ -11,6 +11,9 @@ import Combine
 
 protocol MovieDataSourceProtocol {
     func getMovies(page: Int) -> AnyPublisher<[MovieResponseModel], Error>
+    func getTrendingMovies() -> AnyPublisher<[MovieResponseModel], Error>
+    func getNowPlayingMovies(page: Int, region: String) -> AnyPublisher<[MovieResponseModel], Error>
+    func getMovieGenres() -> AnyPublisher<GenreResponse, Error>
     func getMovie(movieId: Int) -> AnyPublisher<MovieDetailResponse, Error>
     func getMovieBackdrops(movieId: Int) -> AnyPublisher<ImageResponse, Error>
 }
@@ -19,6 +22,18 @@ final class MovieDataSource: NSObject {
     private override init() {}
     
     static let sharedInstance: MovieDataSource = MovieDataSource()
+
+    private func request<Response: Decodable>(
+        _ path: String,
+        parameters: Parameters? = nil
+    ) -> AnyPublisher<Response, Error> {
+        AF.request(API.baseUrl + path, parameters: parameters, headers: API.headers)
+            .validate()
+            .publishDecodable(type: Response.self)
+            .value()
+            .mapError { _ in URLError.invalidResponse as Error }
+            .eraseToAnyPublisher()
+    }
 }
 
 extension MovieDataSource: MovieDataSourceProtocol {
@@ -41,6 +56,22 @@ extension MovieDataSource: MovieDataSourceProtocol {
                     }
             }
         }.eraseToAnyPublisher()
+    }
+
+    func getTrendingMovies() -> AnyPublisher<[MovieResponseModel], Error> {
+        request("trending/movie/week")
+            .map(\MovieResponse.movies)
+            .eraseToAnyPublisher()
+    }
+
+    func getNowPlayingMovies(page: Int, region: String) -> AnyPublisher<[MovieResponseModel], Error> {
+        request("movie/now_playing", parameters: ["page": page, "region": region])
+            .map(\MovieResponse.movies)
+            .eraseToAnyPublisher()
+    }
+
+    func getMovieGenres() -> AnyPublisher<GenreResponse, Error> {
+        request("genre/movie/list")
     }
     
     func getMovie(movieId: Int) -> AnyPublisher<MovieDetailResponse, Error> {

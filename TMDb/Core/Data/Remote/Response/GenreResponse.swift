@@ -7,6 +7,10 @@
 
 import Foundation
 
+struct GenreResponse: Decodable {
+    let genres: [GenreResponseModel]
+}
+
 struct GenreResponseModel: Decodable, Equatable {
     let id: Int
     let genreName: String
