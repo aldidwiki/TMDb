@@ -28,7 +28,6 @@ final class MovieDetailPresenter {
     private(set) var isLoadingMovie = false
     private(set) var movieFailed = false
     private(set) var similarMovies: SimilarMoviesState = .idle
-    private(set) var movieImages: [ImageModel] = []
     private(set) var isFavorite = false
     var showsFavoriteError = false
 
@@ -84,15 +83,6 @@ final class MovieDetailPresenter {
             .store(in: &cancellables)
     }
 
-    func getMovieBackdrops(movieId: Int) {
-        detailUseCase.getMovieBackdrops(movieId: movieId)
-            .receive(on: DispatchQueue.main)
-            .sink { _ in } receiveValue: { [weak self] images in
-                self?.movieImages = images
-            }
-            .store(in: &cancellables)
-    }
-
     func checkFavoriteStatus(movieId: Int) {
         do {
             isFavorite = try favoriteUseCase.isFavorited(.init(mediaType: .movie, mediaID: movieId))
@@ -136,11 +126,11 @@ final class MovieDetailPresenter {
 
     func toMovieImageGallery<Content: View>(
         for movieId: Int,
+        title: String,
         @ViewBuilder content: () -> Content
     ) -> some View {
         NavigationLink {
-            router.makeMovieImageGalleryView(movieId: movieId)
-                .toolbar(.visible, for: .navigationBar)
+            router.makeMovieImageGalleryView(movieId: movieId, title: title)
         } label: {
             content()
         }

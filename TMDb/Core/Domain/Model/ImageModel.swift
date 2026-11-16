@@ -10,4 +10,5 @@ import Foundation
 struct ImageModel: Identifiable {
     let id: Int
     let filePath: String
+    let aspectRatio: Double?
 }

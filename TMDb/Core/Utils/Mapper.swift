@@ -273,7 +273,8 @@ final class Mapper {
         return backdrops.map { imageResponseModel in
             ImageModel(
                 id: imageResponse.imageId,
-                filePath: imageResponseModel.filePath ?? ""
+                filePath: imageResponseModel.filePath ?? "",
+                aspectRatio: imageResponseModel.aspectRatio
             )
         }
     }

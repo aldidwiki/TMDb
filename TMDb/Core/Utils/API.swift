@@ -12,6 +12,8 @@ class API {
     static let baseUrl = "https://api.themoviedb.org/3/"
     static let imageBaseUrl = "https://image.tmdb.org/t/p/w500"
     static let backdropBaseUrl = "https://image.tmdb.org/t/p/w1280"
+    static let backdropThumbnailBaseUrl = "https://image.tmdb.org/t/p/w780"
+    static let backdropOriginalBaseUrl = "https://image.tmdb.org/t/p/original"
     static let profileImageBaseUrl = "https://image.tmdb.org/t/p/h632"
     static let profileOriginalBaseUrl = "https://image.tmdb.org/t/p/original"
     static let logoImageBaseUrl = "https://image.tmdb.org/t/p/w92"

@@ -54,12 +54,11 @@ class DetailRouter {
         )
     }
     
-    func makeMovieImageGalleryView(movieId: Int) -> some View {
-        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
-        return MovieImageGalleryView(
-            detailUseCase: Injection.init().provideDetailUseCase(),
-            favoriteUseCase: favoriteUseCase,
-            contentId: movieId
+    func makeMovieImageGalleryView(movieId: Int, title: String) -> some View {
+        MovieImageGalleryView(
+            detailUseCase: Injection().provideDetailUseCase(),
+            movieId: movieId,
+            movieTitle: title
         )
     }
     

@@ -116,10 +116,10 @@ struct MovieDetailView: View {
                 movieBackdrop(movie)
                     .accessibilityHidden(true)
             } else {
-                presenter.toMovieImageGallery(for: movie.id) {
+                presenter.toMovieImageGallery(for: movie.id, title: movie.title) {
                     movieBackdrop(movie)
                 }
-                .accessibilityLabel("View backdrop gallery")
+                .accessibilityLabel("View movie photos")
             }
         }
         .overlay(alignment: .bottomLeading) {
