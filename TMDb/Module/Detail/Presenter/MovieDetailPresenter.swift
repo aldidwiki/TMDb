@@ -5,86 +5,94 @@
 //  Created by Aldi Dwiki Prahasta on 24/11/22.
 //
 
-import SwiftUI
 import Combine
 import Observation
+import SwiftUI
 
+@MainActor
 @Observable
-class MovieDetailPresenter {
-    private var cancellable: Set<AnyCancellable> = []
-    
+final class MovieDetailPresenter {
+    enum SimilarMoviesState {
+        case idle
+        case loading
+        case loaded([MovieModel])
+        case failed
+    }
+
+    private var cancellables: Set<AnyCancellable> = []
     private let router = DetailRouter()
-    
     private let detailUseCase: DetailUseCase
     private let favoriteUseCase: FavoriteUseCase
-    
-    var movie = MovieDetailModel(
-        id: 0,
-        title: "",
-        rating: 7.1,
-        posterPath: "/bQXAqRx2Fgc46uCVWgoPz5L5Dtr.jpg",
-        overview: "Nearly 5,000 years after he was bestowed with the almighty powers of the Egyptian gods—and imprisoned just as quickly—Black Adam is freed from his earthly tomb, ready to unleash his unique form of justice on the modern world.",
-        tagline: "The world needed a hero. It got Black Adam.",
-        releaseDate: "2022-10-19",
-        backdropPath: "/3CxUndGhUcZdt1Zggjdb2HkLLQX.jpg",
-        runtime: 125,
-        certification: "NR",
-        genre: "Action",
-        cast: [],
-        budget: 1000,
-        revenue: 2000,
-        status: "Released",
-        spokenLanguage: "English",
-        instagramId: "",
-        facebookId: "",
-        twitterId: "",
-        imdbId: "",
-        videos: [],
-        voteCount: nil
-    )
+
+    private(set) var movie: MovieDetailModel?
+    private(set) var isLoadingMovie = false
+    private(set) var movieFailed = false
+    private(set) var similarMovies: SimilarMoviesState = .idle
+    private(set) var movieImages: [ImageModel] = []
+    private(set) var isFavorite = false
     var showsFavoriteError = false
-    var errorMessage = ""
-    var loadingState = false
-    var movieImages: [ImageModel] = []
-    var isFavorite: Bool = false
-    
+
     init(detailUseCase: DetailUseCase, favoriteUseCase: FavoriteUseCase) {
         self.detailUseCase = detailUseCase
         self.favoriteUseCase = favoriteUseCase
     }
-    
-    func getMovie(movieId: Int) {
-        self.loadingState = true
-        detailUseCase.getMovie(movieId: movieId)
-            .receive(on: RunLoop.main)
-            .sink { completion in
-                switch completion {
-                case .failure:
-                    self.errorMessage = String(describing: completion)
-                case .finished:
-                    self.loadingState = false
-                }
-            } receiveValue: { movie in
-                self.movie = movie
-            }.store(in: &cancellable)
+
+    var topCast: [CreditModel] {
+        var seen: Set<Int> = []
+        let cast = (movie?.cast ?? []).sorted { $0.order < $1.order }
+        return Array(cast.filter {
+            $0.id > 0 && !$0.name.isEmpty && seen.insert($0.id).inserted
+        }.prefix(10))
     }
-    
+
+    func load(movieId: Int) {
+        if movie == nil && !movieFailed { getMovie(movieId: movieId) }
+        if case .idle = similarMovies { getSimilarMovies(movieId: movieId) }
+    }
+
+    func getMovie(movieId: Int) {
+        guard !isLoadingMovie else { return }
+        isLoadingMovie = true
+        movieFailed = false
+
+        detailUseCase.getMovie(movieId: movieId)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] completion in
+                self?.isLoadingMovie = false
+                if case .failure = completion { self?.movieFailed = true }
+            } receiveValue: { [weak self] movie in
+                self?.movie = movie
+            }
+            .store(in: &cancellables)
+    }
+
+    func getSimilarMovies(movieId: Int) {
+        if case .loading = similarMovies { return }
+        similarMovies = .loading
+
+        detailUseCase.getSimilarMovies(movieId: movieId)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] completion in
+                if case .failure = completion { self?.similarMovies = .failed }
+            } receiveValue: { [weak self] movies in
+                var seen: Set<Int> = [movieId]
+                let titles = Array(movies.filter {
+                    $0.id > 0 && seen.insert($0.id).inserted
+                }.prefix(10))
+                self?.similarMovies = .loaded(titles)
+            }
+            .store(in: &cancellables)
+    }
+
     func getMovieBackdrops(movieId: Int) {
         detailUseCase.getMovieBackdrops(movieId: movieId)
-            .receive(on: RunLoop.main)
-            .sink { completion in
-                switch completion {
-                case .failure:
-                    self .errorMessage = String(describing: completion)
-                default:
-                    break
-                }
-            } receiveValue: { imageModel in
-                self.movieImages = imageModel
-            }.store(in: &cancellable)
+            .receive(on: DispatchQueue.main)
+            .sink { _ in } receiveValue: { [weak self] images in
+                self?.movieImages = images
+            }
+            .store(in: &cancellables)
     }
-    
-    @MainActor
+
     func checkFavoriteStatus(movieId: Int) {
         do {
             isFavorite = try favoriteUseCase.isFavorited(.init(mediaType: .movie, mediaID: movieId))
@@ -93,41 +101,49 @@ class MovieDetailPresenter {
         }
     }
 
-    @MainActor
     func toggleFavorite() {
-        guard movie.id > 0 else { return }
+        guard let movie, movie.id > 0 else { return }
         do {
             isFavorite = try favoriteUseCase.toggleFavorite(Mapper.mapMovieToFavorite(movie))
         } catch {
             showsFavoriteError = true
         }
     }
-    
+
     func toPersonDetail<Content: View>(
         for personId: Int,
         @ViewBuilder content: () -> Content
     ) -> some View {
-        NavigationLink(destination: router.makePersonDetailView(for: personId)) {
+        NavigationLink {
+            router.makePersonDetailView(for: personId)
+        } label: {
             content()
         }
         .buttonStyle(.plain)
     }
-    
-    func toCreditDetailView<Content: View>(
-        for credits: [CreditModel],
+
+    func toSimilarMovie<Content: View>(
+        for movieId: Int,
         @ViewBuilder content: () -> Content
     ) -> some View {
-        NavigationLink(destination: router.makeCreditDetailView(for: credits)) {
+        NavigationLink {
+            router.makeMovieDetailView(for: movieId)
+        } label: {
             content()
         }
+        .buttonStyle(.plain)
     }
-    
+
     func toMovieImageGallery<Content: View>(
         for movieId: Int,
         @ViewBuilder content: () -> Content
     ) -> some View {
-        NavigationLink(destination: router.makeMovieImageGalleryView(movieId: movieId)) {
+        NavigationLink {
+            router.makeMovieImageGalleryView(movieId: movieId)
+                .toolbar(.visible, for: .navigationBar)
+        } label: {
             content()
         }
+        .buttonStyle(.plain)
     }
 }

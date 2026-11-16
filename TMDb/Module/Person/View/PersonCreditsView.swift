@@ -74,7 +74,6 @@ struct PersonCreditsView: View {
                     ForEach(items) { item in
                         NavigationLink {
                             router.destination(for: item.id)
-                                .toolbar(.visible, for: .navigationBar)
                         } label: {
                             creditRow(item)
                         }

@@ -108,6 +108,7 @@
 		CEC65520292F60BF007B393A /* MovieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC6551F292F60BF007B393A /* MovieView.swift */; };
 		CECA71502A0A1A5D0091094A /* SpokenLanguageResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECA714F2A0A1A5D0091094A /* SpokenLanguageResponse.swift */; };
 		CECFD2432AAEA95E0023D93A /* ExpandableTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECFD2422AAEA95E0023D93A /* ExpandableTextView.swift */; };
+		AE13F0802F40111300755120 /* AnimatedFavoriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE13F07F2F40111300755120 /* AnimatedFavoriteButton.swift */; };
 		CECFD2452AAEB5FF0023D93A /* CustomLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECFD2442AAEB5FF0023D93A /* CustomLabelStyle.swift */; };
 		CEEA020A2AE7727700AEFE31 /* PersonPopularResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEA02092AE7727700AEFE31 /* PersonPopularResponse.swift */; };
 		CEEA020C2AE774E300AEFE31 /* PersonPopularModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEA020B2AE774E300AEFE31 /* PersonPopularModel.swift */; };
@@ -253,6 +254,7 @@
 		CEC6551F292F60BF007B393A /* MovieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieView.swift; sourceTree = "<group>"; };
 		CECA714F2A0A1A5D0091094A /* SpokenLanguageResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpokenLanguageResponse.swift; sourceTree = "<group>"; };
 		CECFD2422AAEA95E0023D93A /* ExpandableTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableTextView.swift; sourceTree = "<group>"; };
+		AE13F07F2F40111300755120 /* AnimatedFavoriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedFavoriteButton.swift; sourceTree = "<group>"; };
 		CECFD2442AAEB5FF0023D93A /* CustomLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLabelStyle.swift; sourceTree = "<group>"; };
 		CEEA02092AE7727700AEFE31 /* PersonPopularResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonPopularResponse.swift; sourceTree = "<group>"; };
 		CEEA020B2AE774E300AEFE31 /* PersonPopularModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonPopularModel.swift; sourceTree = "<group>"; };
@@ -498,6 +500,7 @@
 				CE971C422931F53900C33D9C /* EmptyView.swift */,
 				CE57627A2A419EBF0094A16D /* ExternalMediaView.swift */,
 				CECFD2422AAEA95E0023D93A /* ExpandableTextView.swift */,
+				AE13F07F2F40111300755120 /* AnimatedFavoriteButton.swift */,
 				CEFAA5F42AB29DFA00B3FD37 /* AnimatingCellHeight.swift */,
 				CECFD2442AAEB5FF0023D93A /* CustomLabelStyle.swift */,
 				FA9252042F39C40A00419C21 /* PosterView.swift */,
@@ -1067,6 +1070,7 @@
 				CEBD444B2A08950400BBD9B6 /* CertificationResponse.swift in Sources */,
 				CE5762772A41635C0094A16D /* CreditDetailRouter.swift in Sources */,
 				CECFD2432AAEA95E0023D93A /* ExpandableTextView.swift in Sources */,
+				AE13F0802F40111300755120 /* AnimatedFavoriteButton.swift in Sources */,
 				CEBD44602A08E98F00BBD9B6 /* PersonDetailView.swift in Sources */,
 				AE13F07C2F40111300755120 /* PersonCreditsView.swift in Sources */,
 				CE7BB4DA2BAA981C0080FA7F /* MovieImageGalleryView.swift in Sources */,

@@ -62,8 +62,34 @@ final class Mapper {
             twitterId: movieDetailResponse.externalMedia?.twitterId ?? "",
             imdbId: movieDetailResponse.externalMedia?.imdbId ?? "",
             videos: mapVideoResponseModelToDomains(input: movieDetailResponse.videos),
-            voteCount: movieDetailResponse.voteCount
+            voteCount: movieDetailResponse.voteCount,
+            director: crewNames(for: "Director", in: movieDetailResponse.credits.crew ?? []),
+            usReleaseDate: usTheatricalReleaseDate(in: movieDetailResponse.releaseDates.results),
+            composer: crewNames(for: "Original Music Composer", in: movieDetailResponse.credits.crew ?? [])
         )
+    }
+
+    private static func crewNames(for job: String, in crew: [MovieCrewResponseModel]) -> String? {
+        var seen: Set<String> = []
+        let names = crew.compactMap { credit -> String? in
+            guard credit.job == job, let name = credit.name?.trimmingCharacters(in: .whitespacesAndNewlines),
+                  !name.isEmpty, seen.insert(name).inserted else { return nil }
+            return name
+        }
+        return names.isEmpty ? nil : names.joined(separator: ", ")
+    }
+
+    private static func usTheatricalReleaseDate(in releases: [MovieCertificationResponse]) -> String? {
+        let usReleases = releases.filter { $0.region == "US" }.flatMap(\.movieCertificationResponseModel)
+        // Prefer a wide theatrical release. Use a limited release when there is no wide date.
+        for type in [3, 2] {
+            let dates = usReleases.filter { $0.type == type }.compactMap { release -> String? in
+                guard let rawDate = release.releaseDate, rawDate.count >= 10 else { return nil }
+                return String(rawDate.prefix(10))
+            }
+            if let earliest = dates.min() { return earliest }
+        }
+        return nil
     }
     
     static func mapTvShowDetailResponseToDomain(
@@ -280,7 +306,7 @@ final class Mapper {
                 name: cast.name ?? "",
                 profilePath: cast.profilePath ?? "",
                 characterName: cast.characterName ?? "",
-                order: cast.order ?? 0,
+                order: cast.order ?? .max,
                 popularity: cast.popularity,
                 releaseDate: "",
                 episodeCount: 0,

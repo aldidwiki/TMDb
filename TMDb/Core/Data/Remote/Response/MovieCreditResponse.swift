@@ -9,10 +9,12 @@ import Foundation
 
 struct MovieCreditResponse: Decodable {
     let cast: [MovieCreditResponseModel]
-    
-    private enum CodingKeys: String, CodingKey {
-        case cast
-    }
+    let crew: [MovieCrewResponseModel]?
+}
+
+struct MovieCrewResponseModel: Decodable {
+    let name: String?
+    let job: String?
 }
 
 struct MovieCreditResponseModel: Decodable {

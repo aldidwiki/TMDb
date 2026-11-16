@@ -1,27 +1,22 @@
 //
-//  DetailView.swift
+//  MovieDetailView.swift
 //  TMDb
 //
 //  Created by Aldi Dwiki Prahasta on 25/11/22.
 //
 
-import SwiftUI
 import SDWebImageSwiftUI
-import SwiftUIIntrospect
+import SwiftUI
 
 struct MovieDetailView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.colorScheme) private var colorScheme
-    
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var presenter: MovieDetailPresenter
-    @State var showSheet = false
-    
-    @State private var bgColor: Color = .clear
-    @State private var primaryColor: Color = .primary
-    @State private var secondaryColor: Color = .primary
-    
+    @State private var presentedTrailers: [TrailerLink]?
+
     private let movieId: Int
-    
+
     init(detailUseCase: DetailUseCase, favoriteUseCase: FavoriteUseCase, movieId: Int) {
         _presenter = State(initialValue: MovieDetailPresenter(
             detailUseCase: detailUseCase,
@@ -29,363 +24,600 @@ struct MovieDetailView: View {
         ))
         self.movieId = movieId
     }
-    
+
     var body: some View {
-        ZStack {
-            if presenter.loadingState {
-                ProgressView("Loading")
-            } else {
-                ZStack(alignment: .top) {
-                    bgColor
-                        .ignoresSafeArea(edges: .top)
-                        .frame(height: 0)
-                    
-                    ScrollView(.vertical, showsIndicators: false) {
-                        VStack(alignment: .leading) {
-                            VStack {
-                                if !presenter.movie.backdropPath.isEmpty {
-                                    presenter.toMovieImageGallery(for: movieId) {
-                                        movieBackdrop
-                                    }
-                                }
-                                
-                                movieContentDetail
-                                    .padding([.top, .horizontal])
-                                
-                                movieContentUtils
-                                
-                                movieOverview
-                            }
-                            .padding(.bottom)
-                            .background(bgColor)
-                            .elevation(5)
-                            
-                            if !presenter.movie.cast.isEmpty {
-                                movieCredits
-                            }
-                            
-                            movieDetailInfo
-                            
-                            ExternalMediaView(
-                                instagramId: presenter.movie.instagramId,
-                                facebookId: presenter.movie.facebookId,
-                                twitterId: presenter.movie.twitterId,
-                                imdbId: presenter.movie.imdbId
-                            )
-                            .padding(.vertical)
-                        }
-                    }
-                }
+        GeometryReader { geometry in
+            let inset = max(20, (geometry.size.width - DashboardDesign.contentWidth) / 2)
+
+            VStack(spacing: 0) {
+                toolbar
+                    .padding(.horizontal, inset)
+                detailContent(inset: inset)
             }
-        }.onAppear {
-            if presenter.movie.id == 0 && presenter.movie.title.isEmpty {
-                presenter.getMovie(movieId: movieId)
-            }
-            
-            presenter.checkFavoriteStatus(movieId: movieId)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationTitle(presenter.movie.title)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "chevron.left")
-                        .fontWeight(.bold)
-                        .foregroundStyle(primaryColor)
-                }
-            }
-            
-            ToolbarItem(placement: .principal) {
-                Text(presenter.movie.title)
-                    .font(.headline)
-                    .lineLimit(1)
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(primaryColor)
-            }
-            
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    presenter.toggleFavorite()
-                } label: {
-                    Image(systemName: presenter.isFavorite ? "heart.fill" : "heart")
-                        .contentTransition(.symbolEffect(.replace))
-                        .symbolEffect(.bounce, value: presenter.isFavorite)
-                        .foregroundStyle(primaryColor)
-                }
-                .disabled(presenter.loadingState || presenter.movie.id <= 0)
-                .accessibilityLabel(presenter.isFavorite ? "Remove from favorites" : "Add to favorites")
-            }
-        }
-        .toolbarBackground(bgColor, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
+        .background(DashboardDesign.background.ignoresSafeArea())
+        .accessibilityHidden(presentedTrailers != nil)
+        .overlay { trailerOverlay }
+        .toolbar(.hidden, for: .navigationBar)
+        .tint(DashboardDesign.accent)
+        .onAppear { presenter.checkFavoriteStatus(movieId: movieId) }
+        .task { presenter.load(movieId: movieId) }
         .alert("Couldn’t update favorites", isPresented: $presenter.showsFavoriteError) {
             Button("OK", role: .cancel) {}
         }
-        .blur(radius: showSheet ? 6 : 0, opaque: true)
-        .animation(.easeInOut, value: bgColor)
+    }
+
+    private var toolbar: some View {
+        HStack(spacing: 0) {
+            Button {
+                dismiss()
+            } label: {
+                Image(systemName: "chevron.backward")
+                    .font(.system(size: 17, weight: .semibold))
+                    .frame(width: 44, height: 44, alignment: .leading)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Back")
+
+            Text("Movie Details")
+                .font(.title3.bold())
+                .accessibilityAddTraits(.isHeader)
+
+            Spacer(minLength: 0)
+        }
+        .foregroundStyle(DashboardDesign.text)
+        .frame(minHeight: 56)
+    }
+
+    @ViewBuilder
+    private func detailContent(inset: CGFloat) -> some View {
+        if let movie = presenter.movie {
+            ScrollView {
+                VStack(spacing: 24) {
+                    hero(movie)
+
+                    VStack(spacing: 16) {
+                        overview(movie)
+                        actions(movie)
+                    }
+                    .padding(.horizontal, inset)
+
+                    topCast(inset: inset)
+                    movieInfo(movie)
+                        .padding(.horizontal, inset)
+                    similarMovies(inset: inset)
+                }
+                .padding(.bottom, 24)
+            }
+            .scrollIndicators(.hidden)
+        } else if presenter.movieFailed {
+            ContentUnavailableView {
+                Label("Couldn’t load movie details", systemImage: "wifi.exclamationmark")
+            } actions: {
+                Button("Retry") { presenter.getMovie(movieId: movieId) }
+            }
+            .frame(maxHeight: .infinity)
+        } else {
+            ProgressView("Loading movie details")
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+    }
+
+    private func hero(_ movie: MovieDetailModel) -> some View {
+        let metadata = [
+            String(movie.releaseDate.prefix(4)),
+            movie.genre
+        ].filter { !$0.isEmpty }.joined(separator: " · ")
+
+        return Group {
+            if movie.backdropPath.isEmpty {
+                movieBackdrop(movie)
+                    .accessibilityHidden(true)
+            } else {
+                presenter.toMovieImageGallery(for: movie.id) {
+                    movieBackdrop(movie)
+                }
+                .accessibilityLabel("View backdrop gallery")
+            }
+        }
+        .overlay(alignment: .bottomLeading) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(movie.title)
+                    .font(.title.bold())
+                    .accessibilityAddTraits(.isHeader)
+
+                if !metadata.isEmpty {
+                    Text(metadata)
+                        .font(.caption)
+                }
+            }
+            .foregroundStyle(DashboardDesign.surface)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 16)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(alignment: .bottom) {
+                DashboardDesign.mediaFooterGradient
+            }
+            .allowsHitTesting(false)
+        }
+        .frame(maxWidth: DashboardDesign.contentWidth)
+        .frame(maxWidth: .infinity)
+    }
+
+    private func movieBackdrop(_ movie: MovieDetailModel) -> some View {
+        artwork(movie.backdropPath, baseURL: API.backdropBaseUrl, fallback: DashboardDesign.mediaFooter)
+            .aspectRatio(16.0 / 9, contentMode: .fit)
+            .clipped()
+    }
+
+    private func overview(_ movie: MovieDetailModel) -> some View {
+        HStack(alignment: .top, spacing: 16) {
+            artwork(movie.posterPath, baseURL: API.imageBaseUrl)
+                .frame(width: 96, height: 144)
+                .clipShape(RoundedRectangle(cornerRadius: DashboardDesign.controlRadius))
+                .accessibilityHidden(true)
+
+            VStack(alignment: .leading, spacing: 8) {
+                if movie.rating > 0 || (movie.voteCount ?? 0) > 0 {
+                    rating(movie)
+                }
+
+                Text("Overview")
+                    .font(.subheadline.bold())
+                    .foregroundStyle(DashboardDesign.text)
+                    .accessibilityAddTraits(.isHeader)
+
+                let summary = movie.overview.trimmingCharacters(in: .whitespacesAndNewlines)
+                Text(summary.isEmpty || summary == "-" ? "Overview unavailable" : summary)
+                    .font(.footnote)
+                    .foregroundStyle(DashboardDesign.secondaryText)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+
+    private func rating(_ movie: MovieDetailModel) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            if movie.rating > 0 {
+                let score = movie.rating.formatted(.number.precision(.fractionLength(1)))
+                Label(score, systemImage: "star.fill")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(DashboardDesign.surface)
+                    .padding(.horizontal, 8)
+                    .frame(minHeight: 24)
+                    .background(DashboardDesign.text, in: RoundedRectangle(cornerRadius: 8))
+                    .accessibilityLabel("Rating \(score) out of 10")
+            }
+
+            if let count = movie.voteCount, count > 0 {
+                Text(count == 1 ? "1 vote" : "\(count.formatted(.number.notation(.compactName))) votes")
+                    .font(.caption)
+                    .foregroundStyle(DashboardDesign.secondaryText)
+            }
+        }
+    }
+
+    private func actions(_ movie: MovieDetailModel) -> some View {
+        let trailers = movie.videos.compactMap(TrailerLink.init)
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(spacing: 12))
+            : AnyLayout(HStackLayout(spacing: 12))
+
+        return layout {
+            if trailers.count > 1 {
+                Button {
+                    setTrailerDrawer(trailers)
+                } label: {
+                    trailerLabel
+                }
+                .buttonStyle(.plain)
+            } else if let trailer = trailers.first {
+                Link(destination: trailer.url) {
+                    trailerLabel
+                }
+                .buttonStyle(.plain)
+            }
+
+            AnimatedFavoriteButton(isFavorite: presenter.isFavorite) {
+                let previousValue = presenter.isFavorite
+                presenter.toggleFavorite()
+                return previousValue != presenter.isFavorite
+            }
+        }
+    }
+
+    private var trailerLabel: some View {
+        Label("Watch Trailer", systemImage: "play.fill")
+            .font(.footnote.weight(.semibold))
+            .foregroundStyle(DashboardDesign.surface)
+            .padding(.horizontal, 10)
+            .frame(maxWidth: .infinity, minHeight: 44)
+            .background(DashboardDesign.accent, in: RoundedRectangle(cornerRadius: DashboardDesign.controlRadius))
+    }
+
+    private var trailerOverlay: some View {
+        ZStack(alignment: .bottom) {
+            if let trailers = presentedTrailers {
+                DashboardDesign.text.opacity(0.42)
+                    .ignoresSafeArea()
+                    .onTapGesture { setTrailerDrawer(nil) }
+                    .accessibilityHidden(true)
+                    .transition(.opacity)
+
+                MovieTrailerDrawer(trailers: trailers) { setTrailerDrawer(nil) }
+                    .transition(reduceMotion ? .opacity : .move(edge: .bottom))
+                    .zIndex(1)
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .allowsHitTesting(presentedTrailers != nil)
+    }
+
+    private func setTrailerDrawer(_ trailers: [TrailerLink]?) {
+        withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.25)) {
+            presentedTrailers = trailers
+        }
+    }
+
+    private func topCast(inset: CGFloat) -> some View {
+        let cast = presenter.topCast
+
+        return VStack(alignment: .leading, spacing: 12) {
+            sectionHeading("Top cast", seeAll: true)
+                .padding(.horizontal, inset)
+
+            if cast.isEmpty {
+                sectionMessage("No cast available")
+                    .padding(.horizontal, inset)
+            } else {
+                ScrollView(.horizontal) {
+                    LazyHStack(alignment: .top, spacing: 12) {
+                        ForEach(cast) { credit in
+                            presenter.toPersonDetail(for: credit.id) {
+                                castCard(credit)
+                            }
+                        }
+                    }
+                }
+                .contentMargins(.horizontal, inset, for: .scrollContent)
+                .scrollIndicators(.hidden)
+            }
+        }
+    }
+
+    private func castCard(_ credit: CreditModel) -> some View {
+        let initials = String(credit.name.split(whereSeparator: \.isWhitespace).prefix(2).compactMap(\.first)).uppercased()
+
+        return VStack(alignment: .center, spacing: 5) {
+            Circle()
+                .fill(DashboardDesign.surfaceDim)
+                .overlay {
+                    Text(initials)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(DashboardDesign.accent)
+                }
+                .overlay {
+                    if !credit.profilePath.isEmpty, let url = URL(string: API.profileImageBaseUrl + credit.profilePath) {
+                        WebImage(url: url)
+                            .resizable()
+                            .scaledToFill()
+                    }
+                }
+                .frame(width: 56, height: 56)
+                .clipShape(Circle())
+                .accessibilityHidden(true)
+
+            VStack(alignment: .center, spacing: 2) {
+                Text(credit.name)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(DashboardDesign.text)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.7)
+
+                if !credit.characterName.isEmpty {
+                    Text(credit.characterName)
+                        .font(.caption2)
+                        .foregroundStyle(DashboardDesign.secondaryText)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.7)
+                }
+            }
+        }
+        .multilineTextAlignment(.center)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 8)
+        .frame(width: 132, height: 136, alignment: .top)
+        .background(DashboardDesign.surface, in: RoundedRectangle(cornerRadius: DashboardDesign.cardRadius))
+        .overlay {
+            RoundedRectangle(cornerRadius: DashboardDesign.cardRadius)
+                .strokeBorder(DashboardDesign.border)
+                .allowsHitTesting(false)
+        }
+        .contentShape(Rectangle())
+        .accessibilityElement(children: .combine)
+    }
+
+    @ViewBuilder
+    private func movieInfo(_ movie: MovieDetailModel) -> some View {
+        let fields: [(label: String, value: String?)] = [
+            ("Director", movie.director),
+            ("US release", movie.usReleaseDate?.formatDateString(output: "MMM d, yyyy")),
+            ("Runtime", movie.runtime > 0 ? "\(movie.runtime) min" : nil),
+            ("Music", movie.composer)
+        ]
+        let values = fields.compactMap { field -> (label: String, value: String)? in
+            guard let value = field.value, !value.isEmpty else { return nil }
+            return (field.label, value)
+        }
+
+        if !values.isEmpty {
+            VStack(alignment: .leading, spacing: 12) {
+                sectionHeading("Movie info")
+
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), alignment: .topLeading), count: 2),
+                          alignment: .leading, spacing: 12) {
+                    ForEach(values, id: \.label) { field in
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(field.label)
+                                .font(.caption)
+                                .foregroundStyle(DashboardDesign.secondaryText)
+                            Text(field.value)
+                                .font(.subheadline.weight(.medium))
+                                .foregroundStyle(DashboardDesign.text)
+                        }
+                        .accessibilityElement(children: .combine)
+                    }
+                }
+                .padding(13)
+                .background(DashboardDesign.surface, in: RoundedRectangle(cornerRadius: DashboardDesign.controlRadius))
+                .overlay {
+                    RoundedRectangle(cornerRadius: DashboardDesign.controlRadius)
+                        .strokeBorder(DashboardDesign.border)
+                        .allowsHitTesting(false)
+                }
+            }
+        }
+    }
+
+    private func similarMovies(inset: CGFloat) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            sectionHeading("Similar Movies", seeAll: true)
+                .padding(.horizontal, inset)
+
+            switch presenter.similarMovies {
+            case .idle, .loading:
+                ProgressView("Loading similar movies")
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+            case .loaded(let movies) where movies.isEmpty:
+                sectionMessage("No similar movies available")
+                    .padding(.horizontal, inset)
+            case .loaded(let movies):
+                ScrollView(.horizontal) {
+                    LazyHStack(alignment: .top, spacing: 12) {
+                        ForEach(movies) { movie in
+                            presenter.toSimilarMovie(for: movie.id) {
+                                similarMovieCard(movie)
+                            }
+                        }
+                    }
+                }
+                .contentMargins(.horizontal, inset, for: .scrollContent)
+                .scrollIndicators(.hidden)
+            case .failed:
+                VStack(alignment: .leading, spacing: 6) {
+                    sectionMessage("Couldn’t load similar movies")
+                    Button("Retry") { presenter.getSimilarMovies(movieId: movieId) }
+                        .font(.footnote.weight(.semibold))
+                }
+                .padding(.horizontal, inset)
+            }
+        }
+    }
+
+    private func similarMovieCard(_ movie: MovieModel) -> some View {
+        let year = String(movie.releaseDate.prefix(4))
+
+        return VStack(alignment: .leading, spacing: 4) {
+            artwork(movie.posterPath, baseURL: API.imageBaseUrl)
+                .frame(width: 109, height: 164)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .accessibilityHidden(true)
+
+            Text(movie.title)
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(DashboardDesign.text)
+                .lineLimit(2)
+
+            if !year.isEmpty {
+                Text(year)
+                    .font(.caption)
+                    .foregroundStyle(DashboardDesign.secondaryText)
+            }
+        }
+        .frame(width: 109, alignment: .leading)
+        .contentShape(Rectangle())
+        .accessibilityElement(children: .combine)
+    }
+
+    private func sectionHeading(_ title: String, seeAll: Bool = false) -> some View {
+        HStack(spacing: 12) {
+            Text(title)
+                .font(.title3.bold())
+                .foregroundStyle(DashboardDesign.text)
+                .accessibilityAddTraits(.isHeader)
+
+            Spacer(minLength: 0)
+
+            if seeAll {
+                Button {} label: {
+                    HStack(spacing: 4) {
+                        Text("See All")
+                        Image(systemName: "arrow.right")
+                            .accessibilityHidden(true)
+                    }
+                }
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(DashboardDesign.accent)
+                .buttonStyle(.plain)
+                .disabled(true)
+            }
+        }
+    }
+
+    private func sectionMessage(_ message: String) -> some View {
+        Text(message)
+            .font(.footnote)
+            .foregroundStyle(DashboardDesign.secondaryText)
+    }
+
+    private func artwork(_ path: String, baseURL: String, fallback: Color = DashboardDesign.surfaceDim) -> some View {
+        fallback.overlay {
+            if !path.isEmpty, let url = URL(string: baseURL + path) {
+                WebImage(url: url)
+                    .resizable()
+                    .scaledToFill()
+            }
+        }
     }
 }
 
-extension MovieDetailView {
-    var moviePoster: some View {
-        WebImage(url: URL(string: API.imageBaseUrl + presenter.movie.posterPath))
-            .resizable()
-            .onSuccess(perform: { image, _, _ in
-                if colorScheme == .dark { return }
-                image.extractPalette { bg, primary, secondary in
-                    self.bgColor = bg
-                    self.primaryColor = primary
-                    self.secondaryColor = secondary
-                }
-            })
-            .indicator(.activity)
-            .transition(.fade(duration: 0.5))
-            .scaledToFit()
-            .frame(height: 175)
-    }
-    
-    var movieBackdrop: some View {
-        WebImage(url: URL(string: API.backdropBaseUrl + presenter.movie.backdropPath))
-            .resizable()
-            .indicator(.activity)
-            .transition(.fade(duration: 0.5))
-            .scaledToFit()
-    }
-    
-    var movieContentDetail: some View {
-        HStack {
-            moviePoster
-            
-            VStack {
-                Text(presenter.movie.title)
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .foregroundStyle(primaryColor)
-                    .multilineTextAlignment(.center)
-                
-                Text(presenter.movie.releaseDate.formatDateString())
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(secondaryColor)
-                
-                HStack {
-                    if presenter.movie.runtime != 0 {
-                        Text(presenter.movie.runtime.formatRuntime())
-                            .multilineTextAlignment(.center)
-                            .foregroundStyle(secondaryColor)
-                    }
-                    
-                    if !presenter.movie.certification.isEmpty {
-                        Text("\u{2022}")
-                            .foregroundStyle(secondaryColor)
-                        
-                        Text(presenter.movie.certification)
-                            .multilineTextAlignment(.center)
-                            .foregroundStyle(secondaryColor)
-                    }
-                }
-                
-                Text(presenter.movie.genre)
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(secondaryColor)
-                    .padding(.top, 1)
-                
-                if !presenter.movie.tagline.isEmpty {
-                    Text(presenter.movie.tagline)
-                        .fontWeight(.medium)
-                        .multilineTextAlignment(.center)
-                        .italic()
-                        .foregroundStyle(primaryColor)
-                        .padding(.top, 2)
-                }
-            }
-            .padding(.horizontal)
-        }
-    }
-    
-    var movieOverview: some View {
-        VStack(alignment: .leading) {
-            Text("Overview")
-                .foregroundStyle(primaryColor)
-                .padding([.top, .horizontal])
-                .padding(.bottom, 1)
-                .font(.title2)
-                .fontWeight(.semibold)
-            
-            Text(presenter.movie.overview)
-                .foregroundStyle(secondaryColor)
-                .padding(.horizontal)
-        }
-    }
-    
-    var movieCredits: some View {
-        VStack(alignment: .leading) {
-            Text("Top Billed Cast")
-                .padding(.horizontal)
-                .font(.title2)
-                .fontWeight(.semibold)
-            
-            ScrollView(.horizontal) {
-                LazyHStack(spacing: 20) {
-                    ForEach(presenter.movie.cast.take(length: 10), id: \.id) { cast in
-                        presenter.toPersonDetail(for: cast.id) {
-                            CreditItemView(creditModel: cast, isPersonView: false)
-                        }
-                    }
-                    
-                    presenter.toCreditDetailView(for: presenter.movie.cast) {
-                        HStack {
-                            Text("See more")
-                            Image(systemName: "arrow.right.circle.fill")
-                        }
-                    }
-                }
-                .padding(.horizontal)
-                .padding(.bottom)
-                .scrollTargetLayout()
-            }
-            .scrollTargetBehavior(.viewAligned)
-        }
-        .padding(.top)
-    }
-    
-    var movieDetailInfo: some View {
-        VStack(alignment: .leading) {
-            Text("Details")
-                .padding([.top, .horizontal])
-                .font(.title2)
-                .fontWeight(.semibold)
-            
+private struct MovieTrailerDrawer: View {
+    @Environment(\.openURL) private var openURL
+    @State private var selectedTrailerID: String?
+
+    let trailers: [TrailerLink]
+    let onClose: () -> Void
+
+    private let rowHeight: CGFloat = 42
+    private let rowSpacing: CGFloat = 10
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Capsule()
+                .fill(DashboardDesign.color(0xC7D1E3))
+                .frame(width: 48, height: 4)
+                .frame(maxWidth: .infinity)
+                .padding(.top, 14)
+                .padding(.bottom, 9)
+                .accessibilityHidden(true)
+
             HStack {
-                Spacer()
-                
-                VStack {
-                    Text("Status")
-                    Text(presenter.movie.status)
-                        .fontWeight(.thin)
-                    
-                    Spacer()
-                    
-                    Text("Budget")
-                    Text(presenter.movie.budget.formatCurrency())
-                        .fontWeight(.thin)
+                Text("Watch trailer")
+                    .font(.title3.bold())
+                    .foregroundStyle(DashboardDesign.text)
+                    .accessibilityAddTraits(.isHeader)
+
+                Spacer(minLength: 8)
+
+                Button(action: onClose) {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(DashboardDesign.secondaryText)
+                        .frame(width: 32, height: 28)
+                        .contentShape(Rectangle())
                 }
-                
-                Spacer()
-                
-                VStack {
-                    Text("Spoken Language")
-                    Text(presenter.movie.spokenLanguage)
-                        .fontWeight(.thin)
-                        .multilineTextAlignment(.center)
-                    
-                    Spacer()
-                    
-                    Text("Revenue")
-                    Text(presenter.movie.revenue.formatCurrency())
-                        .fontWeight(.thin)
-                }
-                
-                Spacer()
+                .buttonStyle(.plain)
+                .accessibilityLabel("Close trailers")
             }
-            .padding(.top, 2)
+            .padding(.horizontal, 20)
+
+            Text("Choose a video to play")
+                .font(.caption)
+                .foregroundStyle(DashboardDesign.secondaryText)
+                .padding(.bottom, 16)
+                .padding(.horizontal, 20)
+
+            ViewThatFits(in: .vertical) {
+                trailerRows
+                ScrollView {
+                    trailerRows
+                        .padding(.horizontal, 20)
+                }
+            }
+            .frame(
+                maxHeight: CGFloat(trailers.count) * rowHeight + CGFloat(trailers.count) * rowSpacing
+            )
         }
-        .padding(.bottom)
+        .padding(.bottom, 14)
+        .frame(maxWidth: .infinity)
+        .background {
+            UnevenRoundedRectangle(topLeadingRadius: 24, topTrailingRadius: 24)
+                .fill(DashboardDesign.surface)
+                .ignoresSafeArea(edges: [.horizontal, .bottom])
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityAction(.escape, onClose)
     }
-    
-    var movieContentUtils: some View {
-        HStack(alignment: .center) {
-            Spacer()
-            ZStack {
-                CircularProgressView(progress: presenter.movie.rating / 10, lineWidth: 3, circularColor: secondaryColor)
-                    .frame(width: 35, height: 35)
-                
-                Text((presenter.movie.rating / 10).toPercentage())
-                    .font(.system(size: 11))
-                    .foregroundStyle(primaryColor)
+
+    private var trailerRows: some View {
+        VStack(spacing: rowSpacing) {
+            ForEach(trailers) { trailer in
+                trailerRow(trailer)
             }
             
-            Text("User Score")
-                .foregroundStyle(primaryColor)
-            
-            if presenter.movie.videos.count > 1 {
-                Text("\u{FF5C}")
-                    .foregroundStyle(primaryColor)
-                    .fontWeight(.medium)
-                    .padding(.horizontal)
-                
-                movieTrailerBottomSheet
-            } else {
-                if let firstKey = presenter.movie.videos.first?.key {
-                    Text("\u{FF5C}")
-                        .foregroundStyle(primaryColor)
-                        .fontWeight(.medium)
-                        .padding(.horizontal)
-                    
-                    Link(destination: URL(string: Constants.youtubeBaseUrl + firstKey)!) {
-                        Label("Play Trailer", systemImage: "play.fill")
-                    }
-                    .buttonStyle(.plain)
-                    .foregroundStyle(primaryColor)
-                }
-            }
             Spacer()
         }
-        .padding(.top)
     }
-    
-    var movieTrailerBottomSheet: some View {
-        Button {
-            showSheet.toggle()
+
+    private func trailerRow(_ trailer: TrailerLink) -> some View {
+        let isSelected = trailer.id == (selectedTrailerID ?? trailers.first?.id)
+        let shape = RoundedRectangle(cornerRadius: DashboardDesign.controlRadius)
+
+        return Button {
+            selectedTrailerID = trailer.id
+            openURL(trailer.url)
         } label: {
-            Label("Play Trailer", systemImage: "play.fill")
+            HStack(spacing: 12) {
+                Text(trailer.name)
+                    .font(.footnote.weight(.regular))
+                    .foregroundStyle(DashboardDesign.text)
+                    .lineLimit(2)
+
+                Spacer(minLength: 0)
+
+                Image(systemName: "play.fill")
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(DashboardDesign.accent)
+                    .frame(width: 20)
+                    .accessibilityHidden(true)
+            }
+            .padding(.horizontal, 15)
+            .padding(.vertical, 6)
+            .frame(minHeight: rowHeight)
+            .background(DashboardDesign.surface, in: shape)
+            .overlay {
+                shape.strokeBorder(DashboardDesign.border)
+                    .allowsHitTesting(false)
+            }
         }
         .buttonStyle(.plain)
-        .foregroundStyle(primaryColor)
-        .sheet(isPresented: $showSheet) {
-            let rowHeight: CGFloat = 55
-            let headerHeight: CGFloat = 100
-            let totalHeight = CGFloat(presenter.movie.videos.count) * rowHeight + headerHeight
-            
-            VStack(alignment: .leading) {
-                HStack(alignment: .center) {
-                    Text("Choose Trailer")
-                        .font(.title2)
-                        .fontWeight(.medium)
-                    Spacer()
-                    Button {
-                        showSheet = false
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.title3)
-                    }
-                    .buttonStyle(.plain)
-                }
-                .padding(.horizontal, 20)
-                .padding(.top)
-                
-                List(presenter.movie.videos, id: \.id) { video in
-                    Link(video.name, destination: URL(string: Constants.youtubeBaseUrl + video.key)!)
-                        .buttonStyle(.plain)
-                        .lineLimit(2)
-                        .padding(.vertical, 1)
-                }
-                .listStyle(.plain)
-            }
-            .padding(.vertical)
-            .presentationDragIndicator(.automatic)
-            .presentationDetents([.height(totalHeight)])
-            .interactiveDismissDisabled(true)
-        }
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }
 
-struct MovieDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        let detailUseCase = Injection.init().provideDetailUseCase()
-        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
-        MovieDetailView(detailUseCase: detailUseCase, favoriteUseCase: favoriteUseCase, movieId: 0)
+private struct TrailerLink: Identifiable {
+    let id: String
+    let name: String
+    let url: URL
+
+    init?(_ video: VideoModel) {
+        guard !video.key.isEmpty, let url = URL(string: Constants.youtubeBaseUrl + video.key) else { return nil }
+        id = video.id
+        name = video.name
+        self.url = url
+    }
+}
+
+#Preview {
+    NavigationStack {
+        MovieDetailView(
+            detailUseCase: Injection().provideDetailUseCase(),
+            favoriteUseCase: Injection().provideFavoriteUseCase(),
+            movieId: 693134
+        )
     }
 }

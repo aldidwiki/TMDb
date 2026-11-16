@@ -8,9 +8,7 @@ import SwiftUI
 
 struct PersonDetailView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var presenter: PersonPresenter
-    @State private var favoriteAnimationTrigger = 0
 
     private let personId: Int
     private let router = PersonRouter()
@@ -128,35 +126,11 @@ struct PersonDetailView: View {
     }
 
     private var favoriteButton: some View {
-        let isFavorite = presenter.isFavorite
-        let reduceMotion = self.reduceMotion
-
-        return Button {
+        AnimatedFavoriteButton(isFavorite: presenter.isFavorite) {
             let previousValue = presenter.isFavorite
             presenter.toggleFavorite()
-            if !reduceMotion, previousValue != presenter.isFavorite {
-                favoriteAnimationTrigger += 1
-            }
-        } label: {
-            Label {
-                Text(isFavorite ? "Favorited" : "Favorite")
-            } icon: {
-                Image(systemName: isFavorite ? "heart.fill" : "heart")
-                    .contentTransition(reduceMotion ? .identity : .symbolEffect(.replace))
-                    .keyframeAnimator(initialValue: CGFloat(1), trigger: favoriteAnimationTrigger) { icon, scale in
-                        icon.scaleEffect(reduceMotion ? 1 : scale)
-                    } keyframes: { _ in
-                        CubicKeyframe(isFavorite ? 1.25 : 0.78, duration: 0.10)
-                        SpringKeyframe(1, duration: 0.26, spring: .snappy)
-                    }
-                    .accessibilityHidden(true)
-            }
-            .frame(maxWidth: .infinity)
-            .modifier(PersonOutlineControl(isSelected: isFavorite))
-            .animation(reduceMotion ? nil : .easeInOut(duration: 0.18), value: isFavorite)
+            return previousValue != presenter.isFavorite
         }
-        .buttonStyle(PersonFavoritePressStyle(reduceMotion: reduceMotion))
-        .accessibilityHint(isFavorite ? "Removes from favorites" : "Adds to favorites")
         .frame(maxWidth: 170)
     }
 
@@ -293,7 +267,6 @@ struct PersonDetailView: View {
                         ForEach(items) { item in
                             NavigationLink {
                                 router.destination(for: item.id)
-                                    .toolbar(.visible, for: .navigationBar)
                             } label: {
                                 creditCard(item.credit)
                             }
@@ -372,8 +345,6 @@ struct PersonDetailView: View {
 }
 
 private struct PersonOutlineControl: ViewModifier {
-    var isSelected = false
-
     func body(content: Content) -> some View {
         let shape = RoundedRectangle(cornerRadius: DashboardDesign.controlRadius)
 
@@ -382,22 +353,12 @@ private struct PersonOutlineControl: ViewModifier {
             .foregroundStyle(DashboardDesign.accent)
             .padding(.horizontal, 10)
             .frame(minHeight: 44)
-            .background(isSelected ? DashboardDesign.surfaceDim : DashboardDesign.surface, in: shape)
+            .background(DashboardDesign.surface, in: shape)
             .overlay {
                 shape
-                    .strokeBorder(isSelected ? DashboardDesign.accent : DashboardDesign.border)
+                    .strokeBorder(DashboardDesign.border)
                     .allowsHitTesting(false)
             }
-    }
-}
-
-private struct PersonFavoritePressStyle: ButtonStyle {
-    let reduceMotion: Bool
-
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed && !reduceMotion ? 0.96 : 1)
-            .animation(reduceMotion ? nil : .spring(duration: 0.24, bounce: 0.16), value: configuration.isPressed)
     }
 }
 

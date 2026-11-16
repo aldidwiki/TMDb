@@ -30,4 +30,7 @@ struct MovieDetailModel: Identifiable {
     let imdbId: String
     let videos: [VideoModel]
     let voteCount: Int?
+    let director: String?
+    let usReleaseDate: String?
+    let composer: String?
 }

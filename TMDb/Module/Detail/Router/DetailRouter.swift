@@ -9,6 +9,15 @@ import Foundation
 import SwiftUI
 
 class DetailRouter {
+    func makeMovieDetailView(for movieId: Int) -> some View {
+        let injection = Injection()
+        return MovieDetailView(
+            detailUseCase: injection.provideDetailUseCase(),
+            favoriteUseCase: injection.provideFavoriteUseCase(),
+            movieId: movieId
+        )
+    }
+
     func makePersonDetailView(for personId: Int) -> some View {
         let personUseCase = Injection.init().providePersonUseCase()
         return PersonDetailView(

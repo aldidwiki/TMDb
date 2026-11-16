@@ -19,8 +19,12 @@ struct MovieCertificationResponse: Decodable {
 
 struct MovieCertificationResponseModel: Decodable {
     let certification: String?
+    let releaseDate: String?
+    let type: Int?
     
     private enum CodingKeys: String, CodingKey {
         case certification
+        case releaseDate = "release_date"
+        case type
     }
 }

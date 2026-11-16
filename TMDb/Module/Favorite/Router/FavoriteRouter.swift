@@ -13,7 +13,6 @@ class FavoriteRouter {
         switch id.mediaType {
         case .movie:
             makeDetailView(movieId: id.mediaID)
-                .toolbar(.visible, for: .navigationBar)
         case .tv:
             makeTvDetailView(tvShowId: id.mediaID)
                 .toolbar(.visible, for: .navigationBar)

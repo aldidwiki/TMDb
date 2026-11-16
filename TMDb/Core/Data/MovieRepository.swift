@@ -15,6 +15,7 @@ protocol MovieRepositoryProtocol {
     func getMovieGenres() -> AnyPublisher<[GenreModel], Error>
     func discoverMovies(query: GenreMovieQuery) -> AnyPublisher<GenreMoviePage, Error>
     func getMovie(movieId: Int) -> AnyPublisher<MovieDetailModel, Error>
+    func getSimilarMovies(movieId: Int) -> AnyPublisher<[MovieModel], Error>
     func getMovieBackdrops(movieId: Int) -> AnyPublisher<[ImageModel], Error>
 }
 
@@ -77,6 +78,12 @@ extension MovieRepository: MovieRepositoryProtocol {
             }.eraseToAnyPublisher()
     }
     
+    func getSimilarMovies(movieId: Int) -> AnyPublisher<[MovieModel], Error> {
+        movieDataSource.getSimilarMovies(movieId: movieId)
+            .map(Mapper.mapMovieResponseModelsToDomains)
+            .eraseToAnyPublisher()
+    }
+
     func getMovieBackdrops(movieId: Int) -> AnyPublisher<[ImageModel], Error> {
         return self.movieDataSource.getMovieBackdrops(movieId: movieId)
             .map {
