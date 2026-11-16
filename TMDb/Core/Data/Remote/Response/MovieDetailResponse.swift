@@ -11,6 +11,7 @@ struct MovieDetailResponse: Decodable {
     let id: Int
     let title: String
     let rating: Double?
+    let voteCount: Int?
     let posterPath: String?
     let overview: String?
     let tagline: String
@@ -31,6 +32,7 @@ struct MovieDetailResponse: Decodable {
         case id
         case title
         case rating = "vote_average"
+        case voteCount = "vote_count"
         case posterPath = "poster_path"
         case overview
         case tagline

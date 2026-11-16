@@ -43,6 +43,12 @@ struct ContentView: View {
             }
             .toolbar(.hidden, for: .tabBar)
             .tag(BottomTab.search)
+
+            FavoriteView(favoriteUseCase: Injection().provideFavoriteUseCase()) {
+                bottomNavigation
+            }
+            .toolbar(.hidden, for: .tabBar)
+            .tag(BottomTab.favorites)
         }
     }
     
@@ -53,12 +59,12 @@ struct ContentView: View {
                 
                 Button {
                     selectedTab = tab
-                    if tab == .home || tab == .search {
+                    if tab == .home || tab == .search || tab == .favorites {
                         activePage = tab
                     }
                 } label: {
                     VStack(spacing: 3) {
-                        Image(systemName: tab.symbol)
+                        Image(systemName: tab == .favorites && isSelected ? "heart.fill" : tab.symbol)
                             .font(.system(size: 16, weight: .semibold))
                             .accessibilityHidden(true)
                         Text(tab.rawValue)

@@ -115,11 +115,15 @@ struct TvShowDetailView: View {
                         .symbolEffect(.bounce, value: presenter.isFavorite)
                         .foregroundStyle(primaryColor)
                 }
-                .disabled(self.presenter.loadingState)
+                .disabled(presenter.loadingState || presenter.tvShow.id <= 0)
+                .accessibilityLabel(presenter.isFavorite ? "Remove from favorites" : "Add to favorites")
             }
         }
         .toolbarBackground(bgColor, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
+        .alert("Couldn’t update favorites", isPresented: $presenter.showsFavoriteError) {
+            Button("OK", role: .cancel) {}
+        }
         .blur(radius: showSheet ? 6 : 0, opaque: true)
         .animation(.easeInOut, value: bgColor)
     }

@@ -33,12 +33,6 @@ final class Injection: NSObject {
         return SearchRepository.sharedInstance(searchDataSource)
     }
     
-    private func provideFavoriteRepository() -> FavoriteRepositoryProtocol {
-        let favoriteDataSource = FavoriteDataSource.sharedInstance
-        
-        return FavoriteRepository.sharedInstance(favoriteDataSource)
-    }
-    
     func provideMovieUseCase() -> MovieUseCase {
         let repo = provideMovieRepository()
         return MovieInteractor(repository: repo)
@@ -73,7 +67,6 @@ final class Injection: NSObject {
     }
     
     func provideFavoriteUseCase() -> FavoriteUseCase {
-        let repo = provideFavoriteRepository()
-        return FavoriteInteractor(favoriteRepository: repo)
+        FavoriteInteractor(favoriteRepository: FavoriteRepository())
     }
 }

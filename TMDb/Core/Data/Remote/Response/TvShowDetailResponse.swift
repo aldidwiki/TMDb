@@ -19,6 +19,7 @@ struct TvShowDetailResponse: Decodable {
     let type: String
     let genres: [GenreResponseModel]
     let rating: Double?
+    let voteCount: Int?
     let runtime: [Int]
     let spokenLanguages: [SpokenLanguageResponse]
     let contentRating: ContentRatingResponse
@@ -40,6 +41,7 @@ struct TvShowDetailResponse: Decodable {
         case type
         case genres
         case rating = "vote_average"
+        case voteCount = "vote_count"
         case runtime = "episode_run_time"
         case spokenLanguages = "spoken_languages"
         case contentRating = "content_ratings"

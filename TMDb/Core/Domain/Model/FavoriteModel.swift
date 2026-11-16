@@ -8,18 +8,24 @@
 import Foundation
 
 struct FavoriteModel: Equatable, Identifiable {
-    let id: Int
+    enum MediaType: String {
+        case movie = "movie_type"
+        case tv = "tv_type"
+        case person = "person_type"
+    }
+
+    struct ID: Hashable {
+        let mediaType: MediaType
+        let mediaID: Int
+    }
+
+    let id: ID
     let title: String
     let posterPath: String
-    let rating: Double
-    let releaseDate: String
-    let mediaType: String
-    
-    var toMovieModel : MovieModel {
-        return Mapper.mapFavoriteModelToMovieModel(input: self)
-    }
-    
-    var toPopularPersonModel: PersonPopularModel {
-        return Mapper.mapFavoriteModelToPersonPopularModel(input: self)
-    }
+    var rating: Double = 0
+    var releaseDate = ""
+    var overview: String?
+    var voteCount: Int?
+    var department: String?
+    var createdAt: Date = .now
 }

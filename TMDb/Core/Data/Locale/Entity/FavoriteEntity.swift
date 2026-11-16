@@ -10,13 +10,16 @@ import SwiftData
 
 @Model
 class FavoriteEntity {
-    @Attribute(.unique) var id: Int
+    var id: Int
     var title: String
     var posterPath: String
     var releasedDate: String
     var rating: Double
     var mediaType: String
     var createdAt: Date
+    var overview: String?
+    var voteCount: Int?
+    var department: String?
     
     init(
         id: Int,
@@ -25,7 +28,10 @@ class FavoriteEntity {
         releasedDate: String = "",
         rating: Double = 0.0,
         mediaType: String,
-        createdAt: Date = .now
+        createdAt: Date = .now,
+        overview: String? = nil,
+        voteCount: Int? = nil,
+        department: String? = nil
     ) {
         self.id = id
         self.title = title
@@ -34,5 +40,8 @@ class FavoriteEntity {
         self.rating = rating
         self.mediaType = mediaType
         self.createdAt = createdAt
+        self.overview = overview
+        self.voteCount = voteCount
+        self.department = department
     }
 }

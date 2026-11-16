@@ -8,6 +8,20 @@
 import SwiftUI
 
 class FavoriteRouter {
+    @ViewBuilder
+    func destination(for id: FavoriteModel.ID) -> some View {
+        switch id.mediaType {
+        case .movie:
+            makeDetailView(movieId: id.mediaID)
+                .toolbar(.visible, for: .navigationBar)
+        case .tv:
+            makeTvDetailView(tvShowId: id.mediaID)
+                .toolbar(.visible, for: .navigationBar)
+        case .person:
+            makePersonDetailView(personId: id.mediaID)
+        }
+    }
+
     func makeDetailView(movieId: Int) -> some View {
         let detailUseCase = Injection.init().provideDetailUseCase()
         let favoriteUseCase = Injection.init().provideFavoriteUseCase()

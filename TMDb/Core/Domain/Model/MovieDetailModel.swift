@@ -29,4 +29,5 @@ struct MovieDetailModel: Identifiable {
     let twitterId: String
     let imdbId: String
     let videos: [VideoModel]
+    let voteCount: Int?
 }

@@ -9,7 +9,6 @@ import Foundation
 import Observation
 import Combine
 import SwiftUI
-import SwiftData
 
 @MainActor
 @Observable
@@ -38,10 +37,12 @@ class PersonPresenter {
     private var cancellable: Set<AnyCancellable> = []
     
     private let personUseCase: PersonUseCase
+    private let favoriteUseCase: FavoriteUseCase
     private let router = PersonRouter()
     private let personRouter = DetailRouter()
     
     var isFavorite = false
+    var showsFavoriteError = false
     var errorMessage = ""
     var loadingState = false
     var person = PersonModel(
@@ -69,14 +70,11 @@ class PersonPresenter {
     private var canLoadMore = true
     private var currentPage = 1
     
-    private var context: ModelContext {
-        SwiftDataContextManager.shared.context
-    }
-    
-    init(personUseCase: PersonUseCase) {
+    init(personUseCase: PersonUseCase, favoriteUseCase: FavoriteUseCase = Injection().provideFavoriteUseCase()) {
         self.personUseCase = personUseCase
+        self.favoriteUseCase = favoriteUseCase
     }
-    
+
     func getPerson(personId: Int) {
         guard !loadingState else { return }
         loadingState = true
@@ -247,47 +245,22 @@ class PersonPresenter {
     }
     
     func checkFavoriteStatus(personId: Int) {
-        let descriptor = FetchDescriptor(predicate: #Predicate<FavoriteEntity> { $0.id == personId })
-        let result = (try? context.fetch(descriptor)) ?? []
-        isFavorite = !result.isEmpty
-    }
-    
-    func toggleFavorite() {
-        if isFavorite {
-            deleteFavorite()
-        } else {
-            addFavorite()
-        }
-    }
-    
-    private func addFavorite() {
-        context.insert(Mapper.mapPersonModelToFavoriteEntity(input: person))
-        isFavorite = true
-    }
-    
-    private func deleteFavorite() {
-        let personId = person.id // Assuming your movie model has an id
-        
-        // 1. Create a predicate to find the EXISTING entity
-        let predicate = #Predicate<FavoriteEntity> { favorite in
-            favorite.id == personId
-        }
-        
-        // 2. Fetch the entity from the context
-        let descriptor = FetchDescriptor<FavoriteEntity>(predicate: predicate)
-        
         do {
-            // 3. If it exists in the DB, delete THAT specific instance
-            if let entityToDelete = try context.fetch(descriptor).first {
-                context.delete(entityToDelete)
-                isFavorite = false
-                // try context.save() // Optional: force the write
-            }
+            isFavorite = try favoriteUseCase.isFavorited(.init(mediaType: .person, mediaID: personId))
         } catch {
-            print("Failed to fetch favorite for deletion: \(error)")
+            showsFavoriteError = true
         }
     }
-    
+
+    func toggleFavorite() {
+        guard person.id > 0 else { return }
+        do {
+            isFavorite = try favoriteUseCase.toggleFavorite(Mapper.mapPersonToFavorite(person))
+        } catch {
+            showsFavoriteError = true
+        }
+    }
+
     func toPersonDetailView<Content: View>(
         personId: Int,
         @ViewBuilder content: () -> Content

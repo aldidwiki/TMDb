@@ -5,83 +5,74 @@
 //  Created by Aldi Dwiki Prahasta on 25/11/22.
 //
 
-import SwiftUI
-import Combine
+import Foundation
 import Observation
-import SwiftData
 
 @MainActor
 @Observable
-class FavoritePresenter {
-    private let router = FavoriteRouter()
-    private let favoriteUseCase: FavoriteUseCase
-    
-    private var cancellables = Set<AnyCancellable>()
-    
-    private var context: ModelContext {
-        SwiftDataContextManager.shared.context
+final class FavoritePresenter {
+    enum Sort: String, CaseIterable {
+        case recent = "Recently added"
+        case oldest = "Oldest added"
+        case highestRated = "Highest rated"
+        case title = "Title A–Z"
+        case mostVoted = "Most voted"
     }
-    
+
+    private let favoriteUseCase: FavoriteUseCase
+
+    private(set) var favorites: [FavoriteModel] = []
+    private(set) var loadFailed = false
+    var showsRemovalError = false
+    var sort: Sort = .recent
+
     init(favoriteUseCase: FavoriteUseCase) {
         self.favoriteUseCase = favoriteUseCase
     }
-    
-    var favorites: [FavoriteModel] = []
-    var isLoading = true
-    
-    func getFavorites() async {
-        let favorites = await withCheckedContinuation { continuation in
-            favoriteUseCase.getFavorites()
-                .receive(on: DispatchQueue.main)
-                .sink { [weak self] completion in
-                    switch completion {
-                    case .failure(let error):
-                        print(error)
-                    case .finished:
-                        self?.isLoading = false
-                    }
-                } receiveValue: { favorites in
-                    continuation.resume(returning: favorites)
-                }
-                .store(in: &cancellables)
-        }
-        
-        self.favorites = favorites
-        getFavoritesFromLocal()
-    }
-    
-    private func getFavoritesFromLocal() {
-        let personType = Constants.personType
-        let filteredPredicate = #Predicate<FavoriteEntity> { entity in
-            entity.mediaType == personType
-        }
-        
-        let descriptor = FetchDescriptor<FavoriteEntity>(
-            predicate: filteredPredicate,
-            sortBy: [SortDescriptor(\.createdAt, order: .reverse)]
-        )
-        
-        let entities = try? context.fetch(descriptor)
-        if let entityList = entities {
-            favorites += Mapper.mapFavoriteEntitiesToDomains(input: entityList)
-        }
-    }
-    
-    func linkBuilder<Content: View>(
-        for favoriteModel: FavoriteModel,
-        @ViewBuilder content: () -> Content
-    ) -> some View {
-        NavigationLink {
-            if favoriteModel.mediaType == Constants.movieType {
-                router.makeDetailView(movieId: favoriteModel.id)
-            } else if favoriteModel.mediaType == Constants.tvType {
-                router.makeTvDetailView(tvShowId: favoriteModel.id)
-            } else if favoriteModel.mediaType == Constants.personType {
-                router.makePersonDetailView(personId: favoriteModel.id)
+
+    var sortedFavorites: [FavoriteModel] {
+        favorites.sorted { left, right in
+            switch sort {
+            case .recent:
+                break
+            case .oldest:
+                if left.createdAt != right.createdAt { return left.createdAt < right.createdAt }
+            case .highestRated:
+                let leftRating = left.id.mediaType == .person ? 0 : left.rating
+                let rightRating = right.id.mediaType == .person ? 0 : right.rating
+                if leftRating != rightRating { return leftRating > rightRating }
+            case .title:
+                let order = left.title.localizedStandardCompare(right.title)
+                if order != .orderedSame { return order == .orderedAscending }
+            case .mostVoted:
+                let leftVotes = left.id.mediaType == .person ? -1 : (left.voteCount ?? -1)
+                let rightVotes = right.id.mediaType == .person ? -1 : (right.voteCount ?? -1)
+                if leftVotes != rightVotes { return leftVotes > rightVotes }
             }
-        } label: {
-            content()
+
+            if left.createdAt != right.createdAt { return left.createdAt > right.createdAt }
+            if left.id.mediaType != right.id.mediaType {
+                return left.id.mediaType.rawValue < right.id.mediaType.rawValue
+            }
+            return left.id.mediaID < right.id.mediaID
         }
-        .buttonStyle(.plain)
+    }
+
+    func load() {
+        do {
+            favorites = try favoriteUseCase.getFavorites()
+            loadFailed = false
+        } catch {
+            loadFailed = true
+        }
+    }
+
+    func remove(_ id: FavoriteModel.ID) {
+        do {
+            try favoriteUseCase.removeFavorite(id)
+            favorites.removeAll { $0.id == id }
+        } catch {
+            showsRemovalError = true
+        }
     }
 }

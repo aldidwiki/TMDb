@@ -61,7 +61,8 @@ final class Mapper {
             facebookId: movieDetailResponse.externalMedia?.facebookId ?? "",
             twitterId: movieDetailResponse.externalMedia?.twitterId ?? "",
             imdbId: movieDetailResponse.externalMedia?.imdbId ?? "",
-            videos: mapVideoResponseModelToDomains(input: movieDetailResponse.videos)
+            videos: mapVideoResponseModelToDomains(input: movieDetailResponse.videos),
+            voteCount: movieDetailResponse.voteCount
         )
     }
     
@@ -94,96 +95,61 @@ final class Mapper {
             videos: mapVideoResponseModelToDomains(input: tvShowDetailResponse.videos),
             credits: mapTvShowCreditResponseModelToDomains(input: tvShowDetailResponse.credits),
             networks: mapNetworkResponseModelToDomains(input: tvShowDetailResponse.networks),
-            seasons: mapTvShowSeasonResponseModelToDomains(input: tvShowDetailResponse.seasons)
+            seasons: mapTvShowSeasonResponseModelToDomains(input: tvShowDetailResponse.seasons),
+            voteCount: tvShowDetailResponse.voteCount
         )
     }
     
-    static func mapMovieDetailModelToFavoriteEntity(
-        input movieDetailModel: MovieDetailModel
-    ) -> FavoriteEntity {
-        return FavoriteEntity(
-            id: movieDetailModel.id,
-            title: movieDetailModel.title,
-            posterPath: movieDetailModel.posterPath,
-            releasedDate: movieDetailModel.releaseDate,
-            rating: movieDetailModel.rating,
-            mediaType: Constants.movieType
+    static func mapMovieToFavorite(_ movie: MovieDetailModel) -> FavoriteModel {
+        FavoriteModel(
+            id: .init(mediaType: .movie, mediaID: movie.id),
+            title: movie.title,
+            posterPath: movie.posterPath,
+            rating: movie.rating,
+            releaseDate: movie.releaseDate,
+            overview: movie.overview,
+            voteCount: movie.voteCount
         )
     }
-    
-    static func mapTvShowDetailModelToFavoriteEntity(
-        input tvShowDetailModel: TvShowDetailModel
-    ) -> FavoriteEntity {
-        return FavoriteEntity(
-            id: tvShowDetailModel.id,
-            title: tvShowDetailModel.title,
-            posterPath: tvShowDetailModel.posterPath,
-            releasedDate: tvShowDetailModel.releaseDate,
-            rating: tvShowDetailModel.rating,
-            mediaType: Constants.tvType
+
+    static func mapTvShowToFavorite(_ tvShow: TvShowDetailModel) -> FavoriteModel {
+        FavoriteModel(
+            id: .init(mediaType: .tv, mediaID: tvShow.id),
+            title: tvShow.title,
+            posterPath: tvShow.posterPath,
+            rating: tvShow.rating,
+            releaseDate: tvShow.releaseDate,
+            overview: tvShow.overview,
+            voteCount: tvShow.voteCount
         )
     }
-    
-    static func mapPersonModelToFavoriteEntity(
-        input personModel: PersonModel
-    ) -> FavoriteEntity {
-        return FavoriteEntity(
-            id: personModel.id,
-            title: personModel.name,
-            posterPath: personModel.profilePath,
-            mediaType: Constants.personType
+
+    static func mapPersonToFavorite(_ person: PersonModel) -> FavoriteModel {
+        FavoriteModel(
+            id: .init(mediaType: .person, mediaID: person.id),
+            title: person.name,
+            posterPath: person.profilePath,
+            department: person.knownFor
         )
     }
-    
-    static func mapFavoriteEntitiesToDomains(
-        input favoriteEntities: [FavoriteEntity]
-    ) -> [FavoriteModel] {
-        return favoriteEntities.map { item in
-            FavoriteModel(
-                id: item.id,
+
+    static func mapFavoriteEntitiesToDomains(input: [FavoriteEntity]) -> [FavoriteModel] {
+        input.compactMap { item in
+            guard let type = FavoriteModel.MediaType(rawValue: item.mediaType) else { return nil }
+            return FavoriteModel(
+                id: .init(mediaType: type, mediaID: item.id),
                 title: item.title,
                 posterPath: item.posterPath,
                 rating: item.rating,
                 releaseDate: item.releasedDate,
-                mediaType: item.mediaType
+                overview: item.overview,
+                voteCount: item.voteCount,
+                department: item.department,
+                createdAt: item.createdAt
             )
         }
     }
-    
-    static func mapFavoriteModelToMovieModel(
-        input favoriteModel: FavoriteModel
-    ) -> MovieModel {
-        return MovieModel(
-            id: favoriteModel.id,
-            title: favoriteModel.title,
-            posterPath: favoriteModel.posterPath,
-            rating: favoriteModel.rating,
-            releaseDate: favoriteModel.releaseDate
-        )
-    }
-    
-    static func mapFavoriteModelToPersonPopularModel(
-        input favoriteModel: FavoriteModel
-    ) -> PersonPopularModel {
-        return PersonPopularModel(
-            id: favoriteModel.id,
-            name: favoriteModel.title,
-            profilePath: favoriteModel.posterPath
-        )
-    }
-    
-    static func mapFavoriteModelToTvShowModel(
-        input favoriteModel: FavoriteModel
-    ) -> TvShowModel {
-        return TvShowModel(
-            id: favoriteModel.id,
-            title: favoriteModel.title,
-            posterPath: favoriteModel.posterPath,
-            rating: favoriteModel.rating,
-            releaseDate: favoriteModel.releaseDate
-        )
-    }
-    
+
     static func mapPersonResponseToDomain(
         input personResponse: PersonResponse
     ) -> PersonModel {

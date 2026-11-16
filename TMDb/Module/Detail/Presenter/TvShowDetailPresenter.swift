@@ -19,6 +19,7 @@ class TvShowDetailPresenter {
     private let maxVisibleNetworks = 3
     
     var isFavorite = false
+    var showsFavoriteError = false
     var errorMessage = ""
     var loadingState = false
     var tvShow = TvShowDetailModel(
@@ -43,7 +44,8 @@ class TvShowDetailPresenter {
         videos: [],
         credits: [],
         networks: [],
-        seasons: []
+        seasons: [],
+        voteCount: nil
     )
     
     var tvShowImages: [ImageModel] = []
@@ -83,25 +85,23 @@ class TvShowDetailPresenter {
             }.store(in: &cancellable)
     }
     
+    @MainActor
     func checkFavoriteStatus(tvId: Int) {
-        favoriteUseCase.isFavorited(mediaId: tvId)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] isFavorited in
-                self?.isFavorite = isFavorited
-            }
-            .store(in: &cancellable)
+        do {
+            isFavorite = try favoriteUseCase.isFavorited(.init(mediaType: .tv, mediaID: tvId))
+        } catch {
+            showsFavoriteError = true
+        }
     }
-    
+
+    @MainActor
     func toggleFavorite() {
-        let request = FavoriteRequest(mediaType: "tv", mediaId: tvShow.id, isFavorite: !isFavorite)
-        
-        favoriteUseCase.addToFavorite(request)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] isSuccess in
-                guard isSuccess, let self = self else { return }
-                self.isFavorite = !self.isFavorite
-            }
-            .store(in: &cancellable)
+        guard tvShow.id > 0 else { return }
+        do {
+            isFavorite = try favoriteUseCase.toggleFavorite(Mapper.mapTvShowToFavorite(tvShow))
+        } catch {
+            showsFavoriteError = true
+        }
     }
     
     func getTvShowBackdrop(tvShowId: Int) {

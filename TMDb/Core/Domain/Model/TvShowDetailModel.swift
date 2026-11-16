@@ -30,4 +30,5 @@ struct TvShowDetailModel: Identifiable {
     let credits: [CreditModel]
     let networks: [NetworkModel]
     let seasons: [TvShowSeasonModel]
+    let voteCount: Int?
 }

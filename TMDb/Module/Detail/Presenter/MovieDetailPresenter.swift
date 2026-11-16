@@ -39,8 +39,10 @@ class MovieDetailPresenter {
         facebookId: "",
         twitterId: "",
         imdbId: "",
-        videos: []
+        videos: [],
+        voteCount: nil
     )
+    var showsFavoriteError = false
     var errorMessage = ""
     var loadingState = false
     var movieImages: [ImageModel] = []
@@ -82,26 +84,23 @@ class MovieDetailPresenter {
             }.store(in: &cancellable)
     }
     
+    @MainActor
     func checkFavoriteStatus(movieId: Int) {
-        favoriteUseCase.isFavorited(mediaId: movieId)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] isFavorited in
-                self?.isFavorite = isFavorited
-            }
-            .store(in: &cancellable)
+        do {
+            isFavorite = try favoriteUseCase.isFavorited(.init(mediaType: .movie, mediaID: movieId))
+        } catch {
+            showsFavoriteError = true
+        }
     }
-    
+
+    @MainActor
     func toggleFavorite() {
-        let request = FavoriteRequest(mediaType: "movie", mediaId: movie.id, isFavorite: !isFavorite)
-        
-        favoriteUseCase
-            .addToFavorite(request)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] isSuccess in
-                guard isSuccess, let self = self else { return }
-                self.isFavorite = !self.isFavorite
-            }
-            .store(in: &cancellable)
+        guard movie.id > 0 else { return }
+        do {
+            isFavorite = try favoriteUseCase.toggleFavorite(Mapper.mapMovieToFavorite(movie))
+        } catch {
+            showsFavoriteError = true
+        }
     }
     
     func toPersonDetail<Content: View>(
