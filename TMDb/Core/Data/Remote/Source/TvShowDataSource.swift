@@ -12,6 +12,7 @@ import Combine
 protocol TvShowDataSourceProtocol {
     func getTvShows(page: Int) -> AnyPublisher<[TvResponseModel], Error>
     func getTvShow(tvShowId: Int) -> AnyPublisher<TvShowDetailResponse, Error>
+    func getSimilarTvShows(tvShowId: Int) -> AnyPublisher<[TvResponseModel], Error>
     func getTvShowSeasonDetail(tvShowId: Int, seasonNumber: Int) -> AnyPublisher<TvShowSeasonDetailResponse, Error>
     func getTvShowBackdrops(tvId: Int) -> AnyPublisher<ImageResponse, Error>
 }
@@ -50,7 +51,7 @@ extension TvShowDataSource: TvShowDataSourceProtocol {
         ]
         
         return Future<TvShowDetailResponse, Error> { completion in
-            if let url = URL(string: "\(API.baseUrl)/tv/\(tvShowId)") {
+            if let url = URL(string: "\(API.baseUrl)tv/\(tvShowId)") {
                 AF.request(url, parameters: param, headers: API.headers)
                     .validate()
                     .responseDecodable(of: TvShowDetailResponse.self) { response in
@@ -65,9 +66,23 @@ extension TvShowDataSource: TvShowDataSourceProtocol {
         }.eraseToAnyPublisher()
     }
     
+    func getSimilarTvShows(tvShowId: Int) -> AnyPublisher<[TvResponseModel], Error> {
+        AF.request(
+            "\(API.baseUrl)tv/\(tvShowId)/similar",
+            parameters: ["page": 1],
+            headers: API.headers
+        )
+        .validate()
+        .publishDecodable(type: TvResponse.self)
+        .value()
+        .map(\.tvShows)
+        .mapError { _ in URLError.invalidResponse as Error }
+        .eraseToAnyPublisher()
+    }
+
     func getTvShowSeasonDetail(tvShowId: Int, seasonNumber: Int) -> AnyPublisher<TvShowSeasonDetailResponse, Error> {
         return Future<TvShowSeasonDetailResponse, Error> { completion in
-            if let url = URL(string: "\(API.baseUrl)/tv/\(tvShowId)/season/\(seasonNumber)") {
+            if let url = URL(string: "\(API.baseUrl)tv/\(tvShowId)/season/\(seasonNumber)") {
                 AF.request(url, headers: API.headers)
                     .validate()
                     .responseDecodable(of: TvShowSeasonDetailResponse.self) { response in
@@ -84,7 +99,7 @@ extension TvShowDataSource: TvShowDataSourceProtocol {
     
     func getTvShowBackdrops(tvId: Int) -> AnyPublisher<ImageResponse, Error> {
         return Future<ImageResponse, Error> { completion in
-            if let url = URL(string: "\(API.baseUrl)/tv/\(tvId)/images") {
+            if let url = URL(string: "\(API.baseUrl)tv/\(tvId)/images") {
                 AF.request(url, headers: API.headers)
                     .validate()
                     .responseDecodable(of: ImageResponse.self) { response in

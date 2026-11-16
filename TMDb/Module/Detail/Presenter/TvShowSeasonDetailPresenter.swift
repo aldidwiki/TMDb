@@ -5,37 +5,57 @@
 //  Created by Aldi Dwiki Prahasta on 14/09/23.
 //
 
-import Observation
 import Combine
-import SwiftUI
+import Foundation
+import Observation
 
+@MainActor
 @Observable
-class TvShowSeasonDetailPresenter {
-    private var cancellable: Set<AnyCancellable> = []
-    
-    private let tvShowUseCase: TvShowUseCase
-    
-    var loadingState = false
-    var errorMessage = ""
-    var tvShowEpisodes: [TvShowSeasonDetailModel] = []
-    
-    init(tvShowUseCase: TvShowUseCase) {
-        self.tvShowUseCase = tvShowUseCase
+final class TvShowSeasonDetailPresenter {
+    enum State {
+        case idle
+        case loading
+        case loaded([TvShowSeasonDetailModel])
+        case failed
     }
-    
-    func getTvShowSeasonDetail(tvShowId: Int, seasonNumber: Int) {
-        loadingState = true
-        tvShowUseCase.getTvShowSeasonDetail(tvShowId: tvShowId, seasonNumber: seasonNumber)
-            .receive(on: RunLoop.main)
-            .sink { completion in
-                switch completion {
-                    case .failure:
-                        self.errorMessage = String(describing: completion)
-                    case .finished:
-                        self.loadingState = false
+
+    private let tvShowUseCase: TvShowUseCase
+    private let tvShowId: Int
+    private var states: [Int: State] = [:]
+    private var requests: [Int: AnyCancellable] = [:]
+
+    init(tvShowUseCase: TvShowUseCase, tvShowId: Int) {
+        self.tvShowUseCase = tvShowUseCase
+        self.tvShowId = tvShowId
+    }
+
+    func state(for seasonNumber: Int) -> State {
+        states[seasonNumber] ?? .idle
+    }
+
+    func load(seasonNumber: Int) {
+        switch state(for: seasonNumber) {
+        case .idle, .failed:
+            break
+        case .loading, .loaded:
+            return
+        }
+
+        states[seasonNumber] = .loading
+        requests[seasonNumber] = tvShowUseCase.getTvShowSeasonDetail(tvShowId: tvShowId, seasonNumber: seasonNumber)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] completion in
+                guard let self else { return }
+                if case .failure = completion {
+                    states[seasonNumber] = .failed
+                } else if case .loading = state(for: seasonNumber) {
+                    states[seasonNumber] = .loaded([])
                 }
-            } receiveValue: { episodes in
-                self.tvShowEpisodes = episodes
-            }.store(in: &cancellable)
+                requests[seasonNumber] = nil
+            } receiveValue: { [weak self] episodes in
+                var seen: Set<Int> = []
+                let uniqueEpisodes = episodes.filter { seen.insert($0.episodeNumber).inserted }
+                self?.states[seasonNumber] = .loaded(uniqueEpisodes.sorted { $0.episodeNumber < $1.episodeNumber })
+            }
     }
 }

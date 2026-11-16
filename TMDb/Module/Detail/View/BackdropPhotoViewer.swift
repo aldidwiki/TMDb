@@ -2,7 +2,7 @@ import SDWebImageSwiftUI
 import SwiftUI
 import UIKit
 
-struct MoviePhotoViewer: View {
+struct BackdropPhotoViewer: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @AccessibilityFocusState private var closeButtonFocused: Bool
     @StateObject private var loader = ImageManager()

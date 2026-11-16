@@ -28,6 +28,7 @@ struct TvShowDetailResponse: Decodable {
     let networks: [NetworkResponseModel]
     let externalMedia: ExternalMediaResponse?
     let seasons: [TvShowSeasonResponseModel]
+    let creators: [TvShowCreatorResponseModel]?
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -50,7 +51,12 @@ struct TvShowDetailResponse: Decodable {
         case networks
         case externalMedia = "external_ids"
         case seasons
+        case creators = "created_by"
     }
+}
+
+struct TvShowCreatorResponseModel: Decodable {
+    let name: String?
 }
 
 struct NetworkResponseModel: Decodable {

@@ -70,13 +70,7 @@ final class Mapper {
     }
 
     private static func crewNames(for job: String, in crew: [MovieCrewResponseModel]) -> String? {
-        var seen: Set<String> = []
-        let names = crew.compactMap { credit -> String? in
-            guard credit.job == job, let name = credit.name?.trimmingCharacters(in: .whitespacesAndNewlines),
-                  !name.isEmpty, seen.insert(name).inserted else { return nil }
-            return name
-        }
-        return names.isEmpty ? nil : names.joined(separator: ", ")
+        joinedCreditNames(crew.filter { $0.job == job }.map(\.name))
     }
 
     private static func usTheatricalReleaseDate(in releases: [MovieCertificationResponse]) -> String? {
@@ -122,8 +116,22 @@ final class Mapper {
             credits: mapTvShowCreditResponseModelToDomains(input: tvShowDetailResponse.credits),
             networks: mapNetworkResponseModelToDomains(input: tvShowDetailResponse.networks),
             seasons: mapTvShowSeasonResponseModelToDomains(input: tvShowDetailResponse.seasons),
-            voteCount: tvShowDetailResponse.voteCount
+            voteCount: tvShowDetailResponse.voteCount,
+            creators: joinedCreditNames(tvShowDetailResponse.creators?.map(\.name) ?? []),
+            executiveProducers: joinedCreditNames(tvShowDetailResponse.credits.crew?
+                .filter { $0.jobs?.contains { $0.job == "Executive Producer" } == true }
+                .map(\.name) ?? [])
         )
+    }
+
+    private static func joinedCreditNames(_ names: [String?]) -> String? {
+        var seen: Set<String> = []
+        let uniqueNames = names.compactMap { name -> String? in
+            guard let name = name?.trimmingCharacters(in: .whitespacesAndNewlines),
+                  !name.isEmpty, seen.insert(name).inserted else { return nil }
+            return name
+        }
+        return uniqueNames.isEmpty ? nil : uniqueNames.joined(separator: ", ")
     }
     
     static func mapMovieToFavorite(_ movie: MovieDetailModel) -> FavoriteModel {
@@ -325,7 +333,7 @@ final class Mapper {
                 name: tvShowCast.name ?? "",
                 profilePath: tvShowCast.profilePath ?? "",
                 characterName: tvShowCast.roles.first?.characterName ?? "",
-                order: tvShowCast.order ?? 0,
+                order: tvShowCast.order ?? .max,
                 popularity: tvShowCast.popularity,
                 releaseDate: "",
                 episodeCount: tvShowCast.totalEpisodeCount,

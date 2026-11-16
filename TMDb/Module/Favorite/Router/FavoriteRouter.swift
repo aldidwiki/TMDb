@@ -15,7 +15,6 @@ class FavoriteRouter {
             makeDetailView(movieId: id.mediaID)
         case .tv:
             makeTvDetailView(tvShowId: id.mediaID)
-                .toolbar(.visible, for: .navigationBar)
         case .person:
             makePersonDetailView(personId: id.mediaID)
         }

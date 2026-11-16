@@ -18,6 +18,15 @@ class DetailRouter {
         )
     }
 
+    func makeTvShowDetailView(for tvShowId: Int) -> some View {
+        let injection = Injection()
+        return TvShowDetailView(
+            tvShowUseCase: injection.provideTvShowUseCase(),
+            favoriteUseCase: injection.provideFavoriteUseCase(),
+            tvShowId: tvShowId
+        )
+    }
+
     func makePersonDetailView(for personId: Int) -> some View {
         let personUseCase = Injection.init().providePersonUseCase()
         return PersonDetailView(
@@ -31,43 +40,21 @@ class DetailRouter {
             .environment(CreditDetailPresenter(navigateType: NavigateType.personView))
     }
     
-    func makeTvShowSeasonView(for tvShowSeasonList: [TvShowSeasonModel], title tvShowTitle: String, id tvShowId: Int) -> some View {
-        let tvShowUseCase = Injection.init().provideTvShowUseCase()
-        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
-        
-        return TvShowSeasonView(
-            tvShowUseCase: tvShowUseCase,
-            favoriteUseCase: favoriteUseCase,
-            tvShowId: tvShowId,
-            tvShowTitle: tvShowTitle,
-            tvShowSeasonList: tvShowSeasonList
-        )
-    }
-    
-    func makeTvShowSeasonDetailView(tvShowId: Int, seasonNumber: Int, seasonName: String) -> some View {
-        let tvShowUseCase = Injection.init().provideTvShowUseCase()
-        return TvShowEpisodeView(
-            tvShowUseCase: tvShowUseCase,
-            tvShowId: tvShowId,
-            seasonNumber: seasonNumber, 
-            seasonName: seasonName
-        )
+    func makeTvShowEpisodeView(season: TvShowSeasonModel, episodes: [TvShowSeasonDetailModel]) -> some View {
+        TvShowEpisodeView(season: season, episodes: episodes)
     }
     
     func makeMovieImageGalleryView(movieId: Int, title: String) -> some View {
-        MovieImageGalleryView(
-            detailUseCase: Injection().provideDetailUseCase(),
-            movieId: movieId,
-            movieTitle: title
-        )
+        let useCase = Injection().provideDetailUseCase()
+        return BackdropGalleryView(title: title) {
+            useCase.getMovieBackdrops(movieId: movieId)
+        }
     }
     
-    func makeTvShowImageGalleryView(tvShowId: Int) -> some View {
-        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
-        return TvShowImageGalleryView(
-            tvShowUseCase: Injection.init().provideTvShowUseCase(),
-            favoriteUseCase: favoriteUseCase,
-            tvShowId: tvShowId
-        )
+    func makeTvShowImageGalleryView(tvShowId: Int, title: String) -> some View {
+        let useCase = Injection().provideTvShowUseCase()
+        return BackdropGalleryView(title: title) {
+            useCase.getTvShowBackdrop(tvId: tvShowId)
+        }
     }
 }

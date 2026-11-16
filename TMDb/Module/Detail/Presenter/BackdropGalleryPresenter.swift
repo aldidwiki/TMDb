@@ -4,7 +4,7 @@ import Observation
 
 @MainActor
 @Observable
-final class MovieImageGalleryPresenter {
+final class BackdropGalleryPresenter {
     enum State {
         case idle
         case loading
@@ -12,15 +12,15 @@ final class MovieImageGalleryPresenter {
         case failed
     }
 
-    private let detailUseCase: DetailUseCase
+    private let fetchBackdrops: () -> AnyPublisher<[ImageModel], Error>
     private var request: AnyCancellable?
     private(set) var state: State = .idle
 
-    init(detailUseCase: DetailUseCase) {
-        self.detailUseCase = detailUseCase
+    init(fetchBackdrops: @escaping () -> AnyPublisher<[ImageModel], Error>) {
+        self.fetchBackdrops = fetchBackdrops
     }
 
-    func load(movieId: Int) {
+    func load() {
         switch state {
         case .idle, .failed:
             break
@@ -29,7 +29,7 @@ final class MovieImageGalleryPresenter {
         }
         state = .loading
 
-        request = detailUseCase.getMovieBackdrops(movieId: movieId)
+        request = fetchBackdrops()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
                 if case .failure = completion {

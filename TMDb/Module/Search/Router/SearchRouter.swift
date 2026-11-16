@@ -15,7 +15,6 @@ class SearchRouter {
             goToMovieDetailView(for: id.value)
         case .tv:
             goToTvDetailView(for: id.value)
-                .toolbar(.visible, for: .navigationBar)
         case .person:
             goToPersonDetailView(for: id.value)
         }

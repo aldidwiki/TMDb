@@ -11,6 +11,7 @@ import Combine
 protocol TvShowRepositoryProtocol {
     func getTvShows(page: Int) -> AnyPublisher<[TvShowModel], Error>
     func getTvShow(tvShowId: Int) -> AnyPublisher<TvShowDetailModel, Error>
+    func getSimilarTvShows(tvShowId: Int) -> AnyPublisher<[TvShowModel], Error>
     func getTvShowSeasonDetail(tvShowId: Int, seasonNumber: Int) -> AnyPublisher<[TvShowSeasonDetailModel], Error>
     func getTvShowBackdrops(tvId: Int) -> AnyPublisher<[ImageModel], Error>
 }
@@ -44,6 +45,12 @@ extension TvShowRepository: TvShowRepositoryProtocol {
             }.eraseToAnyPublisher()
     }
     
+    func getSimilarTvShows(tvShowId: Int) -> AnyPublisher<[TvShowModel], Error> {
+        tvShowDataSource.getSimilarTvShows(tvShowId: tvShowId)
+            .map(Mapper.mapTvResponseModelsToDomains(input:))
+            .eraseToAnyPublisher()
+    }
+
     func getTvShowSeasonDetail(tvShowId: Int, seasonNumber: Int) -> AnyPublisher<[TvShowSeasonDetailModel], Error> {
         return self.tvShowDataSource.getTvShowSeasonDetail(tvShowId: tvShowId, seasonNumber: seasonNumber)
             .map {

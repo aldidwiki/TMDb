@@ -31,4 +31,6 @@ struct TvShowDetailModel: Identifiable {
     let networks: [NetworkModel]
     let seasons: [TvShowSeasonModel]
     let voteCount: Int?
+    let creators: String?
+    let executiveProducers: String?
 }

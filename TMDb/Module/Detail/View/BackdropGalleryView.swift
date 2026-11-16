@@ -1,29 +1,28 @@
 //
-//  MovieImageGalleryView.swift
+//  BackdropGalleryView.swift
 //  TMDb
 //
 //  Created by Aldi Dwiki Prahasta on 20/03/24.
 //
 
+import Combine
 import SDWebImageSwiftUI
 import SwiftUI
 import UIKit
 
-struct MovieImageGalleryView: View {
+struct BackdropGalleryView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Namespace private var gallerySpace
-    @State private var presenter: MovieImageGalleryPresenter
-    @State private var selection: MovieBackdropSelection?
+    @State private var presenter: BackdropGalleryPresenter
+    @State private var selection: BackdropSelection?
 
-    private let movieId: Int
-    private let movieTitle: String
+    private let title: String
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 2)
 
-    init(detailUseCase: DetailUseCase, movieId: Int, movieTitle: String) {
-        _presenter = State(initialValue: MovieImageGalleryPresenter(detailUseCase: detailUseCase))
-        self.movieId = movieId
-        self.movieTitle = movieTitle
+    init(title: String, fetchBackdrops: @escaping () -> AnyPublisher<[ImageModel], Error>) {
+        _presenter = State(initialValue: BackdropGalleryPresenter(fetchBackdrops: fetchBackdrops))
+        self.title = title
     }
 
     var body: some View {
@@ -36,10 +35,10 @@ struct MovieImageGalleryView: View {
         .background(DashboardDesign.background.ignoresSafeArea())
         .allowsHitTesting(selection == nil)
         .accessibilityHidden(selection != nil)
-        .overlayPreferenceValue(MovieBackdropBounds.self) { bounds in
+        .overlayPreferenceValue(BackdropBounds.self) { bounds in
             if let selection {
                 GeometryReader { geometry in
-                    MoviePhotoViewer(
+                    BackdropPhotoViewer(
                         photo: selection.photo,
                         thumbnail: selection.thumbnail,
                         sourceFrame: bounds[selection.photo.filePath].map { geometry[$0] } ?? selection.sourceFrame,
@@ -53,7 +52,7 @@ struct MovieImageGalleryView: View {
         }
         .coordinateSpace(name: gallerySpace)
         .toolbar(.hidden, for: .navigationBar)
-        .task { presenter.load(movieId: movieId) }
+        .task { presenter.load() }
     }
 
     private var toolbar: some View {
@@ -82,7 +81,7 @@ struct MovieImageGalleryView: View {
     private var heading: some View {
         insetContent {
             VStack(alignment: .leading, spacing: 4) {
-                Text(movieTitle)
+                Text(title)
                     .font(.title2.bold())
                     .foregroundStyle(DashboardDesign.text)
                     .accessibilityAddTraits(.isHeader)
@@ -106,7 +105,7 @@ struct MovieImageGalleryView: View {
             insetContent {
                 LazyVGrid(columns: columns, spacing: 8) {
                     ForEach(0..<4) { _ in
-                        MovieBackdropPlaceholder()
+                        BackdropPlaceholder()
                             .aspectRatio(16.0 / 9, contentMode: .fit)
                             .clipShape(RoundedRectangle(cornerRadius: DashboardDesign.controlRadius))
                     }
@@ -123,7 +122,7 @@ struct MovieImageGalleryView: View {
             ContentUnavailableView {
                 Label("Couldn’t load backdrops", systemImage: "wifi.exclamationmark")
             } actions: {
-                Button("Retry") { presenter.load(movieId: movieId) }
+                Button("Retry") { presenter.load() }
                     .tint(DashboardDesign.accent)
             }
             .frame(maxHeight: .infinity)
@@ -135,13 +134,13 @@ struct MovieImageGalleryView: View {
             insetContent {
                 LazyVGrid(columns: columns, spacing: 8) {
                     ForEach(Array(backdrops.enumerated()), id: \.element.filePath) { index, photo in
-                        MovieBackdropTile(
+                        BackdropTile(
                             photo: photo,
                             number: index + 1,
                             gallerySpace: gallerySpace,
                             isHidden: selection?.photo.filePath == photo.filePath && !reduceMotion
                         ) { thumbnail, frame in
-                            selection = MovieBackdropSelection(
+                            selection = BackdropSelection(
                                 photo: photo,
                                 number: index + 1,
                                 total: backdrops.count,
@@ -165,7 +164,7 @@ struct MovieImageGalleryView: View {
     }
 }
 
-private struct MovieBackdropSelection {
+private struct BackdropSelection {
     let photo: ImageModel
     let number: Int
     let total: Int
@@ -173,7 +172,7 @@ private struct MovieBackdropSelection {
     let sourceFrame: CGRect
 }
 
-private struct MovieBackdropTile: View {
+private struct BackdropTile: View {
     @StateObject private var loader = ImageManager()
 
     let photo: ImageModel
@@ -197,7 +196,7 @@ private struct MovieBackdropTile: View {
             .opacity(isHidden ? 0 : 1)
         }
         .aspectRatio(16.0 / 9, contentMode: .fit)
-        .anchorPreference(key: MovieBackdropBounds.self, value: .bounds) { [photo.filePath: $0] }
+        .anchorPreference(key: BackdropBounds.self, value: .bounds) { [photo.filePath: $0] }
         .task {
             if loader.image == nil {
                 loader.load(url: URL(string: API.backdropThumbnailBaseUrl + photo.filePath))
@@ -219,12 +218,12 @@ private struct MovieBackdropTile: View {
                         .foregroundStyle(DashboardDesign.secondaryText)
                 }
         } else {
-            MovieBackdropPlaceholder()
+            BackdropPlaceholder()
         }
     }
 }
 
-private struct MovieBackdropBounds: PreferenceKey {
+private struct BackdropBounds: PreferenceKey {
     static let defaultValue: [String: Anchor<CGRect>] = [:]
 
     static func reduce(value: inout [String: Anchor<CGRect>], nextValue: () -> [String: Anchor<CGRect>]) {
@@ -232,7 +231,7 @@ private struct MovieBackdropBounds: PreferenceKey {
     }
 }
 
-private struct MovieBackdropPlaceholder: View {
+private struct BackdropPlaceholder: View {
     var body: some View {
         DashboardDesign.surfaceDim
             .overlay {
@@ -246,10 +245,6 @@ private struct MovieBackdropPlaceholder: View {
 
 #Preview {
     NavigationStack {
-        MovieImageGalleryView(
-            detailUseCase: Injection().provideDetailUseCase(),
-            movieId: 693134,
-            movieTitle: "Dune: Part Two"
-        )
+        DetailRouter().makeMovieImageGalleryView(movieId: 693134, title: "Dune: Part Two")
     }
 }

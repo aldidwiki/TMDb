@@ -11,6 +11,7 @@ import Combine
 protocol TvShowUseCase {
     func getTvShows(page: Int) -> AnyPublisher<[TvShowModel], Error>
     func getTvShow(tvShowId: Int) -> AnyPublisher<TvShowDetailModel, Error>
+    func getSimilarTvShows(tvShowId: Int) -> AnyPublisher<[TvShowModel], Error>
     func getTvShowSeasonDetail(tvShowId: Int, seasonNumber: Int) -> AnyPublisher<[TvShowSeasonDetailModel], Error>
     func getTvShowBackdrop(tvId: Int) -> AnyPublisher<[ImageModel], Error>
 }
@@ -30,6 +31,10 @@ class TvShowInteractor: TvShowUseCase {
         return repository.getTvShow(tvShowId: tvShowId)
     }
     
+    func getSimilarTvShows(tvShowId: Int) -> AnyPublisher<[TvShowModel], Error> {
+        repository.getSimilarTvShows(tvShowId: tvShowId)
+    }
+
     func getTvShowSeasonDetail(tvShowId: Int, seasonNumber: Int) -> AnyPublisher<[TvShowSeasonDetailModel], Error> {
         return repository.getTvShowSeasonDetail(tvShowId: tvShowId, seasonNumber: seasonNumber)
     }

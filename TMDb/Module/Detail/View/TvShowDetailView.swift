@@ -6,418 +6,369 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
-import SwiftUIIntrospect
 
 struct TvShowDetailView: View {
-    @Environment(\.dismiss) private var dismiss
-    @Environment(\.colorScheme) private var colorScheme
-    
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var presenter: TvShowDetailPresenter
-    @State var showSheet = false
-    
-    @State private var bgColor: Color = .clear
-    @State private var primaryColor: Color = .primary
-    @State private var secondaryColor: Color = .primary
-    
-    private let tvShowId: Int
-    
+    @State private var presentedTrailers: [TrailerLink]?
+    @State private var showsSeasonPicker = false
+
     init(tvShowUseCase: TvShowUseCase, favoriteUseCase: FavoriteUseCase, tvShowId: Int) {
         _presenter = State(initialValue: TvShowDetailPresenter(
             tvShowUseCase: tvShowUseCase,
-            favoriteUseCase: favoriteUseCase
+            favoriteUseCase: favoriteUseCase,
+            tvShowId: tvShowId
         ))
-        self.tvShowId = tvShowId
     }
-    
+
     var body: some View {
-        ZStack {
-            if presenter.loadingState {
-                ProgressView("Loading")
-            } else {
-                ZStack(alignment: .top) {
-                    bgColor
-                        .ignoresSafeArea(edges: .top)
-                        .frame(height: 0)
-                    
-                    ScrollView(.vertical, showsIndicators: false) {
-                        VStack(alignment: .leading) {
-                            VStack {
-                                if !presenter.tvShow.backdropPath.isEmpty {
-                                    presenter.toTvShowImageGallery(tvShowId: tvShowId) {
-                                        tvBackdrop
-                                    }
-                                }
-                                
-                                tvContentDetail
-                                    .padding([.top, .horizontal])
-                                
-                                tvContentUtils
-                                
-                                tvOverview
-                            }
-                            .padding(.bottom)
-                            .background(bgColor)
-                            .elevation(5)
-                            
-                            if !presenter.tvShow.credits.isEmpty {
-                                tvCredits
-                            }
-                            
-                            tvDetailInfo
-                            
-                            ExternalMediaView(
-                                instagramId: presenter.tvShow.instagramId,
-                                facebookId: presenter.tvShow.facebookId,
-                                twitterId: presenter.tvShow.twitterId,
-                                imdbId: presenter.tvShow.imdbId
-                            )
-                            .padding(.vertical)
-                        }
-                    }
-                }
+        GeometryReader { geometry in
+            let inset = max(20, (geometry.size.width - DashboardDesign.contentWidth) / 2)
+
+            VStack(spacing: 0) {
+                DetailToolbar(title: "TV Show Details")
+                    .padding(.horizontal, inset)
+                detailContent(inset: inset)
             }
-        }.onAppear {
-            if presenter.tvShow.id == 0 && presenter.tvShow.title.isEmpty {
-                presenter.getTvShow(tvShowId: tvShowId)
-            }
-            
-            presenter.checkFavoriteStatus(tvId: tvShowId)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationTitle(presenter.tvShow.title)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "chevron.left")
-                        .fontWeight(.bold)
-                        .foregroundStyle(primaryColor)
-                }
-            }
-            
-            ToolbarItem(placement: .principal) {
-                Text(presenter.tvShow.title)
-                    .font(.headline)
-                    .lineLimit(1)
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(primaryColor)
-            }
-            
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    presenter.toggleFavorite()
-                } label: {
-                    Image(systemName: presenter.isFavorite ? "heart.fill" : "heart")
-                        .contentTransition(.symbolEffect(.replace))
-                        .symbolEffect(.bounce, value: presenter.isFavorite)
-                        .foregroundStyle(primaryColor)
-                }
-                .disabled(presenter.loadingState || presenter.tvShow.id <= 0)
-                .accessibilityLabel(presenter.isFavorite ? "Remove from favorites" : "Add to favorites")
-            }
+        .background(DashboardDesign.background.ignoresSafeArea())
+        .detailTrailerDrawer($presentedTrailers)
+        .toolbar(.hidden, for: .navigationBar)
+        .tint(DashboardDesign.accent)
+        .onAppear { presenter.checkFavoriteStatus() }
+        .task { presenter.load() }
+        .sheet(isPresented: $showsSeasonPicker) {
+            TvShowSeasonView(
+                seasons: presenter.seasons,
+                selectedSeasonNumber: presenter.selectedSeason?.seasonNumber,
+                onSelect: presenter.selectSeason
+            )
         }
-        .toolbarBackground(bgColor, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
         .alert("Couldn’t update favorites", isPresented: $presenter.showsFavoriteError) {
             Button("OK", role: .cancel) {}
         }
-        .blur(radius: showSheet ? 6 : 0, opaque: true)
-        .animation(.easeInOut, value: bgColor)
     }
-}
 
-extension TvShowDetailView {
-    var tvPoster: some View {
-        WebImage(url: URL(string: API.imageBaseUrl + presenter.tvShow.posterPath))
-            .resizable()
-            .onSuccess(perform: { image, _, _ in
-                if colorScheme == .dark { return }
-                image.extractPalette { bg, primary, secondary in
-                    self.bgColor = bg
-                    self.primaryColor = primary
-                    self.secondaryColor = secondary
-                }
-            })
-            .indicator(.activity)
-            .transition(.fade(duration: 0.5))
-            .scaledToFit()
-            .frame(height: 175)
-    }
-    
-    var tvBackdrop: some View {
-        WebImage(url: URL(string: API.backdropBaseUrl + presenter.tvShow.backdropPath))
-            .resizable()
-            .indicator(.activity)
-            .transition(.fade(duration: 0.5))
-            .scaledToFit()
-    }
-    
-    var tvContentDetail: some View {
-        HStack {
-            tvPoster
-            
-            VStack {
-                Text(presenter.tvShow.title)
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(primaryColor)
-                
-                Text(presenter.tvShow.releaseDate.formatDateString())
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(secondaryColor)
-                
-                HStack {
-                    if presenter.tvShow.runtime != 0 {
-                        Text(presenter.tvShow.runtime.formatRuntime())
-                            .multilineTextAlignment(.center)
-                            .foregroundStyle(secondaryColor)
-                        
-                        Text("\u{2022}")
-                            .foregroundStyle(secondaryColor)
+    @ViewBuilder
+    private func detailContent(inset: CGFloat) -> some View {
+        if let show = presenter.tvShow {
+            ScrollView {
+                VStack(spacing: 24) {
+                    hero(show)
+
+                    VStack(spacing: 16) {
+                        DetailOverview(
+                            posterPath: show.posterPath,
+                            overview: show.overview,
+                            rating: show.rating,
+                            voteCount: show.voteCount
+                        )
+                        DetailActions(
+                            videos: show.videos,
+                            isFavorite: presenter.isFavorite,
+                            presentedTrailers: $presentedTrailers,
+                            onFavoriteToggle: presenter.toggleFavorite
+                        )
                     }
-                    
-                    Text(presenter.tvShow.contentRating)
-                        .multilineTextAlignment(.center)
-                        .foregroundStyle(secondaryColor)
+                    .padding(.horizontal, inset)
+
+                    seasons
+                        .padding(.horizontal, inset)
+
+                    if let season = presenter.selectedSeason {
+                        episodePreview(season)
+                            .padding(.horizontal, inset)
+                    }
+
+                    topCast(inset: inset)
+                    seriesInfo(show)
+                        .padding(.horizontal, inset)
+                    similarShows(inset: inset)
                 }
-                
-                Text(presenter.tvShow.genre)
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(secondaryColor)
-                    .padding(.top, 1)
-                
-                if !presenter.tvShow.tagline.isEmpty {
-                    Text(presenter.tvShow.tagline)
-                        .fontWeight(.medium)
-                        .multilineTextAlignment(.center)
-                        .italic()
-                        .foregroundStyle(secondaryColor)
-                        .padding(.top, 2)
-                }
+                .padding(.bottom, 24)
             }
-            .padding(.horizontal)
+            .scrollIndicators(.hidden)
+        } else if presenter.detailFailed {
+            ContentUnavailableView {
+                Label("Couldn’t load TV show details", systemImage: "wifi.exclamationmark")
+            } actions: {
+                Button("Retry") { presenter.loadTvShow() }
+            }
+            .frame(maxHeight: .infinity)
+        } else {
+            ProgressView("Loading TV show details")
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
-    
-    var tvOverview: some View {
-        VStack(alignment: .leading) {
-            Text("Overview")
-                .foregroundStyle(primaryColor)
-                .padding([.top, .horizontal])
-                .padding(.bottom, 1)
-                .font(.title2)
-                .fontWeight(.semibold)
-            
-            Text(presenter.tvShow.overview)
-                .foregroundStyle(secondaryColor)
-                .padding(.horizontal)
-        }
-    }
-    
-    var tvContentUtils: some View {
-        HStack(alignment: .center) {
-            Spacer()
-            ZStack {
-                CircularProgressView(progress: presenter.tvShow.rating / 10, lineWidth: 3, circularColor: secondaryColor)
-                    .frame(width: 35, height: 35)
-                
-                Text((presenter.tvShow.rating / 10).toPercentage())
-                    .font(.system(size: 11))
-                    .foregroundStyle(primaryColor)
-            }
-            
-            Text("User Score")
-                .foregroundStyle(primaryColor)
-            
-            if presenter.tvShow.videos.count > 1 {
-                Text("\u{FF5C}")
-                    .fontWeight(.medium)
-                    .foregroundStyle(primaryColor)
-                    .padding(.horizontal)
-                
-                tvTrailerBottomSheet
+
+    private func hero(_ show: TvShowDetailModel) -> some View {
+        let count = presenter.regularSeasonCount
+        let seasonCount = count > 0 ? (count == 1 ? "1 Season" : "\(count) Seasons") : ""
+        let metadata = [String(show.releaseDate.prefix(4)), show.genre, seasonCount]
+            .filter { !$0.isEmpty }
+            .joined(separator: " · ")
+
+        return DetailHero(title: show.title, metadata: metadata, cornerRadius: DashboardDesign.controlRadius) {
+            if show.backdropPath.isEmpty {
+                DetailBackdrop(path: show.backdropPath)
+                    .accessibilityHidden(true)
             } else {
-                if let firstKey = presenter.tvShow.videos.first?.key {
-                    Text("\u{FF5C}")
-                        .fontWeight(.medium)
-                        .foregroundStyle(primaryColor)
-                        .padding(.horizontal)
-                    
-                    Link(destination: URL(string: Constants.youtubeBaseUrl + firstKey)!) {
-                        Label("Play Trailer", systemImage: "play.fill")
-                    }
-                    .buttonStyle(.plain)
-                    .foregroundStyle(primaryColor)
+                presenter.toTvShowImageGallery(title: show.title) {
+                    DetailBackdrop(path: show.backdropPath)
                 }
+                .accessibilityLabel("View TV show photos")
             }
-            Spacer()
-        }
-        .padding(.top)
-    }
-    
-    var tvTrailerBottomSheet: some View {
-        Button {
-            showSheet.toggle()
-        } label: {
-            Label("Play Trailer", systemImage: "play.fill")
-        }
-        .buttonStyle(.plain)
-        .foregroundStyle(primaryColor)
-        .sheet(isPresented: $showSheet) {
-            let rowHeight: CGFloat = 55
-            let headerHeight: CGFloat = 100
-            let totalHeight = CGFloat(presenter.tvShow.videos.count) * rowHeight + headerHeight
-            
-            VStack(alignment: .leading) {
-                HStack(alignment: .center) {
-                    Text("Choose Trailer")
-                        .font(.title2)
-                        .fontWeight(.medium)
-                    Spacer()
-                    Button {
-                        showSheet = false
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.title3)
-                    }
-                    .buttonStyle(.plain)
-                }
-                .padding(.top)
-                .padding(.horizontal, 20)
-                
-                List(presenter.tvShow.videos, id: \.id) { video in
-                    Link(video.name, destination: URL(string: Constants.youtubeBaseUrl + video.key)!)
-                        .buttonStyle(.plain)
-                        .lineLimit(2)
-                        .padding(.vertical, 1)
-                }
-                .listStyle(.plain)
-            }
-            .padding(.vertical)
-            .presentationDragIndicator(.automatic)
-            .presentationDetents([.height(totalHeight)])
-            .interactiveDismissDisabled(true)
         }
     }
-    
-    var tvCredits: some View {
-        VStack(alignment: .leading) {
-            Text("Top Billed Cast")
-                .padding(.horizontal)
-                .font(.title2)
-                .fontWeight(.semibold)
-            
-            ScrollView(.horizontal) {
-                LazyHStack(spacing: 20) {
-                    ForEach(presenter.tvShow.credits.take(length: 10), id: \.id) { cast in
-                        presenter.toPersonView(for: cast.id) {
-                            CreditItemView(creditModel: cast, isPersonView: false)
-                        }
-                    }
-                    
-                    presenter.toCreditDetailView(for: presenter.tvShow.credits) {
-                        HStack {
-                            Text("See more")
-                            Image(systemName: "arrow.right.circle.fill")
-                        }
-                    }
-                }
-                .padding(.horizontal)
-                .padding(.bottom)
-                .scrollTargetLayout()
-            }
-            .scrollTargetBehavior(.viewAligned)
-        }
-        .padding(.top)
-    }
-    
-    var tvDetailInfo: some View {
-        VStack(alignment: .leading) {
+
+    private var seasons: some View {
+        VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("Details")
-                    .padding(.horizontal)
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                
-                Spacer()
-                
-                presenter.toTvShowSeasonView(for: presenter.tvShow.seasons, title: presenter.tvShow.title, id: presenter.tvShow.id) {
-                    Text("All SEASONS")
-                        .padding(.horizontal)
-                        .font(.subheadline)
+                DetailSectionHeading("Seasons")
+
+                if presenter.seasons.count > 5 {
+                    Button("All Seasons") { showsSeasonPicker = true }
+                        .font(.footnote.weight(.semibold))
+                        .buttonStyle(.plain)
+                        .foregroundStyle(DashboardDesign.accent)
                 }
-                
             }
-            .padding(.bottom, 2)
-            
-            HStack(alignment: .top) {
-                VStack {
-                    Text("Status")
-                    Text(presenter.tvShow.status)
-                        .fontWeight(.thin)
+
+            if let season = presenter.selectedSeason {
+                let layout = presenter.seasons.count > 2 || dynamicTypeSize.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8))
+                    : AnyLayout(HStackLayout(alignment: .center, spacing: 8))
+
+                layout {
+                    seasonChips
+                    Text(season.episodeSummary)
+                        .font(.caption)
+                        .foregroundStyle(DashboardDesign.secondaryText)
+                        .fixedSize(horizontal: !dynamicTypeSize.isAccessibilitySize, vertical: true)
                 }
-                .frame(maxWidth: 200)
-                
-                VStack {
-                    Text("Spoken Language")
-                    Text(presenter.tvShow.spokenLanguage)
-                        .multilineTextAlignment(.center)
-                        .fontWeight(.thin)
-                }
-                .frame(maxWidth: 200)
+            } else {
+                sectionMessage("No seasons available")
             }
-            
-            Spacer()
-            
-            HStack(alignment: .top) {
-                VStack {
-                    Text("Network")
-                    ForEach(presenter.allowedVisibleNetworks) { network in
-                        WebImage(url: URL(string: API.logoImageBaseUrl + network.logoPath))
-                            .resizable()
-                            .indicator(.activity)
-                            .scaledToFill()
-                            .frame(width: 15, height: 15)
-                    }
-                    
-                    if presenter.showMoreButtonForNetworks {
+        }
+    }
+
+    private var seasonChips: some View {
+        ScrollViewReader { proxy in
+            ScrollView(.horizontal) {
+                LazyHStack(spacing: 8) {
+                    ForEach(presenter.seasons, id: \.seasonNumber) { season in
+                        let isSelected = presenter.selectedSeason?.seasonNumber == season.seasonNumber
+
                         Button {
-                            withAnimation {
-                                presenter.isNetworksExpanded.toggle()
-                            }
+                            presenter.selectSeason(season)
                         } label: {
-                            Text(presenter.isNetworksExpanded ? "show less" : "show more")
-                                .font(.system(size: 14))
+                            Text(season.chipTitle)
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(isSelected ? DashboardDesign.surface : DashboardDesign.secondaryText)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 7)
+                                .frame(minHeight: 34)
+                                .background(isSelected ? DashboardDesign.accent : DashboardDesign.surface, in: Capsule())
+                                .overlay {
+                                    Capsule().strokeBorder(isSelected ? Color.clear : DashboardDesign.border)
+                                        .allowsHitTesting(false)
+                                }
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityAddTraits(isSelected ? .isSelected : [])
+                        .id(season.seasonNumber)
+                    }
+                }
+            }
+            .scrollIndicators(.hidden)
+            .onChange(of: presenter.selectedSeason?.seasonNumber, initial: true) { previous, current in
+                guard let current else { return }
+                withAnimation(previous == current || reduceMotion ? nil : .easeInOut(duration: 0.25)) {
+                    proxy.scrollTo(current, anchor: .center)
+                }
+            }
+        }
+    }
+
+    private func episodePreview(_ season: TvShowSeasonModel) -> some View {
+        let state = presenter.seasonDetails.state(for: season.seasonNumber)
+
+        return VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 8) {
+                DetailSectionHeading("Episodes")
+
+                if case .loaded(let episodes) = state, episodes.count > 3 {
+                    presenter.toEpisodeList(for: season, episodes: episodes) {
+                        Text("See All Episodes")
+                            .font(.footnote.weight(.semibold))
+                            .foregroundStyle(DashboardDesign.accent)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+
+            switch state {
+            case .idle, .loading:
+                ProgressView("Loading episodes")
+                    .frame(maxWidth: .infinity, minHeight: 64)
+            case .loaded(let episodes) where episodes.isEmpty:
+                sectionMessage("No episodes available")
+            case .loaded(let episodes):
+                ForEach(episodes.prefix(3), id: \.episodeNumber) { episode in
+                    episodePreviewRow(episode)
+                }
+            case .failed:
+                sectionMessage("Couldn’t load episodes")
+                Button("Retry") { presenter.seasonDetails.load(seasonNumber: season.seasonNumber) }
+                    .font(.footnote.weight(.semibold))
+            }
+        }
+    }
+
+    private func episodePreviewRow(_ episode: TvShowSeasonDetailModel) -> some View {
+        let airDate = episode.airDate.formatDateString(output: "MMM d, yyyy")
+
+        return HStack(spacing: 12) {
+            Text(episode.episodeCode)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(DashboardDesign.accent)
+                .padding(.horizontal, 8)
+                .frame(minWidth: 44, minHeight: 40)
+                .background(DashboardDesign.surfaceDim, in: RoundedRectangle(cornerRadius: 8))
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(episode.displayName)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(DashboardDesign.text)
+                if !airDate.isEmpty {
+                    Text(airDate)
+                        .font(.caption)
+                        .foregroundStyle(DashboardDesign.secondaryText)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .background(DashboardDesign.surface, in: RoundedRectangle(cornerRadius: DashboardDesign.controlRadius))
+        .overlay {
+            RoundedRectangle(cornerRadius: DashboardDesign.controlRadius)
+                .strokeBorder(DashboardDesign.border)
+                .allowsHitTesting(false)
+        }
+        .accessibilityElement(children: .combine)
+    }
+
+    private func topCast(inset: CGFloat) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            DetailSectionHeading("Top cast", seeAll: true)
+                .padding(.horizontal, inset)
+
+            if presenter.topCast.isEmpty {
+                sectionMessage("No cast available")
+                    .padding(.horizontal, inset)
+            } else {
+                ScrollView(.horizontal) {
+                    LazyHStack(alignment: .top, spacing: 12) {
+                        ForEach(presenter.topCast) { credit in
+                            presenter.toPersonView(for: credit.id) {
+                                DetailCastCard(credit: credit)
+                            }
                         }
                     }
                 }
-                .frame(maxWidth: 200)
-                
-                VStack {
-                    Text("Type")
-                    Text(presenter.tvShow.type)
-                        .fontWeight(.thin)
-                }
-                .frame(maxWidth: 200)
+                .contentMargins(.horizontal, inset, for: .scrollContent)
+                .scrollIndicators(.hidden)
             }
         }
-        .padding(.top)
-        .padding(.bottom)
+    }
+
+    @ViewBuilder
+    private func seriesInfo(_ show: TvShowDetailModel) -> some View {
+        let fields: [(label: String, value: String)] = [
+            ("Creator", show.creators ?? ""),
+            ("First aired", show.releaseDate.formatDateString(output: "MMM d, yyyy")),
+            ("Executive producer", show.executiveProducers ?? ""),
+            ("Status", show.status)
+        ].filter { !$0.1.isEmpty }
+
+        if !fields.isEmpty {
+            VStack(alignment: .leading, spacing: 12) {
+                DetailSectionHeading("Series info")
+
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), alignment: .topLeading),
+                                         count: dynamicTypeSize.isAccessibilitySize ? 1 : 2),
+                          alignment: .leading, spacing: 12) {
+                    ForEach(fields, id: \.label) { field in
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(field.label)
+                                .font(.caption)
+                                .foregroundStyle(DashboardDesign.secondaryText)
+                            Text(field.value)
+                                .font(.subheadline.weight(.medium))
+                                .foregroundStyle(DashboardDesign.text)
+                        }
+                        .accessibilityElement(children: .combine)
+                    }
+                }
+                .padding(13)
+                .background(DashboardDesign.surface, in: RoundedRectangle(cornerRadius: DashboardDesign.controlRadius))
+                .overlay {
+                    RoundedRectangle(cornerRadius: DashboardDesign.controlRadius)
+                        .strokeBorder(DashboardDesign.border)
+                        .allowsHitTesting(false)
+                }
+            }
+        }
+    }
+
+    private func similarShows(inset: CGFloat) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            DetailSectionHeading("Similar Shows", seeAll: true)
+                .padding(.horizontal, inset)
+
+            switch presenter.similarShows {
+            case .idle, .loading:
+                ProgressView("Loading similar shows")
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+            case .loaded(let shows) where shows.isEmpty:
+                sectionMessage("No similar shows available")
+                    .padding(.horizontal, inset)
+            case .loaded(let shows):
+                ScrollView(.horizontal) {
+                    LazyHStack(alignment: .top, spacing: 12) {
+                        ForEach(shows) { show in
+                            presenter.toSimilarShow(for: show.id) {
+                                DetailPosterCard(title: show.title, posterPath: show.posterPath, releaseDate: show.releaseDate)
+                            }
+                        }
+                    }
+                }
+                .contentMargins(.horizontal, inset, for: .scrollContent)
+                .scrollIndicators(.hidden)
+            case .failed:
+                VStack(alignment: .leading, spacing: 6) {
+                    sectionMessage("Couldn’t load similar shows")
+                    Button("Retry") { presenter.loadSimilarShows() }
+                        .font(.footnote.weight(.semibold))
+                }
+                .padding(.horizontal, inset)
+            }
+        }
+    }
+
+    private func sectionMessage(_ message: String) -> some View {
+        Text(message)
+            .font(.footnote)
+            .foregroundStyle(DashboardDesign.secondaryText)
     }
 }
 
-struct TvShowDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        let tvShowUseCase = Injection.init().provideTvShowUseCase()
-        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
-        TvShowDetailView(
-            tvShowUseCase: tvShowUseCase,
-            favoriteUseCase: favoriteUseCase,
-            tvShowId: 0
-        )
+#Preview {
+    NavigationStack {
+        DetailRouter().makeTvShowDetailView(for: 95396)
     }
 }

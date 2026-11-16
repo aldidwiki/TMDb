@@ -26,7 +26,7 @@ class PersonRouter {
     func destination(for route: CreditRoute) -> some View {
         switch route {
         case .movie(let id): makeMovieDetailView(for: id)
-        case .tv(let id): makeTvShowDetailView(for: id).toolbar(.visible, for: .navigationBar)
+        case .tv(let id): makeTvShowDetailView(for: id)
         }
     }
 

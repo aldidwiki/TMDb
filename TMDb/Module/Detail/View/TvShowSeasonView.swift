@@ -8,94 +8,72 @@
 import SwiftUI
 
 struct TvShowSeasonView: View {
-    private let tvShowId: Int
-    private let tvShowTitle: String
-    private let tvShowSeasonList: [TvShowSeasonModel]
-    @State private var tvShowDetailPresenter: TvShowDetailPresenter
-    
-    init(
-        tvShowUseCase: TvShowUseCase,
-        favoriteUseCase: FavoriteUseCase,
-        tvShowId: Int,
-        tvShowTitle: String,
-        tvShowSeasonList: [TvShowSeasonModel]
-    ) {
-        _tvShowDetailPresenter = State(initialValue: TvShowDetailPresenter(
-            tvShowUseCase: tvShowUseCase,
-            favoriteUseCase: favoriteUseCase
-        ))
-        self.tvShowId = tvShowId
-        self.tvShowTitle = tvShowTitle
-        self.tvShowSeasonList = tvShowSeasonList
-    }
-    
+    @Environment(\.dismiss) private var dismiss
+
+    let seasons: [TvShowSeasonModel]
+    let selectedSeasonNumber: Int?
+    let onSelect: (TvShowSeasonModel) -> Void
+
     var body: some View {
-        ScrollView {
-            LazyVStack(spacing: 0) {
-                ForEach(tvShowSeasonList) { tvShowSeason in
-                    VStack(spacing: 0) {
-                        tvShowDetailPresenter.toTvShowEpisodeView(
-                            tvShowId: tvShowId,
-                            seasonNumber: tvShowSeason.seasonNumber,
-                            seasonName: tvShowSeason.seasonName) {
-                                TvShowSeasonItemView(seasonModel: tvShowSeason, tvTitle: tvShowTitle)
+        VStack(spacing: 0) {
+            HStack {
+                DetailSectionHeading("All Seasons")
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "xmark")
+                        .foregroundStyle(DashboardDesign.secondaryText)
+                        .frame(width: 44, height: 44)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Close")
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 16)
+
+            ScrollViewReader { proxy in
+                ScrollView {
+                    LazyVStack(spacing: 8) {
+                        ForEach(seasons, id: \.seasonNumber) { season in
+                            let isSelected = season.seasonNumber == selectedSeasonNumber
+                            Button {
+                                onSelect(season)
+                                dismiss()
+                            } label: {
+                                TvShowSeasonItemView(season: season, isSelected: isSelected)
                             }
                             .buttonStyle(.plain)
-                        
-                        if tvShowSeason != tvShowSeasonList.last {
-                            NativeDivider()
+                            .accessibilityAddTraits(isSelected ? .isSelected : [])
+                            .id(season.seasonNumber)
                         }
+                    }
+                    .padding(20)
+                }
+                .task {
+                    if let selectedSeasonNumber {
+                        proxy.scrollTo(selectedSeasonNumber, anchor: .center)
                     }
                 }
             }
-            .padding(.horizontal, 20)
         }
-        .navigationTitle("\(tvShowTitle) \(tvShowSeasonList.count > 1 ? "Seasons" : "Season")")
+        .background(DashboardDesign.background.ignoresSafeArea())
+        .presentationDragIndicator(.visible)
     }
 }
 
-struct TvShowSeasonView_Previews: PreviewProvider {
-    static var previews: some View {
-        let tvShowUseCase: TvShowUseCase = Injection.init().provideTvShowUseCase()
-        let favoriteUseCase = Injection.init().provideFavoriteUseCase()
-        
-        TvShowSeasonView(
-            tvShowUseCase: tvShowUseCase,
-            favoriteUseCase: favoriteUseCase,
-            tvShowId: 0,
-            tvShowTitle: "Game of Thrones",
-            tvShowSeasonList: [
-                TvShowSeasonModel(
-                    id: 60523,
-                    posterPath: "/A3H6pewHfoy2bXmNhvycOe0xzlC.jpg",
-                    seasonName: "Season 1",
-                    seasonAirDate: "2016-10-24",
-                    episodeCount: 23,
-                    seasonNumber: 1,
-                    seasonOverview: "When an unexpected accident at the S.T.A.R. Labs Particle Accelerator facility strikes Barry, he finds himself suddenly charged with the incredible power to move at super speeds. While Barry has always been a hero in his soul, his newfound powers have finally given him the ability to act like one. With the help of the research team at S.T.A.R. Labs, Barry begins testing the limits of his evolving powers and using them to stop crime. With a winning personality and a smile on his face, Barry Allen — aka The Flash — is finally moving forward in life … very, very fast!",
-                    seasonVoteAverage: 4.2
-                ),
-                TvShowSeasonModel(
-                    id: 60523,
-                    posterPath: "/A3H6pewHfoy2bXmNhvycOe0xzlC.jpg",
-                    seasonName: "Season 1",
-                    seasonAirDate: "2016-10-24",
-                    episodeCount: 23,
-                    seasonNumber: 1,
-                    seasonOverview: "When an unexpected accident at the S.T.A.R. Labs Particle Accelerator facility strikes Barry, he finds himself suddenly charged with the incredible power to move at super speeds. While Barry has always been a hero in his soul, his newfound powers have finally given him the ability to act like one. With the help of the research team at S.T.A.R. Labs, Barry begins testing the limits of his evolving powers and using them to stop crime. With a winning personality and a smile on his face, Barry Allen — aka The Flash — is finally moving forward in life … very, very fast!",
-                    seasonVoteAverage: 4.2
-                ),
-                TvShowSeasonModel(
-                    id: 60523,
-                    posterPath: "/A3H6pewHfoy2bXmNhvycOe0xzlC.jpg",
-                    seasonName: "Season 1",
-                    seasonAirDate: "2016-10-24",
-                    episodeCount: 23,
-                    seasonNumber: 1,
-                    seasonOverview: "When an unexpected accident at the S.T.A.R. Labs Particle Accelerator facility strikes Barry, he finds himself suddenly charged with the incredible power to move at super speeds. While Barry has always been a hero in his soul, his newfound powers have finally given him the ability to act like one. With the help of the research team at S.T.A.R. Labs, Barry begins testing the limits of his evolving powers and using them to stop crime. With a winning personality and a smile on his face, Barry Allen — aka The Flash — is finally moving forward in life … very, very fast!",
-                    seasonVoteAverage: 4.2
-                )
-            ]
-        )
+extension TvShowSeasonModel {
+    var chipTitle: String {
+        seasonNumber == 0 ? "Specials" : "Season \(seasonNumber)"
+    }
+
+    var displayName: String {
+        seasonName.isEmpty ? chipTitle : seasonName
+    }
+
+    var episodeSummary: String {
+        let count = episodeCount == 1 ? "1 episode" : "\(episodeCount) episodes"
+        let year = String(seasonAirDate.prefix(4))
+        return year.isEmpty ? count : "\(count) · \(year)"
     }
 }
