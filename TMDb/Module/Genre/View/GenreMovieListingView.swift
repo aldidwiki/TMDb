@@ -212,19 +212,21 @@ struct GenreMovieListingView: View {
                 Text(movie.overview.isEmpty ? "Overview unavailable" : movie.overview)
                     .font(.system(size: 11))
                     .foregroundStyle(DashboardDesign.secondaryText)
-                    .lineLimit(1)
+                    .lineLimit(2)
                     .padding(.top, 4)
                 
                 NavigationLink(value: movie.id) {
                     Text("See Details")
-                        .font(.system(size: 13, weight: .semibold))
+                        .font(.footnote.weight(.semibold))
                         .foregroundStyle(DashboardDesign.surface)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 42)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 4)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(height: 30)
                         .background(DashboardDesign.accent, in: RoundedRectangle(cornerRadius: 10))
                 }
                 .buttonStyle(.plain)
-                .padding(.top, 11)
+                .padding(.top, 16)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
