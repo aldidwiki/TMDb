@@ -12,14 +12,14 @@ struct ContentView: View {
         case home = "Home"
         case explore = "Explore"
         case search = "Search"
-        case watchlist = "Watchlist"
+        case favorites = "Favorites"
         
         var symbol: String {
             switch self {
             case .home: "house"
             case .explore: "diamond.inset.filled"
             case .search: "magnifyingglass"
-            case .watchlist: "heart"
+            case .favorites: "heart"
             }
         }
     }
