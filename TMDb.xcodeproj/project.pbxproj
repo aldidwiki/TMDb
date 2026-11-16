@@ -84,6 +84,7 @@
 		CEBD445B2A08E54500BBD9B6 /* PersonInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBD445A2A08E54500BBD9B6 /* PersonInteractor.swift */; };
 		CEBD445D2A08E6A500BBD9B6 /* PersonPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBD445C2A08E6A500BBD9B6 /* PersonPresenter.swift */; };
 		CEBD44602A08E98F00BBD9B6 /* PersonDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBD445F2A08E98F00BBD9B6 /* PersonDetailView.swift */; };
+		AE13F07C2F40111300755120 /* PersonCreditsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE13F07B2F40111300755120 /* PersonCreditsView.swift */; };
 		CEBD44632A08FB5400BBD9B6 /* DetailRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEBD44622A08FB5400BBD9B6 /* DetailRouter.swift */; };
 		CEC654E5292F5381007B393A /* TMDbApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC654E4292F5381007B393A /* TMDbApp.swift */; };
 		CEC654E7292F5381007B393A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEC654E6292F5381007B393A /* ContentView.swift */; };
@@ -229,6 +230,7 @@
 		CEBD445A2A08E54500BBD9B6 /* PersonInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonInteractor.swift; sourceTree = "<group>"; };
 		CEBD445C2A08E6A500BBD9B6 /* PersonPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonPresenter.swift; sourceTree = "<group>"; };
 		CEBD445F2A08E98F00BBD9B6 /* PersonDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDetailView.swift; sourceTree = "<group>"; };
+		AE13F07B2F40111300755120 /* PersonCreditsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonCreditsView.swift; sourceTree = "<group>"; };
 		CEBD44622A08FB5400BBD9B6 /* DetailRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailRouter.swift; sourceTree = "<group>"; };
 		CEC654E1292F5381007B393A /* TMDb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TMDb.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEC654E4292F5381007B393A /* TMDbApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDbApp.swift; sourceTree = "<group>"; };
@@ -524,6 +526,7 @@
 			isa = PBXGroup;
 			children = (
 				CEBD445F2A08E98F00BBD9B6 /* PersonDetailView.swift */,
+				AE13F07B2F40111300755120 /* PersonCreditsView.swift */,
 				CEEA02112AE777B300AEFE31 /* PersonItemView.swift */,
 				CEEA02142AE77A0400AEFE31 /* PersonView.swift */,
 				CE1F9AEE2B7DF7800031518F /* PersonImageView.swift */,
@@ -1061,6 +1064,7 @@
 				CE5762772A41635C0094A16D /* CreditDetailRouter.swift in Sources */,
 				CECFD2432AAEA95E0023D93A /* ExpandableTextView.swift in Sources */,
 				CEBD44602A08E98F00BBD9B6 /* PersonDetailView.swift in Sources */,
+				AE13F07C2F40111300755120 /* PersonCreditsView.swift in Sources */,
 				CE7BB4DA2BAA981C0080FA7F /* MovieImageGalleryView.swift in Sources */,
 				CEFAA5FB2AB2A61000B3FD37 /* TvShowEpisodeItemView.swift in Sources */,
 				CE1F2C712A53ED5E00478B2A /* TvShowDetailResponse.swift in Sources */,

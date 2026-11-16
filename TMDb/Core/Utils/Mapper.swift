@@ -383,8 +383,9 @@ final class Mapper {
     private static func mapPersonCreditResponseToDomains(
         input personResponse: PersonResponse
     ) -> [CreditModel] {
-        let credits = (personResponse.credits?.cast ?? []) + (personResponse.credits?.crew ?? [])
-        return credits.map { credit in
+        let cast = (personResponse.credits?.cast ?? []).map { ($0, false) }
+        let crew = (personResponse.credits?.crew ?? []).map { ($0, true) }
+        return (cast + crew).map { credit, isCrewCredit in
             CreditModel(
                 id: credit.id,
                 name: credit.movieTitle ?? credit.tvTitle ?? "",
@@ -393,8 +394,11 @@ final class Mapper {
                 order: credit.order ?? 0,
                 popularity: credit.popularity ?? 0,
                 releaseDate: credit.releaseDate ?? credit.firstAirDate ?? "",
-                episodeCount: 0,
-                mediaType: credit.mediaType
+                episodeCount: credit.mediaType == Constants.tvShowResponseType && !isCrewCredit
+                    ? (credit.episodeCount ?? 0)
+                    : 0,
+                mediaType: credit.mediaType,
+                isCrewCredit: isCrewCredit
             )
         }.sorted {
             $0.releaseDate > $1.releaseDate

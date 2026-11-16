@@ -19,6 +19,15 @@ class PersonPresenter {
         let credit: CreditModel
     }
 
+    struct CreditListItem: Identifiable {
+        let id: PersonRouter.CreditRoute
+        let title: String
+        let releaseYear: String?
+        var posterPath: String
+        var roles: [String]
+        var episodeCount: Int
+    }
+
     struct ProfileLink: Identifiable {
         let title: String
         let url: URL
@@ -94,6 +103,46 @@ class PersonPresenter {
             items.append(KnownForItem(id: route, credit: credit))
             if items.count == 10 { break }
         }
+        return items
+    }
+
+    var allCreditItems: [CreditListItem] {
+        var items: [CreditListItem] = []
+        var indexByRoute: [PersonRouter.CreditRoute: Int] = [:]
+
+        for credit in person.credits.sorted(by: { $0.releaseDate > $1.releaseDate }) {
+            let title = credit.name.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard credit.id > 0, !title.isEmpty,
+                  let route = PersonRouter.CreditRoute(credit: credit) else { continue }
+
+            let role = credit.characterName.trimmingCharacters(in: .whitespacesAndNewlines)
+            let posterPath = credit.profilePath.trimmingCharacters(in: .whitespacesAndNewlines)
+            let roleLabel = credit.isCrewCredit ? role : "as \(role)"
+            let hasRole = !role.isEmpty && role != "-"
+
+            if let index = indexByRoute[route] {
+                if hasRole && !items[index].roles.contains(roleLabel) {
+                    items[index].roles.append(roleLabel)
+                }
+                if items[index].posterPath.isEmpty {
+                    items[index].posterPath = posterPath
+                }
+                // Different roles may cover the same episodes.
+                items[index].episodeCount = max(items[index].episodeCount, credit.episodeCount)
+            } else {
+                let year = String(credit.releaseDate.prefix(4))
+                indexByRoute[route] = items.count
+                items.append(CreditListItem(
+                    id: route,
+                    title: title,
+                    releaseYear: year.count == 4 && (Int(year) ?? 0) > 0 ? year : nil,
+                    posterPath: posterPath,
+                    roles: hasRole ? [roleLabel] : [],
+                    episodeCount: credit.episodeCount
+                ))
+            }
+        }
+
         return items
     }
 

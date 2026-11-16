@@ -17,4 +17,5 @@ struct CreditModel: Identifiable, Equatable {
     let releaseDate: String
     let episodeCount: Int
     let mediaType: String
+    var isCrewCredit = false
 }

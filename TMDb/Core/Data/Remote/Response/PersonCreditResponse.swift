@@ -20,6 +20,7 @@ struct PersonCreditResponseModel: Decodable {
     let job: String?
     let releaseDate: String?
     let firstAirDate: String?
+    let episodeCount: Int?
     let order: Int?
     let popularity: Double?
     let mediaType: String
@@ -33,6 +34,7 @@ struct PersonCreditResponseModel: Decodable {
         case job
         case releaseDate = "release_date"
         case firstAirDate = "first_air_date"
+        case episodeCount = "episode_count"
         case order
         case popularity
         case mediaType = "media_type"

@@ -189,8 +189,8 @@ struct PersonDetailView: View {
                     LazyVGrid(columns: columns, alignment: .leading, spacing: 16) {
                         if let department { infoField("Known for", value: department) }
                         if let birthday { infoField("Date of birth", value: birthday) }
-                        if let birthplace { infoField("Place of birth", value: birthplace) }
                     }
+                    if let birthplace { infoField("Place of birth", value: birthplace) }
 
                     if !aliases.isEmpty {
                         infoField("Also known as", value: aliases.joined(separator: ", "))
@@ -230,19 +230,23 @@ struct PersonDetailView: View {
                     HStack {
                         sectionTitle("Known for")
                         Spacer()
-                        Button {} label: {
+                        NavigationLink {
+                            router.makePersonCreditsView(
+                                personName: presenter.person.name,
+                                items: presenter.allCreditItems
+                            )
+                        } label: {
                             Label("See All", systemImage: "arrow.right")
                                 .font(.footnote.weight(.semibold))
                                 .foregroundStyle(DashboardDesign.accent)
                                 .padding(.horizontal, 12)
-                                .frame(minHeight: 44)
+                                .frame(minHeight: 30)
                                 .background(
                                     DashboardDesign.surfaceDim,
                                     in: RoundedRectangle(cornerRadius: DashboardDesign.controlRadius)
                                 )
                         }
                         .buttonStyle(.plain)
-                        .disabled(true)
                     }
 
                     Text(items.isEmpty ? "No credits available" : "Top 10 · Movies & TV shows")
