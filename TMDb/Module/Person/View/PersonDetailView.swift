@@ -96,7 +96,7 @@ struct PersonDetailView: View {
 
     private var overview: some View {
         HStack(spacing: 16) {
-            presenter.toPersonImageView(personId: personId) {
+            presenter.toPersonImageView(personId: personId, personName: presenter.person.name) {
                 artwork(
                     path: presenter.person.profilePath,
                     baseURL: API.profileImageBaseUrl,

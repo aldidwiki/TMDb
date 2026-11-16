@@ -22,9 +22,11 @@ struct ImageResponse: Decodable {
 struct ImageResponseModel: Decodable {
     let filePath: String?
     let voteAverage: Double?
+    let aspectRatio: Double?
     
     private enum CodingKeys: String, CodingKey {
         case filePath = "file_path"
         case voteAverage = "vote_average"
+        case aspectRatio = "aspect_ratio"
     }
 }

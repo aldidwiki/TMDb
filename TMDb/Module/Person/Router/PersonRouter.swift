@@ -54,11 +54,12 @@ class PersonRouter {
         PersonCreditsView(personName: personName, items: items)
     }
     
-    func makePersonImageView(personId: Int) -> some View {
+    func makePersonImageView(personId: Int, personName: String) -> some View {
         let personUseCase = Injection.init().providePersonUseCase()
         return PersonImageView(
             personUseCase: personUseCase,
-            personId: personId
+            personId: personId,
+            personName: personName
         )
     }
 }

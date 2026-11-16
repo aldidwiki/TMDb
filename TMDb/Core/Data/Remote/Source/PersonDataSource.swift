@@ -66,7 +66,7 @@ extension PersonDataSource: PersonDataSourceProtocol {
     
     func getPersonImage(personId: Int) -> AnyPublisher<ImageResponse, Error> {
         return Future<ImageResponse, Error> { completion in
-            if let url = URL(string: "\(API.baseUrl)/person/\(personId)/images") {
+            if let url = URL(string: "\(API.baseUrl)person/\(personId)/images") {
                 AF.request(url, headers: API.headers)
                     .validate()
                     .responseDecodable(of: ImageResponse.self) { response in

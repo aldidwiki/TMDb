@@ -229,18 +229,18 @@ class PersonPresenter {
     }
     
     func getPersonImage(personId: Int) {
-        self.loadingState = true
+        guard !loadingState else { return }
+        loadingState = true
+        errorMessage = ""
         personUseCase.getPersonImage(personId: personId)
             .receive(on: RunLoop.main)
-            .sink { completion in
-                switch completion {
-                case .failure:
-                    self.errorMessage = String(describing: completion)
-                case .finished:
-                    self.loadingState = false
+            .sink { [weak self] completion in
+                self?.loadingState = false
+                if case .failure = completion {
+                    self?.errorMessage = "Couldn’t load photos"
                 }
-            } receiveValue: { personImageResult in
-                self.personImages = personImageResult
+            } receiveValue: { [weak self] images in
+                self?.personImages = images
             }.store(in: &cancellable)
     }
     
@@ -273,9 +273,10 @@ class PersonPresenter {
     
     func toPersonImageView<Content: View>(
         personId: Int,
+        personName: String,
         @ViewBuilder content: () -> Content
     ) -> some View {
-        NavigationLink(destination: router.makePersonImageView(personId: personId).toolbar(.visible, for: .navigationBar)) {
+        NavigationLink(destination: router.makePersonImageView(personId: personId, personName: personName)) {
             content()
         }
         .buttonStyle(.plain)

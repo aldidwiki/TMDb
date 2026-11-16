@@ -229,11 +229,11 @@ final class Mapper {
             return []
         }
         
-        return profileImages.map { personResponseModel in
-            PersonImageModel(
-                id: imageResponse.imageId,
-                filePath: personResponseModel.filePath ?? ""
-            )
+        var seen: Set<String> = []
+        return profileImages.compactMap { image in
+            guard let path = image.filePath, path.hasPrefix("/"), path.count > 1,
+                  seen.insert(path).inserted else { return nil }
+            return PersonImageModel(filePath: path, aspectRatio: image.aspectRatio)
         }
     }
     

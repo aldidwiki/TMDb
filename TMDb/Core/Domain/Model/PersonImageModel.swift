@@ -8,6 +8,8 @@
 import Foundation
 
 struct PersonImageModel: Identifiable {
-    let id: Int
     let filePath: String
+    let aspectRatio: Double?
+
+    var id: String { filePath }
 }
