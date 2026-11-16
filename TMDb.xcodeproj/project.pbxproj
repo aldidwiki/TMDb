@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B7A100022A00000000000011 /* SimilarTitlesPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A100022A00000000000001 /* SimilarTitlesPage.swift */; };
+		B7A100022A00000000000012 /* SimilarTitlesPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A100022A00000000000002 /* SimilarTitlesPresenter.swift */; };
+		B7A100022A00000000000013 /* SimilarTitlesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A100022A00000000000003 /* SimilarTitlesView.swift */; };
+		B7A100022A00000000000014 /* SimilarTitlesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A100022A00000000000004 /* SimilarTitlesSection.swift */; };
 		B7A100012A00000000000004 /* GenreMoviePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A100012A00000000000014 /* GenreMoviePage.swift */; };
 		B7A100012A00000000000005 /* GenreInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A100012A00000000000015 /* GenreInteractor.swift */; };
 		B7A100012A00000000000001 /* GenreMovieListingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A100012A00000000000011 /* GenreMovieListingView.swift */; };
@@ -159,6 +163,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B7A100022A00000000000001 /* SimilarTitlesPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarTitlesPage.swift; sourceTree = "<group>"; };
+		B7A100022A00000000000002 /* SimilarTitlesPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarTitlesPresenter.swift; sourceTree = "<group>"; };
+		B7A100022A00000000000003 /* SimilarTitlesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarTitlesView.swift; sourceTree = "<group>"; };
+		B7A100022A00000000000004 /* SimilarTitlesSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarTitlesSection.swift; sourceTree = "<group>"; };
 		B7A100012A00000000000014 /* GenreMoviePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreMoviePage.swift; sourceTree = "<group>"; };
 		B7A100012A00000000000015 /* GenreInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreInteractor.swift; sourceTree = "<group>"; };
 		B7A100012A00000000000011 /* GenreMovieListingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreMovieListingView.swift; sourceTree = "<group>"; };
@@ -370,9 +378,36 @@
 			children = (
 				CEBD44612A08FB3900BBD9B6 /* Router */,
 				CE9E30E229305C07001BFB57 /* View */,
+				B7A100022A00000000000020 /* Similar */,
 				CE182B02292F831200B5C857 /* Presenter */,
 			);
 			path = Detail;
+			sourceTree = "<group>";
+		};
+		B7A100022A00000000000020 /* Similar */ = {
+			isa = PBXGroup;
+			children = (
+				B7A100022A00000000000021 /* Presenter */,
+				B7A100022A00000000000022 /* View */,
+			);
+			path = Similar;
+			sourceTree = "<group>";
+		};
+		B7A100022A00000000000021 /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				B7A100022A00000000000002 /* SimilarTitlesPresenter.swift */,
+			);
+			path = Presenter;
+			sourceTree = "<group>";
+		};
+		B7A100022A00000000000022 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B7A100022A00000000000003 /* SimilarTitlesView.swift */,
+				B7A100022A00000000000004 /* SimilarTitlesSection.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		CE182B02292F831200B5C857 /* Presenter */ = {
@@ -685,6 +720,7 @@
 		CEC6550A292F5758007B393A /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				B7A100022A00000000000001 /* SimilarTitlesPage.swift */,
 				B7A100012A00000000000014 /* GenreMoviePage.swift */,
 				A7D9BCEAA01240DE8F467B0E /* GenreModel.swift */,
 				CEC65508292F5744007B393A /* MovieModel.swift */,
@@ -956,6 +992,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7A100022A00000000000011 /* SimilarTitlesPage.swift in Sources */,
+				B7A100022A00000000000012 /* SimilarTitlesPresenter.swift in Sources */,
+				B7A100022A00000000000013 /* SimilarTitlesView.swift in Sources */,
+				B7A100022A00000000000014 /* SimilarTitlesSection.swift in Sources */,
 				B7A100012A00000000000004 /* GenreMoviePage.swift in Sources */,
 				B7A100012A00000000000005 /* GenreInteractor.swift in Sources */,
 				A7D9BCEAA01240DE8F467B04 /* DashboardView.swift in Sources */,

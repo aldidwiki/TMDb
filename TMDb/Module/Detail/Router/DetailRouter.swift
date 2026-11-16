@@ -27,6 +27,23 @@ class DetailRouter {
         )
     }
 
+    func makeSimilarTitlesView(
+        sourceTitle: String,
+        genres: String,
+        media: SimilarTitlesView.Media,
+        presenter: SimilarTitlesPresenter
+    ) -> some View {
+        SimilarTitlesView(sourceTitle: sourceTitle, genres: genres, media: media, presenter: presenter)
+    }
+
+    @ViewBuilder
+    func makeSimilarTitleDetailView(for id: Int, media: SimilarTitlesView.Media) -> some View {
+        switch media {
+        case .movie: makeMovieDetailView(for: id)
+        case .tv: makeTvShowDetailView(for: id)
+        }
+    }
+
     func makePersonDetailView(for personId: Int) -> some View {
         let personUseCase = Injection.init().providePersonUseCase()
         return PersonDetailView(

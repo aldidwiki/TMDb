@@ -16,7 +16,7 @@ protocol MovieDataSourceProtocol {
     func getMovieGenres() -> AnyPublisher<GenreResponse, Error>
     func discoverMovies(query: GenreMovieQuery) -> AnyPublisher<MovieResponse, Error>
     func getMovie(movieId: Int) -> AnyPublisher<MovieDetailResponse, Error>
-    func getSimilarMovies(movieId: Int) -> AnyPublisher<[MovieResponseModel], Error>
+    func getSimilarMovies(movieId: Int, page: Int) -> AnyPublisher<MovieResponse, Error>
     func getMovieBackdrops(movieId: Int) -> AnyPublisher<ImageResponse, Error>
 }
 
@@ -115,10 +115,8 @@ extension MovieDataSource: MovieDataSourceProtocol {
         }.eraseToAnyPublisher()
     }
     
-    func getSimilarMovies(movieId: Int) -> AnyPublisher<[MovieResponseModel], Error> {
-        request("movie/\(movieId)/similar", parameters: ["page": 1])
-            .map(\MovieResponse.movies)
-            .eraseToAnyPublisher()
+    func getSimilarMovies(movieId: Int, page: Int) -> AnyPublisher<MovieResponse, Error> {
+        request("movie/\(movieId)/similar", parameters: ["page": page])
     }
 
     func getMovieBackdrops(movieId: Int) -> AnyPublisher<ImageResponse, Error> {

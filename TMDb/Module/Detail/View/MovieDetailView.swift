@@ -16,7 +16,8 @@ struct MovieDetailView: View {
     init(detailUseCase: DetailUseCase, favoriteUseCase: FavoriteUseCase, movieId: Int) {
         _presenter = State(initialValue: MovieDetailPresenter(
             detailUseCase: detailUseCase,
-            favoriteUseCase: favoriteUseCase
+            favoriteUseCase: favoriteUseCase,
+            movieId: movieId
         ))
         self.movieId = movieId
     }
@@ -72,7 +73,13 @@ struct MovieDetailView: View {
                     topCast(title: movie.title, inset: inset)
                     movieInfo(movie)
                         .padding(.horizontal, inset)
-                    similarMovies(inset: inset)
+                    SimilarTitlesSection(
+                        sourceTitle: movie.title,
+                        genres: movie.genre,
+                        media: .movie,
+                        inset: inset,
+                        presenter: presenter.similarTitles
+                    )
                 }
                 .padding(.bottom, 24)
             }
@@ -180,42 +187,6 @@ struct MovieDetailView: View {
                         .strokeBorder(DashboardDesign.border)
                         .allowsHitTesting(false)
                 }
-            }
-        }
-    }
-
-    private func similarMovies(inset: CGFloat) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            DetailSectionHeading("Similar Movies", seeAll: true)
-                .padding(.horizontal, inset)
-
-            switch presenter.similarMovies {
-            case .idle, .loading:
-                ProgressView("Loading similar movies")
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-            case .loaded(let movies) where movies.isEmpty:
-                sectionMessage("No similar movies available")
-                    .padding(.horizontal, inset)
-            case .loaded(let movies):
-                ScrollView(.horizontal) {
-                    LazyHStack(alignment: .top, spacing: 12) {
-                        ForEach(movies) { movie in
-                            presenter.toSimilarMovie(for: movie.id) {
-                                DetailPosterCard(title: movie.title, posterPath: movie.posterPath, releaseDate: movie.releaseDate)
-                            }
-                        }
-                    }
-                }
-                .contentMargins(.horizontal, inset, for: .scrollContent)
-                .scrollIndicators(.hidden)
-            case .failed:
-                VStack(alignment: .leading, spacing: 6) {
-                    sectionMessage("Couldn’t load similar movies")
-                    Button("Retry") { presenter.getSimilarMovies(movieId: movieId) }
-                        .font(.footnote.weight(.semibold))
-                }
-                .padding(.horizontal, inset)
             }
         }
     }

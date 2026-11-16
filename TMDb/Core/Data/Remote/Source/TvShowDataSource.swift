@@ -12,7 +12,7 @@ import Combine
 protocol TvShowDataSourceProtocol {
     func getTvShows(page: Int) -> AnyPublisher<[TvResponseModel], Error>
     func getTvShow(tvShowId: Int) -> AnyPublisher<TvShowDetailResponse, Error>
-    func getSimilarTvShows(tvShowId: Int) -> AnyPublisher<[TvResponseModel], Error>
+    func getSimilarTvShows(tvShowId: Int, page: Int) -> AnyPublisher<TvResponse, Error>
     func getTvShowSeasonDetail(tvShowId: Int, seasonNumber: Int) -> AnyPublisher<TvShowSeasonDetailResponse, Error>
     func getTvShowBackdrops(tvId: Int) -> AnyPublisher<ImageResponse, Error>
 }
@@ -66,16 +66,15 @@ extension TvShowDataSource: TvShowDataSourceProtocol {
         }.eraseToAnyPublisher()
     }
     
-    func getSimilarTvShows(tvShowId: Int) -> AnyPublisher<[TvResponseModel], Error> {
+    func getSimilarTvShows(tvShowId: Int, page: Int) -> AnyPublisher<TvResponse, Error> {
         AF.request(
             "\(API.baseUrl)tv/\(tvShowId)/similar",
-            parameters: ["page": 1],
+            parameters: ["page": page],
             headers: API.headers
         )
         .validate()
         .publishDecodable(type: TvResponse.self)
         .value()
-        .map(\.tvShows)
         .mapError { _ in URLError.invalidResponse as Error }
         .eraseToAnyPublisher()
     }

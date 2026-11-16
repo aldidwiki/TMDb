@@ -9,9 +9,15 @@ import Foundation
 
 struct TvResponse: Decodable {
     let tvShows: [TvResponseModel]
+    let page: Int?
+    let totalPages: Int?
+    let totalResults: Int?
     
     private enum CodingKeys: String, CodingKey {
         case tvShows = "results"
+        case page
+        case totalPages = "total_pages"
+        case totalResults = "total_results"
     }
 }
 

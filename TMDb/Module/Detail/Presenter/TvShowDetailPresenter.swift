@@ -12,25 +12,17 @@ import SwiftUI
 @MainActor
 @Observable
 final class TvShowDetailPresenter {
-    enum SimilarShowsState {
-        case idle
-        case loading
-        case loaded([TvShowModel])
-        case failed
-    }
-
     private let router = DetailRouter()
     private let tvShowUseCase: TvShowUseCase
     private let favoriteUseCase: FavoriteUseCase
     private let tvShowId: Int
     private var detailRequest: AnyCancellable?
-    private var similarRequest: AnyCancellable?
 
     let seasonDetails: TvShowSeasonDetailPresenter
     private(set) var tvShow: TvShowDetailModel?
     private(set) var isLoading = false
     private(set) var detailFailed = false
-    private(set) var similarShows: SimilarShowsState = .idle
+    let similarTitles: SimilarTitlesPresenter
     private(set) var seasons: [TvShowSeasonModel] = []
     private(set) var selectedSeason: TvShowSeasonModel?
     private(set) var isFavorite = false
@@ -41,6 +33,9 @@ final class TvShowDetailPresenter {
         self.favoriteUseCase = favoriteUseCase
         self.tvShowId = tvShowId
         seasonDetails = TvShowSeasonDetailPresenter(tvShowUseCase: tvShowUseCase, tvShowId: tvShowId)
+        similarTitles = SimilarTitlesPresenter(sourceID: tvShowId) { page in
+            tvShowUseCase.getSimilarTvShows(tvShowId: tvShowId, page: page)
+        }
     }
 
     var cast: [CreditModel] {
@@ -53,7 +48,7 @@ final class TvShowDetailPresenter {
 
     func load() {
         if tvShow == nil && !detailFailed { loadTvShow() }
-        if case .idle = similarShows { loadSimilarShows() }
+        similarTitles.load()
     }
 
     func loadTvShow() {
@@ -97,26 +92,6 @@ final class TvShowDetailPresenter {
         seasonDetails.load(seasonNumber: season.seasonNumber)
     }
 
-    func loadSimilarShows() {
-        if case .loading = similarShows { return }
-        similarShows = .loading
-
-        similarRequest = tvShowUseCase.getSimilarTvShows(tvShowId: tvShowId)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] completion in
-                guard let self else { return }
-                if case .failure = completion {
-                    similarShows = .failed
-                } else if case .loading = similarShows {
-                    similarShows = .loaded([])
-                }
-            } receiveValue: { [weak self] shows in
-                guard let self else { return }
-                var seen: Set<Int> = [tvShowId]
-                similarShows = .loaded(Array(shows.filter { $0.id > 0 && seen.insert($0.id).inserted }.prefix(10)))
-            }
-    }
-
     func checkFavoriteStatus() {
         do {
             isFavorite = try favoriteUseCase.isFavorited(.init(mediaType: .tv, mediaID: tvShowId))
@@ -152,15 +127,6 @@ final class TvShowDetailPresenter {
     ) -> some View {
         NavigationLink {
             router.makeFullCastView(title: title, media: .tv, cast: cast)
-        } label: {
-            content()
-        }
-        .buttonStyle(.plain)
-    }
-
-    func toSimilarShow<Content: View>(for tvShowId: Int, @ViewBuilder content: () -> Content) -> some View {
-        NavigationLink {
-            router.makeTvShowDetailView(for: tvShowId)
         } label: {
             content()
         }

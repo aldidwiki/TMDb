@@ -10,7 +10,7 @@ import Combine
 
 protocol DetailUseCase {
     func getMovie(movieId: Int) -> AnyPublisher<MovieDetailModel, Error>
-    func getSimilarMovies(movieId: Int) -> AnyPublisher<[MovieModel], Error>
+    func getSimilarMovies(movieId: Int, page: Int) -> AnyPublisher<SimilarTitlesPage, Error>
     func getMovieBackdrops(movieId: Int) -> AnyPublisher<[ImageModel], Error>
 }
 
@@ -25,8 +25,8 @@ class DetailInteractor: DetailUseCase {
         return repository.getMovie(movieId: movieId)
     }
     
-    func getSimilarMovies(movieId: Int) -> AnyPublisher<[MovieModel], Error> {
-        repository.getSimilarMovies(movieId: movieId)
+    func getSimilarMovies(movieId: Int, page: Int) -> AnyPublisher<SimilarTitlesPage, Error> {
+        repository.getSimilarMovies(movieId: movieId, page: page)
     }
 
     func getMovieBackdrops(movieId: Int) -> AnyPublisher<[ImageModel], Error> {

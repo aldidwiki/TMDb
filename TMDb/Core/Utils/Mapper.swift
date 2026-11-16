@@ -8,6 +8,40 @@
 import Foundation
 
 final class Mapper {
+    static func mapSimilarMoviePage(_ response: MovieResponse, requestedPage: Int) -> SimilarTitlesPage {
+        SimilarTitlesPage(
+            titles: response.movies.map { movie in
+                SimilarTitle(
+                    id: movie.id,
+                    title: movie.title,
+                    posterPath: movie.posterPath ?? "",
+                    releaseDate: movie.releaseDate ?? "",
+                    rating: movie.rating
+                )
+            },
+            page: response.page ?? requestedPage,
+            totalPages: response.totalPages ?? requestedPage,
+            totalResults: response.totalResults
+        )
+    }
+
+    static func mapSimilarShowPage(_ response: TvResponse, requestedPage: Int) -> SimilarTitlesPage {
+        SimilarTitlesPage(
+            titles: response.tvShows.map { show in
+                SimilarTitle(
+                    id: show.id,
+                    title: show.title,
+                    posterPath: show.posterPath ?? "",
+                    releaseDate: show.releaseDate ?? "",
+                    rating: show.rating
+                )
+            },
+            page: response.page ?? requestedPage,
+            totalPages: response.totalPages ?? requestedPage,
+            totalResults: response.totalResults
+        )
+    }
+
     static func mapMovieResponseModelsToDomains (
         input movieResponseModels: [MovieResponseModel]
     ) -> [MovieModel] {

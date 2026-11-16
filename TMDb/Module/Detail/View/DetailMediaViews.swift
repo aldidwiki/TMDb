@@ -225,11 +225,9 @@ struct DetailPosterCard: View {
 
 struct DetailSectionHeading: View {
     let title: String
-    let seeAll: Bool
 
-    init(_ title: String, seeAll: Bool = false) {
+    init(_ title: String) {
         self.title = title
-        self.seeAll = seeAll
     }
 
     var body: some View {
@@ -240,14 +238,6 @@ struct DetailSectionHeading: View {
                 .accessibilityAddTraits(.isHeader)
 
             Spacer(minLength: 0)
-
-            if seeAll {
-                Button {} label: {
-                    DetailSeeAllLabel()
-                }
-                .buttonStyle(.plain)
-                .disabled(true)
-            }
         }
     }
 }

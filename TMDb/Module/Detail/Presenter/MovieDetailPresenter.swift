@@ -12,13 +12,6 @@ import SwiftUI
 @MainActor
 @Observable
 final class MovieDetailPresenter {
-    enum SimilarMoviesState {
-        case idle
-        case loading
-        case loaded([MovieModel])
-        case failed
-    }
-
     private var cancellables: Set<AnyCancellable> = []
     private let router = DetailRouter()
     private let detailUseCase: DetailUseCase
@@ -27,13 +20,16 @@ final class MovieDetailPresenter {
     private(set) var movie: MovieDetailModel?
     private(set) var isLoadingMovie = false
     private(set) var movieFailed = false
-    private(set) var similarMovies: SimilarMoviesState = .idle
+    let similarTitles: SimilarTitlesPresenter
     private(set) var isFavorite = false
     var showsFavoriteError = false
 
-    init(detailUseCase: DetailUseCase, favoriteUseCase: FavoriteUseCase) {
+    init(detailUseCase: DetailUseCase, favoriteUseCase: FavoriteUseCase, movieId: Int) {
         self.detailUseCase = detailUseCase
         self.favoriteUseCase = favoriteUseCase
+        similarTitles = SimilarTitlesPresenter(sourceID: movieId) { page in
+            detailUseCase.getSimilarMovies(movieId: movieId, page: page)
+        }
     }
 
     var cast: [CreditModel] {
@@ -42,7 +38,7 @@ final class MovieDetailPresenter {
 
     func load(movieId: Int) {
         if movie == nil && !movieFailed { getMovie(movieId: movieId) }
-        if case .idle = similarMovies { getSimilarMovies(movieId: movieId) }
+        similarTitles.load()
     }
 
     func getMovie(movieId: Int) {
@@ -57,24 +53,6 @@ final class MovieDetailPresenter {
                 if case .failure = completion { self?.movieFailed = true }
             } receiveValue: { [weak self] movie in
                 self?.movie = movie
-            }
-            .store(in: &cancellables)
-    }
-
-    func getSimilarMovies(movieId: Int) {
-        if case .loading = similarMovies { return }
-        similarMovies = .loading
-
-        detailUseCase.getSimilarMovies(movieId: movieId)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] completion in
-                if case .failure = completion { self?.similarMovies = .failed }
-            } receiveValue: { [weak self] movies in
-                var seen: Set<Int> = [movieId]
-                let titles = Array(movies.filter {
-                    $0.id > 0 && seen.insert($0.id).inserted
-                }.prefix(10))
-                self?.similarMovies = .loaded(titles)
             }
             .store(in: &cancellables)
     }
@@ -115,18 +93,6 @@ final class MovieDetailPresenter {
     ) -> some View {
         NavigationLink {
             router.makeFullCastView(title: title, media: .movie, cast: cast)
-        } label: {
-            content()
-        }
-        .buttonStyle(.plain)
-    }
-
-    func toSimilarMovie<Content: View>(
-        for movieId: Int,
-        @ViewBuilder content: () -> Content
-    ) -> some View {
-        NavigationLink {
-            router.makeMovieDetailView(for: movieId)
         } label: {
             content()
         }

@@ -85,7 +85,13 @@ struct TvShowDetailView: View {
                     topCast(title: show.title, inset: inset)
                     seriesInfo(show)
                         .padding(.horizontal, inset)
-                    similarShows(inset: inset)
+                    SimilarTitlesSection(
+                        sourceTitle: show.title,
+                        genres: show.genre,
+                        media: .tv,
+                        inset: inset,
+                        presenter: presenter.similarTitles
+                    )
                 }
                 .padding(.bottom, 24)
             }
@@ -330,42 +336,6 @@ struct TvShowDetailView: View {
                         .strokeBorder(DashboardDesign.border)
                         .allowsHitTesting(false)
                 }
-            }
-        }
-    }
-
-    private func similarShows(inset: CGFloat) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            DetailSectionHeading("Similar Shows", seeAll: true)
-                .padding(.horizontal, inset)
-
-            switch presenter.similarShows {
-            case .idle, .loading:
-                ProgressView("Loading similar shows")
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-            case .loaded(let shows) where shows.isEmpty:
-                sectionMessage("No similar shows available")
-                    .padding(.horizontal, inset)
-            case .loaded(let shows):
-                ScrollView(.horizontal) {
-                    LazyHStack(alignment: .top, spacing: 12) {
-                        ForEach(shows) { show in
-                            presenter.toSimilarShow(for: show.id) {
-                                DetailPosterCard(title: show.title, posterPath: show.posterPath, releaseDate: show.releaseDate)
-                            }
-                        }
-                    }
-                }
-                .contentMargins(.horizontal, inset, for: .scrollContent)
-                .scrollIndicators(.hidden)
-            case .failed:
-                VStack(alignment: .leading, spacing: 6) {
-                    sectionMessage("Couldn’t load similar shows")
-                    Button("Retry") { presenter.loadSimilarShows() }
-                        .font(.footnote.weight(.semibold))
-                }
-                .padding(.horizontal, inset)
             }
         }
     }
