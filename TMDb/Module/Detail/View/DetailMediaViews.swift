@@ -127,30 +127,39 @@ struct DetailOverview: View {
     }
 }
 
-struct DetailCastCard: View {
+struct DetailCastAvatar: View {
     let credit: CreditModel
+    let diameter: CGFloat
 
     var body: some View {
         let initials = String(credit.name.split(whereSeparator: \.isWhitespace).prefix(2).compactMap(\.first)).uppercased()
 
+        Circle()
+            .fill(DashboardDesign.surfaceDim)
+            .overlay {
+                Text(initials)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(DashboardDesign.accent)
+            }
+            .overlay {
+                if !credit.profilePath.isEmpty, let url = URL(string: API.profileImageBaseUrl + credit.profilePath) {
+                    WebImage(url: url)
+                        .resizable()
+                        .scaledToFill()
+                }
+            }
+            .frame(width: diameter, height: diameter)
+            .clipShape(Circle())
+            .accessibilityHidden(true)
+    }
+}
+
+struct DetailCastCard: View {
+    let credit: CreditModel
+
+    var body: some View {
         VStack(alignment: .center, spacing: 5) {
-            Circle()
-                .fill(DashboardDesign.surfaceDim)
-                .overlay {
-                    Text(initials)
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(DashboardDesign.accent)
-                }
-                .overlay {
-                    if !credit.profilePath.isEmpty, let url = URL(string: API.profileImageBaseUrl + credit.profilePath) {
-                        WebImage(url: url)
-                            .resizable()
-                            .scaledToFill()
-                    }
-                }
-                .frame(width: 56, height: 56)
-                .clipShape(Circle())
-                .accessibilityHidden(true)
+            DetailCastAvatar(credit: credit, diameter: 56)
 
             VStack(alignment: .center, spacing: 2) {
                 Text(credit.name)
@@ -234,18 +243,24 @@ struct DetailSectionHeading: View {
 
             if seeAll {
                 Button {} label: {
-                    HStack(spacing: 4) {
-                        Text("See All")
-                        Image(systemName: "arrow.right")
-                            .accessibilityHidden(true)
-                    }
+                    DetailSeeAllLabel()
                 }
-                .font(.footnote.weight(.semibold))
-                .foregroundStyle(DashboardDesign.accent)
                 .buttonStyle(.plain)
                 .disabled(true)
             }
         }
+    }
+}
+
+struct DetailSeeAllLabel: View {
+    var body: some View {
+        HStack(spacing: 4) {
+            Text("See All")
+            Image(systemName: "arrow.right")
+                .accessibilityHidden(true)
+        }
+        .font(.footnote.weight(.semibold))
+        .foregroundStyle(DashboardDesign.accent)
     }
 }
 

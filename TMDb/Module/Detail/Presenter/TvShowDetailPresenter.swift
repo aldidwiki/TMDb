@@ -43,12 +43,8 @@ final class TvShowDetailPresenter {
         seasonDetails = TvShowSeasonDetailPresenter(tvShowUseCase: tvShowUseCase, tvShowId: tvShowId)
     }
 
-    var topCast: [CreditModel] {
-        var seen: Set<Int> = []
-        let cast = (tvShow?.credits ?? []).sorted { $0.order < $1.order }
-        return Array(cast.filter {
-            $0.id > 0 && !$0.name.isEmpty && seen.insert($0.id).inserted
-        }.prefix(10))
+    var cast: [CreditModel] {
+        CreditModel.castInBillingOrder(tvShow?.credits ?? [])
     }
 
     var regularSeasonCount: Int {
@@ -143,6 +139,19 @@ final class TvShowDetailPresenter {
     func toPersonView<Content: View>(for personId: Int, @ViewBuilder content: () -> Content) -> some View {
         NavigationLink {
             router.makePersonDetailView(for: personId)
+        } label: {
+            content()
+        }
+        .buttonStyle(.plain)
+    }
+
+    func toFullCast<Content: View>(
+        title: String,
+        cast: [CreditModel],
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        NavigationLink {
+            router.makeFullCastView(title: title, media: .tv, cast: cast)
         } label: {
             content()
         }

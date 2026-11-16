@@ -35,9 +35,8 @@ class DetailRouter {
         )
     }
     
-    func makeCreditDetailView(for credits: [CreditModel]) -> some View {
-        return CreditDetailView(creditModelList: credits)
-            .environment(CreditDetailPresenter(navigateType: NavigateType.personView))
+    func makeFullCastView(title: String, media: FullCastView.Media, cast: [CreditModel]) -> some View {
+        FullCastView(title: title, media: media, cast: cast)
     }
     
     func makeTvShowEpisodeView(season: TvShowSeasonModel, episodes: [TvShowSeasonDetailModel]) -> some View {

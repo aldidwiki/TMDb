@@ -82,7 +82,7 @@ struct TvShowDetailView: View {
                             .padding(.horizontal, inset)
                     }
 
-                    topCast(inset: inset)
+                    topCast(title: show.title, inset: inset)
                     seriesInfo(show)
                         .padding(.horizontal, inset)
                     similarShows(inset: inset)
@@ -261,18 +261,28 @@ struct TvShowDetailView: View {
         .accessibilityElement(children: .combine)
     }
 
-    private func topCast(inset: CGFloat) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            DetailSectionHeading("Top cast", seeAll: true)
-                .padding(.horizontal, inset)
+    private func topCast(title: String, inset: CGFloat) -> some View {
+        let cast = presenter.cast
 
-            if presenter.topCast.isEmpty {
+        return VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 12) {
+                DetailSectionHeading("Top cast")
+                if !cast.isEmpty {
+                    presenter.toFullCast(title: title, cast: cast) {
+                        DetailSeeAllLabel()
+                    }
+                    .accessibilityLabel("See all cast")
+                }
+            }
+            .padding(.horizontal, inset)
+
+            if cast.isEmpty {
                 sectionMessage("No cast available")
                     .padding(.horizontal, inset)
             } else {
                 ScrollView(.horizontal) {
                     LazyHStack(alignment: .top, spacing: 12) {
-                        ForEach(presenter.topCast) { credit in
+                        ForEach(cast.prefix(10)) { credit in
                             presenter.toPersonView(for: credit.id) {
                                 DetailCastCard(credit: credit)
                             }

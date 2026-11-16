@@ -69,7 +69,7 @@ struct MovieDetailView: View {
                     }
                     .padding(.horizontal, inset)
 
-                    topCast(inset: inset)
+                    topCast(title: movie.title, inset: inset)
                     movieInfo(movie)
                         .padding(.horizontal, inset)
                     similarMovies(inset: inset)
@@ -108,12 +108,20 @@ struct MovieDetailView: View {
         }
     }
 
-    private func topCast(inset: CGFloat) -> some View {
-        let cast = presenter.topCast
+    private func topCast(title: String, inset: CGFloat) -> some View {
+        let cast = presenter.cast
 
         return VStack(alignment: .leading, spacing: 12) {
-            DetailSectionHeading("Top cast", seeAll: true)
-                .padding(.horizontal, inset)
+            HStack(spacing: 12) {
+                DetailSectionHeading("Top cast")
+                if !cast.isEmpty {
+                    presenter.toFullCast(title: title, cast: cast) {
+                        DetailSeeAllLabel()
+                    }
+                    .accessibilityLabel("See all cast")
+                }
+            }
+            .padding(.horizontal, inset)
 
             if cast.isEmpty {
                 sectionMessage("No cast available")
@@ -121,7 +129,7 @@ struct MovieDetailView: View {
             } else {
                 ScrollView(.horizontal) {
                     LazyHStack(alignment: .top, spacing: 12) {
-                        ForEach(cast) { credit in
+                        ForEach(cast.prefix(10)) { credit in
                             presenter.toPersonDetail(for: credit.id) {
                                 DetailCastCard(credit: credit)
                             }

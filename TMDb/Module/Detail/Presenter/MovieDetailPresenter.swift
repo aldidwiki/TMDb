@@ -36,12 +36,8 @@ final class MovieDetailPresenter {
         self.favoriteUseCase = favoriteUseCase
     }
 
-    var topCast: [CreditModel] {
-        var seen: Set<Int> = []
-        let cast = (movie?.cast ?? []).sorted { $0.order < $1.order }
-        return Array(cast.filter {
-            $0.id > 0 && !$0.name.isEmpty && seen.insert($0.id).inserted
-        }.prefix(10))
+    var cast: [CreditModel] {
+        CreditModel.castInBillingOrder(movie?.cast ?? [])
     }
 
     func load(movieId: Int) {
@@ -106,6 +102,19 @@ final class MovieDetailPresenter {
     ) -> some View {
         NavigationLink {
             router.makePersonDetailView(for: personId)
+        } label: {
+            content()
+        }
+        .buttonStyle(.plain)
+    }
+
+    func toFullCast<Content: View>(
+        title: String,
+        cast: [CreditModel],
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        NavigationLink {
+            router.makeFullCastView(title: title, media: .movie, cast: cast)
         } label: {
             content()
         }
