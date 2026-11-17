@@ -448,19 +448,11 @@
 		A7D9BCEAA01240DE8F467B08 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				F5CA2646DE1E31561A42C214 /* DashboardTrendingSection.swift */,
-				1ECE7EA67F92AC73CF69FC32 /* DashboardTrendingCarousel.swift */,
-				A8CDC23DA0C324102126CC86 /* DashboardTrailerButton.swift */,
-				6064EAB5E6427D8B3D3EFE47 /* DashboardSectionHeading.swift */,
-				2558407613C22BDD8B54147A /* DashboardSectionContent.swift */,
-				B325278ABE2236CA05A1D5C8 /* DashboardNowPlayingSection.swift */,
-				C89D29C5D542598DF8A1D578 /* DashboardNowPlayingCard.swift */,
-				7B6B9D193C55F836D3E167A8 /* DashboardGenreTile.swift */,
-				46FCA17C8B74C1F373F3B6C2 /* DashboardGenreSection.swift */,
-				8F4DC1B651E71182801696A4 /* DashboardFeaturedCard.swift */,
-				FCE8DF9E0B155C3E0A0B6B39 /* DashboardContentInset.swift */,
-				9C92B5360A83EA9A7ABA56E6 /* DashboardCarouselIndicator.swift */,
 				A7D9BCEAA01240DE8F467B01 /* DashboardView.swift */,
+				77070F09867E880798A328AE /* Trending */,
+				17BCDE1962C56E394D24BAB9 /* NowPlaying */,
+				CE50636305CBFF490AB61429 /* Genres */,
+				E925192099F3C902C0F54B32 /* Shared */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -494,11 +486,9 @@
 		B7A100012A00000000000021 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				76C74309CFD886FF6FDD24B1 /* GenreMovieList.swift */,
-				36A3E1361C23639340E1EED4 /* GenreFilterDrawer.swift */,
-				B3CA78E0239047127D6F4034 /* GenreMovieCard.swift */,
-				340FCA96768CF0EBF295746E /* GenreListingHeader.swift */,
 				B7A100012A00000000000011 /* GenreMovieListingView.swift */,
+				8B4EAC6CB6C016F0325EE411 /* Controls */,
+				570D8EF57DBEF7DDF173EABC /* Results */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -539,9 +529,8 @@
 		B7A100022A00000000000022 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				78EFC83249E05F8CB173DB46 /* SimilarTitleCard.swift */,
 				B7A100022A00000000000003 /* SimilarTitlesView.swift */,
-				B7A100022A00000000000004 /* SimilarTitlesSection.swift */,
+				8FAD18ADAE8282A2F3E2C9D8 /* Components */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -559,12 +548,9 @@
 		B7A100032A00000000000041 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				FECB4D582967013C21F39826 /* ExploreResults.swift */,
-				03D93E51C97E774B4FD291DE /* ExploreHeader.swift */,
-				5B75D25B4A5D4EEF337E8329 /* ExploreChip.swift */,
 				B7A100032A00000000000006 /* ExploreView.swift */,
-				B7A100032A00000000000007 /* ExploreCard.swift */,
-				B7A100032A00000000000008 /* ExploreDrawer.swift */,
+				26CA1E5449B1A09817228D86 /* Controls */,
+				24E4A4F423AF0CF506990736 /* Results */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -645,33 +631,16 @@
 		CE9E30E229305C07001BFB57 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				550D80B5E9DA129F38563371 /* SeriesInfoSection.swift */,
-				1F24C87D697ED9F0327C57C6 /* MovieInfoSection.swift */,
-				CABC221F87B8C8F769B6159D /* TvEpisodePreviewRow.swift */,
-				047F93A1B2FB89B1D6B335DA /* TrailerDrawer.swift */,
-				C2FC86E3491CF931E9568E1A /* FullCastRow.swift */,
-				3B709E9A5537F2F460630870 /* EpisodeSearchField.swift */,
-				22F0A967DDDCAF79467DD72C /* DetailToolbar.swift */,
-				446C8C85F60A01B33792079C /* DetailSeeAllLabel.swift */,
-				280471E1DE69DE9822D917BA /* DetailSectionHeading.swift */,
-				8E9EB0425DBFF3FEFCFB4C11 /* DetailPosterCard.swift */,
-				D3B17D50401CDB7A79710FDE /* DetailOverview.swift */,
-				DEA3700C89B999BC053FBBBD /* DetailHero.swift */,
-				B0591EBD0C6EF7E4487E0CAC /* DetailCastCard.swift */,
-				5D44D617E4917946673947E9 /* DetailCastAvatar.swift */,
-				BEC66846A64812E36DFA6E93 /* DetailBackdrop.swift */,
-				91157617E294BE3D9463738F /* DetailActions.swift */,
-				9FA81D4432052A9BED43EBA5 /* BackdropTile.swift */,
-				181F55CBF4EF16DCE5D928FD /* BackdropPlaceholder.swift */,
-				CE5762702A4149D40094A16D /* FullCastView.swift */,
 				CE9E30E329305C15001BFB57 /* MovieDetailView.swift */,
-				AE13F0892F40111300755120 /* DetailTrailerDrawer.swift */,
-				CE7BB4D92BAA981C0080FA7F /* BackdropGalleryView.swift */,
 				CE1F2C762A53FE0B00478B2A /* TvShowDetailView.swift */,
-				CEFAA5FA2AB2A61000B3FD37 /* TvShowEpisodeItemView.swift */,
-				CEFAA5FC2AB2B8E400B3FD37 /* TvShowEpisodeView.swift */,
-				CEA218D32A874E5A00237BFB /* TvShowSeasonItemView.swift */,
-				CEA218D72A87556600237BFB /* TvShowSeasonView.swift */,
+				9651081AE395912E2AEB59CD /* Artwork */,
+				3C91DDFA7E0CA297E56DC49A /* Cast */,
+				CD1C0DDB9FE3CDABCCB85478 /* Episodes */,
+				7351E538799E59133150A83D /* Gallery */,
+				DED0C4E691EC158E597EE784 /* Information */,
+				D98C19B3524306130E7DDEC7 /* Seasons */,
+				C0706FF44E87A95951BA4D37 /* Shared */,
+				394AE190AAF92C6F5A3D2674 /* Trailers */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -722,14 +691,9 @@
 		CE9E30FD2930BA99001BFB57 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				AD315D662DF464555F9893EC /* FavoritesList.swift */,
-				C3E6B53833739DE13AA0E2F6 /* FavoriteSortDrawer.swift */,
-				88FB23A2E4F1A2D9708EFF2E /* FavoriteRemoveButton.swift */,
-				D59258CBD4C412599BF6AC19 /* FavoritePersonCard.swift */,
-				BC7D6775E5C05BAF4AAAA2ED /* FavoriteMediaCard.swift */,
-				13327EF13FC03CBA781FF1BF /* FavoriteHeader.swift */,
-				B1DF95AC7AB9F1EF4C968CDF /* FavoriteArtwork.swift */,
 				CE9E30FE2930BAA9001BFB57 /* FavoriteView.swift */,
+				3644755B7AD470A2952B672B /* Header */,
+				7882F88137F4B2D28403811E /* List */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -737,13 +701,10 @@
 		CEA218DB2A8784D700237BFB /* CustomView */ = {
 			isa = PBXGroup;
 			children = (
-				CDD2C8929A93567681388876 /* DrawerActionButton.swift */,
-				BD27A47BEA8CA8D1F9A0C432 /* DetailArtwork.swift */,
-				1A1A93122FD8E73651D8DAC1 /* RemoteArtwork.swift */,
 				2F5E6BB3A9C93A441A9680CC /* DashboardDesign.swift */,
 				CECFD2422AAEA95E0023D93A /* ExpandableTextView.swift */,
-				AE13F07F2F40111300755120 /* AnimatedFavoriteButton.swift */,
-				AE13F0852F40111300755120 /* ZoomablePhoto.swift */,
+				9B156948DDE78295A5EDAF5A /* Artwork */,
+				CE10818D61344600AD57C5ED /* Controls */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -769,15 +730,9 @@
 		CEBD445E2A08E90C00BBD9B6 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				E3A6DABB964787458E5993AB /* PersonKnownForCard.swift */,
-				64AAF57D1DB4E7727004286F /* PersonArtwork.swift */,
-				BC10198C74DDBDF006D2B621 /* PersonBiography.swift */,
-				1A70AF7DDB6ACAE839BD6D6C /* PersonPhotoTile.swift */,
-				4873B3BD3820729CC67AD69B /* PersonPhotoPlaceholder.swift */,
-				75E196EF948206DEE0777B6B /* PersonCreditRow.swift */,
-				CEBD445F2A08E98F00BBD9B6 /* PersonDetailView.swift */,
-				AE13F07B2F40111300755120 /* PersonCreditsView.swift */,
-				CE1F9AEE2B7DF7800031518F /* PersonImageView.swift */,
+				D384CDB5B909D3EDF0AA00AB /* Credits */,
+				9F57ADBEDE1AE4E96763AA2A /* Details */,
+				28C12F596884F0466DCF3D4D /* Gallery */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -832,13 +787,12 @@
 		CEC654F2292F541C007B393A /* App */ = {
 			isa = PBXGroup;
 			children = (
-				40137D90DC525016A44EDE72 /* SplashArtwork.swift */,
 				23A202B5484811DCA3D33741 /* BottomNavigation.swift */,
 				7F9C5A6E35AE681BFCB7D218 /* PreviewFixtures.swift */,
 				CEC654E6292F5381007B393A /* ContentView.swift */,
-				CE0FF1292A458782009D3B26 /* SplashView.swift */,
 				CEC654E4292F5381007B393A /* TMDbApp.swift */,
 				FA9739D82F39CCE4000F5D71 /* LaunchScreen.storyboard */,
+				46A5290F47E353C2470EAFA1 /* Splash */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -851,6 +805,7 @@
 				CEC65500292F551A007B393A /* Data */,
 				CEC65517292F5B07007B393A /* DI */,
 				CEC65507292F5732007B393A /* Domain */,
+				27989C3E2B08AB825AD558A4 /* Mapper */,
 				CEC654F4292F543C007B393A /* Utils */,
 			);
 			path = Core;
@@ -861,22 +816,29 @@
 			children = (
 				C36E9B13A35376D2211525F6 /* DisplayText.swift */,
 				B04FE6CC9BA05E28EF1C2CAE /* PageItems.swift */,
-				464F4D383A27A39CD65F032D /* TVMapping.swift */,
-				F866A890FF3DA14F2AFFD89D /* SearchMapping.swift */,
 				3341D215518BAF41BD4C1164 /* RuntimeFormatting.swift */,
 				95E1185153F44DC2999F71D5 /* PosterURLType.swift */,
-				37314982A926E9C0285C7A57 /* PersonMapping.swift */,
-				66F0CCA485264AA3E3392FA2 /* MovieMapping.swift */,
-				D5B7531C14939F1F2F914654 /* MetadataFormatting.swift */,
-				2CCA1A04560DD15B7442E7EC /* MediaMapping.swift */,
-				D24CB41C13D32F4E0C558A64 /* FavoriteMapping.swift */,
 				A3CCAF0D80D45803CF36007D /* DateFormatting.swift */,
 				CEC654F5292F544B007B393A /* CustomError.swift */,
-				CEC6550B292F57A6007B393A /* Mapper.swift */,
 				CEC6551D292F5C52007B393A /* API.swift */,
 				CE8E43D82A42B4AA00123AA6 /* Constants.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		27989C3E2B08AB825AD558A4 /* Mapper */ = {
+			isa = PBXGroup;
+			children = (
+				CEC6550B292F57A6007B393A /* Mapper.swift */,
+				D24CB41C13D32F4E0C558A64 /* FavoriteMapping.swift */,
+				2CCA1A04560DD15B7442E7EC /* MediaMapping.swift */,
+				D5B7531C14939F1F2F914654 /* MetadataFormatting.swift */,
+				66F0CCA485264AA3E3392FA2 /* MovieMapping.swift */,
+				37314982A926E9C0285C7A57 /* PersonMapping.swift */,
+				F866A890FF3DA14F2AFFD89D /* SearchMapping.swift */,
+				464F4D383A27A39CD65F032D /* TVMapping.swift */,
+			);
+			path = Mapper;
 			sourceTree = "<group>";
 		};
 		CEC65500292F551A007B393A /* Data */ = {
@@ -1052,14 +1014,9 @@
 		FA273C332F3F0B070017D24A /* View */ = {
 			isa = PBXGroup;
 			children = (
-				8CC3F551CC018557D373EA1E /* SearchResults.swift */,
-				73759690FFE181FDFD9FD129 /* SearchResultsHeading.swift */,
-				BF2BD52A6CA09BDDFB703347 /* SearchPersonCard.swift */,
-				425C37D95808601555798C34 /* SearchMediaCard.swift */,
-				B8E990B7F3C6ACDD740486CF /* SearchHeading.swift */,
-				B43B407D93257192E7DDFE86 /* SearchFilters.swift */,
-				7C8470DE3B842AE0BBE6A49D /* SearchField.swift */,
 				FA273C342F3F0B160017D24A /* SearchView.swift */,
+				644D029C3CC12E520EFB75B3 /* Controls */,
+				9DB202A15355CC5856591FFB /* Results */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1095,6 +1052,273 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		46A5290F47E353C2470EAFA1 /* Splash */ = {
+			isa = PBXGroup;
+			children = (
+				CE0FF1292A458782009D3B26 /* SplashView.swift */,
+				40137D90DC525016A44EDE72 /* SplashArtwork.swift */,
+			);
+			path = Splash;
+			sourceTree = "<group>";
+		};
+		9B156948DDE78295A5EDAF5A /* Artwork */ = {
+			isa = PBXGroup;
+			children = (
+				BD27A47BEA8CA8D1F9A0C432 /* DetailArtwork.swift */,
+				1A1A93122FD8E73651D8DAC1 /* RemoteArtwork.swift */,
+				AE13F0852F40111300755120 /* ZoomablePhoto.swift */,
+			);
+			path = Artwork;
+			sourceTree = "<group>";
+		};
+		CE10818D61344600AD57C5ED /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+				AE13F07F2F40111300755120 /* AnimatedFavoriteButton.swift */,
+				CDD2C8929A93567681388876 /* DrawerActionButton.swift */,
+			);
+			path = Controls;
+			sourceTree = "<group>";
+		};
+		77070F09867E880798A328AE /* Trending */ = {
+			isa = PBXGroup;
+			children = (
+				F5CA2646DE1E31561A42C214 /* DashboardTrendingSection.swift */,
+				1ECE7EA67F92AC73CF69FC32 /* DashboardTrendingCarousel.swift */,
+				8F4DC1B651E71182801696A4 /* DashboardFeaturedCard.swift */,
+				9C92B5360A83EA9A7ABA56E6 /* DashboardCarouselIndicator.swift */,
+				A8CDC23DA0C324102126CC86 /* DashboardTrailerButton.swift */,
+			);
+			path = Trending;
+			sourceTree = "<group>";
+		};
+		17BCDE1962C56E394D24BAB9 /* NowPlaying */ = {
+			isa = PBXGroup;
+			children = (
+				B325278ABE2236CA05A1D5C8 /* DashboardNowPlayingSection.swift */,
+				C89D29C5D542598DF8A1D578 /* DashboardNowPlayingCard.swift */,
+			);
+			path = NowPlaying;
+			sourceTree = "<group>";
+		};
+		CE50636305CBFF490AB61429 /* Genres */ = {
+			isa = PBXGroup;
+			children = (
+				46FCA17C8B74C1F373F3B6C2 /* DashboardGenreSection.swift */,
+				7B6B9D193C55F836D3E167A8 /* DashboardGenreTile.swift */,
+			);
+			path = Genres;
+			sourceTree = "<group>";
+		};
+		E925192099F3C902C0F54B32 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				2558407613C22BDD8B54147A /* DashboardSectionContent.swift */,
+				6064EAB5E6427D8B3D3EFE47 /* DashboardSectionHeading.swift */,
+				FCE8DF9E0B155C3E0A0B6B39 /* DashboardContentInset.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		9651081AE395912E2AEB59CD /* Artwork */ = {
+			isa = PBXGroup;
+			children = (
+				DEA3700C89B999BC053FBBBD /* DetailHero.swift */,
+				BEC66846A64812E36DFA6E93 /* DetailBackdrop.swift */,
+				D3B17D50401CDB7A79710FDE /* DetailOverview.swift */,
+			);
+			path = Artwork;
+			sourceTree = "<group>";
+		};
+		3C91DDFA7E0CA297E56DC49A /* Cast */ = {
+			isa = PBXGroup;
+			children = (
+				CE5762702A4149D40094A16D /* FullCastView.swift */,
+				C2FC86E3491CF931E9568E1A /* FullCastRow.swift */,
+				B0591EBD0C6EF7E4487E0CAC /* DetailCastCard.swift */,
+				5D44D617E4917946673947E9 /* DetailCastAvatar.swift */,
+			);
+			path = Cast;
+			sourceTree = "<group>";
+		};
+		CD1C0DDB9FE3CDABCCB85478 /* Episodes */ = {
+			isa = PBXGroup;
+			children = (
+				CEFAA5FC2AB2B8E400B3FD37 /* TvShowEpisodeView.swift */,
+				CEFAA5FA2AB2A61000B3FD37 /* TvShowEpisodeItemView.swift */,
+				CABC221F87B8C8F769B6159D /* TvEpisodePreviewRow.swift */,
+				3B709E9A5537F2F460630870 /* EpisodeSearchField.swift */,
+			);
+			path = Episodes;
+			sourceTree = "<group>";
+		};
+		7351E538799E59133150A83D /* Gallery */ = {
+			isa = PBXGroup;
+			children = (
+				CE7BB4D92BAA981C0080FA7F /* BackdropGalleryView.swift */,
+				9FA81D4432052A9BED43EBA5 /* BackdropTile.swift */,
+				181F55CBF4EF16DCE5D928FD /* BackdropPlaceholder.swift */,
+			);
+			path = Gallery;
+			sourceTree = "<group>";
+		};
+		DED0C4E691EC158E597EE784 /* Information */ = {
+			isa = PBXGroup;
+			children = (
+				1F24C87D697ED9F0327C57C6 /* MovieInfoSection.swift */,
+				550D80B5E9DA129F38563371 /* SeriesInfoSection.swift */,
+			);
+			path = Information;
+			sourceTree = "<group>";
+		};
+		D98C19B3524306130E7DDEC7 /* Seasons */ = {
+			isa = PBXGroup;
+			children = (
+				CEA218D72A87556600237BFB /* TvShowSeasonView.swift */,
+				CEA218D32A874E5A00237BFB /* TvShowSeasonItemView.swift */,
+			);
+			path = Seasons;
+			sourceTree = "<group>";
+		};
+		C0706FF44E87A95951BA4D37 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				22F0A967DDDCAF79467DD72C /* DetailToolbar.swift */,
+				280471E1DE69DE9822D917BA /* DetailSectionHeading.swift */,
+				446C8C85F60A01B33792079C /* DetailSeeAllLabel.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		394AE190AAF92C6F5A3D2674 /* Trailers */ = {
+			isa = PBXGroup;
+			children = (
+				91157617E294BE3D9463738F /* DetailActions.swift */,
+				AE13F0892F40111300755120 /* DetailTrailerDrawer.swift */,
+				047F93A1B2FB89B1D6B335DA /* TrailerDrawer.swift */,
+			);
+			path = Trailers;
+			sourceTree = "<group>";
+		};
+		8FAD18ADAE8282A2F3E2C9D8 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				B7A100022A00000000000004 /* SimilarTitlesSection.swift */,
+				78EFC83249E05F8CB173DB46 /* SimilarTitleCard.swift */,
+				8E9EB0425DBFF3FEFCFB4C11 /* DetailPosterCard.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		26CA1E5449B1A09817228D86 /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+				03D93E51C97E774B4FD291DE /* ExploreHeader.swift */,
+				5B75D25B4A5D4EEF337E8329 /* ExploreChip.swift */,
+				B7A100032A00000000000008 /* ExploreDrawer.swift */,
+			);
+			path = Controls;
+			sourceTree = "<group>";
+		};
+		24E4A4F423AF0CF506990736 /* Results */ = {
+			isa = PBXGroup;
+			children = (
+				FECB4D582967013C21F39826 /* ExploreResults.swift */,
+				B7A100032A00000000000007 /* ExploreCard.swift */,
+			);
+			path = Results;
+			sourceTree = "<group>";
+		};
+		3644755B7AD470A2952B672B /* Header */ = {
+			isa = PBXGroup;
+			children = (
+				13327EF13FC03CBA781FF1BF /* FavoriteHeader.swift */,
+				C3E6B53833739DE13AA0E2F6 /* FavoriteSortDrawer.swift */,
+			);
+			path = Header;
+			sourceTree = "<group>";
+		};
+		7882F88137F4B2D28403811E /* List */ = {
+			isa = PBXGroup;
+			children = (
+				AD315D662DF464555F9893EC /* FavoritesList.swift */,
+				BC7D6775E5C05BAF4AAAA2ED /* FavoriteMediaCard.swift */,
+				D59258CBD4C412599BF6AC19 /* FavoritePersonCard.swift */,
+				B1DF95AC7AB9F1EF4C968CDF /* FavoriteArtwork.swift */,
+				88FB23A2E4F1A2D9708EFF2E /* FavoriteRemoveButton.swift */,
+			);
+			path = List;
+			sourceTree = "<group>";
+		};
+		8B4EAC6CB6C016F0325EE411 /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+				340FCA96768CF0EBF295746E /* GenreListingHeader.swift */,
+				36A3E1361C23639340E1EED4 /* GenreFilterDrawer.swift */,
+			);
+			path = Controls;
+			sourceTree = "<group>";
+		};
+		570D8EF57DBEF7DDF173EABC /* Results */ = {
+			isa = PBXGroup;
+			children = (
+				76C74309CFD886FF6FDD24B1 /* GenreMovieList.swift */,
+				B3CA78E0239047127D6F4034 /* GenreMovieCard.swift */,
+			);
+			path = Results;
+			sourceTree = "<group>";
+		};
+		D384CDB5B909D3EDF0AA00AB /* Credits */ = {
+			isa = PBXGroup;
+			children = (
+				AE13F07B2F40111300755120 /* PersonCreditsView.swift */,
+				75E196EF948206DEE0777B6B /* PersonCreditRow.swift */,
+				E3A6DABB964787458E5993AB /* PersonKnownForCard.swift */,
+			);
+			path = Credits;
+			sourceTree = "<group>";
+		};
+		9F57ADBEDE1AE4E96763AA2A /* Details */ = {
+			isa = PBXGroup;
+			children = (
+				CEBD445F2A08E98F00BBD9B6 /* PersonDetailView.swift */,
+				BC10198C74DDBDF006D2B621 /* PersonBiography.swift */,
+				64AAF57D1DB4E7727004286F /* PersonArtwork.swift */,
+			);
+			path = Details;
+			sourceTree = "<group>";
+		};
+		28C12F596884F0466DCF3D4D /* Gallery */ = {
+			isa = PBXGroup;
+			children = (
+				CE1F9AEE2B7DF7800031518F /* PersonImageView.swift */,
+				1A70AF7DDB6ACAE839BD6D6C /* PersonPhotoTile.swift */,
+				4873B3BD3820729CC67AD69B /* PersonPhotoPlaceholder.swift */,
+			);
+			path = Gallery;
+			sourceTree = "<group>";
+		};
+		644D029C3CC12E520EFB75B3 /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+				B8E990B7F3C6ACDD740486CF /* SearchHeading.swift */,
+				7C8470DE3B842AE0BBE6A49D /* SearchField.swift */,
+				B43B407D93257192E7DDFE86 /* SearchFilters.swift */,
+			);
+			path = Controls;
+			sourceTree = "<group>";
+		};
+		9DB202A15355CC5856591FFB /* Results */ = {
+			isa = PBXGroup;
+			children = (
+				8CC3F551CC018557D373EA1E /* SearchResults.swift */,
+				73759690FFE181FDFD9FD129 /* SearchResultsHeading.swift */,
+				425C37D95808601555798C34 /* SearchMediaCard.swift */,
+				BF2BD52A6CA09BDDFB703347 /* SearchPersonCard.swift */,
+			);
+			path = Results;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
