@@ -24,7 +24,6 @@ struct ContentView: View {
         }
     }
     
-    @State private var selectedTab: BottomTab = .home
     @State private var activePage: BottomTab = .home
     
     var body: some View {
@@ -37,6 +36,12 @@ struct ContentView: View {
             }
             .toolbar(.hidden, for: .tabBar)
             .tag(BottomTab.home)
+
+            ExploreView(useCase: Injection().provideExploreUseCase()) {
+                bottomNavigation
+            }
+            .toolbar(.hidden, for: .tabBar)
+            .tag(BottomTab.explore)
 
             SearchView(searchUseCase: Injection().provideSearchUseCase()) {
                 bottomNavigation
@@ -55,13 +60,10 @@ struct ContentView: View {
     private var bottomNavigation: some View {
         HStack(spacing: 0) {
             ForEach(BottomTab.allCases, id: \.self) { tab in
-                let isSelected = tab == selectedTab
+                let isSelected = tab == activePage
                 
                 Button {
-                    selectedTab = tab
-                    if tab == .home || tab == .search || tab == .favorites {
-                        activePage = tab
-                    }
+                    activePage = tab
                 } label: {
                     VStack(spacing: 3) {
                         Image(systemName: tab == .favorites && isSelected ? "heart.fill" : tab.symbol)

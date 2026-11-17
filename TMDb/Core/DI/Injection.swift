@@ -66,6 +66,10 @@ final class Injection: NSObject {
         return SearchInteractor(searchRepository: repo)
     }
     
+    func provideExploreUseCase() -> ExploreUseCase {
+        ExploreInteractor(repository: ExploreRepository(dataSource: ExploreDataSource()))
+    }
+
     func provideFavoriteUseCase() -> FavoriteUseCase {
         FavoriteInteractor(favoriteRepository: FavoriteRepository())
     }
