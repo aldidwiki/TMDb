@@ -77,3 +77,9 @@ extension TvShowSeasonModel {
         return year.isEmpty ? count : "\(count) · \(year)"
     }
 }
+
+#if DEBUG
+#Preview("TvShowSeasonView") {
+    TvShowSeasonView(seasons: [PreviewFixtures.season], selectedSeasonNumber: 1, onSelect: { _ in })
+}
+#endif

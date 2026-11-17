@@ -38,8 +38,10 @@ struct BackdropGalleryView: View {
         .overlayPreferenceValue(BackdropBounds.self) { bounds in
             if let selection {
                 GeometryReader { geometry in
-                    BackdropPhotoViewer(
-                        photo: selection.photo,
+                    GalleryPhotoViewer(
+                        layout: .landscape,
+                        url: selection.photo.filePath.isEmpty ? nil : URL(string: API.backdropOriginalBaseUrl + selection.photo.filePath),
+                        aspectRatio: selection.photo.aspectRatio,
                         thumbnail: selection.thumbnail,
                         sourceFrame: bounds[selection.photo.filePath].map { geometry[$0] } ?? selection.sourceFrame,
                         viewportSize: geometry.size,
@@ -172,58 +174,7 @@ private struct BackdropSelection {
     let sourceFrame: CGRect
 }
 
-private struct BackdropTile: View {
-    @StateObject private var loader = ImageManager()
-
-    let photo: ImageModel
-    let number: Int
-    let gallerySpace: Namespace.ID
-    let isHidden: Bool
-    let onOpen: (UIImage?, CGRect) -> Void
-
-    var body: some View {
-        GeometryReader { geometry in
-            Button {
-                onOpen(loader.image, geometry.frame(in: .named(gallerySpace)))
-            } label: {
-                artwork
-                    .frame(width: geometry.size.width, height: geometry.size.height)
-                    .clipShape(RoundedRectangle(cornerRadius: DashboardDesign.controlRadius))
-                    .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Backdrop \(number)")
-            .opacity(isHidden ? 0 : 1)
-        }
-        .aspectRatio(16.0 / 9, contentMode: .fit)
-        .anchorPreference(key: BackdropBounds.self, value: .bounds) { [photo.filePath: $0] }
-        .task {
-            if loader.image == nil {
-                loader.load(url: URL(string: API.backdropThumbnailBaseUrl + photo.filePath))
-            }
-        }
-        .onDisappear { loader.cancel() }
-    }
-
-    @ViewBuilder
-    private var artwork: some View {
-        if let image = loader.image {
-            Image(uiImage: image)
-                .resizable()
-                .scaledToFill()
-        } else if loader.error != nil {
-            DashboardDesign.surfaceDim
-                .overlay {
-                    Image(systemName: "photo")
-                        .foregroundStyle(DashboardDesign.secondaryText)
-                }
-        } else {
-            BackdropPlaceholder()
-        }
-    }
-}
-
-private struct BackdropBounds: PreferenceKey {
+struct BackdropBounds: PreferenceKey {
     static let defaultValue: [String: Anchor<CGRect>] = [:]
 
     static func reduce(value: inout [String: Anchor<CGRect>], nextValue: () -> [String: Anchor<CGRect>]) {
@@ -231,20 +182,10 @@ private struct BackdropBounds: PreferenceKey {
     }
 }
 
-private struct BackdropPlaceholder: View {
-    var body: some View {
-        DashboardDesign.surfaceDim
-            .overlay {
-                ProgressView("Loading")
-                    .font(.caption2)
-                    .foregroundStyle(DashboardDesign.secondaryText)
-                    .tint(DashboardDesign.accent)
-            }
-    }
-}
-
-#Preview {
+#if DEBUG
+#Preview("Backdrop gallery") {
     NavigationStack {
-        DetailRouter().makeMovieImageGalleryView(movieId: 693134, title: "Dune: Part Two")
+        BackdropGalleryView(title: "The Last Horizon", fetchBackdrops: { PreviewFixtures.UseCases().getMovieBackdrops(movieId: 1) })
     }
 }
+#endif

@@ -222,7 +222,7 @@ final class ExplorePresenter {
                     case .success(let page):
                         let pageNumber = updated.nextPages[media, default: 1]
                         updated.hasLoaded = true
-                        updated.items.append(contentsOf: page.items.filter { seen.insert($0.id).inserted })
+                        updated.items.append(contentsOf: seen.unseenItems(page.items))
                         updated.nextPages[media] = pageNumber + 1
                         if pageNumber >= page.totalPages { updated.finished.insert(media) }
                         updated.failed.remove(media)

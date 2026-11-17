@@ -9,7 +9,6 @@ import Foundation
 import Combine
 
 protocol TvShowRepositoryProtocol {
-    func getTvShows(page: Int) -> AnyPublisher<[TvShowModel], Error>
     func getTvShow(tvShowId: Int) -> AnyPublisher<TvShowDetailModel, Error>
     func getSimilarTvShows(tvShowId: Int, page: Int) -> AnyPublisher<SimilarTitlesPage, Error>
     func getTvShowSeasonDetail(tvShowId: Int, seasonNumber: Int) -> AnyPublisher<[TvShowSeasonDetailModel], Error>
@@ -31,12 +30,6 @@ final class TvShowRepository: NSObject {
 }
 
 extension TvShowRepository: TvShowRepositoryProtocol {
-    func getTvShows(page: Int) -> AnyPublisher<[TvShowModel], Error> {
-        return self.tvShowDataSource.getTvShows(page: page)
-            .map {
-                Mapper.mapTvResponseModelsToDomains(input: $0)
-            }.eraseToAnyPublisher()
-    }
     
     func getTvShow(tvShowId: Int) -> AnyPublisher<TvShowDetailModel, Error> {
         return self.tvShowDataSource.getTvShow(tvShowId: tvShowId)

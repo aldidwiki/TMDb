@@ -65,7 +65,7 @@ final class SimilarTitlesPresenter {
                     return
                 }
 
-                let additions = response.titles.filter { $0.id > 0 && self.seenIDs.insert($0.id).inserted }
+                let additions = seenIDs.unseenItems(response.titles.filter { $0.id > 0 })
                 titles.append(contentsOf: additions)
                 if page == 1 {
                     previewTitles = Array(additions.prefix(10))

@@ -8,7 +8,8 @@
 import Foundation
 import Observation
 import Combine
-import SwiftUI
+import Foundation
+import Observation
 
 @MainActor
 @Observable
@@ -38,8 +39,6 @@ class PersonPresenter {
     
     private let personUseCase: PersonUseCase
     private let favoriteUseCase: FavoriteUseCase
-    private let router = PersonRouter()
-    private let personRouter = DetailRouter()
     
     var isFavorite = false
     var showsFavoriteError = false
@@ -63,12 +62,8 @@ class PersonPresenter {
         twitterId: ""
     )
     
-    var personPopular: [PersonPopularModel] = []
     var personImages: [PersonImageModel] = []
     
-    var isFetchingMore = false
-    private var canLoadMore = true
-    private var currentPage = 1
     
     init(personUseCase: PersonUseCase, favoriteUseCase: FavoriteUseCase = Injection().provideFavoriteUseCase()) {
         self.personUseCase = personUseCase
@@ -177,56 +172,6 @@ class PersonPresenter {
         return links
     }
     
-    func getPopularPerson(reset: Bool = false) {
-        if reset {
-            currentPage = 1
-            loadingState = true
-            canLoadMore = true
-            personPopular.removeAll()
-        }
-        
-        guard canLoadMore && !isFetchingMore else { return }
-        
-        if currentPage > 1 {
-            isFetchingMore = true
-        }
-        
-        personUseCase.getPopularPerson(page: currentPage)
-            .receive(on: RunLoop.main)
-            .sink { completion in
-                switch completion {
-                case .failure:
-                    self.errorMessage = String(describing: completion)
-                case .finished:
-                    self.isFetchingMore = false
-                }
-            } receiveValue: { newPersons in
-                let uniquePersons = newPersons.filter { newPerson in
-                    !self.personPopular.contains { $0.id == newPerson.id }
-                }
-                
-                if uniquePersons.isEmpty {
-                    self.canLoadMore = false
-                    
-                    if self.currentPage == 1 {
-                        self.loadingState = false
-                        self.personPopular = newPersons
-                    }
-                } else {
-                    if reset {
-                        self.personPopular = uniquePersons
-                    } else {
-                        self.personPopular.append(contentsOf: uniquePersons)
-                    }
-                    
-                    if self.currentPage == 1 {
-                        self.loadingState = false
-                    }
-                    
-                    self.currentPage += 1
-                }
-            }.store(in: &cancellable)
-    }
     
     func getPersonImage(personId: Int) {
         guard !loadingState else { return }
@@ -261,24 +206,5 @@ class PersonPresenter {
         }
     }
 
-    func toPersonDetailView<Content: View>(
-        personId: Int,
-        @ViewBuilder content: () -> Content
-    ) -> some View {
-        NavigationLink(destination: personRouter.makePersonDetailView(for: personId)) {
-            content()
-        }
-        .buttonStyle(.plain)
-    }
     
-    func toPersonImageView<Content: View>(
-        personId: Int,
-        personName: String,
-        @ViewBuilder content: () -> Content
-    ) -> some View {
-        NavigationLink(destination: router.makePersonImageView(personId: personId, personName: personName)) {
-            content()
-        }
-        .buttonStyle(.plain)
-    }
 }

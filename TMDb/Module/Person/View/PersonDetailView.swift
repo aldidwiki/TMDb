@@ -14,8 +14,8 @@ struct PersonDetailView: View {
     private let router = PersonRouter()
     private let columns = [GridItem(.flexible(), spacing: 16), GridItem(.flexible(), spacing: 16)]
 
-    init(personUseCase: PersonUseCase, personId: Int) {
-        _presenter = State(initialValue: PersonPresenter(personUseCase: personUseCase))
+    init(personUseCase: PersonUseCase, personId: Int, favoriteUseCase: FavoriteUseCase = Injection().provideFavoriteUseCase()) {
+        _presenter = State(initialValue: PersonPresenter(personUseCase: personUseCase, favoriteUseCase: favoriteUseCase))
         self.personId = personId
     }
 
@@ -83,7 +83,7 @@ struct PersonDetailView: View {
                 if !links.isEmpty {
                     insetContent { externalLinks(links) }
                 }
-                insetContent { biography }
+                insetContent { PersonBiography(text: presenter.person.biography) }
                 insetContent { personalInfo }
                 knownFor
             }
@@ -94,8 +94,10 @@ struct PersonDetailView: View {
 
     private var overview: some View {
         HStack(spacing: 16) {
-            presenter.toPersonImageView(personId: personId, personName: presenter.person.name) {
-                artwork(
+            NavigationLink {
+                router.makePersonImageView(personId: personId, personName: presenter.person.name)
+            } label: {
+                PersonArtwork(
                     path: presenter.person.profilePath,
                     baseURL: API.profileImageBaseUrl,
                     fallback: DashboardDesign.surfaceDim,
@@ -105,6 +107,7 @@ struct PersonDetailView: View {
                 )
                 .accessibilityLabel("View profile photos")
             }
+            .buttonStyle(.plain)
 
             VStack(alignment: .leading, spacing: 12) {
                 Text(presenter.person.name)
@@ -113,7 +116,7 @@ struct PersonDetailView: View {
                     .accessibilityAddTraits(.isHeader)
                     .fixedSize(horizontal: false, vertical: true)
 
-                if let department = availableText(presenter.person.knownFor) {
+                if let department = presenter.person.knownFor.nonPlaceholderText {
                     Text(department == "Acting" ? "Actor" : department)
                         .font(.subheadline)
                         .foregroundStyle(DashboardDesign.secondaryText)
@@ -165,28 +168,12 @@ struct PersonDetailView: View {
         .accessibilityLabel(link.title == "Google" ? "Google Search" : link.title)
     }
 
-    private var biography: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            sectionTitle("Biography")
-            if let biography = availableText(presenter.person.biography) {
-                ExpandableTextView(textData: biography, maxTextLine: 7)
-                    .font(.subheadline)
-                    .foregroundStyle(DashboardDesign.secondaryText)
-                    .lineSpacing(3)
-            } else {
-                Text("Biography unavailable")
-                    .font(.subheadline)
-                    .foregroundStyle(DashboardDesign.secondaryText)
-            }
-        }
-    }
-
     @ViewBuilder
     private var personalInfo: some View {
-        let department = availableText(presenter.person.knownFor)
-        let birthday = availableText(presenter.person.birthday.formatDateString())
-        let birthplace = availableText(presenter.person.birthplace)
-        let aliases = presenter.person.alsoKnownAs.compactMap(availableText)
+        let department = presenter.person.knownFor.nonPlaceholderText
+        let birthday = presenter.person.birthday.formatDateString().nonPlaceholderText
+        let birthplace = presenter.person.birthplace.nonPlaceholderText
+        let aliases = presenter.person.alsoKnownAs.compactMap(\.nonPlaceholderText)
 
         if department != nil || birthday != nil || birthplace != nil || !aliases.isEmpty {
             VStack(alignment: .leading, spacing: 12) {
@@ -268,7 +255,7 @@ struct PersonDetailView: View {
                             NavigationLink {
                                 router.destination(for: item.id)
                             } label: {
-                                creditCard(item.credit)
+                                PersonKnownForCard(credit: item.credit)
                             }
                             .buttonStyle(.plain)
                         }
@@ -278,50 +265,6 @@ struct PersonDetailView: View {
                 .scrollIndicators(.hidden)
             }
         }
-    }
-
-    private func creditCard(_ credit: CreditModel) -> some View {
-        let isMovie = credit.mediaType == Constants.movieResponseType
-        let media = isMovie ? "Movie" : "TV"
-        let role = availableText(credit.characterName)
-
-        return VStack(alignment: .leading, spacing: 4) {
-            artwork(
-                path: credit.profilePath,
-                baseURL: API.imageBaseUrl,
-                fallback: DashboardDesign.color(isMovie ? 0x493255 : 0x1C5060),
-                width: 140,
-                height: 210,
-                radius: DashboardDesign.controlRadius
-            )
-            .accessibilityHidden(true)
-
-            Text(credit.name)
-                .font(.footnote.weight(.semibold))
-                .foregroundStyle(DashboardDesign.text)
-                .lineLimit(1)
-
-            Text(role.map { "\($0) · \(media)" } ?? media)
-                .font(.caption)
-                .foregroundStyle(DashboardDesign.secondaryText)
-                .lineLimit(1)
-        }
-        .frame(width: 140, alignment: .leading)
-        .contentShape(Rectangle())
-        .accessibilityElement(children: .combine)
-    }
-
-    private func artwork(path: String, baseURL: String, fallback: Color, width: CGFloat, height: CGFloat, radius: CGFloat) -> some View {
-        ZStack {
-            fallback
-            if let path = availableText(path) {
-                WebImage(url: URL(string: baseURL + path))
-                    .resizable()
-                    .scaledToFill()
-            }
-        }
-        .frame(width: width, height: height)
-        .clipShape(RoundedRectangle(cornerRadius: radius))
     }
 
     private func insetContent<Content: View>(@ViewBuilder content: () -> Content) -> some View {
@@ -338,10 +281,6 @@ struct PersonDetailView: View {
             .accessibilityAddTraits(.isHeader)
     }
 
-    private func availableText(_ value: String) -> String? {
-        let text = value.trimmingCharacters(in: .whitespacesAndNewlines)
-        return text.isEmpty || text == "-" ? nil : text
-    }
 }
 
 private struct PersonOutlineControl: ViewModifier {
@@ -362,8 +301,10 @@ private struct PersonOutlineControl: ViewModifier {
     }
 }
 
-#Preview {
+#if DEBUG
+#Preview("Person detail") {
     NavigationStack {
-        PersonDetailView(personUseCase: Injection().providePersonUseCase(), personId: 933238)
+        PersonDetailView(personUseCase: PreviewFixtures.UseCases(), personId: PreviewFixtures.person.id, favoriteUseCase: PreviewFixtures.favorites())
     }
 }
+#endif

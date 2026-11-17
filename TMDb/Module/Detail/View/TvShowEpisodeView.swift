@@ -37,7 +37,7 @@ struct TvShowEpisodeView: View {
                         .foregroundStyle(DashboardDesign.text)
                         .accessibilityAddTraits(.isHeader)
 
-                    searchField
+                    EpisodeSearchField(query: $query)
                 }
                 .padding(.horizontal, inset)
                 .padding(.vertical, 12)
@@ -65,35 +65,6 @@ struct TvShowEpisodeView: View {
         .tint(DashboardDesign.accent)
     }
 
-    private var searchField: some View {
-        HStack(spacing: 8) {
-            Image(systemName: "magnifyingglass")
-                .accessibilityHidden(true)
-            TextField("Search by title or episode number", text: $query)
-                .font(.subheadline)
-                .foregroundStyle(DashboardDesign.text)
-                .submitLabel(.search)
-
-            if !query.isEmpty {
-                Button {
-                    query = ""
-                } label: {
-                    Image(systemName: "xmark.circle.fill")
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("Clear search")
-            }
-        }
-        .foregroundStyle(DashboardDesign.secondaryText)
-        .padding(.horizontal, 12)
-        .frame(minHeight: 44)
-        .background(DashboardDesign.surface, in: RoundedRectangle(cornerRadius: DashboardDesign.controlRadius))
-        .overlay {
-            RoundedRectangle(cornerRadius: DashboardDesign.controlRadius)
-                .strokeBorder(DashboardDesign.border)
-                .allowsHitTesting(false)
-        }
-    }
 }
 
 extension TvShowSeasonDetailModel {
@@ -105,3 +76,9 @@ extension TvShowSeasonDetailModel {
         name.isEmpty ? "Episode \(episodeNumber)" : name
     }
 }
+
+#if DEBUG
+#Preview("TvShowEpisodeView") {
+    NavigationStack { TvShowEpisodeView(season: PreviewFixtures.season, episodes: [PreviewFixtures.episode]) }
+}
+#endif

@@ -99,3 +99,9 @@ struct ExploreCard: View {
             .accessibilityHidden(true)
     }
 }
+
+#if DEBUG
+#Preview("ExploreCard") {
+    ExploreCard(item: PreviewFixtures.explore, genres: ["Science Fiction"])
+}
+#endif

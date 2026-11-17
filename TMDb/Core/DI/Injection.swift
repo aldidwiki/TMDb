@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import RealmSwift
 
 final class Injection: NSObject {
     private func provideMovieRepository() -> MovieRepositoryProtocol {
@@ -33,10 +32,6 @@ final class Injection: NSObject {
         return SearchRepository.sharedInstance(searchDataSource)
     }
     
-    func provideMovieUseCase() -> MovieUseCase {
-        let repo = provideMovieRepository()
-        return MovieInteractor(repository: repo)
-    }
 
     func provideDashboardUseCase() -> DashboardUseCase {
         DashboardInteractor(repository: provideMovieRepository())

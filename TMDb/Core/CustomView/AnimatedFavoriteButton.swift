@@ -56,3 +56,9 @@ private struct FavoritePressStyle: ButtonStyle {
             .animation(reduceMotion ? nil : .spring(duration: 0.24, bounce: 0.16), value: configuration.isPressed)
     }
 }
+
+#if DEBUG
+#Preview("AnimatedFavoriteButton") {
+    AnimatedFavoriteButton(isFavorite: true, onToggle: { true })
+}
+#endif

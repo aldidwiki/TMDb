@@ -277,3 +277,11 @@ private struct ExploreChipLayout: Layout {
         }
     }
 }
+
+#if DEBUG
+#Preview("ExploreDrawer") {
+    ExploreDrawer(category: .movies, presenter: ExplorePresenter(useCase: PreviewFixtures.UseCases()),
+                  filters: .constant(.init()), sort: .constant(.popular), isSort: false, onClose: {},
+                  onCategory: { _ in }, onPickYear: {}, onReset: {}, onApply: {})
+}
+#endif

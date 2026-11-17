@@ -133,7 +133,7 @@ final class SearchPresenter {
 
                 switch result {
                 case .success(let response):
-                    let uniqueResults = response.results.filter { self.resultIDs.insert($0.id).inserted }
+                    let uniqueResults = self.resultIDs.unseenItems(response.results)
                     self.results.append(contentsOf: uniqueResults)
                     self.nextPage = page + 1
                     self.totalPages = min(response.totalPages, 500)

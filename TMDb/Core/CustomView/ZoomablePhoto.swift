@@ -76,3 +76,12 @@ final class PhotoZoomScrollView: UIScrollView, UIScrollViewDelegate {
         }
     }
 }
+
+#if DEBUG
+#Preview("ZoomablePhoto") {
+    if let image = PreviewFixtures.thumbnail {
+        ZoomablePhoto(image: image, resetsZoom: false, onZoomReset: {})
+            .frame(width: 200, height: 180)
+    }
+}
+#endif

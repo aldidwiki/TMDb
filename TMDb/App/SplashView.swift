@@ -8,27 +8,20 @@
 import SwiftUI
 
 struct SplashView: View {
-    @State var isActive = false
+    @State private var isActive = false
+    let content: () -> ContentView
+
+    init(content: @escaping () -> ContentView = { ContentView() }) {
+        self.content = content
+    }
     
     var body: some View {
         ZStack {
             if isActive {
-                ContentView()
+                content()
                     .transition(.scale)
             } else {
-                ZStack {
-                    Rectangle()
-                        .background(Color("primary_color"))
-                    
-                    Color("primary_color")
-                    
-                    Image("app_logo")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 150, height: 150)
-                }
-                .preferredColorScheme(.dark)
-                .ignoresSafeArea()
+                SplashArtwork()
             }
         }
         .onAppear {
@@ -41,6 +34,8 @@ struct SplashView: View {
     }
 }
 
-#Preview {
-    SplashView()
+#if DEBUG
+#Preview("Splash") {
+    SplashView(content: PreviewFixtures.contentView)
 }
+#endif

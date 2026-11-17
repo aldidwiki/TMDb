@@ -22,7 +22,7 @@ struct GenreMovieListingView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            header
+            GenreListingHeader(title: genre.name, count: presenter.totalResults, dismiss: { dismiss() })
                 .padding(.horizontal, 18)
                 .padding(.top, 8)
                 .padding(.bottom, 26)
@@ -38,49 +38,12 @@ struct GenreMovieListingView: View {
             .scrollIndicators(.hidden)
             .padding(.bottom, 20)
             
-            ScrollView(.vertical, showsIndicators: true) {
-                Group {
-                    if presenter.isLoading {
-                        ProgressView("Loading movies")
-                            .frame(maxWidth: .infinity)
-                            .padding(.top, 60)
-                    } else if presenter.loadError {
-                        VStack(spacing: 12) {
-                            Label("Couldn’t load movies", systemImage: "wifi.exclamationmark")
-                                .foregroundStyle(DashboardDesign.secondaryText)
-                            Button("Retry") { presenter.load() }
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.top, 60)
-                    } else if presenter.hasLoaded && presenter.movies.isEmpty {
-                        ContentUnavailableView("No movies found", systemImage: "movieclapper",
-                                               description: Text("Try another year or rating."))
-                        .frame(maxWidth: .infinity)
-                        .padding(.top, 60)
-                    } else {
-                        LazyVStack(spacing: 12) {
-                            ForEach(presenter.movies) { movie in
-                                movieCard(movie)
-                                    .onAppear { presenter.loadMoreIfNeeded(after: movie) }
-                            }
-                            if presenter.isLoadingMore {
-                                ProgressView()
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 12)
-                            } else if presenter.loadMoreError {
-                                Button("Couldn’t load more movies. Retry") { presenter.loadNextPage() }
-                                    .font(.footnote)
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 12)
-                            }
-                        }
-                    }
-                }
-                .padding(.horizontal, 18)
-                .padding(.bottom, 28)
-            }
-            .scrollIndicators(.visible)
-            .id(presenter.listVersion)
+            GenreMovieList(
+                movies: presenter.movies, hasLoaded: presenter.hasLoaded, isLoading: presenter.isLoading,
+                isLoadingMore: presenter.isLoadingMore, loadError: presenter.loadError,
+                loadMoreError: presenter.loadMoreError, listVersion: presenter.listVersion,
+                load: presenter.load, loadMore: presenter.loadNextPage, loadMoreIfNeeded: presenter.loadMoreIfNeeded
+            )
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(DashboardDesign.background.ignoresSafeArea())
@@ -109,29 +72,6 @@ struct GenreMovieListingView: View {
         }
     }
     
-    private var header: some View {
-        HStack(alignment: .top, spacing: 8) {
-            Button(action: { dismiss() }) {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundStyle(DashboardDesign.text)
-                    .frame(width: 34, height: 44)
-                    .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Back")
-            
-            VStack(alignment: .leading, spacing: 2) {
-                Text("\(genre.name) Movies")
-                    .font(.system(size: 20, weight: .bold))
-                    .foregroundStyle(DashboardDesign.text)
-                Text("\(presenter.totalResults) titles available")
-                    .font(.system(size: 11))
-                    .foregroundStyle(DashboardDesign.secondaryText)
-            }
-            .padding(.top, 3)
-        }
-    }
     
     private func chip(_ label: String, selected: Bool = false, showsChevron: Bool = false, action: @escaping () -> Void) -> some View {
         Button(action: action) {
@@ -154,61 +94,6 @@ struct GenreMovieListingView: View {
         .buttonStyle(.plain)
     }
     
-    private func movieCard(_ movie: MovieModel) -> some View {
-        HStack(alignment: .top, spacing: 12) {
-            Group {
-                if !movie.posterPath.isEmpty, let url = URL(string: API.imageBaseUrl + movie.posterPath) {
-                    WebImage(url: url)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 86, height: 134)
-                        .clipped()
-                        .background(DashboardDesign.color(0x292667))
-                } else {
-                    DashboardDesign.color(0x292667)
-                        .frame(width: 86, height: 134)
-                }
-            }
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-            .accessibilityHidden(true)
-            
-            VStack(alignment: .leading, spacing: 0) {
-                Text(movie.title)
-                    .font(.system(size: 16, weight: .bold))
-                    .foregroundStyle(DashboardDesign.text)
-                    .lineLimit(1)
-                Text(String(movie.releaseDate.prefix(4)))
-                    .font(.system(size: 11))
-                    .foregroundStyle(DashboardDesign.secondaryText)
-                    .padding(.top, 4)
-                Text("★ \(movie.rating.formatted(.number.precision(.fractionLength(1))))")
-                    .font(.system(size: 13, weight: .bold))
-                    .foregroundStyle(DashboardDesign.color(0xF59E0B))
-                    .padding(.top, 4)
-                Text(movie.overview.isEmpty ? "Overview unavailable" : movie.overview)
-                    .font(.system(size: 11))
-                    .foregroundStyle(DashboardDesign.secondaryText)
-                    .lineLimit(2)
-                    .padding(.top, 4)
-                
-                NavigationLink(value: movie.id) {
-                    Text("See Details")
-                        .font(.footnote.weight(.semibold))
-                        .foregroundStyle(DashboardDesign.surface)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 4)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .frame(height: 30)
-                        .background(DashboardDesign.accent, in: RoundedRectangle(cornerRadius: 10))
-                }
-                .buttonStyle(.plain)
-                .padding(.top, 16)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-        }
-        .padding(10)
-        .background(DashboardDesign.surface, in: RoundedRectangle(cornerRadius: 14))
-    }
     
     private func open(_ sheet: FilterSheet) {
         draftSort = presenter.sort
@@ -233,7 +118,8 @@ struct GenreMovieListingView: View {
                 closeSheet()
             }
         } else {
-            sortOrRatingSheet(isSort: sheet == .sort)
+            GenreFilterDrawer(isSort: sheet == .sort, genreName: genre.name, draftSort: $draftSort,
+                              draftRating: $draftRating, close: closeSheet, apply: apply)
                 .frame(maxWidth: .infinity)
                 .frame(height: 440)
                 .background(DashboardDesign.surface)
@@ -242,56 +128,6 @@ struct GenreMovieListingView: View {
         }
     }
 
-    private func sortOrRatingSheet(isSort: Bool) -> some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Capsule()
-                .fill(DashboardDesign.border)
-                .frame(width: 48, height: 4)
-                .frame(maxWidth: .infinity)
-                .padding(.top, 14)
-                .padding(.bottom, 9)
-            
-            HStack {
-                Text(isSort ? "Sort by" : "Minimum rating")
-                    .font(.system(size: 20, weight: .bold))
-                    .foregroundStyle(DashboardDesign.text)
-                Spacer()
-                Button { closeSheet() } label: {
-                    Image(systemName: "xmark")
-                        .foregroundStyle(DashboardDesign.secondaryText)
-                        .frame(width: 28, height: 28)
-                }
-                .accessibilityLabel("Close")
-            }
-            
-            Text(isSort ? "Choose how \(genre.name) movies are ordered." : "Show titles at or above this rating.")
-                .font(.system(size: 13))
-                .foregroundStyle(DashboardDesign.secondaryText)
-                .padding(.top, 7)
-                .padding(.bottom, 9)
-            
-            VStack(spacing: 9) {
-                if isSort {
-                    optionRows(GenrePresenter.Sort.allCases, selection: $draftSort)
-                } else {
-                    optionRows(GenrePresenter.MinimumRating.allCases, selection: $draftRating)
-                }
-            }
-            
-            Button { apply() } label: {
-                Text(isSort ? "Apply sort" : "Apply rating")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(DashboardDesign.surface)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 46)
-                    .background(DashboardDesign.accent, in: RoundedRectangle(cornerRadius: 10))
-            }
-            .padding(.top, 9)
-            Spacer(minLength: 0)
-        }
-        .padding(.horizontal, 20)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-    }
     
     private func optionRows<Option: RawRepresentable & Hashable>(_ options: [Option], selection: Binding<Option>) -> some View where Option.RawValue == String {
         ForEach(options, id: \.self) { option in
@@ -323,11 +159,10 @@ struct GenreMovieListingView: View {
     }
 }
 
-#Preview {
+#if DEBUG
+#Preview("Genre movies") {
     NavigationStack {
-        GenreMovieListingView(
-            genre: GenreRoute(id: 878, name: "Sci-Fi"),
-            useCase: Injection().provideGenreUseCase()
-        )
+        GenreMovieListingView(genre: .init(id: 878, name: "Science Fiction"), useCase: PreviewFixtures.UseCases())
     }
 }
+#endif

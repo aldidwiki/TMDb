@@ -40,8 +40,10 @@ struct PersonImageView: View {
             if let selection {
                 GeometryReader { geometry in
                     let sourceFrame = bounds[selection.photo.id].map { geometry[$0] } ?? selection.sourceFrame
-                    PersonPhotoViewer(
-                        photo: selection.photo,
+                    GalleryPhotoViewer(
+                        layout: .portrait,
+                        url: selection.photo.filePath.isEmpty ? nil : URL(string: API.profileOriginalBaseUrl + selection.photo.filePath),
+                        aspectRatio: selection.photo.aspectRatio,
                         thumbnail: selection.thumbnail,
                         sourceFrame: sourceFrame,
                         viewportSize: geometry.size,
@@ -175,52 +177,7 @@ private struct PersonPhotoSelection {
     let sourceFrame: CGRect
 }
 
-private struct PersonPhotoTile: View {
-    @StateObject private var loader = ImageManager()
-
-    let photo: PersonImageModel
-    let index: Int
-    let isHidden: Bool
-    let onOpen: (UIImage?, CGRect) -> Void
-
-    var body: some View {
-        GeometryReader { geometry in
-            Button {
-                onOpen(loader.image, geometry.frame(in: .named("personPhotoGallery")))
-            } label: {
-                ZStack {
-                    if let image = loader.image {
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFill()
-                    } else if loader.error != nil {
-                        DashboardDesign.surfaceDim
-                        Image(systemName: "photo")
-                            .foregroundStyle(DashboardDesign.secondaryText)
-                    } else {
-                        PersonPhotoPlaceholder()
-                    }
-                }
-                .frame(width: geometry.size.width, height: geometry.size.height)
-                .clipShape(RoundedRectangle(cornerRadius: DashboardDesign.controlRadius))
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Photo \(index + 1)")
-            .opacity(isHidden ? 0 : 1)
-        }
-        .aspectRatio(9.0 / 16, contentMode: .fit)
-        .anchorPreference(key: PersonPhotoTileBounds.self, value: .bounds) { [photo.id: $0] }
-        .task {
-            if loader.image == nil {
-                loader.load(url: URL(string: API.profileImageBaseUrl + photo.filePath))
-            }
-        }
-        .onDisappear { loader.cancel() }
-    }
-}
-
-private struct PersonPhotoTileBounds: PreferenceKey {
+struct PersonPhotoTileBounds: PreferenceKey {
     static let defaultValue: [String: Anchor<CGRect>] = [:]
 
     static func reduce(value: inout [String: Anchor<CGRect>], nextValue: () -> [String: Anchor<CGRect>]) {
@@ -228,24 +185,8 @@ private struct PersonPhotoTileBounds: PreferenceKey {
     }
 }
 
-private struct PersonPhotoPlaceholder: View {
-    var body: some View {
-        DashboardDesign.surfaceDim
-            .overlay {
-                ProgressView("Loading")
-                    .font(.caption2)
-                    .foregroundStyle(DashboardDesign.secondaryText)
-                    .tint(DashboardDesign.accent)
-            }
-    }
+#if DEBUG
+#Preview("Person gallery") {
+    NavigationStack { PersonImageView(personUseCase: PreviewFixtures.UseCases(), personId: 3, personName: "Alex Morgan") }
 }
-
-#Preview {
-    NavigationStack {
-        PersonImageView(
-            personUseCase: Injection().providePersonUseCase(),
-            personId: 933238,
-            personName: "Rebecca Ferguson"
-        )
-    }
-}
+#endif

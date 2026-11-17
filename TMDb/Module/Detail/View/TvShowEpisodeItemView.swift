@@ -64,3 +64,9 @@ struct TvShowEpisodeItemView: View {
         }
     }
 }
+
+#if DEBUG
+#Preview("TvShowEpisodeItemView") {
+    TvShowEpisodeItemView(episodeModel: PreviewFixtures.episode)
+}
+#endif

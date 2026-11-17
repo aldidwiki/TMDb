@@ -6,11 +6,9 @@
 //
 
 import Foundation
-import Alamofire
 import Combine
 
 protocol TvShowDataSourceProtocol {
-    func getTvShows(page: Int) -> AnyPublisher<[TvResponseModel], Error>
     func getTvShow(tvShowId: Int) -> AnyPublisher<TvShowDetailResponse, Error>
     func getSimilarTvShows(tvShowId: Int, page: Int) -> AnyPublisher<TvResponse, Error>
     func getTvShowSeasonDetail(tvShowId: Int, seasonNumber: Int) -> AnyPublisher<TvShowSeasonDetailResponse, Error>
@@ -19,97 +17,24 @@ protocol TvShowDataSourceProtocol {
 
 final class TvShowDataSource: NSObject {
     private override init() {}
-    
+
     static let sharedInstance: TvShowDataSource = TvShowDataSource()
 }
 
 extension TvShowDataSource: TvShowDataSourceProtocol {
-    func getTvShows(page: Int) -> AnyPublisher<[TvResponseModel], Error> {
-        let param: Parameters = [
-            "page": page
-        ]
-        
-        return Future<[TvResponseModel], Error> { completion in
-            if let url = URL(string: "\(API.baseUrl)tv/popular") {
-                AF.request(url, parameters: param, headers: API.headers)
-                    .validate()
-                    .responseDecodable(of: TvResponse.self) { response in
-                        switch response.result {
-                            case .success(let value):
-                                completion(.success(value.tvShows))
-                            case .failure:
-                                completion(.failure(URLError.invalidResponse))
-                        }
-                    }
-            }
-        }.eraseToAnyPublisher()
-    }
-    
     func getTvShow(tvShowId: Int) -> AnyPublisher<TvShowDetailResponse, Error> {
-        let param: Parameters = [
-            "append_to_response": "content_ratings,videos,aggregate_credits,external_ids"
-        ]
-        
-        return Future<TvShowDetailResponse, Error> { completion in
-            if let url = URL(string: "\(API.baseUrl)tv/\(tvShowId)") {
-                AF.request(url, parameters: param, headers: API.headers)
-                    .validate()
-                    .responseDecodable(of: TvShowDetailResponse.self) { response in
-                        switch response.result {
-                            case .success(let value):
-                                completion(.success(value))
-                            case .failure:
-                                completion(.failure(URLError.invalidResponse))
-                        }
-                    }
-            }
-        }.eraseToAnyPublisher()
+        TMDbRequest.value("tv/\(tvShowId)", parameters: ["append_to_response": "content_ratings,videos,aggregate_credits,external_ids"])
     }
-    
+
     func getSimilarTvShows(tvShowId: Int, page: Int) -> AnyPublisher<TvResponse, Error> {
-        AF.request(
-            "\(API.baseUrl)tv/\(tvShowId)/similar",
-            parameters: ["page": page],
-            headers: API.headers
-        )
-        .validate()
-        .publishDecodable(type: TvResponse.self)
-        .value()
-        .mapError { _ in URLError.invalidResponse as Error }
-        .eraseToAnyPublisher()
+        TMDbRequest.value("tv/\(tvShowId)/similar", parameters: ["page": page])
     }
 
     func getTvShowSeasonDetail(tvShowId: Int, seasonNumber: Int) -> AnyPublisher<TvShowSeasonDetailResponse, Error> {
-        return Future<TvShowSeasonDetailResponse, Error> { completion in
-            if let url = URL(string: "\(API.baseUrl)tv/\(tvShowId)/season/\(seasonNumber)") {
-                AF.request(url, headers: API.headers)
-                    .validate()
-                    .responseDecodable(of: TvShowSeasonDetailResponse.self) { response in
-                        switch response.result {
-                            case .success(let value):
-                                completion(.success(value))
-                            case .failure:
-                                completion(.failure(URLError.invalidResponse))
-                        }
-                    }
-            }
-        }.eraseToAnyPublisher()
+        TMDbRequest.value("tv/\(tvShowId)/season/\(seasonNumber)")
     }
-    
+
     func getTvShowBackdrops(tvId: Int) -> AnyPublisher<ImageResponse, Error> {
-        return Future<ImageResponse, Error> { completion in
-            if let url = URL(string: "\(API.baseUrl)tv/\(tvId)/images") {
-                AF.request(url, headers: API.headers)
-                    .validate()
-                    .responseDecodable(of: ImageResponse.self) { response in
-                        switch response.result {
-                            case .success(let value):
-                                completion(.success(value))
-                            case .failure:
-                                completion(.failure(URLError.invalidResponse))
-                        }
-                    }
-            }
-        }.eraseToAnyPublisher()
+        TMDbRequest.value("tv/\(tvId)/images")
     }
 }

@@ -123,8 +123,8 @@ final class GenrePresenter {
                 self.request = nil
             } receiveValue: { [weak self] result in
                 guard let self, generation == self.requestGeneration else { return }
-                let knownIDs = Set(self.movies.map(\.id))
-                self.movies.append(contentsOf: result.movies.filter { !knownIDs.contains($0.id) })
+                var knownIDs = Set(self.movies.map(\.id))
+                self.movies.append(contentsOf: knownIDs.unseenItems(result.movies))
                 self.totalResults = result.totalResults
                 self.totalPages = max(1, result.totalPages)
                 self.nextPage = result.movies.isEmpty ? self.totalPages + 1 : page + 1

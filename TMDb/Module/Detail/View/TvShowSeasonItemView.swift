@@ -40,3 +40,9 @@ struct TvShowSeasonItemView: View {
         .accessibilityElement(children: .combine)
     }
 }
+
+#if DEBUG
+#Preview("TvShowSeasonItemView") {
+    TvShowSeasonItemView(season: PreviewFixtures.season, isSelected: true)
+}
+#endif

@@ -9,7 +9,6 @@ import Foundation
 import Combine
 
 protocol MovieRepositoryProtocol {
-    func getMovies(page: Int) -> AnyPublisher<[MovieModel], Error>
     func getTrendingMovies() -> AnyPublisher<[MovieModel], Error>
     func getNowPlayingMovies(page: Int, region: String) -> AnyPublisher<[MovieModel], Error>
     func getMovieGenres() -> AnyPublisher<[GenreModel], Error>
@@ -34,12 +33,6 @@ final class MovieRepository: NSObject {
 }
 
 extension MovieRepository: MovieRepositoryProtocol {
-    func getMovies(page: Int) -> AnyPublisher<[MovieModel], Error> {
-        return self.movieDataSource.getMovies(page: page)
-            .map {
-                Mapper.mapMovieResponseModelsToDomains(input: $0)
-            }.eraseToAnyPublisher()
-    }
 
     func getTrendingMovies() -> AnyPublisher<[MovieModel], Error> {
         movieDataSource.getTrendingMovies()

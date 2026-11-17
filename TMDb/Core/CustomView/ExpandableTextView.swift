@@ -82,10 +82,8 @@ struct ExpandableTextView: View {
     }
 }
 
-struct ExpandableTextView_Previews: PreviewProvider {
-    static var previews: some View {
-        ExpandableTextView(
-            textData: "Robb goes to war against the Lannisters. Jon finds himself struggling on deciding if his place is with Robb or the Night's Watch. Drogo has fallen ill from a fresh battle wound. Daenerys is desperate to save him."
-        )
-    }
+#Preview("Expandable text") {
+    ExpandableTextView(
+        textData: "Robb goes to war against the Lannisters. Jon finds himself struggling on deciding if his place is with Robb or the Night's Watch. Drogo has fallen ill from a fresh battle wound. Daenerys is desperate to save him."
+    )
 }

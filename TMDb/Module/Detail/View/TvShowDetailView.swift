@@ -83,7 +83,7 @@ struct TvShowDetailView: View {
                     }
 
                     topCast(title: show.title, inset: inset)
-                    seriesInfo(show)
+                    SeriesInfoSection(show: show)
                         .padding(.horizontal, inset)
                     SimilarTitlesSection(
                         sourceTitle: show.title,
@@ -223,7 +223,7 @@ struct TvShowDetailView: View {
                 sectionMessage("No episodes available")
             case .loaded(let episodes):
                 ForEach(episodes.prefix(3), id: \.episodeNumber) { episode in
-                    episodePreviewRow(episode)
+                    TvEpisodePreviewRow(episode: episode)
                 }
             case .failed:
                 sectionMessage("Couldn’t load episodes")
@@ -231,40 +231,6 @@ struct TvShowDetailView: View {
                     .font(.footnote.weight(.semibold))
             }
         }
-    }
-
-    private func episodePreviewRow(_ episode: TvShowSeasonDetailModel) -> some View {
-        let airDate = episode.airDate.formatDateString(output: "MMM d, yyyy")
-
-        return HStack(spacing: 12) {
-            Text(episode.episodeCode)
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(DashboardDesign.accent)
-                .padding(.horizontal, 8)
-                .frame(minWidth: 44, minHeight: 40)
-                .background(DashboardDesign.surfaceDim, in: RoundedRectangle(cornerRadius: 8))
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text(episode.displayName)
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(DashboardDesign.text)
-                if !airDate.isEmpty {
-                    Text(airDate)
-                        .font(.caption)
-                        .foregroundStyle(DashboardDesign.secondaryText)
-                }
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 10)
-        .background(DashboardDesign.surface, in: RoundedRectangle(cornerRadius: DashboardDesign.controlRadius))
-        .overlay {
-            RoundedRectangle(cornerRadius: DashboardDesign.controlRadius)
-                .strokeBorder(DashboardDesign.border)
-                .allowsHitTesting(false)
-        }
-        .accessibilityElement(children: .combine)
     }
 
     private func topCast(title: String, inset: CGFloat) -> some View {
@@ -301,45 +267,6 @@ struct TvShowDetailView: View {
         }
     }
 
-    @ViewBuilder
-    private func seriesInfo(_ show: TvShowDetailModel) -> some View {
-        let fields: [(label: String, value: String)] = [
-            ("Creator", show.creators ?? ""),
-            ("First aired", show.releaseDate.formatDateString(output: "MMM d, yyyy")),
-            ("Executive producer", show.executiveProducers ?? ""),
-            ("Status", show.status)
-        ].filter { !$0.1.isEmpty }
-
-        if !fields.isEmpty {
-            VStack(alignment: .leading, spacing: 12) {
-                DetailSectionHeading("Series info")
-
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), alignment: .topLeading),
-                                         count: dynamicTypeSize.isAccessibilitySize ? 1 : 2),
-                          alignment: .leading, spacing: 12) {
-                    ForEach(fields, id: \.label) { field in
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(field.label)
-                                .font(.caption)
-                                .foregroundStyle(DashboardDesign.secondaryText)
-                            Text(field.value)
-                                .font(.subheadline.weight(.medium))
-                                .foregroundStyle(DashboardDesign.text)
-                        }
-                        .accessibilityElement(children: .combine)
-                    }
-                }
-                .padding(13)
-                .background(DashboardDesign.surface, in: RoundedRectangle(cornerRadius: DashboardDesign.controlRadius))
-                .overlay {
-                    RoundedRectangle(cornerRadius: DashboardDesign.controlRadius)
-                        .strokeBorder(DashboardDesign.border)
-                        .allowsHitTesting(false)
-                }
-            }
-        }
-    }
-
     private func sectionMessage(_ message: String) -> some View {
         Text(message)
             .font(.footnote)
@@ -347,8 +274,10 @@ struct TvShowDetailView: View {
     }
 }
 
-#Preview {
+#if DEBUG
+#Preview("TV detail") {
     NavigationStack {
-        DetailRouter().makeTvShowDetailView(for: 95396)
+        TvShowDetailView(tvShowUseCase: PreviewFixtures.UseCases(), favoriteUseCase: PreviewFixtures.favorites(), tvShowId: PreviewFixtures.show.id)
     }
 }
+#endif

@@ -106,11 +106,6 @@ final class ExploreDataSource {
         _ path: String,
         parameters: Parameters
     ) -> AnyPublisher<Response, Error> {
-        AF.request(API.baseUrl + path, parameters: parameters, headers: API.headers)
-            .validate()
-            .publishDecodable(type: Response.self)
-            .value()
-            .mapError { $0 as Error }
-            .eraseToAnyPublisher()
+        TMDbRequest.value(path, parameters: parameters, mapError: { $0 })
     }
 }

@@ -73,3 +73,13 @@ struct SimilarTitlesSection: View {
             .foregroundStyle(DashboardDesign.secondaryText)
     }
 }
+
+#if DEBUG
+#Preview("SimilarTitlesSection") {
+    let presenter = SimilarTitlesPresenter(sourceID: 1, fetchPage: { PreviewFixtures.UseCases().getSimilarMovies(movieId: 1, page: $0) })
+    NavigationStack {
+        SimilarTitlesSection(sourceTitle: "The Last Horizon", genres: "Science Fiction", media: .movie, inset: 20, presenter: presenter)
+            .task { presenter.load() }
+    }
+}
+#endif

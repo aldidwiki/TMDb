@@ -8,88 +8,67 @@
 import SwiftUI
 
 struct ContentView: View {
-    private enum BottomTab: String, CaseIterable {
-        case home = "Home"
-        case explore = "Explore"
-        case search = "Search"
-        case favorites = "Favorites"
-        
-        var symbol: String {
-            switch self {
-            case .home: "house"
-            case .explore: "diamond.inset.filled"
-            case .search: "magnifyingglass"
-            case .favorites: "heart"
-            }
-        }
-    }
-    
     @State private var activePage: BottomTab = .home
     
+    private let dashboardUseCase: DashboardUseCase
+    private let detailUseCase: DetailUseCase
+    private let exploreUseCase: ExploreUseCase
+    private let searchUseCase: SearchUseCase
+    private let favoriteUseCase: FavoriteUseCase
+
+    init() {
+        let injection = Injection()
+        self.init(dashboardUseCase: injection.provideDashboardUseCase(), detailUseCase: injection.provideDetailUseCase(),
+                  exploreUseCase: injection.provideExploreUseCase(), searchUseCase: injection.provideSearchUseCase(),
+                  favoriteUseCase: injection.provideFavoriteUseCase())
+    }
+
+    init(dashboardUseCase: DashboardUseCase, detailUseCase: DetailUseCase, exploreUseCase: ExploreUseCase,
+         searchUseCase: SearchUseCase, favoriteUseCase: FavoriteUseCase) {
+        self.dashboardUseCase = dashboardUseCase
+        self.detailUseCase = detailUseCase
+        self.exploreUseCase = exploreUseCase
+        self.searchUseCase = searchUseCase
+        self.favoriteUseCase = favoriteUseCase
+    }
+
     var body: some View {
         TabView(selection: $activePage) {
             DashboardView(
-                dashboardUseCase: Injection().provideDashboardUseCase(),
-                detailUseCase: Injection().provideDetailUseCase()
+                dashboardUseCase: dashboardUseCase,
+                detailUseCase: detailUseCase
             ) {
-                bottomNavigation
+                BottomNavigation(activePage: $activePage)
             }
             .toolbar(.hidden, for: .tabBar)
             .tag(BottomTab.home)
 
-            ExploreView(useCase: Injection().provideExploreUseCase()) {
-                bottomNavigation
+            ExploreView(useCase: exploreUseCase) {
+                BottomNavigation(activePage: $activePage)
             }
             .toolbar(.hidden, for: .tabBar)
             .tag(BottomTab.explore)
 
-            SearchView(searchUseCase: Injection().provideSearchUseCase()) {
-                bottomNavigation
+            SearchView(searchUseCase: searchUseCase) {
+                BottomNavigation(activePage: $activePage)
             }
             .toolbar(.hidden, for: .tabBar)
             .tag(BottomTab.search)
 
-            FavoriteView(favoriteUseCase: Injection().provideFavoriteUseCase()) {
-                bottomNavigation
+            FavoriteView(favoriteUseCase: favoriteUseCase) {
+                BottomNavigation(activePage: $activePage)
             }
             .toolbar(.hidden, for: .tabBar)
             .tag(BottomTab.favorites)
         }
     }
     
-    private var bottomNavigation: some View {
-        HStack(spacing: 0) {
-            ForEach(BottomTab.allCases, id: \.self) { tab in
-                let isSelected = tab == activePage
-                
-                Button {
-                    activePage = tab
-                } label: {
-                    VStack(spacing: 3) {
-                        Image(systemName: tab == .favorites && isSelected ? "heart.fill" : tab.symbol)
-                            .font(.system(size: 16, weight: .semibold))
-                            .accessibilityHidden(true)
-                        Text(tab.rawValue)
-                            .font(.system(size: 9, weight: .semibold))
-                    }
-                    .foregroundStyle(isSelected ? DashboardDesign.accent : DashboardDesign.secondaryText)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .accessibilityAddTraits(isSelected ? .isSelected : [])
-            }
-        }
-        .frame(height: 60)
-        .background {
-            DashboardDesign.surface.ignoresSafeArea(edges: .bottom)
-        }
-        .overlay(alignment: .top) {
-            DashboardDesign.border.frame(height: 1)
-        }
-    }
 }
 
-#Preview {
-    ContentView()
+#if DEBUG
+#Preview("App tabs") {
+    let fixtures = PreviewFixtures.UseCases()
+    ContentView(dashboardUseCase: fixtures, detailUseCase: fixtures, exploreUseCase: fixtures,
+                searchUseCase: fixtures, favoriteUseCase: PreviewFixtures.favorites())
 }
+#endif
