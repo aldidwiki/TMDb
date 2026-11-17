@@ -9,10 +9,14 @@ import SwiftUI
 struct PersonDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var presenter: PersonPresenter
+    @State private var isBiographyAboveViewport = false
+
+    private enum ScrollAnchor {
+        case biography
+    }
 
     private let personId: Int
     private let router = PersonRouter()
-    private let columns = [GridItem(.flexible(), spacing: 16), GridItem(.flexible(), spacing: 16)]
 
     init(personUseCase: PersonUseCase, personId: Int, favoriteUseCase: FavoriteUseCase = Injection().provideFavoriteUseCase()) {
         _presenter = State(initialValue: PersonPresenter(personUseCase: personUseCase, favoriteUseCase: favoriteUseCase))
@@ -74,21 +78,31 @@ struct PersonDetailView: View {
     }
 
     private var details: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
-                insetContent {
-                    overview
+        ScrollViewReader { scroll in
+            ScrollView {
+                VStack(alignment: .leading, spacing: 24) {
+                    insetContent { overview }
+                    let links = presenter.profileLinks
+                    if !links.isEmpty {
+                        insetContent { externalLinks(links) }
+                    }
+                    insetContent {
+                        PersonBiography(text: presenter.person.biography) {
+                            if isBiographyAboveViewport {
+                                scroll.scrollTo(ScrollAnchor.biography, anchor: .top)
+                            }
+                        }
+                    }
+                    .id(ScrollAnchor.biography)
+                    .onGeometryChange(for: Bool.self) {
+                        $0.frame(in: .scrollView(axis: .vertical)).minY < 0
+                    } action: { isBiographyAboveViewport = $0 }
+                    insetContent { personalInfo }
+                    knownFor
                 }
-                let links = presenter.profileLinks
-                if !links.isEmpty {
-                    insetContent { externalLinks(links) }
-                }
-                insetContent { PersonBiography(text: presenter.person.biography) }
-                insetContent { personalInfo }
-                knownFor
+                .padding(.top, 8)
+                .padding(.bottom, 28)
             }
-            .padding(.top, 8)
-            .padding(.bottom, 28)
         }
     }
 
@@ -179,9 +193,20 @@ struct PersonDetailView: View {
             VStack(alignment: .leading, spacing: 12) {
                 sectionTitle("Personal info")
                 VStack(alignment: .leading, spacing: 16) {
-                    LazyVGrid(columns: columns, alignment: .leading, spacing: 16) {
-                        if let department { infoField("Known for", value: department) }
-                        if let birthday { infoField("Date of birth", value: birthday) }
+                    if department != nil || birthday != nil {
+                        HStack(alignment: .top, spacing: 16) {
+                            if let department {
+                                infoField("Known for", value: department)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            if let birthday {
+                                infoField("Date of birth", value: birthday)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            if department == nil || birthday == nil {
+                                Color.clear.frame(maxWidth: .infinity, maxHeight: 0)
+                            }
+                        }
                     }
                     if let birthplace { infoField("Place of birth", value: birthplace) }
 
