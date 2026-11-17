@@ -84,9 +84,9 @@ extension MovieDataSource: MovieDataSourceProtocol {
             "page": query.page,
             "include_adult": false
         ]
-        if let year = query.releaseYear {
-            parameters["release_date.gte"] = "\(year)-01-01"
-            parameters["release_date.lte"] = "\(year)-12-31"
+        if let dates = query.releaseYear?.dates {
+            parameters["release_date.gte"] = dates.lowerBound
+            parameters["release_date.lte"] = dates.upperBound
         }
         if let rating = query.minimumRating {
             parameters["vote_average.gte"] = rating

@@ -71,9 +71,9 @@ struct ExploreDrawer: View {
 
             HStack(spacing: 12) {
                 if !isSort {
-                    ExploreDrawerButton(title: "Reset Filters", prominent: false, action: onReset)
+                    DrawerActionButton(title: "Reset Filters", prominent: false, action: onReset)
                 }
-                ExploreDrawerButton(title: isSort ? "Apply sort" : "Apply Filters", prominent: true, action: onApply)
+                DrawerActionButton(title: isSort ? "Apply sort" : "Apply Filters", prominent: true, action: onApply)
             }
         }
         .frame(maxWidth: DashboardDesign.contentWidth)
@@ -236,30 +236,6 @@ struct ExploreDrawer: View {
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(selected ? .isSelected : [])
-    }
-}
-
-struct ExploreDrawerButton: View {
-    let title: String
-    let prominent: Bool
-    let action: () -> Void
-
-    @Environment(\.isEnabled) private var isEnabled
-
-    var body: some View {
-        let shape = RoundedRectangle(cornerRadius: DashboardDesign.controlRadius)
-        Button(action: action) {
-            Text(title)
-                .font(.subheadline.weight(.semibold))
-                .multilineTextAlignment(.center)
-                .foregroundStyle(prominent ? DashboardDesign.surface : DashboardDesign.accent)
-                .padding(8)
-                .frame(maxWidth: .infinity, minHeight: 44)
-                .background(prominent ? DashboardDesign.accent : DashboardDesign.surface, in: shape)
-                .overlay { shape.strokeBorder(prominent ? Color.clear : DashboardDesign.border) }
-        }
-        .buttonStyle(.plain)
-        .opacity(isEnabled ? 1 : 0.45)
     }
 }
 

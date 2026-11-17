@@ -248,7 +248,7 @@ struct ExploreView<BottomBar: View>: View {
     @ViewBuilder
     private func drawerContent(_ drawer: Drawer) -> some View {
         if drawer == .years {
-            ExploreYearPicker(
+            YearPicker(
                 title: presenter.category == .shows ? "First air year" : "Release year",
                 selection: draftFilters.year,
                 onCancel: { present(.filters) },

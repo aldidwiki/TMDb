@@ -2,32 +2,14 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct GenreMovieListingView: View {
-    private enum FilterSheet: String, Identifiable {
+    private enum FilterSheet {
         case sort, year, rating
-        var id: String { rawValue }
-        
-        var title: String {
-            switch self {
-            case .sort: "Sort by"
-            case .year: "Release year"
-            case .rating: "Minimum rating"
-            }
-        }
-        
-        var action: String {
-            switch self {
-            case .sort: "Apply sort"
-            case .year: "Apply year"
-            case .rating: "Apply rating"
-            }
-        }
     }
     
     @Environment(\.dismiss) private var dismiss
     @State private var presenter: GenrePresenter
     @State private var activeSheet: FilterSheet?
     @State private var draftSort: GenrePresenter.Sort = .popularity
-    @State private var draftYear: GenrePresenter.ReleaseYear = .all
     @State private var draftRating: GenrePresenter.MinimumRating = .any
     
     let genre: GenreRoute
@@ -48,7 +30,7 @@ struct GenreMovieListingView: View {
             ScrollView(.horizontal) {
                 HStack(spacing: 8) {
                     chip(presenter.sort.rawValue, selected: true, showsChevron: true) { open(.sort) }
-                    chip(presenter.releaseYear == .all ? "Release: All" : "Release: \(presenter.releaseYear.rawValue)") { open(.year) }
+                    chip("Release: \(presenter.releaseYear?.label ?? "All")") { open(.year) }
                     chip(presenter.minimumRating == .any ? "★ Any rating" : "★ \(presenter.minimumRating.rawValue)") { open(.rating) }
                 }
                 .padding(.horizontal, 18)
@@ -109,26 +91,20 @@ struct GenreMovieListingView: View {
             router.goToMovieDetailView(for: movieID)
         }
         .overlay {
-            GeometryReader { geometry in
-                ZStack(alignment: .bottom) {
-                    if activeSheet != nil {
-                        DashboardDesign.text.opacity(0.42)
-                            .ignoresSafeArea()
-                            .onTapGesture { closeSheet() }
-                            .transition(.opacity)
-                    }
-                    
-                    if let sheet = activeSheet {
-                        filterSheet(sheet)
-                            .frame(width: geometry.size.width, height: 440)
-                            .background(DashboardDesign.surface)
-                            .clipShape(.rect(topLeadingRadius: 24, topTrailingRadius: 24))
-                            .transition(.move(edge: .bottom))
-                    }
+            ZStack(alignment: .bottom) {
+                if let sheet = activeSheet {
+                    DashboardDesign.text.opacity(0.42)
+                        .ignoresSafeArea()
+                        .onTapGesture { closeSheet() }
+                        .accessibilityHidden(true)
+                        .transition(.opacity)
+
+                    sheetContent(sheet)
+                        .transition(.move(edge: .bottom))
+                        .zIndex(1)
                 }
-                .frame(width: geometry.size.width, height: geometry.size.height)
             }
-            .ignoresSafeArea()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .allowsHitTesting(activeSheet != nil)
         }
     }
@@ -236,7 +212,6 @@ struct GenreMovieListingView: View {
     
     private func open(_ sheet: FilterSheet) {
         draftSort = presenter.sort
-        draftYear = presenter.releaseYear
         draftRating = presenter.minimumRating
         withAnimation(.easeInOut(duration: 0.25)) { activeSheet = sheet }
     }
@@ -246,11 +221,28 @@ struct GenreMovieListingView: View {
     }
     
     private func apply() {
-        presenter.apply(sort: draftSort, year: draftYear, rating: draftRating)
+        presenter.apply(sort: draftSort, year: presenter.releaseYear, rating: draftRating)
         closeSheet()
     }
-    
-    private func filterSheet(_ sheet: FilterSheet) -> some View {
+
+    @ViewBuilder
+    private func sheetContent(_ sheet: FilterSheet) -> some View {
+        if sheet == .year {
+            YearPicker(title: "Release year", selection: presenter.releaseYear, onCancel: closeSheet) { year in
+                presenter.apply(sort: presenter.sort, year: year, rating: presenter.minimumRating)
+                closeSheet()
+            }
+        } else {
+            sortOrRatingSheet(isSort: sheet == .sort)
+                .frame(maxWidth: .infinity)
+                .frame(height: 440)
+                .background(DashboardDesign.surface)
+                .clipShape(.rect(topLeadingRadius: 24, topTrailingRadius: 24))
+                .ignoresSafeArea(.container, edges: [.horizontal, .bottom])
+        }
+    }
+
+    private func sortOrRatingSheet(isSort: Bool) -> some View {
         VStack(alignment: .leading, spacing: 0) {
             Capsule()
                 .fill(DashboardDesign.border)
@@ -260,7 +252,7 @@ struct GenreMovieListingView: View {
                 .padding(.bottom, 9)
             
             HStack {
-                Text(sheet.title)
+                Text(isSort ? "Sort by" : "Minimum rating")
                     .font(.system(size: 20, weight: .bold))
                     .foregroundStyle(DashboardDesign.text)
                 Spacer()
@@ -272,25 +264,22 @@ struct GenreMovieListingView: View {
                 .accessibilityLabel("Close")
             }
             
-            Text(helper(for: sheet))
+            Text(isSort ? "Choose how \(genre.name) movies are ordered." : "Show titles at or above this rating.")
                 .font(.system(size: 13))
                 .foregroundStyle(DashboardDesign.secondaryText)
                 .padding(.top, 7)
                 .padding(.bottom, 9)
             
             VStack(spacing: 9) {
-                switch sheet {
-                case .sort:
+                if isSort {
                     optionRows(GenrePresenter.Sort.allCases, selection: $draftSort)
-                case .year:
-                    optionRows(GenrePresenter.ReleaseYear.allCases, selection: $draftYear)
-                case .rating:
+                } else {
                     optionRows(GenrePresenter.MinimumRating.allCases, selection: $draftRating)
                 }
             }
             
             Button { apply() } label: {
-                Text(sheet.action)
+                Text(isSort ? "Apply sort" : "Apply rating")
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(DashboardDesign.surface)
                     .frame(maxWidth: .infinity)
@@ -302,14 +291,6 @@ struct GenreMovieListingView: View {
         }
         .padding(.horizontal, 20)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-    }
-    
-    private func helper(for sheet: FilterSheet) -> String {
-        switch sheet {
-        case .sort: "Choose how \(genre.name) movies are ordered."
-        case .year: "Filter the list by release year."
-        case .rating: "Show titles at or above this rating."
-        }
     }
     
     private func optionRows<Option: RawRepresentable & Hashable>(_ options: [Option], selection: Binding<Option>) -> some View where Option.RawValue == String {

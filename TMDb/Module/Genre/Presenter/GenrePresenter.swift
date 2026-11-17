@@ -23,16 +23,6 @@ final class GenrePresenter {
         }
     }
 
-    enum ReleaseYear: String, CaseIterable {
-        case year2024 = "2024"
-        case year2023 = "2023"
-        case year2022 = "2022"
-        case year2021 = "2021"
-        case all = "All years"
-
-        var value: Int? { Int(rawValue) }
-    }
-
     enum MinimumRating: String, CaseIterable {
         case six = "6.0+"
         case seven = "7.0+"
@@ -44,7 +34,7 @@ final class GenrePresenter {
     }
 
     private(set) var sort: Sort = .popularity
-    private(set) var releaseYear: ReleaseYear = .all
+    private(set) var releaseYear: YearFilter?
     private(set) var minimumRating: MinimumRating = .any
     private(set) var movies: [MovieModel] = []
     private(set) var totalResults = 0
@@ -76,7 +66,7 @@ final class GenrePresenter {
         loadNextPage()
     }
 
-    func apply(sort: Sort, year: ReleaseYear, rating: MinimumRating) {
+    func apply(sort: Sort, year: YearFilter?, rating: MinimumRating) {
         guard self.sort != sort || releaseYear != year || minimumRating != rating else { return }
         self.sort = sort
         releaseYear = year
@@ -114,7 +104,7 @@ final class GenrePresenter {
         let query = GenreMovieQuery(
             genreID: genreID,
             sortBy: sort.apiValue,
-            releaseYear: releaseYear.value,
+            releaseYear: releaseYear,
             minimumRating: minimumRating.value,
             page: page,
             region: "ID"

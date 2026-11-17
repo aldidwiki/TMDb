@@ -7,7 +7,7 @@ struct GenreMoviePage {
 struct GenreMovieQuery {
     let genreID: Int
     let sortBy: String
-    let releaseYear: Int?
+    let releaseYear: YearFilter?
     let minimumRating: Double?
     let page: Int
     let region: String

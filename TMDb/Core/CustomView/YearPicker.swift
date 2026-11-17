@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ExploreYearPicker: View {
+struct YearPicker: View {
     private enum Mode: String, CaseIterable {
         case single = "Single year"
         case range = "Year range"
@@ -12,7 +12,7 @@ struct ExploreYearPicker: View {
 
     let title: String
     let onCancel: () -> Void
-    let onUse: (ExploreYearFilter?) -> Void
+    let onUse: (YearFilter?) -> Void
 
     @State private var mode: Mode = .single
     @State private var singleText = ""
@@ -25,8 +25,8 @@ struct ExploreYearPicker: View {
     private let recentYears: [Int]
     private static let yearLength = 4
 
-    init(title: String, selection: ExploreYearFilter?, onCancel: @escaping () -> Void,
-         onUse: @escaping (ExploreYearFilter?) -> Void) {
+    init(title: String, selection: YearFilter?, onCancel: @escaping () -> Void,
+         onUse: @escaping (YearFilter?) -> Void) {
         self.title = title
         self.onCancel = onCancel
         self.onUse = onUse
@@ -48,10 +48,10 @@ struct ExploreYearPicker: View {
         }
     }
 
-    private var selection: ExploreYearFilter? {
+    private var selection: YearFilter? {
         switch mode {
         case .single:
-            return year(from: singleText).map(ExploreYearFilter.single)
+            return year(from: singleText).map(YearFilter.single)
         case .range:
             guard let from = year(from: fromText), let to = year(from: toText), from <= to else {
                 return nil
@@ -101,8 +101,8 @@ struct ExploreYearPicker: View {
             .scrollDismissesKeyboard(.interactively)
 
             HStack(spacing: 12) {
-                ExploreDrawerButton(title: "Cancel", prominent: false, action: onCancel)
-                ExploreDrawerButton(title: "Use this year", prominent: true) {
+                DrawerActionButton(title: "Cancel", prominent: false, action: onCancel)
+                DrawerActionButton(title: "Use this year", prominent: true) {
                     onUse(selection)
                 }
                 .disabled(!canUseSelection)
@@ -234,5 +234,29 @@ struct ExploreYearPicker: View {
     private func year(from text: String) -> Int? {
         guard text.count == Self.yearLength, let year = Int(text), (1000...9999).contains(year) else { return nil }
         return year
+    }
+}
+
+struct DrawerActionButton: View {
+    let title: String
+    let prominent: Bool
+    let action: () -> Void
+
+    @Environment(\.isEnabled) private var isEnabled
+
+    var body: some View {
+        let shape = RoundedRectangle(cornerRadius: DashboardDesign.controlRadius)
+        Button(action: action) {
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+                .multilineTextAlignment(.center)
+                .foregroundStyle(prominent ? DashboardDesign.surface : DashboardDesign.accent)
+                .padding(8)
+                .frame(maxWidth: .infinity, minHeight: 44)
+                .background(prominent ? DashboardDesign.accent : DashboardDesign.surface, in: shape)
+                .overlay { shape.strokeBorder(prominent ? Color.clear : DashboardDesign.border) }
+        }
+        .buttonStyle(.plain)
+        .opacity(isEnabled ? 1 : 0.45)
     }
 }

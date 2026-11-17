@@ -157,7 +157,8 @@
 		B7A100032A00000000000028 /* ExploreDrawer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A100032A00000000000008 /* ExploreDrawer.swift */; };
 		B7A100032A00000000000029 /* ExplorePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A100032A00000000000009 /* ExplorePresenter.swift */; };
 		B7A100032A0000000000002A /* ExploreRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A100032A0000000000000A /* ExploreRouter.swift */; };
-		B7A100032A0000000000002B /* ExploreYearPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A100032A0000000000000B /* ExploreYearPicker.swift */; };
+		B7A100032A0000000000002B /* YearPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A100032A0000000000000B /* YearPicker.swift */; };
+		B7A100032A0000000000002C /* YearFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A100032A0000000000000C /* YearFilter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -316,7 +317,8 @@
 		B7A100032A00000000000008 /* ExploreDrawer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreDrawer.swift; sourceTree = "<group>"; };
 		B7A100032A00000000000009 /* ExplorePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExplorePresenter.swift; sourceTree = "<group>"; };
 		B7A100032A0000000000000A /* ExploreRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreRouter.swift; sourceTree = "<group>"; };
-		B7A100032A0000000000000B /* ExploreYearPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreYearPicker.swift; sourceTree = "<group>"; };
+		B7A100032A0000000000000B /* YearPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearPicker.swift; sourceTree = "<group>"; };
+		B7A100032A0000000000000C /* YearFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearFilter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -564,6 +566,7 @@
 				CECFD2442AAEB5FF0023D93A /* CustomLabelStyle.swift */,
 				FA9252042F39C40A00419C21 /* PosterView.swift */,
 				FA8A51A32F3B0E3D0040ED03 /* NativeDivider.swift */,
+				B7A100032A0000000000000B /* YearPicker.swift */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -747,6 +750,7 @@
 			children = (
 				B7A100022A00000000000001 /* SimilarTitlesPage.swift */,
 				B7A100012A00000000000014 /* GenreMoviePage.swift */,
+				B7A100032A0000000000000C /* YearFilter.swift */,
 				A7D9BCEAA01240DE8F467B0E /* GenreModel.swift */,
 				CEC65508292F5744007B393A /* MovieModel.swift */,
 				CE182AFD292F813800B5C857 /* MovieDetailModel.swift */,
@@ -919,7 +923,6 @@
 				B7A100032A00000000000006 /* ExploreView.swift */,
 				B7A100032A00000000000007 /* ExploreCard.swift */,
 				B7A100032A00000000000008 /* ExploreDrawer.swift */,
-				B7A100032A0000000000000B /* ExploreYearPicker.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1091,7 +1094,8 @@
 				B7A100032A00000000000028 /* ExploreDrawer.swift in Sources */,
 				B7A100032A00000000000029 /* ExplorePresenter.swift in Sources */,
 				B7A100032A0000000000002A /* ExploreRouter.swift in Sources */,
-				B7A100032A0000000000002B /* ExploreYearPicker.swift in Sources */,
+				B7A100032A0000000000002B /* YearPicker.swift in Sources */,
+				B7A100032A0000000000002C /* YearFilter.swift in Sources */,
 				FA273C352F3F0B160017D24A /* SearchView.swift in Sources */,
 				CEC65509292F5744007B393A /* MovieModel.swift in Sources */,
 				CEF796C22A52D0C30046858F /* TvShowItemView.swift in Sources */,
